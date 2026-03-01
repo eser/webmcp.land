@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "@/i18n/request";
+import { AuthRedirect } from "@/components/auth/auth-redirect";
 import { getConfig } from "@/lib/config";
 import { AuthContent } from "@/components/auth/auth-content";
 
@@ -29,7 +29,7 @@ export default async function RegisterPage() {
 
   // Block registration if disabled or credentials not enabled
   if (!hasCredentials || !config.auth.allowRegistration) {
-    redirect("/login");
+    return <AuthRedirect />;
   }
 
   return (

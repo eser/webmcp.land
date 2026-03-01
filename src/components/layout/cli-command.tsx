@@ -2,19 +2,18 @@
 
 import { useState, useEffect } from "react";
 import { Terminal } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 
 export function CliCommand() {
-  const t = useTranslations("homepage");
-  const tCommon = useTranslations("common");
+  const { t } = useTranslation();
   const [isHovered, setIsHovered] = useState(false);
   const [displayedText, setDisplayedText] = useState("");
   const [copied, setCopied] = useState(false);
-  const command = "npx prompts.chat";
+  const command = "npx webmcp.land";
 
   useEffect(() => {
     if (isHovered) {
-      setDisplayedText("");
+      setDisplayedText("homepage.");
       let index = 0;
       const interval = setInterval(() => {
         if (index < command.length) {
@@ -26,7 +25,7 @@ export function CliCommand() {
       }, 40);
       return () => clearInterval(interval);
     } else {
-      setDisplayedText("");
+      setDisplayedText("homepage.");
     }
   }, [isHovered]);
 
@@ -43,12 +42,12 @@ export function CliCommand() {
   return (
     <div className="relative">
       {/* Copied tooltip */}
-      <span 
+      <span
         className={`absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 text-xs font-medium text-white bg-green-600 rounded transition-all duration-200 ${
           copied ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
         }`}
       >
-        {tCommon("copied")}
+        {t("common.copied")}
       </span>
       <button
         onClick={handleCopy}
@@ -59,20 +58,20 @@ export function CliCommand() {
       <Terminal className="h-4 w-4 text-green-400 shrink-0" />
       <div className="relative h-5 flex items-center overflow-hidden">
         {/* Grid container for smooth width animation */}
-        <div 
+        <div
           className="grid transition-all duration-500 ease-out"
           style={{ gridTemplateColumns: isHovered ? '0fr 1fr' : '1fr 0fr' }}
         >
           {/* Default label */}
-          <span 
+          <span
             className={`text-sm font-medium text-zinc-100 whitespace-nowrap overflow-hidden transition-opacity duration-300 ${
               isHovered ? 'opacity-0' : 'opacity-100'
             }`}
           >
-            {t("commandLine")}
+            {t("homepage.commandLine")}
           </span>
           {/* Hover state - command with typewriter (force LTR for CLI) */}
-          <code 
+          <code
             dir="ltr"
             className={`text-sm font-mono text-zinc-100 whitespace-nowrap overflow-hidden transition-opacity duration-300 ${
               isHovered ? 'opacity-100' : 'opacity-0'

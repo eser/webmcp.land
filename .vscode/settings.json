@@ -1,0 +1,15 @@
+{
+  "coverage-gutters.showGutterCoverage": true,
+  "coverage-gutters.showLineCoverage": true,
+  "coverage-gutters.showRulerCoverage": true,
+  "yaml.schemas": {
+    "https://json.schemastore.org/github-workflow.json": "./.github/workflows/*.yml"
+  },
+  "files.associations": {
+    "*.mdoc": "markdown",
+    "*.mdx": "markdown"
+  },
+  "[codeowners]": {
+    "editor.defaultFormatter": "chdsbd.github-code-owners"
+  }
+}

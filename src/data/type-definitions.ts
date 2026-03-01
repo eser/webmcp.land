@@ -1,11 +1,11 @@
 /**
- * Auto-generated type definitions for prompts.chat
+ * Auto-generated type definitions for webmcp.land
  * Generated from TypeScript source files via reflection
  * DO NOT EDIT MANUALLY - run `npm run docs:generate` to regenerate
  */
 
 export const TYPE_DEFINITIONS = `
-declare module 'prompts.chat' {
+declare module 'webmcp.land' {
 
   // BUILDER TYPES
   export interface PromptVariable {

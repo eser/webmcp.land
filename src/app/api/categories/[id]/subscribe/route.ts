@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { and, eq } from "drizzle-orm";
+import { getSession } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { categories, categorySubscriptions } from "@/lib/schema";
 
 // POST - Subscribe to a category
 export async function POST(
@@ -8,7 +10,7 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await auth();
+    const session = await getSession();
     if (!session?.user) {
       return NextResponse.json(
         { error: "unauthorized", message: "You must be logged in" },
@@ -19,9 +21,10 @@ export async function POST(
     const { id: categoryId } = await params;
 
     // Check if category exists
-    const category = await db.category.findUnique({
-      where: { id: categoryId },
-    });
+    const [category] = await db
+      .select()
+      .from(categories)
+      .where(eq(categories.id, categoryId));
 
     if (!category) {
       return NextResponse.json(
@@ -31,14 +34,15 @@ export async function POST(
     }
 
     // Check if already subscribed
-    const existing = await db.categorySubscription.findUnique({
-      where: {
-        userId_categoryId: {
-          userId: session.user.id,
-          categoryId,
-        },
-      },
-    });
+    const [existing] = await db
+      .select()
+      .from(categorySubscriptions)
+      .where(
+        and(
+          eq(categorySubscriptions.userId, session.user.id),
+          eq(categorySubscriptions.categoryId, categoryId),
+        )
+      );
 
     if (existing) {
       return NextResponse.json(
@@ -48,23 +52,22 @@ export async function POST(
     }
 
     // Create subscription
-    const subscription = await db.categorySubscription.create({
-      data: {
+    await db
+      .insert(categorySubscriptions)
+      .values({
         userId: session.user.id,
         categoryId,
-      },
-      include: {
-        category: {
-          select: {
-            id: true,
-            name: true,
-            slug: true,
-          },
-        },
+      });
+
+    // Return the category info
+    return NextResponse.json({
+      subscribed: true,
+      category: {
+        id: category.id,
+        name: category.name,
+        slug: category.slug,
       },
     });
-
-    return NextResponse.json({ subscribed: true, category: subscription.category });
   } catch (error) {
     console.error("Subscribe error:", error);
     return NextResponse.json(
@@ -80,7 +83,7 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await auth();
+    const session = await getSession();
     if (!session?.user) {
       return NextResponse.json(
         { error: "unauthorized", message: "You must be logged in" },
@@ -91,12 +94,14 @@ export async function DELETE(
     const { id: categoryId } = await params;
 
     // Delete subscription
-    await db.categorySubscription.deleteMany({
-      where: {
-        userId: session.user.id,
-        categoryId,
-      },
-    });
+    await db
+      .delete(categorySubscriptions)
+      .where(
+        and(
+          eq(categorySubscriptions.userId, session.user.id),
+          eq(categorySubscriptions.categoryId, categoryId),
+        )
+      );
 
     return NextResponse.json({ subscribed: false });
   } catch (error) {

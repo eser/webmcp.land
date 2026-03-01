@@ -2,39 +2,39 @@
 
 ## Capabilities
 
-- **Curated Prompt Library** — Access 100+ high-quality, community-tested prompts for ChatGPT, Claude, Gemini, Llama, Mistral, and other AI models
-- **Discover & Browse** — Explore prompts by categories, tags, or AI-powered semantic search
-- **Create & Share Prompts** — Submit your own prompts with support for text, structured (JSON/YAML), and media-enhanced formats
-- **Version Control** — Track prompt changes with built-in versioning and change request system (similar to PRs)
-- **Personalized Feed** — Subscribe to categories and get a curated feed of prompts matching your interests
-- **Private Prompts** — Keep your prompts private or share them with the community
-- **Voting & Leaderboard** — Upvote prompts and discover the most popular ones via PromptMasters leaderboard
+- **MCP Service Registry** — Register and discover MCP/WebMCP service endpoints with automatic capability discovery
+- **Discover & Browse** — Explore resources by categories, tags, or AI-powered semantic search
+- **Register & Share** — Submit your own MCP/WebMCP endpoints and share them with the community
+- **Version Control** — Track resource changes with built-in versioning and change request system (similar to PRs)
+- **Personalized Feed** — Subscribe to categories and get a curated feed of resources matching your interests
+- **Private Resources** — Keep your resources private or share them with the community
+- **Voting & Leaderboard** — Upvote resources and discover the most popular ones via the Top Providers leaderboard
 - **Multi-language Support** — Available in English, Spanish, Japanese, Turkish, and Chinese
 
 ## Benefits
 
-- **Unlock AI Potential:** Stop struggling with prompt engineering — use battle-tested prompts from 141k+ GitHub stars community
-- **Save Time:** Copy prompts with one click, customize variables inline, and use them instantly in any AI chat
-- **Community-Driven Quality:** Every prompt is curated and refined by the community through change requests and voting
-- **Self-Hostable:** Deploy your own white-labeled prompt library for your team or organization with customizable branding, themes, and authentication
-- **CC0 Licensed:** All prompts are public domain — use them freely for any purpose, commercial or personal
+- **Discover MCP Services:** Find the right MCP tools for any task — search by use case across a growing registry of services
+- **Save Time:** Connect to services instantly, browse their tools and capabilities, and integrate them into your AI workflows
+- **Community-Driven Quality:** Every resource is curated and refined by the community through change requests and voting
+- **Self-Hostable:** Deploy your own white-labeled MCP registry for your team or organization with customizable branding, themes, and authentication
+- **Apache-2.0 Licensed:** Fully open source — use freely for any purpose, commercial or personal
 
 ## Getting Started
 
 **Requirements:**
-- **Plan:** Free and open-source (CC0 license)
-- **User Permissions:** No account needed to browse; sign in via GitHub/Google to create & save prompts
-- **Availability:** Generally Available at [prompts.chat](https://prompts.chat)
+- **Plan:** Free and open-source (Apache-2.0 license)
+- **User Permissions:** No account needed to browse; sign in via GitHub/Google to register resources
+- **Availability:** Generally Available at [webmcp.land](https://webmcp.land)
 
 ---
 
-This guide explains how to deploy **prompts.chat** on your own private server for enhanced privacy and customization.
+This guide explains how to deploy **webmcp.land** on your own private server for enhanced privacy and customization.
 
 ## Prerequisites
 
-- **Node.js** 18+ 
+- **Node.js** 18+
 - **PostgreSQL** database
-- **npm** or **yarn**
+- **pnpm** (recommended) or **npm**
 
 ## Environment Variables
 
@@ -42,7 +42,7 @@ Create a `.env` file based on `.env.example`:
 
 ```bash
 # Database
-DATABASE_URL="postgresql://user:password@localhost:5432/prompts"
+DATABASE_URL="postgresql://user:password@localhost:5432/webmcp"
 
 # Authentication (choose one provider)
 # GitHub OAuth
@@ -64,11 +64,11 @@ OPENAI_API_KEY="your-openai-api-key"
 
 ### Quick Start (Recommended)
 
-The fastest way to create a new prompts.chat instance:
+The fastest way to create a new webmcp.land instance:
 
 ```bash
-npx prompts.chat new my-prompt-library
-cd my-prompt-library
+npx webmcp.land new my-registry
+cd my-registry
 ```
 
 This will:
@@ -80,25 +80,25 @@ This will:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/f/prompts.chat.git
-   cd prompts.chat
+   git clone https://github.com/eser/webmcp.land.git
+   cd webmcp.land
    ```
 
 2. **Install dependencies**
    ```bash
-   npm install
+   pnpm install
    ```
 
 3. **Run the interactive setup wizard**
    ```bash
-   npm run setup
+   pnpm run setup
    ```
    This will guide you through configuring:
    - **Branding** — App name, logo, description
    - **Theme** — Primary color, border radius, UI variant
    - **Authentication** — GitHub, Google, Apple, Azure AD, or email/password
    - **Languages** — Select from 16 supported locales
-   - **Features** — Private prompts, categories, tags, comments, AI search, AI generation, MCP support
+   - **Features** — Private resources, categories, tags, comments, AI search, discovery, MCP support
 
 4. **Configure environment variables**
    ```bash
@@ -108,37 +108,37 @@ This will:
 
 5. **Run database migrations**
    ```bash
-   npm run db:migrate
+   pnpm run db:migrate
    ```
 
 6. **Seed initial data** (optional)
    ```bash
-   npm run db:seed
+   pnpm run db:seed
    ```
 
 7. **Start the development server**
    ```bash
-   npm run dev
+   pnpm run dev
    ```
 
 8. **Build for production**
    ```bash
-   npm run build
-   npm run start
+   pnpm run build
+   pnpm run start
    ```
 
 ## Configuration
 
-The setup wizard (`npm run setup`) generates `prompts.config.ts` automatically. You can also manually edit it:
+The setup wizard (`pnpm run setup`) generates `webmcp.config.ts` automatically. You can also manually edit it:
 
 ```typescript
-// Set to true to use your own branding instead of prompts.chat branding
+// Set to true to use your own branding instead of webmcp.land branding
 const useCloneBranding = true;
 
 export default defineConfig({
   // Branding
   branding: {
-    name: "Your Prompt Library",
+    name: "Your MCP Registry",
     logo: "/your-logo.svg",
     logoDark: "/your-logo-dark.svg",
     description: "Your custom description",
@@ -161,21 +161,22 @@ export default defineConfig({
 
   // Features
   features: {
-    privatePrompts: true,
+    privateResources: true,
     changeRequests: true,
     categories: true,
     tags: true,
-    aiSearch: false,  // Requires OPENAI_API_KEY
+    aiSearch: false,   // Requires OPENAI_API_KEY
+    discovery: true,   // MCP endpoint discovery
   },
 
   // Homepage
   homepage: {
     useCloneBranding,  // Use your branding on homepage
     achievements: {
-      enabled: !useCloneBranding,  // Hide prompts.chat achievements
+      enabled: !useCloneBranding,  // Hide webmcp.land achievements
     },
     sponsors: {
-      enabled: !useCloneBranding,  // Hide prompts.chat sponsors
+      enabled: !useCloneBranding,  // Hide webmcp.land sponsors
     },
   },
 
@@ -198,8 +199,8 @@ When `useCloneBranding` is set to `true`, the homepage will:
 - Hide the achievements section (Forbes, GitHub stars, etc.)
 - Hide the sponsor links and "Become a Sponsor" CTA
 
-This is ideal for organizations that want to deploy their own white-labeled prompt library without prompts.chat branding.
+This is ideal for organizations that want to deploy their own white-labeled MCP service registry without webmcp.land branding.
 
 ## Support
 
-For issues and questions, please open a [GitHub Issue](https://github.com/f/prompts.chat/issues).
+For issues and questions, please open a [GitHub Issue](https://github.com/eser/webmcp.land/issues).

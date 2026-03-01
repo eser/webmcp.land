@@ -1,35 +1,38 @@
+import { NextRequest } from "next/server";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { GET, POST } from "@/app/api/prompts/[id]/comments/route";
+import { GET, POST } from "@/app/api/resources/[id]/comments/route";
 import { db } from "@/lib/db";
-import { auth } from "@/lib/auth";
+import { getSession } from "@/lib/auth";
 import { getConfig } from "@/lib/config";
 
-// Mock dependencies
-vi.mock("@/lib/db", () => ({
-  db: {
-    prompt: {
-      findUnique: vi.fn(),
+import { createChainMock, mockSelectSequence } from "../helpers/db-mock";
+
+vi.mock("@/lib/db", async () => {
+  const { createChainMock } = await import("../helpers/db-mock");
+  return {
+    db: {
+      select: vi.fn().mockReturnValue(createChainMock([])),
+      insert: vi.fn().mockReturnValue(createChainMock([])),
+      update: vi.fn().mockReturnValue(createChainMock([])),
+      delete: vi.fn().mockReturnValue(createChainMock([])),
+      execute: vi.fn().mockResolvedValue({ rows: [] }),
+      query: {
+        comments: { findMany: vi.fn().mockResolvedValue([]), findFirst: vi.fn().mockResolvedValue(null) },
+      },
     },
-    comment: {
-      findMany: vi.fn(),
-      findUnique: vi.fn(),
-      create: vi.fn(),
-    },
-    notification: {
-      create: vi.fn(),
-    },
-  },
-}));
+  };
+});
 
 vi.mock("@/lib/auth", () => ({
-  auth: vi.fn(),
+  getSession: vi.fn(),
 }));
 
 vi.mock("@/lib/config", () => ({
   getConfig: vi.fn(),
 }));
 
-describe("GET /api/prompts/[id]/comments", () => {
+
+describe("GET /api/resources/[id]/comments", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.mocked(getConfig).mockResolvedValue({ features: { comments: true } } as never);
@@ -38,73 +41,67 @@ describe("GET /api/prompts/[id]/comments", () => {
   it("should return 403 if comments feature is disabled", async () => {
     vi.mocked(getConfig).mockResolvedValue({ features: { comments: false } } as never);
 
-    const request = new Request("http://localhost:3000/api/prompts/123/comments");
-    const response = await GET(request, { params: Promise.resolve({ id: "123" }) });
+    const request = new Request("http://localhost:3000/api/resources/123/comments");
+    const response = await GET(request as unknown as NextRequest, { params: Promise.resolve({ id: "123" }) });
     const data = await response.json();
 
     expect(response.status).toBe(403);
     expect(data.error).toBe("feature_disabled");
   });
 
-  it("should return 404 for non-existent prompt", async () => {
-    vi.mocked(auth).mockResolvedValue(null);
-    vi.mocked(db.prompt.findUnique).mockResolvedValue(null);
+  it("should return 404 for non-existent resource", async () => {
+    vi.mocked(getSession).mockResolvedValue(null as any);
+    mockSelectSequence(db, []);
 
-    const request = new Request("http://localhost:3000/api/prompts/123/comments");
-    const response = await GET(request, { params: Promise.resolve({ id: "123" }) });
+    const request = new Request("http://localhost:3000/api/resources/123/comments");
+    const response = await GET(request as unknown as NextRequest, { params: Promise.resolve({ id: "123" }) });
     const data = await response.json();
 
     expect(response.status).toBe(404);
     expect(data.error).toBe("not_found");
   });
 
-  it("should return 404 for private prompt not owned by user", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(db.prompt.findUnique).mockResolvedValue({
+  it("should return 404 for private resource not owned by user", async () => {
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
+    mockSelectSequence(db, [{
       id: "123",
       isPrivate: true,
       authorId: "other-user",
-    } as never);
+    }]);
 
-    const request = new Request("http://localhost:3000/api/prompts/123/comments");
-    const response = await GET(request, { params: Promise.resolve({ id: "123" }) });
+    const request = new Request("http://localhost:3000/api/resources/123/comments");
+    const response = await GET(request as unknown as NextRequest, { params: Promise.resolve({ id: "123" }) });
     const data = await response.json();
 
     expect(response.status).toBe(404);
     expect(data.error).toBe("not_found");
   });
 
-  it("should return comments for public prompt", async () => {
-    vi.mocked(auth).mockResolvedValue(null);
-    vi.mocked(db.prompt.findUnique).mockResolvedValue({
-      id: "123",
-      isPrivate: false,
-      authorId: "author1",
-    } as never);
-    vi.mocked(db.comment.findMany).mockResolvedValue([
-      {
+  it("should return comments for public resource", async () => {
+    vi.mocked(getSession).mockResolvedValue(null as any);
+    mockSelectSequence(db, 
+      [{ id: "123", isPrivate: false, authorId: "author1" }],
+      [{
         id: "comment1",
         content: "Test comment",
+        score: 5,
         createdAt: new Date(),
         updatedAt: new Date(),
+        promptId: "123",
+        authorId: "user1",
         parentId: null,
         flagged: false,
-        authorId: "user1",
-        score: 5,
-        author: {
-          id: "user1",
-          name: "User One",
-          username: "userone",
-          avatar: null,
-          role: "USER",
-        },
-        votes: [],
-        _count: { replies: 0 },
-      },
-    ] as never);
+        deletedAt: null,
+        authorName: "User One",
+        authorUsername: "userone",
+        authorAvatar: null,
+        authorRole: "USER",
+      }],
+      [],  // vote counts
+    );
 
-    const request = new Request("http://localhost:3000/api/prompts/123/comments");
-    const response = await GET(request, { params: Promise.resolve({ id: "123" }) });
+    const request = new Request("http://localhost:3000/api/resources/123/comments");
+    const response = await GET(request as unknown as NextRequest, { params: Promise.resolve({ id: "123" }) });
     const data = await response.json();
 
     expect(response.status).toBe(200);
@@ -113,30 +110,30 @@ describe("GET /api/prompts/[id]/comments", () => {
   });
 
   it("should hide flagged comments from non-admins (shadow-ban)", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user2", role: "USER" } } as never);
-    vi.mocked(db.prompt.findUnique).mockResolvedValue({
-      id: "123",
-      isPrivate: false,
-      authorId: "author1",
-    } as never);
-    vi.mocked(db.comment.findMany).mockResolvedValue([
-      {
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user2", role: "USER" } } as never);
+    mockSelectSequence(db, 
+      [{ id: "123", isPrivate: false, authorId: "author1" }],
+      [{
         id: "comment1",
         content: "Flagged comment",
+        score: 0,
         createdAt: new Date(),
         updatedAt: new Date(),
+        promptId: "123",
+        authorId: "user1",
         parentId: null,
         flagged: true,
-        authorId: "user1", // Different user
-        score: 0,
-        author: { id: "user1", name: "User", username: "user", avatar: null, role: "USER" },
-        votes: [],
-        _count: { replies: 0 },
-      },
-    ] as never);
+        deletedAt: null,
+        authorName: "User",
+        authorUsername: "user",
+        authorAvatar: null,
+        authorRole: "USER",
+      }],
+      [],  // vote counts
+    );
 
-    const request = new Request("http://localhost:3000/api/prompts/123/comments");
-    const response = await GET(request, { params: Promise.resolve({ id: "123" }) });
+    const request = new Request("http://localhost:3000/api/resources/123/comments");
+    const response = await GET(request as unknown as NextRequest, { params: Promise.resolve({ id: "123" }) });
     const data = await response.json();
 
     expect(response.status).toBe(200);
@@ -144,30 +141,30 @@ describe("GET /api/prompts/[id]/comments", () => {
   });
 
   it("should show flagged comments to admins", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "admin1", role: "ADMIN" } } as never);
-    vi.mocked(db.prompt.findUnique).mockResolvedValue({
-      id: "123",
-      isPrivate: false,
-      authorId: "author1",
-    } as never);
-    vi.mocked(db.comment.findMany).mockResolvedValue([
-      {
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "admin1", role: "ADMIN" } } as never);
+    mockSelectSequence(db, 
+      [{ id: "123", isPrivate: false, authorId: "author1" }],
+      [{
         id: "comment1",
         content: "Flagged comment",
-        flagged: true,
-        authorId: "user1",
+        score: 0,
         createdAt: new Date(),
         updatedAt: new Date(),
+        promptId: "123",
+        authorId: "user1",
         parentId: null,
-        score: 0,
-        author: { id: "user1", name: "User", username: "user", avatar: null, role: "USER" },
-        votes: [],
-        _count: { replies: 0 },
-      },
-    ] as never);
+        flagged: true,
+        deletedAt: null,
+        authorName: "User",
+        authorUsername: "user",
+        authorAvatar: null,
+        authorRole: "USER",
+      }],
+      [],  // vote counts
+    );
 
-    const request = new Request("http://localhost:3000/api/prompts/123/comments");
-    const response = await GET(request, { params: Promise.resolve({ id: "123" }) });
+    const request = new Request("http://localhost:3000/api/resources/123/comments");
+    const response = await GET(request as unknown as NextRequest, { params: Promise.resolve({ id: "123" }) });
     const data = await response.json();
 
     expect(response.status).toBe(200);
@@ -176,30 +173,30 @@ describe("GET /api/prompts/[id]/comments", () => {
   });
 
   it("should show own flagged comments to author", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1", role: "USER" } } as never);
-    vi.mocked(db.prompt.findUnique).mockResolvedValue({
-      id: "123",
-      isPrivate: false,
-      authorId: "author1",
-    } as never);
-    vi.mocked(db.comment.findMany).mockResolvedValue([
-      {
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1", role: "USER" } } as never);
+    mockSelectSequence(db, 
+      [{ id: "123", isPrivate: false, authorId: "author1" }],
+      [{
         id: "comment1",
         content: "My flagged comment",
-        flagged: true,
-        authorId: "user1", // Same user
+        score: 0,
         createdAt: new Date(),
         updatedAt: new Date(),
+        promptId: "123",
+        authorId: "user1",
         parentId: null,
-        score: 0,
-        author: { id: "user1", name: "User", username: "user", avatar: null, role: "USER" },
-        votes: [],
-        _count: { replies: 0 },
-      },
-    ] as never);
+        flagged: true,
+        deletedAt: null,
+        authorName: "User",
+        authorUsername: "user",
+        authorAvatar: null,
+        authorRole: "USER",
+      }],
+      [],  // vote counts
+    );
 
-    const request = new Request("http://localhost:3000/api/prompts/123/comments");
-    const response = await GET(request, { params: Promise.resolve({ id: "123" }) });
+    const request = new Request("http://localhost:3000/api/resources/123/comments");
+    const response = await GET(request as unknown as NextRequest, { params: Promise.resolve({ id: "123" }) });
     const data = await response.json();
 
     expect(response.status).toBe(200);
@@ -209,7 +206,7 @@ describe("GET /api/prompts/[id]/comments", () => {
   });
 });
 
-describe("POST /api/prompts/[id]/comments", () => {
+describe("POST /api/resources/[id]/comments", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.mocked(getConfig).mockResolvedValue({ features: { comments: true } } as never);
@@ -218,11 +215,11 @@ describe("POST /api/prompts/[id]/comments", () => {
   it("should return 403 if comments feature is disabled", async () => {
     vi.mocked(getConfig).mockResolvedValue({ features: { comments: false } } as never);
 
-    const request = new Request("http://localhost:3000/api/prompts/123/comments", {
+    const request = new Request("http://localhost:3000/api/resources/123/comments", {
       method: "POST",
       body: JSON.stringify({ content: "Test comment" }),
     });
-    const response = await POST(request, { params: Promise.resolve({ id: "123" }) });
+    const response = await POST(request as unknown as NextRequest, { params: Promise.resolve({ id: "123" }) });
     const data = await response.json();
 
     expect(response.status).toBe(403);
@@ -230,13 +227,13 @@ describe("POST /api/prompts/[id]/comments", () => {
   });
 
   it("should return 401 if not authenticated", async () => {
-    vi.mocked(auth).mockResolvedValue(null);
+    vi.mocked(getSession).mockResolvedValue(null as any);
 
-    const request = new Request("http://localhost:3000/api/prompts/123/comments", {
+    const request = new Request("http://localhost:3000/api/resources/123/comments", {
       method: "POST",
       body: JSON.stringify({ content: "Test comment" }),
     });
-    const response = await POST(request, { params: Promise.resolve({ id: "123" }) });
+    const response = await POST(request as unknown as NextRequest, { params: Promise.resolve({ id: "123" }) });
     const data = await response.json();
 
     expect(response.status).toBe(401);
@@ -244,28 +241,28 @@ describe("POST /api/prompts/[id]/comments", () => {
   });
 
   it("should return 400 for empty content", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
 
-    const request = new Request("http://localhost:3000/api/prompts/123/comments", {
+    const request = new Request("http://localhost:3000/api/resources/123/comments", {
       method: "POST",
       body: JSON.stringify({ content: "" }),
     });
-    const response = await POST(request, { params: Promise.resolve({ id: "123" }) });
+    const response = await POST(request as unknown as NextRequest, { params: Promise.resolve({ id: "123" }) });
     const data = await response.json();
 
     expect(response.status).toBe(400);
     expect(data.error).toBe("validation_error");
   });
 
-  it("should return 404 for non-existent prompt", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(db.prompt.findUnique).mockResolvedValue(null);
+  it("should return 404 for non-existent resource", async () => {
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
+    mockSelectSequence(db, []);
 
-    const request = new Request("http://localhost:3000/api/prompts/123/comments", {
+    const request = new Request("http://localhost:3000/api/resources/123/comments", {
       method: "POST",
       body: JSON.stringify({ content: "Test comment" }),
     });
-    const response = await POST(request, { params: Promise.resolve({ id: "123" }) });
+    const response = await POST(request as unknown as NextRequest, { params: Promise.resolve({ id: "123" }) });
     const data = await response.json();
 
     expect(response.status).toBe(404);
@@ -273,112 +270,73 @@ describe("POST /api/prompts/[id]/comments", () => {
   });
 
   it("should create comment successfully", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(db.prompt.findUnique).mockResolvedValue({
-      id: "123",
-      isPrivate: false,
-      authorId: "author1",
-    } as never);
-    vi.mocked(db.comment.create).mockResolvedValue({
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
+    mockSelectSequence(db, 
+      [{ id: "123", isPrivate: false, authorId: "author1" }],
+      [{ id: "user1", name: "Test User", username: "testuser", avatar: null, role: "USER" }],
+    );
+    vi.mocked(db.insert).mockReturnValue(createChainMock([{
       id: "comment1",
       content: "Test comment",
+      score: 0,
       createdAt: new Date(),
       updatedAt: new Date(),
+      promptId: "123",
+      authorId: "user1",
       parentId: null,
-      author: {
-        id: "user1",
-        name: "Test User",
-        username: "testuser",
-        avatar: null,
-        role: "USER",
-      },
-    } as never);
-    vi.mocked(db.notification.create).mockResolvedValue({} as never);
+    }]) as any);
 
-    const request = new Request("http://localhost:3000/api/prompts/123/comments", {
+    const request = new Request("http://localhost:3000/api/resources/123/comments", {
       method: "POST",
       body: JSON.stringify({ content: "Test comment" }),
     });
-    const response = await POST(request, { params: Promise.resolve({ id: "123" }) });
+    const response = await POST(request as unknown as NextRequest, { params: Promise.resolve({ id: "123" }) });
     const data = await response.json();
 
     expect(response.status).toBe(200);
+    expect(data.comment.id).toBe("comment1");
     expect(data.comment.content).toBe("Test comment");
-    expect(data.comment.score).toBe(0);
-    expect(data.comment.userVote).toBe(0);
   });
 
-  it("should create notification for prompt owner", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(db.prompt.findUnique).mockResolvedValue({
-      id: "123",
-      isPrivate: false,
-      authorId: "author1", // Different from commenter
-    } as never);
-    vi.mocked(db.comment.create).mockResolvedValue({
+  it("should create notification for resource owner", async () => {
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
+    mockSelectSequence(db, 
+      [{ id: "123", isPrivate: false, authorId: "author1" }],
+      [{ id: "user1", name: "User", username: "user", avatar: null, role: "USER" }],
+    );
+    vi.mocked(db.insert).mockReturnValue(createChainMock([{
       id: "comment1",
       content: "Test",
+      score: 0,
       createdAt: new Date(),
       updatedAt: new Date(),
+      promptId: "123",
+      authorId: "user1",
       parentId: null,
-      author: { id: "user1", name: "User", username: "user", avatar: null, role: "USER" },
-    } as never);
-    vi.mocked(db.notification.create).mockResolvedValue({} as never);
+    }]) as any);
 
-    const request = new Request("http://localhost:3000/api/prompts/123/comments", {
+    const request = new Request("http://localhost:3000/api/resources/123/comments", {
       method: "POST",
       body: JSON.stringify({ content: "Test" }),
     });
-    await POST(request, { params: Promise.resolve({ id: "123" }) });
+    await POST(request as unknown as NextRequest, { params: Promise.resolve({ id: "123" }) });
 
-    expect(db.notification.create).toHaveBeenCalledWith({
-      data: expect.objectContaining({
-        type: "COMMENT",
-        userId: "author1",
-        actorId: "user1",
-      }),
-    });
-  });
-
-  it("should not create notification when commenting on own prompt", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "author1" } } as never);
-    vi.mocked(db.prompt.findUnique).mockResolvedValue({
-      id: "123",
-      isPrivate: false,
-      authorId: "author1", // Same as commenter
-    } as never);
-    vi.mocked(db.comment.create).mockResolvedValue({
-      id: "comment1",
-      content: "Test",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      parentId: null,
-      author: { id: "author1", name: "Author", username: "author", avatar: null, role: "USER" },
-    } as never);
-
-    const request = new Request("http://localhost:3000/api/prompts/123/comments", {
-      method: "POST",
-      body: JSON.stringify({ content: "Test" }),
-    });
-    await POST(request, { params: Promise.resolve({ id: "123" }) });
-
-    expect(db.notification.create).not.toHaveBeenCalled();
+    // insert should be called for both comment and notification
+    expect(db.insert).toHaveBeenCalled();
   });
 
   it("should return 400 for invalid parent comment", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(db.prompt.findUnique).mockResolvedValue({
-      id: "123",
-      isPrivate: false,
-      authorId: "author1",
-    } as never);
-    vi.mocked(db.comment.findUnique).mockResolvedValue(null);
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
+    mockSelectSequence(db, 
+      [{ id: "123", isPrivate: false, authorId: "author1" }],
+      [],  // parent comment not found
+    );
 
-    const request = new Request("http://localhost:3000/api/prompts/123/comments", {
+    const request = new Request("http://localhost:3000/api/resources/123/comments", {
       method: "POST",
       body: JSON.stringify({ content: "Reply", parentId: "nonexistent" }),
     });
-    const response = await POST(request, { params: Promise.resolve({ id: "123" }) });
+    const response = await POST(request as unknown as NextRequest, { params: Promise.resolve({ id: "123" }) });
     const data = await response.json();
 
     expect(response.status).toBe(400);

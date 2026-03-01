@@ -1,16 +1,12 @@
-import { getRequestConfig } from "next-intl/server";
 import { cookies, headers } from "next/headers";
 import { LOCALE_COOKIE, supportedLocales, defaultLocale } from "@/lib/i18n/config";
-import { IntlErrorCode } from "next-intl";
 
 /**
  * Parse Accept-Language header and find the best matching supported locale
- * e.g., "ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7" -> "ru" if supported
  */
 function detectLocaleFromHeader(acceptLanguage: string | null): string | null {
   if (!acceptLanguage) return null;
-  
-  // Parse Accept-Language header into array of {lang, q} sorted by quality
+
   const languages = acceptLanguage
     .split(",")
     .map((part) => {
@@ -19,69 +15,69 @@ function detectLocaleFromHeader(acceptLanguage: string | null): string | null {
       return { lang: lang.trim().toLowerCase(), q };
     })
     .sort((a, b) => b.q - a.q);
-  
-  // Find first matching supported locale
+
   for (const { lang } of languages) {
-    // Try exact match first (e.g., "en-us" -> "en")
     const baseLocale = lang.split("-")[0];
     if (supportedLocales.includes(baseLocale)) {
       return baseLocale;
     }
-    // Try full locale match
     if (supportedLocales.includes(lang)) {
       return lang;
     }
   }
-  
+
   return null;
 }
 
-export default getRequestConfig(async () => {
+/**
+ * Detect the current locale from cookie or Accept-Language header (server-side)
+ */
+export async function getLocale(): Promise<string> {
   const cookieStore = await cookies();
   const headerStore = await headers();
-  
-  // 1. Check for saved locale preference in cookie
+
   let locale = cookieStore.get(LOCALE_COOKIE)?.value;
-  let detectedFromBrowser = false;
-  
-  // 2. If no cookie, detect from browser's Accept-Language header
+
   if (!locale || !supportedLocales.includes(locale)) {
     const acceptLanguage = headerStore.get("accept-language");
     const detected = detectLocaleFromHeader(acceptLanguage);
-    if (detected) {
-      locale = detected;
-      detectedFromBrowser = true;
-    } else {
-      locale = defaultLocale;
-    }
+    locale = detected ?? defaultLocale;
   }
-  
-  // Load messages for the locale
-  let messages;
+
+  return locale;
+}
+
+/**
+ * Load messages for a given locale (server-side)
+ */
+export async function getMessages(locale?: string): Promise<Record<string, any>> {
+  const lang = locale ?? await getLocale();
   try {
-    messages = (await import(`@/../messages/${locale}.json`)).default;
+    return (await import(`@/../messages/${lang}.json`)).default;
   } catch {
-    // Fall back to default locale messages
-    messages = (await import(`@/../messages/${defaultLocale}.json`)).default;
+    return (await import(`@/../messages/${defaultLocale}.json`)).default;
   }
-  
-  return {
-    locale,
-    messages,
-    timeZone: "UTC",
-    // Handle missing messages gracefully in production
-    onError(error) {
-      if (error.code === IntlErrorCode.MISSING_MESSAGE) {
-        // Log missing messages but don't throw
-        console.warn(`Missing translation: ${error.originalMessage}`);
-      } else if (error.code === "ENVIRONMENT_FALLBACK" as IntlErrorCode) {
-        // Silently ignore environment fallback warnings
-      } else {
-        console.error(error);
+}
+
+/**
+ * Create a scoped translation function for server components.
+ * Equivalent to next-intl's getTranslations("namespace").
+ */
+export async function getTranslations(namespace: string): Promise<(key: string, params?: Record<string, any>) => string> {
+  const messages = await getMessages();
+  return (key: string, params?: Record<string, any>) => {
+    const fullKey = `${namespace}.${key}`;
+    const parts = fullKey.split(".");
+    let val: any = messages;
+    for (const p of parts) {
+      val = val?.[p];
+    }
+    if (typeof val !== "string") return fullKey;
+    if (params) {
+      for (const [k, v] of Object.entries(params)) {
+        val = val.replace(new RegExp(`\\{${k}\\}`, "g"), String(v));
       }
-    },
-    getMessageFallback({ namespace, key }) {
-      return `${namespace}.${key}`;
-    },
+    }
+    return val;
   };
-});
+}

@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { eq } from "drizzle-orm";
+import { getSession } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { webhookConfigs } from "@/lib/schema";
 import { isPrivateUrl } from "@/lib/webhook";
 
 export async function POST(
@@ -8,7 +10,7 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await auth();
+    const session = await getSession();
     if (!session?.user || session.user.role !== "ADMIN") {
       return NextResponse.json({ error: "unauthorized" }, { status: 401 });
     }
@@ -16,9 +18,10 @@ export async function POST(
     const { id } = await params;
 
     // Get the webhook configuration
-    const webhook = await db.webhookConfig.findUnique({
-      where: { id },
-    });
+    const [webhook] = await db
+      .select()
+      .from(webhookConfigs)
+      .where(eq(webhookConfigs.id, id));
 
     if (!webhook) {
       return NextResponse.json({ error: "Webhook not found" }, { status: 404 });
@@ -26,15 +29,14 @@ export async function POST(
 
     // Replace placeholders with test values (must match WEBHOOK_PLACEHOLDERS)
     let payload = webhook.payload;
-    const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://prompts.chat";
+    const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://webmcp.land";
     const testData: Record<string, string> = {
-      "{{PROMPT_ID}}": "test-prompt-id-12345",
-      "{{PROMPT_TITLE}}": "Test Prompt Title",
-      "{{PROMPT_DESCRIPTION}}": "This is a test description for the webhook.",
-      "{{PROMPT_CONTENT}}": "This is the test prompt content. It demonstrates how your webhook will receive data when a new prompt is created.",
-      "{{PROMPT_TYPE}}": "TEXT",
-      "{{PROMPT_URL}}": `${siteUrl}/prompts/test-prompt-id-12345`,
-      "{{PROMPT_MEDIA_URL}}": "https://example.com/media/test-image.png",
+      "{{RESOURCE_ID}}": "test-resource-id-12345",
+      "{{RESOURCE_TITLE}}": "Test Resource Title",
+      "{{RESOURCE_DESCRIPTION}}": "This is a test description for the webhook.",
+      "{{RESOURCE_ENDPOINT_URL}}": "https://example.com/mcp",
+      "{{RESOURCE_SERVER_TYPE}}": "MCP",
+      "{{RESOURCE_URL}}": `${siteUrl}/resources/test-resource-id-12345`,
       "{{AUTHOR_USERNAME}}": "testuser",
       "{{AUTHOR_NAME}}": "Test User",
       "{{AUTHOR_AVATAR}}": "https://avatars.githubusercontent.com/u/1234567",
@@ -49,7 +51,6 @@ export async function POST(
         minute: "2-digit",
       }),
       "{{SITE_URL}}": siteUrl,
-      "{{CHATGPT_URL}}": `https://chat.openai.com/?prompt=${encodeURIComponent("This is the test prompt content. It demonstrates how your webhook will receive data when a new prompt is created.")}`,
     };
 
     for (const [placeholder, value] of Object.entries(testData)) {

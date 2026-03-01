@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Download, Copy, Check } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { useBranding } from "@/components/providers/branding-provider";
 import { notFound } from "next/navigation";
@@ -173,7 +173,7 @@ function isLight(color: string): boolean {
 
 export default function BrandAssetsPage() {
   const branding = useBranding();
-  const t = useTranslations("brand");
+  const { t } = useTranslation();
 
   // Redirect if using clone branding
   if (branding.useCloneBranding) {
@@ -182,27 +182,27 @@ export default function BrandAssetsPage() {
 
   return (
     <div className="container max-w-4xl py-10">
-      <h1 className="text-3xl font-bold mb-2">{t("title")}</h1>
+      <h1 className="text-3xl font-bold mb-2">{t("brand.title")}</h1>
       <p className="text-muted-foreground mb-10">
-        {t("description", { name: branding.name })}
+        {t("brand.description", { name: branding.name })}
       </p>
 
       <div className="space-y-10">
         {/* Logos Section */}
         <section>
-          <h2 className="text-xl font-semibold mb-4">{t("logos")}</h2>
+          <h2 className="text-xl font-semibold mb-4">{t("brand.logos")}</h2>
           <div className="grid md:grid-cols-2 gap-4">
             {/* Logo for light backgrounds */}
             <AssetCard
-              title={t("logo")}
-              description={t("forLightBackgrounds")}
+              title={t("brand.logo")}
+              description={t("brand.forLightBackgrounds")}
               bgClass="bg-gray-100"
               downloadUrl="/logo.svg"
-              filename="prompts-chat-logo.svg"
+              filename="webmcp-land-logo.svg"
             >
               <Image
                 src="/logo.svg"
-                alt="prompts.chat logo"
+                alt="webmcp.land logo"
                 width={80}
                 height={80}
                 className="h-20 w-auto"
@@ -211,15 +211,15 @@ export default function BrandAssetsPage() {
 
             {/* Logo for dark backgrounds */}
             <AssetCard
-              title={t("logo")}
-              description={t("forDarkBackgrounds")}
+              title={t("brand.logo")}
+              description={t("brand.forDarkBackgrounds")}
               bgClass="bg-gray-900"
               downloadUrl="/logo-dark.svg"
-              filename="prompts-chat-logo-dark.svg"
+              filename="webmcp-land-logo-dark.svg"
             >
               <Image
                 src="/logo-dark.svg"
-                alt="prompts.chat logo dark"
+                alt="webmcp.land logo dark"
                 width={80}
                 height={80}
                 className="h-20 w-auto"
@@ -228,16 +228,16 @@ export default function BrandAssetsPage() {
 
             {/* Logo with text - light */}
             <AssetCard
-              title={t("logoWithName")}
-              description={t("forLightBackgrounds")}
+              title={t("brand.logoWithName")}
+              description={t("brand.forLightBackgrounds")}
               bgClass="bg-gray-100"
               downloadUrl="/logo.svg"
-              filename="prompts-chat-logo.svg"
+              filename="webmcp-land-logo.svg"
             >
               <div className="flex items-center gap-3">
                 <Image
                   src="/logo.svg"
-                  alt="prompts.chat logo"
+                  alt="webmcp.land logo"
                   width={48}
                   height={48}
                   className="h-12 w-auto"
@@ -248,16 +248,16 @@ export default function BrandAssetsPage() {
 
             {/* Logo with text - dark */}
             <AssetCard
-              title={t("logoWithName")}
-              description={t("forDarkBackgrounds")}
+              title={t("brand.logoWithName")}
+              description={t("brand.forDarkBackgrounds")}
               bgClass="bg-gray-900"
               downloadUrl="/logo-dark.svg"
-              filename="prompts-chat-logo-dark.svg"
+              filename="webmcp-land-logo-dark.svg"
             >
               <div className="flex items-center gap-3">
                 <Image
                   src="/logo-dark.svg"
-                  alt="prompts.chat logo dark"
+                  alt="webmcp.land logo dark"
                   width={48}
                   height={48}
                   className="h-12 w-auto"
@@ -271,12 +271,12 @@ export default function BrandAssetsPage() {
         {/* Promi Mascot Section */}
         <section>
           <h2 className="text-xl font-semibold mb-4">Promi</h2>
-          <p className="text-sm text-muted-foreground mb-4">The pixel art mascot for prompts.chat Kids</p>
+          <p className="text-sm text-muted-foreground mb-4">The pixel art mascot for webmcp.land Kids</p>
           <div className="grid md:grid-cols-2 gap-4">
             {/* Promi for light backgrounds */}
             <AssetCard
               title="Promi"
-              description={t("forLightBackgrounds")}
+              description={t("brand.forLightBackgrounds")}
               bgClass="bg-gray-100"
               downloadUrl="/promi.svg"
               filename="promi.svg"
@@ -287,7 +287,7 @@ export default function BrandAssetsPage() {
             {/* Promi for dark backgrounds */}
             <AssetCard
               title="Promi"
-              description={t("forDarkBackgrounds")}
+              description={t("brand.forDarkBackgrounds")}
               bgClass="bg-gray-900"
               downloadUrl="/promi-dark.svg"
               filename="promi-dark.svg"
@@ -299,11 +299,11 @@ export default function BrandAssetsPage() {
 
         {/* Animated Logos Section */}
         <section>
-          <h2 className="text-xl font-semibold mb-4">{t("animatedLogos")}</h2>
+          <h2 className="text-xl font-semibold mb-4">{t("brand.animatedLogos")}</h2>
           <div className="grid md:grid-cols-2 gap-4">
             {/* Logo animated */}
             <AssetCard
-              title={t("logo")}
+              title={t("brand.logo")}
               description="Animated"
               bgClass="bg-gray-100"
               downloadUrl="/logo-animated.svg"
@@ -329,64 +329,50 @@ export default function BrandAssetsPage() {
 
         {/* Colors Section */}
         <section>
-          <h2 className="text-xl font-semibold mb-4">{t("brandColors")}</h2>
-          <p className="text-sm text-muted-foreground mb-4">{t("clickToCopy")}</p>
+          <h2 className="text-xl font-semibold mb-4">{t("brand.brandColors")}</h2>
+          <p className="text-sm text-muted-foreground mb-4">{t("brand.clickToCopy")}</p>
           <div className="grid gap-2">
             <ColorCard
               color="#000000"
               name="Primary"
-              description={t("primary")}
+              description={t("brand.primary")}
             />
             <ColorCard
               color="#ffffff"
               name="Background"
-              description={t("background")}
+              description={t("brand.background")}
             />
             <ColorCard
               color="#6366f1"
               name="Accent"
-              description={t("accent")}
+              description={t("brand.accent")}
             />
             <ColorCard
               color="#71717a"
               name="Muted"
-              description={t("muted")}
+              description={t("brand.muted")}
             />
           </div>
         </section>
 
         {/* Usage Guidelines */}
         <section>
-          <h2 className="text-xl font-semibold mb-4">{t("usageGuidelines")}</h2>
+          <h2 className="text-xl font-semibold mb-4">{t("brand.usageGuidelines")}</h2>
           <div className="prose prose-neutral dark:prose-invert max-w-none">
             <ul className="list-disc list-inside text-muted-foreground space-y-2">
-              <li>{t("guideline1")}</li>
-              <li>{t("guideline2")}</li>
-              <li>{t("guideline3")}</li>
-              <li>{t("guideline4")}</li>
-              <li>{t("guideline5")}</li>
+              <li>{t("brand.guideline1")}</li>
+              <li>{t("brand.guideline2")}</li>
+              <li>{t("brand.guideline3")}</li>
+              <li>{t("brand.guideline4")}</li>
+              <li>{t("brand.guideline5")}</li>
             </ul>
           </div>
         </section>
 
         {/* License */}
         <section>
-          <h2 className="text-xl font-semibold mb-4">{t("license")}</h2>
-          <p className="text-muted-foreground">
-            {t.rich("licenseText", {
-              name: branding.name,
-              link: (chunks) => (
-                <a
-                  href="https://creativecommons.org/publicdomain/zero/1.0/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline hover:text-foreground"
-                >
-                  {chunks}
-                </a>
-              ),
-            })}
-          </p>
+          <h2 className="text-xl font-semibold mb-4">{t("brand.license")}</h2>
+          <p className="text-muted-foreground" dangerouslySetInnerHTML={{ __html: t("brand.licenseText", { name: branding.name }) }} />
         </section>
       </div>
     </div>

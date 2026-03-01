@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { getSession } from "@/lib/auth";
 import { getStoragePlugin } from "@/lib/plugins/registry";
 import sharp from "sharp";
 
 const MAX_IMAGE_SIZE = 4 * 1024 * 1024; // 4MB for images
-const MAX_VIDEO_SIZE = 4 * 1024 * 1024; // 4MB for videos (Vercel serverless limit)
+const MAX_VIDEO_SIZE = 4 * 1024 * 1024; // 4MB for videos
 const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp"];
 const ALLOWED_VIDEO_TYPES = ["video/mp4"];
 
@@ -15,7 +15,7 @@ async function compressToJpg(buffer: Buffer): Promise<Buffer> {
 }
 
 export async function POST(request: NextRequest) {
-  const session = await auth();
+  const session = await getSession();
   
   if (!session?.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

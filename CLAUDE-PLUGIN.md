@@ -1,27 +1,27 @@
 # Claude Code Plugin
 
-Access prompts.chat directly in [Claude Code](https://code.claude.com) with our official plugin. Search prompts, discover skills, and improve your prompts without leaving your IDE.
+Access webmcp.land directly in [Claude Code](https://code.claude.com) with our official plugin. Search prompts, discover skills, and improve your prompts without leaving your IDE.
 
 ## Installation
 
-Add the prompts.chat marketplace to Claude Code:
+Add the webmcp.land marketplace to Claude Code:
 
 ```
-/plugin marketplace add f/prompts.chat
+/plugin marketplace add eser/webmcp.land
 ```
 
 Then install the plugin:
 
 ```
-/plugin install prompts.chat@prompts.chat
+/plugin install webmcp.land@webmcp.land
 ```
 
 ## Features
 
 | Feature | Description |
 |---------|-------------|
-| **MCP Server** | Connect to prompts.chat API for real-time prompt access |
-| **Commands** | `/prompts.chat:prompts` and `/prompts.chat:skills` slash commands |
+| **MCP Server** | Connect to webmcp.land API for real-time prompt access |
+| **Commands** | `/webmcp.land:prompts` and `/webmcp.land:skills` slash commands |
 | **Agents** | Prompt Manager and Skill Manager agents for complex workflows |
 | **Skills** | Auto-activating skills for prompt and skill discovery |
 
@@ -30,38 +30,38 @@ Then install the plugin:
 ### Search Prompts
 
 ```
-/prompts.chat:prompts <query>
-/prompts.chat:prompts <query> --type IMAGE
-/prompts.chat:prompts <query> --category coding
-/prompts.chat:prompts <query> --tag productivity
+/webmcp.land:prompts <query>
+/webmcp.land:prompts <query> --type IMAGE
+/webmcp.land:prompts <query> --category coding
+/webmcp.land:prompts <query> --tag productivity
 ```
 
 **Examples:**
 ```
-/prompts.chat:prompts code review
-/prompts.chat:prompts writing assistant --category writing
-/prompts.chat:prompts midjourney --type IMAGE
-/prompts.chat:prompts react developer --tag coding
+/webmcp.land:prompts code review
+/webmcp.land:prompts writing assistant --category writing
+/webmcp.land:prompts midjourney --type IMAGE
+/webmcp.land:prompts react developer --tag coding
 ```
 
 ### Search Skills
 
 ```
-/prompts.chat:skills <query>
-/prompts.chat:skills <query> --category coding
-/prompts.chat:skills <query> --tag automation
+/webmcp.land:skills <query>
+/webmcp.land:skills <query> --category coding
+/webmcp.land:skills <query> --tag automation
 ```
 
 **Examples:**
 ```
-/prompts.chat:skills testing automation
-/prompts.chat:skills documentation --category coding
-/prompts.chat:skills api integration
+/webmcp.land:skills testing automation
+/webmcp.land:skills documentation --category coding
+/webmcp.land:skills api integration
 ```
 
 ## MCP Tools
 
-The plugin provides these tools via the prompts.chat MCP server:
+The plugin provides these tools via the webmcp.land MCP server:
 
 ### Prompt Tools
 
@@ -88,7 +88,7 @@ The plugin provides these tools via the prompts.chat MCP server:
 ### Prompt Manager
 
 The `prompt-manager` agent helps you:
-- Search for prompts across prompts.chat
+- Search for prompts across webmcp.land
 - Get and fill prompt variables
 - Save new prompts to your account
 - Improve prompts using AI
@@ -109,7 +109,7 @@ Automatically activates when you:
 - Ask for prompt templates
 - Want to search for prompts
 - Need to improve a prompt
-- Mention prompts.chat
+- Mention webmcp.land
 
 ### Skill Lookup
 
@@ -121,7 +121,7 @@ Automatically activates when you:
 
 ## Authentication
 
-To save prompts and skills, you need an API key from [prompts.chat/settings](https://prompts.chat/settings).
+To save prompts and skills, you need an API key from [webmcp.land/settings](https://webmcp.land/settings).
 
 ### Option 1: Environment Variable
 
@@ -142,13 +142,13 @@ PROMPTS_API_KEY: your_api_key_here
 ## Plugin Structure
 
 ```
-plugins/claude/prompts.chat/
+plugins/claude/webmcp.land/
 ├── .claude-plugin/
 │   └── plugin.json          # Plugin manifest
 ├── .mcp.json                 # MCP server configuration
 ├── commands/
-│   ├── prompts.md           # /prompts.chat:prompts command
-│   └── skills.md            # /prompts.chat:skills command
+│   ├── prompts.md           # /webmcp.land:prompts command
+│   └── skills.md            # /webmcp.land:skills command
 ├── agents/
 │   ├── prompt-manager.md    # Prompt management agent
 │   └── skill-manager.md     # Skill management agent
@@ -161,6 +161,6 @@ plugins/claude/prompts.chat/
 
 ## Links
 
-- **[prompts.chat](https://prompts.chat)** - Browse all prompts and skills
-- **[API Documentation](https://prompts.chat/api/mcp)** - MCP server endpoint
-- **[Settings](https://prompts.chat/settings)** - Get your API key
+- **[webmcp.land](https://webmcp.land)** - Browse all prompts and skills
+- **[API Documentation](https://webmcp.land/api/mcp)** - MCP server endpoint
+- **[Settings](https://webmcp.land/settings)** - Get your API key

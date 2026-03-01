@@ -1,0 +1,23 @@
+{
+  "name": "webmcp.land",
+  "description": "Access thousands of AI prompts and skills directly in your AI coding assistant. Search prompts, discover skills, save your own, and improve prompts with AI.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Eser Ozvataf",
+    "email": "eser@acikyazilim.com"
+  },
+  "homepage": "https://webmcp.land",
+  "repository": "https://github.com/eser/webmcp.land",
+  "license": "MIT",
+  "keywords": ["prompts", "ai", "skills", "chatgpt", "claude", "llm"],
+  "commands": [
+    "./commands/prompts.md",
+    "./commands/skills.md"
+  ],
+  "agents": [
+    "./agents/prompt-manager.md",
+    "./agents/skill-manager.md"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json"
+}

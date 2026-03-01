@@ -79,7 +79,7 @@ export default function DownloadPrompts() {
 
   const markdown = `# Download Prompts
 
-Download all prompts from prompts.chat for offline access and faster searching.
+Download all prompts from webmcp.land for offline access and faster searching.
 
 ## Cache Status
 
@@ -91,7 +91,7 @@ ${error ? `\n\n## Error\n\n\`${error}\`` : ""}
 
 ---
 
-Press **Enter** to download all prompts. This will fetch the latest prompts from prompts.chat and cache them locally for offline use.
+Press **Enter** to download all prompts. This will fetch the latest prompts from webmcp.land and cache them locally for offline use.
 `;
 
   return (
@@ -130,7 +130,7 @@ Press **Enter** to download all prompts. This will fetch the latest prompts from
           <Detail.Metadata.Separator />
           <Detail.Metadata.Label
             title="Source"
-            text="prompts.chat/prompts.json"
+            text="webmcp.land/prompts.json"
           />
         </Detail.Metadata>
       }

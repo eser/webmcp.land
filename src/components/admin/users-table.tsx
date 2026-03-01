@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { useTranslations, useLocale } from "next-intl";
+import { useTranslation } from "react-i18next";
 import { formatDistanceToNow } from "@/lib/date";
 import { MoreHorizontal, Shield, User, Trash2, BadgeCheck, Search, Loader2, ChevronLeft, ChevronRight, Filter, Flag, AlertTriangle, Sparkles } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -71,9 +71,8 @@ interface Pagination {
 
 export function UsersTable() {
   const router = useRouter();
-  const t = useTranslations("admin.users");
-  const tCommon = useTranslations("common");
-  const locale = useLocale();
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language;
   const [deleteUserId, setDeleteUserId] = useState<string | null>(null);
   const [editCreditsUser, setEditCreditsUser] = useState<UserData | null>(null);
   const [newCreditLimit, setNewCreditLimit] = useState("");
@@ -137,10 +136,10 @@ export function UsersTable() {
 
       if (!res.ok) throw new Error("Failed to update role");
 
-      toast.success(t("roleUpdated"));
+      toast.success(t("admin.users.roleUpdated"));
       router.refresh();
     } catch {
-      toast.error(t("roleUpdateFailed"));
+      toast.error(t("admin.users.roleUpdateFailed"));
     }
   };
 
@@ -154,11 +153,11 @@ export function UsersTable() {
 
       if (!res.ok) throw new Error("Failed to update verification");
 
-      toast.success(verified ? t("verified") : t("unverified"));
+      toast.success(verified ? t("admin.users.verified") : t("admin.users.unverified"));
       fetchUsers(currentPage, searchQuery, userFilter);
       router.refresh();
     } catch {
-      toast.error(t("verifyFailed"));
+      toast.error(t("admin.users.verifyFailed"));
     }
   };
 
@@ -172,11 +171,11 @@ export function UsersTable() {
 
       if (!res.ok) throw new Error("Failed to update flag status");
 
-      toast.success(flagged ? t("flagged") : t("unflagged"));
+      toast.success(flagged ? t("admin.users.flagged") : t("admin.users.unflagged"));
       fetchUsers(currentPage, searchQuery, userFilter);
       router.refresh();
     } catch {
-      toast.error(t("flagFailed"));
+      toast.error(t("admin.users.flagFailed"));
     }
   };
 
@@ -191,11 +190,11 @@ export function UsersTable() {
 
       if (!res.ok) throw new Error("Failed to delete user");
 
-      toast.success(t("deleted"));
+      toast.success(t("admin.users.deleted"));
       fetchUsers(currentPage, searchQuery, userFilter);
       router.refresh();
     } catch {
-      toast.error(t("deleteFailed"));
+      toast.error(t("admin.users.deleteFailed"));
     } finally {
       setLoading(false);
       setDeleteUserId(null);
@@ -220,11 +219,11 @@ export function UsersTable() {
 
       if (!res.ok) throw new Error("Failed to update credits");
 
-      toast.success(t("creditsUpdated"));
+      toast.success(t("admin.users.creditsUpdated"));
       fetchUsers(currentPage, searchQuery, userFilter);
       router.refresh();
     } catch {
-      toast.error(t("creditsUpdateFailed"));
+      toast.error(t("admin.users.creditsUpdateFailed"));
     } finally {
       setLoading(false);
       setEditCreditsUser(null);
@@ -235,29 +234,29 @@ export function UsersTable() {
     <>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
         <div>
-          <h3 className="text-lg font-semibold">{t("title")}</h3>
-          <p className="text-sm text-muted-foreground">{t("description")}</p>
+          <h3 className="text-lg font-semibold">{t("admin.users.title")}</h3>
+          <p className="text-sm text-muted-foreground">{t("admin.users.description")}</p>
         </div>
         <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-          <Select value={userFilter} onValueChange={handleFilterChange}>
+          <Select value={userFilter} onValueChange={(value) => value && handleFilterChange(value)}>
             <SelectTrigger className="w-full sm:w-[140px]">
               <Filter className="h-4 w-4 mr-2" />
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">{t("filters.all")}</SelectItem>
-              <SelectItem value="admin">{t("filters.admin")}</SelectItem>
-              <SelectItem value="user">{t("filters.user")}</SelectItem>
-              <SelectItem value="verified">{t("filters.verified")}</SelectItem>
-              <SelectItem value="unverified">{t("filters.unverified")}</SelectItem>
-              <SelectItem value="flagged">{t("filters.flagged")}</SelectItem>
+              <SelectItem value="all">{t("admin.users.filters.all")}</SelectItem>
+              <SelectItem value="admin">{t("admin.users.filters.admin")}</SelectItem>
+              <SelectItem value="user">{t("admin.users.filters.user")}</SelectItem>
+              <SelectItem value="verified">{t("admin.users.filters.verified")}</SelectItem>
+              <SelectItem value="unverified">{t("admin.users.filters.unverified")}</SelectItem>
+              <SelectItem value="flagged">{t("admin.users.filters.flagged")}</SelectItem>
             </SelectContent>
           </Select>
           <div className="flex gap-2">
             <div className="relative flex-1 sm:flex-none">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder={t("searchPlaceholder")}
+                placeholder={t("admin.users.searchPlaceholder")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSearch()}
@@ -277,7 +276,7 @@ export function UsersTable() {
         </div>
       ) : users.length === 0 ? (
         <div className="text-center py-12 border rounded-md text-muted-foreground">
-          {t("noUsers")}
+          {t("admin.users.noUsers")}
         </div>
       ) : (
         <>
@@ -303,34 +302,32 @@ export function UsersTable() {
                     </div>
                   </div>
                   <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0">
+                    <DropdownMenuTrigger render={<Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0" />}>
                         <MoreHorizontal className="h-4 w-4" />
-                      </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       {user.role === "USER" ? (
                         <DropdownMenuItem onClick={() => handleRoleChange(user.id, "ADMIN")}>
                           <Shield className="h-4 w-4 mr-2" />
-                          {t("makeAdmin")}
+                          {t("admin.users.makeAdmin")}
                         </DropdownMenuItem>
                       ) : (
                         <DropdownMenuItem onClick={() => handleRoleChange(user.id, "USER")}>
                           <User className="h-4 w-4 mr-2" />
-                          {t("removeAdmin")}
+                          {t("admin.users.removeAdmin")}
                         </DropdownMenuItem>
                       )}
                       <DropdownMenuItem onClick={() => handleVerifyToggle(user.id, !user.verified)}>
                         <BadgeCheck className="h-4 w-4 mr-2" />
-                        {user.verified ? t("unverify") : t("verify")}
+                        {user.verified ? t("admin.users.unverify") : t("admin.users.verify")}
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => handleFlagToggle(user.id, !user.flagged)}>
                         <Flag className="h-4 w-4 mr-2" />
-                        {user.flagged ? t("unflag") : t("flag")}
+                        {user.flagged ? t("admin.users.unflag") : t("admin.users.flag")}
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => handleEditCredits(user)}>
                         <Sparkles className="h-4 w-4 mr-2" />
-                        {t("editCredits")}
+                        {t("admin.users.editCredits")}
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
@@ -338,7 +335,7 @@ export function UsersTable() {
                         onClick={() => setDeleteUserId(user.id)}
                       >
                         <Trash2 className="h-4 w-4 mr-2" />
-                        {t("delete")}
+                        {t("admin.users.delete")}
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -351,7 +348,7 @@ export function UsersTable() {
                   </Badge>
                 </div>
                 <div className="flex items-center justify-between text-xs text-muted-foreground">
-                  <span>{user._count.prompts} {t("prompts").toLowerCase()}</span>
+                  <span>{user._count.prompts} {t("admin.users.prompts").toLowerCase()}</span>
                   <span>{formatDistanceToNow(new Date(user.createdAt), locale)}</span>
                 </div>
               </div>
@@ -363,11 +360,11 @@ export function UsersTable() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>{t("user")}</TableHead>
-              <TableHead>{t("email")}</TableHead>
-              <TableHead>{t("role")}</TableHead>
-              <TableHead className="text-center">{t("prompts")}</TableHead>
-              <TableHead>{t("joined")}</TableHead>
+              <TableHead>{t("admin.users.user")}</TableHead>
+              <TableHead>{t("admin.users.email")}</TableHead>
+              <TableHead>{t("admin.users.role")}</TableHead>
+              <TableHead className="text-center">{t("admin.users.prompts")}</TableHead>
+              <TableHead>{t("admin.users.joined")}</TableHead>
               <TableHead className="w-[50px]"></TableHead>
             </TableRow>
           </TableHeader>
@@ -405,34 +402,32 @@ export function UsersTable() {
                 </TableCell>
                 <TableCell>
                   <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon" className="h-8 w-8">
+                    <DropdownMenuTrigger render={<Button variant="ghost" size="icon" className="h-8 w-8" />}>
                         <MoreHorizontal className="h-4 w-4" />
-                      </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       {user.role === "USER" ? (
                         <DropdownMenuItem onClick={() => handleRoleChange(user.id, "ADMIN")}>
                           <Shield className="h-4 w-4 mr-2" />
-                          {t("makeAdmin")}
+                          {t("admin.users.makeAdmin")}
                         </DropdownMenuItem>
                       ) : (
                         <DropdownMenuItem onClick={() => handleRoleChange(user.id, "USER")}>
                           <User className="h-4 w-4 mr-2" />
-                          {t("removeAdmin")}
+                          {t("admin.users.removeAdmin")}
                         </DropdownMenuItem>
                       )}
                       <DropdownMenuItem onClick={() => handleVerifyToggle(user.id, !user.verified)}>
                         <BadgeCheck className="h-4 w-4 mr-2" />
-                        {user.verified ? t("unverify") : t("verify")}
+                        {user.verified ? t("admin.users.unverify") : t("admin.users.verify")}
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => handleFlagToggle(user.id, !user.flagged)}>
                         <Flag className="h-4 w-4 mr-2" />
-                        {user.flagged ? t("unflag") : t("flag")}
+                        {user.flagged ? t("admin.users.unflag") : t("admin.users.flag")}
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => handleEditCredits(user)}>
                         <Sparkles className="h-4 w-4 mr-2" />
-                        {t("editCredits")}
+                        {t("admin.users.editCredits")}
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
@@ -440,7 +435,7 @@ export function UsersTable() {
                         onClick={() => setDeleteUserId(user.id)}
                       >
                         <Trash2 className="h-4 w-4 mr-2" />
-                        {t("delete")}
+                        {t("admin.users.delete")}
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -455,7 +450,7 @@ export function UsersTable() {
           {pagination && pagination.totalPages > 1 && (
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-4 pt-4 border-t">
               <p className="text-sm text-muted-foreground">
-                {t("showing", {
+                {t("admin.users.showing", {
                   from: (pagination.page - 1) * pagination.limit + 1,
                   to: Math.min(pagination.page * pagination.limit, pagination.total),
                   total: pagination.total,
@@ -492,17 +487,17 @@ export function UsersTable() {
       <AlertDialog open={!!deleteUserId} onOpenChange={() => setDeleteUserId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>{t("deleteConfirmTitle")}</AlertDialogTitle>
-            <AlertDialogDescription>{t("deleteConfirmDescription")}</AlertDialogDescription>
+            <AlertDialogTitle>{t("admin.users.deleteConfirmTitle")}</AlertDialogTitle>
+            <AlertDialogDescription>{t("admin.users.deleteConfirmDescription")}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+            <AlertDialogCancel>{t("admin.users.cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
               disabled={loading}
               className="bg-destructive text-white hover:bg-destructive/90"
             >
-              {t("delete")}
+              {t("admin.users.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -512,14 +507,14 @@ export function UsersTable() {
       <AlertDialog open={!!editCreditsUser} onOpenChange={() => setEditCreditsUser(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>{t("editCreditsTitle")}</AlertDialogTitle>
+            <AlertDialogTitle>{t("admin.users.editCreditsTitle")}</AlertDialogTitle>
             <AlertDialogDescription>
-              {t("editCreditsDescription", { username: editCreditsUser?.username || "" })}
+              {t("admin.users.editCreditsDescription", { username: editCreditsUser?.username || "" })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <div className="py-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium">{t("dailyLimit")}</label>
+              <label className="text-sm font-medium">{t("admin.users.dailyLimit")}</label>
               <Input
                 type="number"
                 min="0"
@@ -528,7 +523,7 @@ export function UsersTable() {
                 placeholder="10"
               />
               <p className="text-xs text-muted-foreground">
-                {t("currentCredits", { 
+                {t("admin.users.currentCredits", {
                   remaining: editCreditsUser?.generationCreditsRemaining ?? 0,
                   limit: editCreditsUser?.dailyGenerationLimit ?? 0
                 })}
@@ -536,10 +531,10 @@ export function UsersTable() {
             </div>
           </div>
           <AlertDialogFooter>
-            <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+            <AlertDialogCancel>{t("admin.users.cancel")}</AlertDialogCancel>
             <AlertDialogAction onClick={handleSaveCredits} disabled={loading}>
               {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
-              {t("save")}
+              {t("admin.users.save")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

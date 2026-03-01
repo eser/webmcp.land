@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
@@ -22,10 +22,10 @@ interface CategoryFiltersProps {
 export function CategoryFilters({ categorySlug }: CategoryFiltersProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const t = useTranslations("categories");
+  const { t } = useTranslation();
 
-  const currentSort = (searchParams?.get("sort") as SortOption) || "newest";
-  const currentSearch = searchParams?.get("q") || "";
+  const currentSort = (searchParams?.get("categories.sort") as SortOption) || "newest";
+  const currentSearch = searchParams?.get("categories.q") || "";
 
   const updateParams = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams?.toString() || "");
@@ -57,21 +57,21 @@ export function CategoryFilters({ categorySlug }: CategoryFiltersProps) {
         <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
           type="search"
-          placeholder={t("searchPlaceholder")}
+          placeholder={t("categories.searchPlaceholder")}
           defaultValue={currentSearch}
           onKeyDown={handleSearchKeyDown}
           onBlur={handleSearchBlur}
           className="pl-8 h-8 w-full md:w-[180px] text-sm"
         />
       </div>
-      <Select value={currentSort} onValueChange={(value) => updateParams("sort", value)}>
+      <Select value={currentSort} onValueChange={(value) => value && updateParams("sort", value)}>
         <SelectTrigger size="sm" className="h-8 text-sm">
           <SelectValue />
         </SelectTrigger>
         <SelectContent align="end">
           {SORT_OPTIONS.map((option) => (
             <SelectItem key={option} value={option}>
-              {t(`sort.${option}`)}
+              {t(`categories.sort.${option}`)}
             </SelectItem>
           ))}
         </SelectContent>

@@ -26,6 +26,7 @@ dist
 
 # Docker
 docker-compose*.yml
+compose.yml
 Dockerfile*
 
 # Development files
@@ -46,6 +47,3 @@ Thumbs.db
 # Logs
 logs
 *.log
-
-# Prisma
-prisma/migrations/**/migration_lock.toml

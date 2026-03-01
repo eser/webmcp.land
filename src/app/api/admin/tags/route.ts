@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { getSession } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { tags } from "@/lib/schema";
 
 // Create tag
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth();
+    const session = await getSession();
     if (!session?.user || session.user.role !== "ADMIN") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -17,13 +18,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Name and slug are required" }, { status: 400 });
     }
 
-    const tag = await db.tag.create({
-      data: {
+    const [tag] = await db
+      .insert(tags)
+      .values({
         name,
         slug,
         color: color || "#6366f1",
-      },
-    });
+      })
+      .returning();
 
     return NextResponse.json(tag);
   } catch (error) {

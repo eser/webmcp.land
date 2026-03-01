@@ -1,16 +1,17 @@
 import Link from "next/link";
 import Image from "next/image";
-import { getTranslations } from "next-intl/server";
-import { ArrowRight, Star, Heart, Trophy, Users, HeartHandshake, Code, Lock, Building2, Github, GraduationCap, LogIn, Rocket, Quote, History } from "lucide-react";
-import { auth } from "@/lib/auth";
+import { getLocale, getTranslations } from "@/i18n/request";
+import { ArrowRight, Star, HeartHandshake, Code, Lock, Building2, Github, LogIn, Rocket, Quote, History } from "lucide-react";
+import { getSession } from "@/lib/auth";
 import { getConfig } from "@/lib/config";
 import { Button } from "@/components/ui/button";
-import { DiscoveryPrompts } from "@/components/prompts/discovery-prompts";
-import { HeroCategories } from "@/components/prompts/hero-categories";
+import { DiscoveryResources } from "@/components/resources/discovery-resources";
+import { HeroCategories } from "@/components/resources/hero-categories";
 import { CliCommand } from "@/components/layout/cli-command";
 import { ExtensionLink } from "@/components/layout/extension-link";
 import { AnimatedText } from "@/components/layout/animated-text";
-import { SponsorLink, BecomeSponsorLink, BuiltWithLink } from "@/components/layout/sponsor-link";
+import { CyclingText } from "@/components/layout/cycling-text";
+import { SponsorLink, BecomeSponsorLink } from "@/components/layout/sponsor-link";
 
 function getOrdinalSuffix(n: number): string {
   const s = ["th", "st", "nd", "rd"];
@@ -19,11 +20,11 @@ function getOrdinalSuffix(n: number): string {
 }
 
 export default async function HomePage() {
-  const tHomepage = await getTranslations("homepage");
-  const tNav = await getTranslations("nav");
-  const session = await auth();
+  const t = await getTranslations("homepage");
+
+  const session = await getSession();
   const config = await getConfig();
-  
+
   const isOAuth = config.auth.provider !== "credentials";
   // Show register button only for non-logged-in users
   const showRegisterButton = !session && (isOAuth || (config.auth.provider === "credentials" && config.auth.allowRegistration));
@@ -33,11 +34,11 @@ export default async function HomePage() {
 
   // Fetch GitHub stars dynamically (with caching) - only if not using clone branding
   let githubStars = 139000; // fallback
-  if (!useCloneBranding && config.homepage?.achievements?.enabled !== false) {
+  if (!useCloneBranding) {
     try {
-      const res = await fetch("https://api.github.com/repos/f/prompts.chat", {
-        next: { revalidate: 3600 }, // Cache for 1 hour
-      });
+      const res = await fetch("https://api.github.com/repos/eser/webmcp.land", {
+        next: { revalidate: 3600 },
+      } as RequestInit);
       if (res.ok) {
         const data = await res.json();
         githubStars = data.stargazers_count;
@@ -91,7 +92,7 @@ export default async function HomePage() {
               <HeroCategories />
               {/* Clients Section */}
               <div className="flex flex-col items-center gap-3">
-                <span className="text-xs text-muted-foreground uppercase tracking-wider">{tHomepage("clients")}</span>
+                <span className="text-xs text-muted-foreground uppercase tracking-wider">{t("clients")}</span>
                 <div className="flex items-center gap-3">
                   <CliCommand />
                   {config.branding.appStoreUrl && (
@@ -111,7 +112,7 @@ export default async function HomePage() {
                     <ExtensionLink url={config.branding.chromeExtensionUrl} />
                   )}
                   <Link
-                    href="raycast://extensions/fka/prompts-chat?source=prompts.chat"
+                    href="raycast://extensions/eserozvataf/webmcp-land?source=webmcp.land"
                     className="inline-flex items-center justify-center gap-2 h-10 px-2.5 2xl:px-4 bg-zinc-900 dark:bg-zinc-800 hover:bg-zinc-800 dark:hover:bg-zinc-700 rounded-lg transition-colors border border-zinc-700 dark:border-zinc-600"
                   >
                     <svg className="h-4 w-4 text-zinc-100" viewBox="0 0 24 24" fill="currentColor">
@@ -124,7 +125,7 @@ export default async function HomePage() {
             </div>
           </div>
         )}
-        
+
         <div className="container relative z-20">
           <div className="max-w-2xl">
             {useCloneBranding ? (
@@ -139,26 +140,26 @@ export default async function HomePage() {
             ) : (
               <>
                 <h1 className="space-y-0 overflow-visible">
-                  <AnimatedText className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter leading-none text-balance">{tHomepage("heroTitle")}</AnimatedText>
-                  <AnimatedText className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl italic font-display tracking-tight leading-none whitespace-nowrap">{tHomepage("heroSubtitle")}</AnimatedText>
+                  <AnimatedText className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter leading-none text-balance">{t("heroTitle")}</AnimatedText>
+                  <CyclingText items={["MCP resources", "WebMCP resources"]} interval={5000} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl italic font-display tracking-tight leading-none whitespace-nowrap" />
                 </h1>
                 <p className="mt-6 text-muted-foreground text-lg max-w-xl">
-                  {tHomepage("heroDescription")}
+                  {t("heroDescription")}
                 </p>
-                
+
                 {/* Feature badges */}
                 <div className="mt-8 flex flex-wrap gap-4">
                   <div className="flex items-center gap-2 text-muted-foreground">
                     <Code className="h-5 w-5 text-primary" />
-                    <span>{tHomepage("heroFeature1")}</span>
+                    <span>{t("heroFeature1")}</span>
                   </div>
                   <div className="flex items-center gap-2 text-muted-foreground">
                     <Lock className="h-5 w-5 text-primary" />
-                    <span>{tHomepage("heroFeature2")}</span>
+                    <span>{t("heroFeature2")}</span>
                   </div>
                   <div className="flex items-center gap-2 text-muted-foreground">
                     <Building2 className="h-5 w-5 text-primary" />
-                    <span>{tHomepage("heroFeature3")}</span>
+                    <span>{t("heroFeature3")}</span>
                   </div>
                 </div>
               </>
@@ -166,51 +167,45 @@ export default async function HomePage() {
 
             <div className="mt-10 flex flex-col gap-4">
               <div className="flex flex-wrap gap-3">
-                <Button size="lg" asChild>
-                  <Link href={session ? "/feed" : "/prompts"}>
-                    {session ? tHomepage("viewFeed") : tHomepage("browsePrompts")}
+                <Button render={<Link href={session ? "/feed" : "/registry"} />} size="lg">
+                    {session ? t("viewFeed") : t("browseResources")}
                     <ArrowRight className="ml-1.5 h-4 w-4" />
-                  </Link>
                 </Button>
                 {!useCloneBranding && (
-                  <Button variant="outline" size="lg" asChild>
-                    <Link href="https://github.com/f/prompts.chat/blob/main/SELF-HOSTING.md" target="_blank" rel="noopener noreferrer">
+                  <Button render={<Link href="/docs/self-hosting" target="_blank" rel="noopener noreferrer" />} variant="outline" size="lg">
                       <Github className="mr-1.5 h-4 w-4" />
-                      {tHomepage("setupPrivateServer")}
-                    </Link>
+                      {t("setupPrivateServer")}
                   </Button>
                 )}
                 {showRegisterButton && (
-                  <Button variant="outline" size="lg" asChild>
-                    <Link href={isOAuth ? "/login" : "/register"}>
+                  <Button render={<Link href={isOAuth ? "/login" : "/register"} />} variant="outline" size="lg">
                       <LogIn className="mr-1.5 h-4 w-4" />
-                      {isOAuth ? tNav("login") : tNav("register")}
-                    </Link>
+                      {isOAuth ? t("login") : t("register")}
                   </Button>
                 )}
               </div>
               {!useCloneBranding && (
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
-                  <Link 
-                    href="https://github.com/f/prompts.chat/stargazers" 
-                    target="_blank" 
+                  <Link
+                    href="https://github.com/eser/webmcp.land/stargazers"
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
                     <Star className="h-4 w-4 text-amber-500" />
-                    <span>{tHomepage("beStargazer", { count: (githubStars + 1).toLocaleString(), ordinal: getOrdinalSuffix(githubStars + 1) })}</span>
+                    <span>{t("beStargazer", { count: (githubStars + 1).toLocaleString(), ordinal: getOrdinalSuffix(githubStars + 1) })}</span>
                   </Link>
-                  <Link 
-                    href="/about" 
+                  <Link
+                    href="/about"
                     className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
                     <History className="h-4 w-4" />
-                    {tHomepage("ourHistory")}
+                    {t("ourHistory")}
                   </Link>
                 </div>
               )}
             </div>
-            
+
             {/* Mobile Hero Categories */}
             <div className="mt-8 lg:hidden">
               <HeroCategories />
@@ -219,7 +214,7 @@ export default async function HomePage() {
             {/* Tablet Clients Section - hidden on mobile phones */}
             {!useCloneBranding && (
               <div className="mt-8 hidden sm:flex lg:hidden flex-col items-center gap-3">
-                <span className="text-xs text-muted-foreground uppercase tracking-wider">{tHomepage("clients")}</span>
+                <span className="text-xs text-muted-foreground uppercase tracking-wider">{t("clients")}</span>
                 <div className="flex flex-wrap items-center justify-center gap-2">
                   <CliCommand />
                   {config.branding.appStoreUrl && (
@@ -239,7 +234,7 @@ export default async function HomePage() {
                     <ExtensionLink url={config.branding.chromeExtensionUrl} />
                   )}
                   <Link
-                    href="raycast://extensions/fka/prompts-chat?source=prompts.chat"
+                    href="raycast://extensions/eserozvataf/webmcp-land?source=webmcp.land"
                     className="inline-flex items-center justify-center gap-2 h-10 px-2.5 md:px-4 bg-zinc-900 dark:bg-zinc-800 hover:bg-zinc-800 dark:hover:bg-zinc-700 rounded-lg transition-colors border border-zinc-700 dark:border-zinc-600"
                   >
                     <svg className="h-4 w-4 text-zinc-100" viewBox="0 0 24 24" fill="currentColor">
@@ -260,13 +255,13 @@ export default async function HomePage() {
           <div className="container">
             {!useCloneBranding && (
               <div className="flex items-center justify-center gap-2 mb-4">
-                <p className="text-center text-xs text-muted-foreground">{tHomepage("achievements.sponsoredBy")}</p>
+                <p className="text-center text-xs text-muted-foreground">{t("achievements.sponsoredBy")}</p>
                 <BecomeSponsorLink
-                  href="https://github.com/sponsors/f/sponsorships?sponsor=f&tier_id=558224&preview=false"
+                  href="https://github.com/sponsors/eser/sponsorships?sponsor=eser&tier_id=558224&preview=false"
                   className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-pink-700 dark:text-pink-300 bg-pink-100 dark:bg-pink-900/30 hover:bg-pink-200 dark:hover:bg-pink-900/50 rounded-full transition-colors border border-pink-200 dark:border-pink-800"
                 >
                   <HeartHandshake className="h-3 w-3" />
-                  {tHomepage("achievements.becomeSponsor")}
+                  {t("achievements.becomeSponsor")}
                 </BecomeSponsorLink>
               </div>
             )}
@@ -282,213 +277,77 @@ export default async function HomePage() {
                 />
               ))}
             </div>
-            {!useCloneBranding && (
-              <div className="flex flex-col md:flex-row items-center justify-center gap-1.5 mt-4 pt-4 border-t text-xs text-muted-foreground">
-                <span><b>prompts.chat</b> is built with</span>
-                <span className="inline-flex items-center gap-1.5">
-                  <BuiltWithLink href="https://wind.surf/prompts-chat" toolName="Windsurf">
-                    <Image
-                      src="/sponsors/windsurf.svg"
-                      alt="Windsurf"
-                      width={80}
-                      height={20}
-                      className="h-3 w-auto dark:invert"
-                    />
-                  </BuiltWithLink>
-                  <span>and</span>
-                  <BuiltWithLink href="https://devin.ai/?utm_source=prompts.chat" toolName="Devin">
-                    <Image
-                      src="/sponsors/devin.svg"
-                      alt="Devin"
-                      width={80}
-                      height={20}
-                      className="h-6 w-auto dark:hidden"
-                    />
-                    <Image
-                      src="/sponsors/devin-dark.svg"
-                      alt="Devin"
-                      width={80}
-                      height={20}
-                      className="h-6 w-auto hidden dark:block"
-                    />
-                  </BuiltWithLink>
-                  <span>by Cognition</span>
-                </span>
-              </div>
-            )}
-            {/* Achievements */}
-            {config.homepage?.achievements?.enabled !== false && (
-              <div className="mt-6 pt-6 border-t">
-                <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 md:gap-x-10 md:gap-y-2 text-sm">
-                  <Link href="https://www.forbes.com/sites/tjmccue/2023/01/19/chatgpt-success-completely-depends-on-your-prompt/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
-                    <Trophy className="h-4 w-4 text-amber-500" />
-                    <span>{tHomepage("achievements.featuredIn")} <strong>{tHomepage("achievements.forbes")}</strong></span>
-                  </Link>
-                  <Link href="https://www.huit.harvard.edu/news/ai-prompts" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
-                    <GraduationCap className="h-4 w-4 text-[#A51C30]" />
-                    <span>{tHomepage("achievements.referencedBy")} <strong>{tHomepage("achievements.harvardUniversity")}</strong></span>
-                  </Link>
-                  <Link href="https://etc.cuit.columbia.edu/news/columbia-prompt-library-effective-academic-ai-use" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
-                    <GraduationCap className="h-4 w-4 text-[#B9D9EB]" />
-                    <span>{tHomepage("achievements.referencedBy")} <strong>{tHomepage("achievements.columbiaUniversity")}</strong></span>
-                  </Link>
-                  <Link href="https://libguides.olympic.edu/UsingAI/Prompts" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
-                    <GraduationCap className="h-4 w-4 text-[#003366]" />
-                    <span>{tHomepage("achievements.referencedBy")} <strong>{tHomepage("achievements.olympicCollege")}</strong></span>
-                  </Link>
-                  <Link href="https://scholar.google.com/citations?user=AZ0Dg8YAAAAJ&hl=en" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
-                    <GraduationCap className="h-4 w-4 text-[#4285F4]" />
-                    <span><strong>40+</strong> {tHomepage("achievements.academicCitations")}</span>
-                  </Link>
-                  <Link href="https://github.blog/changelog/2025-02-14-personal-custom-instructions-bing-web-search-and-more-in-copilot-on-github-com/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
-                    <Github className="h-4 w-4" />
-                    <span>{tHomepage("achievements.referencedIn")} <strong>{tHomepage("achievements.githubBlog")}</strong></span>
-                  </Link>
-                  <Link href="https://huggingface.co/datasets/fka/prompts.chat" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
-                    <Heart className="h-4 w-4 text-red-500" />
-                    <span>{tHomepage("achievements.mostLikedDataset")}</span>
-                  </Link>
-                  <Link href="https://github.com/f/prompts.chat" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
-                    <Star className="h-4 w-4 text-yellow-500" />
-                    <span><strong>{(githubStars / 1000).toFixed(0)}k</strong> {tHomepage("achievements.githubStars")}</span>
-                  </Link>
-                  <Link href="https://github.com/f/prompts.chat" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
-                    <Trophy className="h-4 w-4 text-purple-500" />
-                    <span>{tHomepage("achievements.mostStarredRepo")}</span>
-                  </Link>
-                  <span className="flex items-center gap-2 text-muted-foreground">
-                    <Users className="h-4 w-4 text-green-500" />
-                    <span>{tHomepage("achievements.usedByThousands")}</span>
-                  </span>
-                  <Link href="https://spotlights-feed.github.com/spotlights/prompts-chat/index/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
-                    <Github className="h-4 w-4 text-purple-600" />
-                    <span>{tHomepage("achievements.githubStaffPick")}</span>
-                  </Link>
-                  <span className="flex items-center gap-2 text-muted-foreground">
-                    <Code className="h-4 w-4 text-blue-500" />
-                    <span>{tHomepage("achievements.fullyOpenSource")}</span>
-                  </span>
-                  <span className="flex items-center gap-2 text-muted-foreground">
-                    <Rocket className="h-4 w-4 text-orange-500" />
-                    <span><strong>{tHomepage("achievements.firstEver")}</strong> · {tHomepage("achievements.releasedOn")}</span>
-                  </span>
-                </div>
-              </div>
-            )}
-            {/* Testimonials */}
-            {!useCloneBranding && (
-              <div className="mt-6 pt-6 border-t">
-                <p className="text-center text-xs text-muted-foreground mb-6">{tHomepage("achievements.lovedByPioneers")}</p>
-                <div className="grid md:grid-cols-2 gap-4 max-w-4xl mx-auto">
-                  {/* Greg Brockman */}
-                  <Link
-                    href="https://x.com/gdb/status/1602072566671110144"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group relative p-5 rounded-lg border bg-muted/30 overflow-hidden hover:border-primary/50 transition-colors"
-                  >
-                    <Quote className="absolute top-3 right-3 h-16 w-16 text-muted-foreground/10 -rotate-12" />
-                    <div className="relative z-10 flex flex-col gap-3 h-full">
-                      <div className="flex items-center gap-3">
-                        <Image
-                          src="/sponsors/gdb.jpg"
-                          alt="Greg Brockman"
-                          width={40}
-                          height={40}
-                          className="rounded-full"
-                        />
-                        <div>
-                          <p className="text-sm font-medium">Greg Brockman</p>
-                          <p className="text-xs text-muted-foreground">President & Co-Founder at OpenAI · Dec 12, 2022</p>
-                        </div>
-                      </div>
-                      <p className="text-sm text-muted-foreground italic leading-relaxed">&ldquo;Love the community explorations of ChatGPT, from capabilities (https://github.com/f/prompts.chat) to limitations (...). No substitute for the collective power of the internet when it comes to plumbing the uncharted depths of a new deep learning model.&rdquo;</p>
-                    </div>
-                  </Link>
-                  {/* Wojciech Zaremba */}
-                  <Link
-                    href="https://x.com/woj_zaremba/status/1601362952841760769"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group relative p-5 rounded-lg border bg-muted/30 overflow-hidden hover:border-primary/50 transition-colors"
-                  >
-                    <Quote className="absolute top-3 right-3 h-16 w-16 text-muted-foreground/10 -rotate-12" />
-                    <div className="relative z-10 flex flex-col gap-3 h-full">
-                      <div className="flex items-center gap-3">
-                        <Image
-                          src="/sponsors/woj.jpg"
-                          alt="Wojciech Zaremba"
-                          width={40}
-                          height={40}
-                          className="rounded-full"
-                        />
-                        <div>
-                          <p className="text-sm font-medium">Wojciech Zaremba</p>
-                          <p className="text-xs text-muted-foreground">Co-Founder at OpenAI · Dec 10, 2022</p>
-                        </div>
-                      </div>
-                      <p className="text-sm text-muted-foreground italic leading-relaxed">&ldquo;I love it! https://github.com/f/prompts.chat&rdquo;</p>
-                    </div>
-                  </Link>
-                  {/* Clement Delangue */}
-                  <Link
-                    href="https://x.com/clementdelangue/status/1830976369389642059"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group relative p-5 rounded-lg border bg-muted/30 overflow-hidden hover:border-primary/50 transition-colors"
-                  >
-                    <Quote className="absolute top-3 right-3 h-16 w-16 text-muted-foreground/10 -rotate-12" />
-                    <div className="relative z-10 flex flex-col gap-3 h-full">
-                      <div className="flex items-center gap-3">
-                        <Image
-                          src="/sponsors/clem.png"
-                          alt="Clement Delangue"
-                          width={40}
-                          height={40}
-                          className="rounded-full"
-                        />
-                        <div>
-                          <p className="text-sm font-medium">Clement Delangue</p>
-                          <p className="text-xs text-muted-foreground">CEO at Hugging Face · Sep 3, 2024</p>
-                        </div>
-                      </div>
-                      <p className="text-sm text-muted-foreground italic leading-relaxed">&ldquo;Keep up the great work!&rdquo;</p>
-                    </div>
-                  </Link>
-                  {/* Thomas Dohmke */}
-                  <Link
-                    href="https://x.com/ashtom/status/1887250944427237816"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group relative p-5 rounded-lg border bg-muted/30 overflow-hidden hover:border-primary/50 transition-colors"
-                  >
-                    <Quote className="absolute top-3 right-3 h-16 w-16 text-muted-foreground/10 -rotate-12" />
-                    <div className="relative z-10 flex flex-col gap-3 h-full">
-                      <div className="flex items-center gap-3">
-                        <Image
-                          src="https://github.com/ashtom.png"
-                          alt="Thomas Dohmke"
-                          width={40}
-                          height={40}
-                          className="rounded-full"
-                        />
-                        <div>
-                          <p className="text-sm font-medium">Thomas Dohmke</p>
-                          <p className="text-xs text-muted-foreground">Former CEO at GitHub · Feb 5, 2025</p>
-                        </div>
-                      </div>
-                      <p className="text-sm text-muted-foreground italic leading-relaxed">&ldquo;You can now pass prompts to Copilot Chat via URL. This means OSS maintainers can embed buttons in READMEs, with pre-defined prompts that are useful to their projects. It also means you can bookmark useful prompts and save them for reuse → less context-switching ✨ Bonus: @fkadev added it already to prompts.chat 🚀&rdquo;</p>
-                    </div>
-                  </Link>
-                </div>
-              </div>
-            )}
           </div>
         </section>
       )}
 
-      {/* Featured & Latest Prompts Section */}
-      <DiscoveryPrompts isHomepage />
+      {/* Built With & Testimonials */}
+      {!useCloneBranding && (
+        <section className="py-8 border-b">
+          <div className="container">
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <p className="text-center text-xs text-muted-foreground">{t("achievements.sponsoredBy")}</p>
+              <BecomeSponsorLink
+                href="https://github.com/sponsors/eser/sponsorships?sponsor=eser&tier_id=558224&preview=false"
+                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-pink-700 dark:text-pink-300 bg-pink-100 dark:bg-pink-900/30 hover:bg-pink-200 dark:hover:bg-pink-900/50 rounded-full transition-colors border border-pink-200 dark:border-pink-800"
+              >
+                <HeartHandshake className="h-3 w-3" />
+                {t("achievements.becomeSponsor")}
+              </BecomeSponsorLink>
+            </div>
+            <div className="flex items-center justify-center mt-4 pt-4 border-t text-xs text-muted-foreground">
+              <span><b>webmcp.land</b> is built with AI-assistance</span>
+            </div>
+            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 md:gap-x-10 md:gap-y-2 mt-4 pt-4 border-t text-sm">
+              <Link href="https://github.com/eser/webmcp.land" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
+                <Star className="h-4 w-4 text-yellow-500" />
+                <span><strong>{(githubStars / 1000).toFixed(0)}k</strong> {t("achievements.githubStars")}</span>
+              </Link>
+              <span className="flex items-center gap-2 text-muted-foreground">
+                <Code className="h-4 w-4 text-blue-500" />
+                <span>{t("achievements.fullyOpenSource")}</span>
+              </span>
+              <span className="flex items-center gap-2 text-muted-foreground">
+                <Rocket className="h-4 w-4 text-orange-500" />
+                <span><strong>{t("achievements.firstEver")}</strong> · {t("achievements.releasedOn")}</span>
+              </span>
+            </div>
+            {/* Testimonials */}
+            {/* <div className="mt-6 pt-6 border-t">
+              <p className="text-center text-xs text-muted-foreground mb-6">{t("achievements.lovedByPioneers")}</p>
+                <div className="grid md:grid-cols-2 gap-4 max-w-4xl mx-auto">
+                  <Link
+                    href="https://x.com/eser"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group relative p-5 rounded-lg border bg-muted/30 overflow-hidden hover:border-primary/50 transition-colors"
+                  >
+                    <Quote className="absolute top-3 right-3 h-16 w-16 text-muted-foreground/10 -rotate-12" />
+                    <div className="relative z-10 flex flex-col gap-3 h-full">
+                      <div className="flex items-center gap-3">
+                        <Image
+                          src="/sponsors/eo.jpg"
+                          alt="Eser Ozvataf"
+                          width={40}
+                          height={40}
+                          className="rounded-full"
+                        />
+                        <div>
+                          <p className="text-sm font-medium">Eser Ozvataf</p>
+                          <p className="text-xs text-muted-foreground">Contributor at AYA · Feb 28, 2026</p>
+                        </div>
+                      </div>
+                      <p className="text-sm text-muted-foreground italic leading-relaxed">&ldquo;welcome&rdquo;</p>
+                    </div>
+                  </Link>
+                </div>
+              </div> */}
+          </div>
+        </section>
+      )}
+
+      {/* Featured & Latest Resources Section */}
+      <DiscoveryResources isHomepage />
 
       {/* CTA Section - only show if not using clone branding */}
       {!useCloneBranding && (
@@ -511,15 +370,13 @@ export default async function HomePage() {
                   className="h-12 w-12 hidden dark:block"
                 />
                 <div>
-                  <h2 className="font-semibold">{tHomepage("readyToStart")}</h2>
-                  <p className="text-sm text-muted-foreground">{tHomepage("freeAndOpen")}</p>
+                  <h2 className="font-semibold">{t("readyToStart")}</h2>
+                  <p className="text-sm text-muted-foreground">{t("freeAndOpen")}</p>
                 </div>
               </div>
               {showRegisterButton && (
-                <Button asChild>
-                  <Link href={isOAuth ? "/login" : "/register"}>
-                    {isOAuth ? tNav("login") : tHomepage("createAccount")}
-                  </Link>
+                <Button render={<Link href={isOAuth ? "/login" : "/register"} />}>
+                    {isOAuth ? t("login") : t("createAccount")}
                 </Button>
               )}
             </div>

@@ -1,21 +1,22 @@
-import { PrismaClient } from "@prisma/client";
+import { drizzle } from "drizzle-orm/node-postgres";
+import { Pool } from "pg";
+import * as schema from "./schema";
 
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined;
+const globalForDb = globalThis as unknown as {
+  pool: Pool | undefined;
 };
 
-// Configure Prisma for serverless environments with connection pooling
-const prismaClientSingleton = () => {
-  return new PrismaClient({
-    log:
-      process.env.NODE_ENV === "development"
-        ? ["query", "error", "warn"]
-        : ["error"],
-    datasourceUrl: process.env.DATABASE_URL,
+const pool =
+  globalForDb.pool ??
+  new Pool({
+    connectionString: process.env.DATABASE_URL,
   });
-};
 
-export const db = globalForPrisma.prisma ?? prismaClientSingleton();
+// Reuse pool across hot reloads in development
+globalForDb.pool = pool;
 
-// Always reuse the same instance to prevent connection pool exhaustion
-globalForPrisma.prisma = db;
+export const db = drizzle({
+  client: pool,
+  schema,
+  logger: process.env.NODE_ENV === "development",
+});

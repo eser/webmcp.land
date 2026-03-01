@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 import Link from "next/link";
 import { Loader2, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -18,7 +18,7 @@ import { toast } from "sonner";
 import { analyticsComment } from "@/lib/analytics";
 
 interface CommentFormProps {
-  promptId: string;
+  resourceId: string;
   parentId?: string;
   isLoggedIn: boolean;
   onCommentAdded: (comment: Comment) => void;
@@ -47,7 +47,7 @@ interface Comment {
 }
 
 export function CommentForm({
-  promptId,
+  resourceId,
   parentId,
   isLoggedIn,
   onCommentAdded,
@@ -55,9 +55,7 @@ export function CommentForm({
   placeholder,
   autoFocus = false,
 }: CommentFormProps) {
-  const t = useTranslations("comments");
-  const tCommon = useTranslations("common");
-  const tVote = useTranslations("vote");
+  const { t } = useTranslation();
   const [content, setContent] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -77,7 +75,7 @@ export function CommentForm({
     setIsLoading(true);
 
     try {
-      const response = await fetch(`/api/prompts/${promptId}/comments`, {
+      const response = await fetch(`/api/resources/${resourceId}/comments`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ content: content.trim(), parentId }),
@@ -90,11 +88,11 @@ export function CommentForm({
 
       const data = await response.json();
       onCommentAdded(data.comment);
-      setContent("");
-      analyticsComment.post(promptId, !!parentId);
-      toast.success(t("commentPosted"));
+      setContent("comments.");
+      analyticsComment.post(resourceId, !!parentId);
+      toast.success(t("comments.commentPosted"));
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : tCommon("error"));
+      toast.error(error instanceof Error ? error.message : t("common.error"));
     } finally {
       setIsLoading(false);
     }
@@ -106,7 +104,7 @@ export function CommentForm({
         <Textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          placeholder={placeholder || t("writeComment")}
+          placeholder={placeholder || t("comments.writeComment")}
           className="min-h-[80px] resize-none"
           autoFocus={autoFocus}
           disabled={isLoading}
@@ -120,7 +118,7 @@ export function CommentForm({
               onClick={onCancel}
               disabled={isLoading}
             >
-              {tCommon("cancel")}
+              {t("common.cancel")}
             </Button>
           )}
           <Button
@@ -131,10 +129,10 @@ export function CommentForm({
             {isLoading ? (
               <>
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                {t("posting")}
+                {t("comments.posting")}
               </>
             ) : (
-              parentId ? t("reply") : t("postComment")
+              parentId ? t("comments.reply") : t("comments.postComment")
             )}
           </Button>
         </div>
@@ -143,20 +141,18 @@ export function CommentForm({
       <Dialog open={showLoginModal} onOpenChange={setShowLoginModal}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>{tVote("loginRequired")}</DialogTitle>
+            <DialogTitle>{t("vote.loginRequired")}</DialogTitle>
             <DialogDescription>
-              {t("loginToComment")}
+              {t("comments.loginToComment")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex-col sm:flex-row gap-2">
             <Button variant="outline" onClick={() => setShowLoginModal(false)}>
-              {tCommon("cancel")}
+              {t("common.cancel")}
             </Button>
-            <Button asChild>
-              <Link href="/login">
+            <Button render={<Link href="/login" />}>
                 <LogIn className="h-4 w-4 mr-2" />
-                {tVote("goToLogin")}
-              </Link>
+                {t("vote.goToLogin")}
             </Button>
           </DialogFooter>
         </DialogContent>

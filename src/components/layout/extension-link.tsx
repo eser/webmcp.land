@@ -3,17 +3,17 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Chromium } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 import { isChromeBrowser, isFirefoxBrowser } from "@/lib/utils";
 
-const FIREFOX_ADDON_URL = "https://addons.mozilla.org/en-US/firefox/addon/prompts-chat/";
+const FIREFOX_ADDON_URL = "https://addons.mozilla.org/en-US/firefox/addon/webmcp-land/";
 
 interface ExtensionLinkProps {
   url: string;
 }
 
 export function ExtensionLink({ url }: ExtensionLinkProps) {
-  const t = useTranslations("homepage");
+  const { t } = useTranslation();
   const [browserType, setBrowserType] = useState<"chrome" | "firefox" | null>(null);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export function ExtensionLink({ url }: ExtensionLinkProps) {
       ) : (
         <Chromium className="h-4 w-4 text-zinc-100" />
       )}
-      <span className="hidden 2xl:inline text-sm font-medium text-zinc-100 whitespace-nowrap">{t("extension")}</span>
+      <span className="hidden 2xl:inline text-sm font-medium text-zinc-100 whitespace-nowrap">{t("homepage.extension")}</span>
     </Link>
   );
 }

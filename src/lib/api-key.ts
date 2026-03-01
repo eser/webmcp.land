@@ -1,10 +1,10 @@
 import { randomBytes } from "crypto";
 
-const API_KEY_PREFIX = "pchat_";
+const API_KEY_PREFIX = "wmcp_";
 const API_KEY_LENGTH = 32;
 
 /**
- * Generate a secure API key with the pchat_ prefix
+ * Generate a secure API key with the wmcp_ prefix
  */
 export function generateApiKey(): string {
   const randomPart = randomBytes(API_KEY_LENGTH).toString("hex");

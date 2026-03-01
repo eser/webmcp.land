@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Cookie } from "lucide-react";
 
@@ -15,7 +15,7 @@ export function getCookieConsent(): CookieConsent {
 }
 
 export function CookieConsentBanner() {
-  const t = useTranslations("cookies");
+  const { t } = useTranslation();
   const [consent, setConsent] = useState<CookieConsent | "pending">("pending");
   const [confirmReject, setConfirmReject] = useState(false);
 
@@ -49,7 +49,7 @@ export function CookieConsentBanner() {
       <div className="container flex items-center justify-between gap-4 py-2 text-xs">
         <div className="flex items-center gap-2 text-muted-foreground">
           <Cookie className="h-3.5 w-3.5 shrink-0" />
-          <span>{confirmReject ? t("confirmMessage") : t("message")}</span>
+          <span>{confirmReject ? t("cookies.confirmMessage") : t("cookies.message")}</span>
         </div>
         <div className="flex items-center gap-2 shrink-0">
           {confirmReject ? (
@@ -60,7 +60,7 @@ export function CookieConsentBanner() {
                 className="h-7 text-xs"
                 onClick={handleNevermind}
               >
-                {t("nevermind")}
+                {t("cookies.nevermind")}
               </Button>
               <Button
                 variant="destructive"
@@ -68,7 +68,7 @@ export function CookieConsentBanner() {
                 className="h-7 text-xs"
                 onClick={handleRejectClick}
               >
-                {t("confirmReject")}
+                {t("cookies.confirmReject")}
               </Button>
             </>
           ) : (
@@ -79,14 +79,14 @@ export function CookieConsentBanner() {
                 className="h-7 text-xs"
                 onClick={handleRejectClick}
               >
-                {t("reject")}
+                {t("cookies.reject")}
               </Button>
               <Button
                 size="sm"
                 className="h-7 text-xs"
                 onClick={handleAccept}
               >
-                {t("accept")}
+                {t("cookies.accept")}
               </Button>
             </>
           )}

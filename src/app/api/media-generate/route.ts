@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { eq } from "drizzle-orm";
+import { getSession } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { users } from "@/lib/schema";
 import {
   getMediaGeneratorPlugin,
   getAvailableModels,
@@ -8,7 +10,7 @@ import {
 } from "@/lib/plugins/media-generators";
 
 export async function GET() {
-  const session = await auth();
+  const session = await getSession();
 
   if (!session?.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -19,45 +21,38 @@ export async function GET() {
   const videoModels = getAvailableModels("video");
   const audioModels = getAvailableModels("audio");
 
-  // Get user's credit info
-  const user = await db.user.findUnique({
-    where: { id: session.user.id },
-    select: {
-      generationCreditsRemaining: true,
-      dailyGenerationLimit: true,
-      flagged: true,
-    },
-  });
+  // Get user's flagged status
+  const [user] = await db
+    .select({
+      flagged: users.flagged,
+    })
+    .from(users)
+    .where(eq(users.id, session.user.id));
 
   return NextResponse.json({
     available,
     imageModels,
     videoModels,
     audioModels,
-    credits: {
-      remaining: user?.generationCreditsRemaining ?? 0,
-      daily: user?.dailyGenerationLimit ?? 0,
-    },
-    canGenerate: !user?.flagged && (user?.generationCreditsRemaining ?? 0) > 0,
+    canGenerate: !user?.flagged,
   });
 }
 
 export async function POST(request: NextRequest) {
-  const session = await auth();
+  const session = await getSession();
 
   if (!session?.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   try {
-    // Check user's credits and flagged status
-    const user = await db.user.findUnique({
-      where: { id: session.user.id },
-      select: {
-        generationCreditsRemaining: true,
-        flagged: true,
-      },
-    });
+    // Check user's flagged status
+    const [user] = await db
+      .select({
+        flagged: users.flagged,
+      })
+      .from(users)
+      .where(eq(users.id, session.user.id));
 
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
@@ -67,14 +62,6 @@ export async function POST(request: NextRequest) {
     if (user.flagged) {
       return NextResponse.json(
         { error: "Your account has been flagged. Media generation is disabled." },
-        { status: 403 }
-      );
-    }
-
-    // Check credits
-    if (user.generationCreditsRemaining <= 0) {
-      return NextResponse.json(
-        { error: "No generation credits remaining. Credits reset daily." },
         { status: 403 }
       );
     }
@@ -112,16 +99,6 @@ export async function POST(request: NextRequest) {
       inputImageUrl,
       resolution,
       aspectRatio,
-    });
-
-    // Deduct one credit after successful generation start
-    await db.user.update({
-      where: { id: session.user.id },
-      data: {
-        generationCreditsRemaining: {
-          decrement: 1,
-        },
-      },
     });
 
     return NextResponse.json({

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -35,8 +35,7 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export function RegisterForm() {
   const router = useRouter();
-  const t = useTranslations("auth");
-  const tCommon = useTranslations("common");
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<RegisterFormValues>({
@@ -70,22 +69,22 @@ export function RegisterForm() {
       if (!response.ok) {
         if (result.error === "email_taken") {
           analyticsAuth.registerFailed("email_taken");
-          toast.error(t("emailTaken"));
+          toast.error(t("auth.emailTaken"));
         } else if (result.error === "username_taken") {
           analyticsAuth.registerFailed("username_taken");
-          toast.error(t("usernameTaken"));
+          toast.error(t("auth.usernameTaken"));
         } else {
           analyticsAuth.registerFailed(result.error);
-          toast.error(result.message || t("registrationFailed"));
+          toast.error(result.message || t("auth.registrationFailed"));
         }
         return;
       }
 
       analyticsAuth.register();
-      toast.success(t("registerSuccess"));
+      toast.success(t("auth.registerSuccess"));
       router.push("/login");
     } catch {
-      toast.error(tCommon("somethingWentWrong"));
+      toast.error(t("common.somethingWentWrong"));
     } finally {
       setIsLoading(false);
     }
@@ -100,7 +99,7 @@ export function RegisterForm() {
             name="name"
             render={({ field }) => (
               <FormItem className="space-y-1">
-                <FormLabel className="text-xs">{t("name")}</FormLabel>
+                <FormLabel className="text-xs">{t("auth.name")}</FormLabel>
                 <FormControl>
                   <Input placeholder="John Doe" className="h-8 text-sm" disabled={isLoading} {...field} />
                 </FormControl>
@@ -113,7 +112,7 @@ export function RegisterForm() {
             name="username"
             render={({ field }) => (
               <FormItem className="space-y-1">
-                <FormLabel className="text-xs">{t("username")}</FormLabel>
+                <FormLabel className="text-xs">{t("auth.username")}</FormLabel>
                 <FormControl>
                   <Input placeholder="johndoe" className="h-8 text-sm" disabled={isLoading} {...field} />
                 </FormControl>
@@ -127,7 +126,7 @@ export function RegisterForm() {
           name="email"
           render={({ field }) => (
             <FormItem className="space-y-1">
-              <FormLabel className="text-xs">{t("email")}</FormLabel>
+              <FormLabel className="text-xs">{t("auth.email")}</FormLabel>
               <FormControl>
                 <Input type="email" placeholder="name@example.com" className="h-8 text-sm" disabled={isLoading} {...field} />
               </FormControl>
@@ -141,7 +140,7 @@ export function RegisterForm() {
             name="password"
             render={({ field }) => (
               <FormItem className="space-y-1">
-                <FormLabel className="text-xs">{t("password")}</FormLabel>
+                <FormLabel className="text-xs">{t("auth.password")}</FormLabel>
                 <FormControl>
                   <Input type="password" placeholder="••••••••" className="h-8 text-sm" disabled={isLoading} {...field} />
                 </FormControl>
@@ -154,7 +153,7 @@ export function RegisterForm() {
             name="confirmPassword"
             render={({ field }) => (
               <FormItem className="space-y-1">
-                <FormLabel className="text-xs">{t("confirmPassword")}</FormLabel>
+                <FormLabel className="text-xs">{t("auth.confirmPassword")}</FormLabel>
                 <FormControl>
                   <Input type="password" placeholder="••••••••" className="h-8 text-sm" disabled={isLoading} {...field} />
                 </FormControl>
@@ -165,7 +164,7 @@ export function RegisterForm() {
         </div>
         <Button type="submit" className="w-full h-8 text-sm" disabled={isLoading}>
           {isLoading && <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />}
-          {t("register")}
+          {t("auth.register")}
         </Button>
       </form>
     </Form>

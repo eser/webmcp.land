@@ -25,10 +25,10 @@ messages:
 
       ## Output Formats (how to structure the response)
       - **text**: Well-formatted plain text or markdown
-      - **structured_json**: Valid JSON matching prompts.chat interfaces
-      - **structured_yaml**: Valid YAML matching prompts.chat interfaces
+      - **structured_json**: Valid JSON matching webmcp.land interfaces
+      - **structured_yaml**: Valid YAML matching webmcp.land interfaces
 
-      ## prompts.chat Type Reference
+      ## webmcp.land Type Reference
       Use the following type definitions to understand the structure and options available.
       When outputFormat is structured_json or structured_yaml, output must match the appropriate interface:
       - For text prompts: BuiltPrompt or BuiltChatPrompt

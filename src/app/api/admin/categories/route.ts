@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidateTag } from "next/cache";
-import { auth } from "@/lib/auth";
+import { getSession } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { categories } from "@/lib/schema";
 
 // Create category
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth();
+    const session = await getSession();
     if (!session?.user || session.user.role !== "ADMIN") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -18,16 +19,17 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Name and slug are required" }, { status: 400 });
     }
 
-    const category = await db.category.create({
-      data: {
+    const [category] = await db
+      .insert(categories)
+      .values({
         name,
         slug,
         description: description || null,
         icon: icon || null,
         parentId: parentId || null,
         pinned: pinned || false,
-      },
-    });
+      })
+      .returning();
 
     revalidateTag("categories", "max");
 

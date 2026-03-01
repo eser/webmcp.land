@@ -2,19 +2,13 @@
 
 # dependencies
 /node_modules
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
 
 # testing
 /coverage
 
-# next.js
+# build output
 /.next/
+/dist/
 /out/
 
 # production
@@ -31,20 +25,22 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)
-.env
 .env.local
 .env.*.local
-!.env.example
-
-# vercel
-.vercel
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
 
-/src/generated/prisma
+# drizzle migration metadata
+/drizzle/meta
 /src/app/sponsors
 
 # Sentry Config File
 .env.sentry-build-plugin
+
+# VS Code (keep shared settings)
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/settings.json

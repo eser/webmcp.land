@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 import { LoginForm } from "./login-form";
 import { RegisterForm } from "./register-form";
 import { OAuthButton } from "./oauth-button";
@@ -9,6 +9,7 @@ interface AuthContentProps {
   providers: string[];
   mode: "login" | "register";
   useCloneBranding?: boolean;
+  callbackUri?: string;
 }
 
 const providerNames: Record<string, string> = {
@@ -19,8 +20,8 @@ const providerNames: Record<string, string> = {
   credentials: "Email",
 };
 
-export function AuthContent({ providers, mode, useCloneBranding = false }: AuthContentProps) {
-  const t = useTranslations("auth");
+export function AuthContent({ providers, mode, useCloneBranding = false, callbackUri }: AuthContentProps) {
+  const { t } = useTranslation();
   const hasCredentials = providers.includes("credentials");
   const oauthProviders = providers.filter((p) => p !== "credentials");
   const hasGitHub = oauthProviders.includes("github");
@@ -35,11 +36,12 @@ export function AuthContent({ providers, mode, useCloneBranding = false }: AuthC
               key={provider}
               provider={provider}
               providerName={providerNames[provider] || provider}
+              callbackUri={callbackUri}
             />
           ))}
           {hasGitHub && !useCloneBranding && (
             <p className="text-xs text-muted-foreground text-center mt-2">
-              {t("githubAttributionHint")}
+              {t("auth.githubAttributionHint")}
             </p>
           )}
         </div>
@@ -58,7 +60,7 @@ export function AuthContent({ providers, mode, useCloneBranding = false }: AuthC
       )}
 
       {/* Credentials form */}
-      {hasCredentials && (mode === "login" ? <LoginForm /> : <RegisterForm />)}
+      {hasCredentials && (mode === "login" ? <LoginForm callbackUri={callbackUri} /> : <RegisterForm />)}
     </div>
   );
 }

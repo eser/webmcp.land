@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ChevronsDown, ChevronsUp } from "lucide-react";
@@ -20,7 +20,7 @@ interface CodeViewProps {
 type ViewMode = "code" | "tree";
 
 export function CodeView({ content, language = "json", className, maxLines, fontSize = "xs", wordWrap = false, preview = false }: CodeViewProps) {
-  const t = useTranslations("common");
+  const { t } = useTranslation();
   const [viewMode, setViewMode] = useState<ViewMode>("code");
   const expandAllRef = useRef<(() => void) | undefined>(undefined);
   const collapseAllRef = useRef<(() => void) | undefined>(undefined);
@@ -39,7 +39,7 @@ export function CodeView({ content, language = "json", className, maxLines, font
     }
   }
 
-  const lines = content.split("\n");
+  const lines = content.split("common.\n");
   const displayLines = maxLines ? lines.slice(0, maxLines) : lines;
   const hasMore = maxLines && lines.length > maxLines;
 
@@ -63,7 +63,7 @@ export function CodeView({ content, language = "json", className, maxLines, font
               onClick={() => setViewMode("code")}
               className="h-7 px-2 text-xs"
             >
-              {t("codeView")}
+              {t("common.codeView")}
             </Button>
             <Button
               variant={viewMode === "tree" ? "default" : "outline"}
@@ -71,7 +71,7 @@ export function CodeView({ content, language = "json", className, maxLines, font
               onClick={() => setViewMode("tree")}
               className="h-7 px-2 text-xs"
             >
-              {t("treeView")}
+              {t("common.treeView")}
             </Button>
           </div>
           
@@ -83,7 +83,7 @@ export function CodeView({ content, language = "json", className, maxLines, font
                 size="sm"
                 onClick={handleExpandAll}
                 className="h-7 w-7 p-0"
-                title={t("expandAll")}
+                title={t("common.expandAll")}
               >
                 <ChevronsDown className="h-4 w-4" />
               </Button>
@@ -92,7 +92,7 @@ export function CodeView({ content, language = "json", className, maxLines, font
                 size="sm"
                 onClick={handleCollapseAll}
                 className="h-7 w-7 p-0"
-                title={t("collapseAll")}
+                title={t("common.collapseAll")}
               >
                 <ChevronsUp className="h-4 w-4" />
               </Button>
@@ -131,7 +131,7 @@ export function CodeView({ content, language = "json", className, maxLines, font
                   ...
                 </span>
                 <span className="text-muted-foreground">
-                  {t("moreLines", { count: lines.length - (maxLines || 0) })}
+                  {t("common.moreLines", { count: lines.length - (maxLines || 0) })}
                 </span>
               </div>
             )}

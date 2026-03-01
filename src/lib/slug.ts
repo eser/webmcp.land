@@ -89,10 +89,10 @@ export async function generateSlug(title: string): Promise<string> {
 }
 
 /**
- * Generates a slug for a prompt, always translating to English first
+ * Generates a slug for a resource, always translating to English first
  * This ensures consistent English slugs regardless of the original language
  */
-export async function generatePromptSlug(title: string): Promise<string> {
+export async function generateResourceSlug(title: string): Promise<string> {
   // Always translate to English for consistency
   const englishTitle = await translateToEnglish(title);
   return slugify(englishTitle);

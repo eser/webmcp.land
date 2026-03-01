@@ -159,7 +159,7 @@ function PlatformList({ prompt, content }: PlatformListProps) {
                   shortcut={{ modifiers: ["cmd"], key: "c" }}
                 />
                 <Action.OpenInBrowser
-                  title="View on prompts.chat"
+                  title="View on webmcp.land"
                   url={promptUrl}
                   shortcut={{ modifiers: ["cmd"], key: "o" }}
                 />
@@ -192,7 +192,7 @@ function PlatformList({ prompt, content }: PlatformListProps) {
                   shortcut={{ modifiers: ["cmd"], key: "c" }}
                 />
                 <Action.OpenInBrowser
-                  title="View on prompts.chat"
+                  title="View on webmcp.land"
                   url={promptUrl}
                   shortcut={{ modifiers: ["cmd"], key: "o" }}
                 />
@@ -226,7 +226,7 @@ function PlatformList({ prompt, content }: PlatformListProps) {
                     shortcut={{ modifiers: ["cmd"], key: "c" }}
                   />
                   <Action.OpenInBrowser
-                    title="View on prompts.chat"
+                    title="View on webmcp.land"
                     url={promptUrl}
                     shortcut={{ modifiers: ["cmd"], key: "o" }}
                   />

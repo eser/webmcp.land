@@ -1,89 +1,89 @@
 import { describe, it, expect } from "vitest";
-import { getPromptUrl, getPromptEditUrl, getPromptChangesUrl } from "@/lib/urls";
+import { getResourceUrl, getResourceEditUrl, getResourceChangesUrl } from "@/lib/urls";
 
-describe("getPromptUrl", () => {
+describe("getResourceUrl", () => {
   it("should return URL with just ID when no slug provided", () => {
-    expect(getPromptUrl("abc123")).toBe("/prompts/abc123");
+    expect(getResourceUrl("abc123")).toBe("/registry/abc123");
   });
 
   it("should return URL with ID and slug when slug provided", () => {
-    expect(getPromptUrl("abc123", "my-prompt")).toBe("/prompts/abc123_my-prompt");
+    expect(getResourceUrl("abc123", "my-resource")).toBe("/registry/abc123_my-resource");
   });
 
   it("should return URL with just ID when slug is null", () => {
-    expect(getPromptUrl("abc123", null)).toBe("/prompts/abc123");
+    expect(getResourceUrl("abc123", null)).toBe("/registry/abc123");
   });
 
   it("should return URL with just ID when slug is undefined", () => {
-    expect(getPromptUrl("abc123", undefined)).toBe("/prompts/abc123");
+    expect(getResourceUrl("abc123", undefined)).toBe("/registry/abc123");
   });
 
   it("should return URL with just ID when slug is empty string", () => {
-    expect(getPromptUrl("abc123", "")).toBe("/prompts/abc123");
+    expect(getResourceUrl("abc123", "")).toBe("/registry/abc123");
   });
 
   it("should handle slug with special characters", () => {
-    expect(getPromptUrl("abc123", "my-cool-prompt")).toBe("/prompts/abc123_my-cool-prompt");
+    expect(getResourceUrl("abc123", "my-cool-resource")).toBe("/registry/abc123_my-cool-resource");
   });
 
   it("should handle numeric ID", () => {
-    expect(getPromptUrl("12345", "test")).toBe("/prompts/12345_test");
+    expect(getResourceUrl("12345", "test")).toBe("/registry/12345_test");
   });
 
   it("should handle UUID-style ID", () => {
     const uuid = "550e8400-e29b-41d4-a716-446655440000";
-    expect(getPromptUrl(uuid, "slug")).toBe(`/prompts/${uuid}_slug`);
+    expect(getResourceUrl(uuid, "slug")).toBe(`/resources/${uuid}_slug`);
   });
 
   it("should handle slug with numbers", () => {
-    expect(getPromptUrl("id1", "prompt-2024")).toBe("/prompts/id1_prompt-2024");
+    expect(getResourceUrl("id1", "resource-2024")).toBe("/registry/id1_resource-2024");
   });
 });
 
-describe("getPromptEditUrl", () => {
+describe("getResourceEditUrl", () => {
   it("should return edit URL with just ID when no slug", () => {
-    expect(getPromptEditUrl("abc123")).toBe("/prompts/abc123/edit");
+    expect(getResourceEditUrl("abc123")).toBe("/registry/abc123/edit");
   });
 
   it("should return edit URL with ID and slug", () => {
-    expect(getPromptEditUrl("abc123", "my-prompt")).toBe("/prompts/abc123_my-prompt/edit");
+    expect(getResourceEditUrl("abc123", "my-resource")).toBe("/registry/abc123_my-resource/edit");
   });
 
   it("should return edit URL with just ID when slug is null", () => {
-    expect(getPromptEditUrl("abc123", null)).toBe("/prompts/abc123/edit");
+    expect(getResourceEditUrl("abc123", null)).toBe("/registry/abc123/edit");
   });
 
   it("should return edit URL with just ID when slug is undefined", () => {
-    expect(getPromptEditUrl("abc123", undefined)).toBe("/prompts/abc123/edit");
+    expect(getResourceEditUrl("abc123", undefined)).toBe("/registry/abc123/edit");
   });
 
-  it("should append /edit to the base prompt URL", () => {
-    const baseUrl = getPromptUrl("test", "slug");
-    const editUrl = getPromptEditUrl("test", "slug");
+  it("should append /edit to the base resource URL", () => {
+    const baseUrl = getResourceUrl("test", "slug");
+    const editUrl = getResourceEditUrl("test", "slug");
     expect(editUrl).toBe(`${baseUrl}/edit`);
   });
 });
 
-describe("getPromptChangesUrl", () => {
+describe("getResourceChangesUrl", () => {
   it("should return changes URL with just ID when no slug", () => {
-    expect(getPromptChangesUrl("abc123")).toBe("/prompts/abc123/changes/new");
+    expect(getResourceChangesUrl("abc123")).toBe("/registry/abc123/changes/new");
   });
 
   it("should return changes URL with ID and slug", () => {
-    expect(getPromptChangesUrl("abc123", "my-prompt")).toBe("/prompts/abc123_my-prompt/changes/new");
+    expect(getResourceChangesUrl("abc123", "my-resource")).toBe("/registry/abc123_my-resource/changes/new");
   });
 
   it("should return changes URL with just ID when slug is null", () => {
-    expect(getPromptChangesUrl("abc123", null)).toBe("/prompts/abc123/changes/new");
+    expect(getResourceChangesUrl("abc123", null)).toBe("/registry/abc123/changes/new");
   });
 
   it("should return changes URL with just ID when slug is undefined", () => {
-    expect(getPromptChangesUrl("abc123", undefined)).toBe("/prompts/abc123/changes/new");
+    expect(getResourceChangesUrl("abc123", undefined)).toBe("/registry/abc123/changes/new");
   });
 
-  it("should append /changes/new to the base prompt URL", () => {
-    const baseUrl = getPromptUrl("test", "slug");
-    const changesUrl = getPromptChangesUrl("test", "slug");
+  it("should append /changes/new to the base resource URL", () => {
+    const baseUrl = getResourceUrl("test", "slug");
+    const changesUrl = getResourceChangesUrl("test", "slug");
     expect(changesUrl).toBe(`${baseUrl}/changes/new`);
   });
 });
@@ -93,9 +93,9 @@ describe("URL generation consistency", () => {
     const id = "test-id";
     const slug = "test-slug";
 
-    const baseUrl = getPromptUrl(id, slug);
-    const editUrl = getPromptEditUrl(id, slug);
-    const changesUrl = getPromptChangesUrl(id, slug);
+    const baseUrl = getResourceUrl(id, slug);
+    const editUrl = getResourceEditUrl(id, slug);
+    const changesUrl = getResourceChangesUrl(id, slug);
 
     expect(editUrl.startsWith(baseUrl)).toBe(true);
     expect(changesUrl.startsWith(baseUrl)).toBe(true);
@@ -104,9 +104,9 @@ describe("URL generation consistency", () => {
   it("should handle same ID with different slugs", () => {
     const id = "same-id";
 
-    const url1 = getPromptUrl(id, "slug-one");
-    const url2 = getPromptUrl(id, "slug-two");
-    const url3 = getPromptUrl(id, null);
+    const url1 = getResourceUrl(id, "slug-one");
+    const url2 = getResourceUrl(id, "slug-two");
+    const url3 = getResourceUrl(id, null);
 
     expect(url1).not.toBe(url2);
     expect(url1).not.toBe(url3);

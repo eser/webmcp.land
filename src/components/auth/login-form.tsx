@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
-import { useTranslations } from "next-intl";
+import { authClient } from "@/lib/auth/client";
+import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -28,9 +28,13 @@ const loginSchema = z.object({
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
-export function LoginForm() {
+interface LoginFormProps {
+  callbackUri?: string;
+}
+
+export function LoginForm({ callbackUri }: LoginFormProps) {
   const router = useRouter();
-  const t = useTranslations("auth");
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<LoginFormValues>({
@@ -45,24 +49,23 @@ export function LoginForm() {
     setIsLoading(true);
 
     try {
-      const result = await signIn("credentials", {
+      const { error } = await authClient.signIn.email({
         email: data.email,
         password: data.password,
-        redirect: false,
       });
 
-      if (result?.error) {
+      if (error) {
         analyticsAuth.loginFailed("credentials");
-        toast.error(t("invalidCredentials"));
+        toast.error(t("auth.invalidCredentials"));
         return;
       }
 
       analyticsAuth.login("credentials");
-      toast.success(t("loginSuccess"));
-      router.push("/");
+      toast.success(t("auth.loginSuccess"));
+      router.push(callbackUri || "/");
       router.refresh();
     } catch {
-      toast.error(t("invalidCredentials"));
+      toast.error(t("auth.invalidCredentials"));
     } finally {
       setIsLoading(false);
     }
@@ -76,7 +79,7 @@ export function LoginForm() {
           name="email"
           render={({ field }) => (
             <FormItem className="space-y-1">
-              <FormLabel className="text-xs">{t("email")}</FormLabel>
+              <FormLabel className="text-xs">{t("auth.email")}</FormLabel>
               <FormControl>
                 <Input type="email" placeholder="name@example.com" className="h-8 text-sm" disabled={isLoading} {...field} />
               </FormControl>
@@ -89,7 +92,7 @@ export function LoginForm() {
           name="password"
           render={({ field }) => (
             <FormItem className="space-y-1">
-              <FormLabel className="text-xs">{t("password")}</FormLabel>
+              <FormLabel className="text-xs">{t("auth.password")}</FormLabel>
               <FormControl>
                 <Input type="password" placeholder="••••••••" className="h-8 text-sm" disabled={isLoading} {...field} />
               </FormControl>
@@ -99,7 +102,7 @@ export function LoginForm() {
         />
         <Button type="submit" className="w-full h-8 text-sm" disabled={isLoading}>
           {isLoading && <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />}
-          {t("login")}
+          {t("auth.login")}
         </Button>
       </form>
     </Form>

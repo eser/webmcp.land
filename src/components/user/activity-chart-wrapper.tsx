@@ -24,9 +24,9 @@ export function ActivityChartWrapper({ data, locale }: ActivityChartWrapperProps
       params.delete("date");
     }
     
-    // Always switch to prompts tab when filtering by date
+    // Always switch to resources tab when filtering by date
     if (date) {
-      params.set("tab", "prompts");
+      params.set("tab", "resources");
     }
     
     const newUrl = `?${params.toString()}`;

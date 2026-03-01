@@ -13,7 +13,7 @@ jobs:
       - name: Reset daily generation credits
         run: |
           response=$(curl -s -w "\n%{http_code}" -X POST \
-            "https://prompts.chat/api/cron/reset-credits" \
+            "https://webmcp.land/api/cron/reset-credits" \
             -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}")
           
           http_code=$(echo "$response" | tail -n1)

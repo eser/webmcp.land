@@ -4,7 +4,7 @@ set -e
 echo ""
 echo "╔═══════════════════════════════════════════════════════════════╗"
 echo "║                                                               ║"
-echo "║   🚀 prompts.chat - AI Prompt Library                        ║"
+echo "║   🚀 webmcp.land - AI Prompt Library                        ║"
 echo "║                                                               ║"
 echo "╚═══════════════════════════════════════════════════════════════╝"
 echo ""
@@ -56,7 +56,7 @@ fi
 # Clone and build on first run
 if [ ! -f "$BUILD_MARKER" ]; then
     echo ""
-    echo "▶ First run detected - building prompts.chat..."
+    echo "▶ First run detected - building webmcp.land..."
     echo ""
     
     # Clone repository
@@ -74,22 +74,17 @@ if [ ! -f "$BUILD_MARKER" ]; then
     
     # Install dependencies (including devDependencies needed for build)
     echo "▶ Installing dependencies..."
-    NODE_ENV=development npm ci
+    NODE_ENV=development pnpm install --frozen-lockfile
     echo "✓ Dependencies installed"
     
     # Run docker-setup.js to generate config with branding
     echo "▶ Generating configuration..."
-    node scripts/docker-setup.js
+    node scripts/docker-setup.cjs
     echo "✓ Configuration generated"
-    
-    # Generate Prisma client
-    echo "▶ Generating Prisma client..."
-    npx prisma generate
-    echo "✓ Prisma client generated"
     
     # Build Next.js
     echo "▶ Building Next.js application (this may take a few minutes)..."
-    npm run build
+    pnpm run build
     echo "✓ Build complete"
     
     # Copy static files for standalone mode
@@ -131,7 +126,7 @@ done
 # Run migrations
 echo "▶ Running database migrations..."
 cd "$APP_DIR"
-npx prisma migrate deploy
+pnpm run db:migrate
 echo "✓ Migrations complete"
 
 # Start Next.js
@@ -142,7 +137,7 @@ echo "▶ Starting Next.js..."
 SEED_MARKER="/data/.seeded"
 if [ ! -f "$SEED_MARKER" ]; then
     echo "▶ Seeding database..."
-    if npx tsx prisma/seed.ts 2>/dev/null; then
+    if node drizzle/seed.ts 2>/dev/null; then
         touch "$SEED_MARKER"
         echo "✓ Database seeded"
     else
@@ -171,7 +166,7 @@ supervisorctl -c /etc/supervisor/conf.d/supervisord.conf start nextjs
 echo ""
 echo "╔═══════════════════════════════════════════════════════════════╗"
 echo "║                                                               ║"
-echo "║   ✅ prompts.chat is running!                                 ║"
+echo "║   ✅ webmcp.land is running!                                 ║"
 echo "║                                                               ║"
 echo "║   🌐 Open http://localhost:${PORT:-80} in your browser            ║"
 echo "║                                                               ║"

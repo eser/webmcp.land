@@ -1,24 +1,24 @@
 /**
- * Generates a URL path for a prompt, including the slug if available
- * Format: /prompts/{id} or /prompts/{id}_{slug}
+ * Generates a URL path for a resource, including the slug if available
+ * Format: /registry/{id} or /registry/{id}_{slug}
  */
-export function getPromptUrl(id: string, slug?: string | null): string {
+export function getResourceUrl(id: string, slug?: string | null): string {
   if (slug) {
-    return `/prompts/${id}_${slug}`;
+    return `/registry/${id}_${slug}`;
   }
-  return `/prompts/${id}`;
+  return `/registry/${id}`;
 }
 
 /**
- * Generates edit URL for a prompt
+ * Generates edit URL for a resource
  */
-export function getPromptEditUrl(id: string, slug?: string | null): string {
-  return `${getPromptUrl(id, slug)}/edit`;
+export function getResourceEditUrl(id: string, slug?: string | null): string {
+  return `${getResourceUrl(id, slug)}/edit`;
 }
 
 /**
- * Generates changes URL for a prompt
+ * Generates changes URL for a resource
  */
-export function getPromptChangesUrl(id: string, slug?: string | null): string {
-  return `${getPromptUrl(id, slug)}/changes/new`;
+export function getResourceChangesUrl(id: string, slug?: string | null): string {
+  return `${getResourceUrl(id, slug)}/changes/new`;
 }

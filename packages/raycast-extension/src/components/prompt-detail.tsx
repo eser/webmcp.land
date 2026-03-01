@@ -119,7 +119,7 @@ ${prompt.tags.length > 0 ? `**Tags:** ${prompt.tags.map((t) => t.tag.name).join(
           )}
           <Detail.Metadata.Separator />
           <Detail.Metadata.Link
-            title="View on prompts.chat"
+            title="View on webmcp.land"
             text="Open"
             target={promptUrl}
           />

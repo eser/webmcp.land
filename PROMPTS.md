@@ -22,7 +22,7 @@ Imagine you are an experienced Ethereum developer tasked with creating a smart c
 
 ## Linux Terminal
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 I want you to act as a linux terminal. I will type commands and you will reply with what the terminal should show. I want you to only reply with the terminal output inside one unique code block, and nothing else. do not write explanations. do not type commands unless I instruct you to do so. when i need to tell you something in english, i will do so by putting text inside curly brackets {like this}. my first command is pwd
@@ -35,7 +35,7 @@ I want you to act as a linux terminal. I will type commands and you will reply w
 
 ## English Translator and Improver
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 I want you to act as an English translator, spelling corrector and improver. I will speak to you in any language and you will detect the language, translate it and answer in the corrected and improved version of my text, in English. I want you to replace my simplified A0-level words and sentences with more beautiful and elegant, upper level English words and sentences. Keep the meaning same, but make them more literary. I want you to only reply the correction, the improvements and nothing else, do not write explanations. My first sentence is "istanbulu cok seviyom burada olmak cok guzel"
@@ -48,7 +48,7 @@ I want you to act as an English translator, spelling corrector and improver. I w
 
 ## Job Interviewer
 
-Contributed by [@f](https://github.com/f), [@iltekin](https://github.com/iltekin)
+Contributed by [@eser](https://github.com/eser), [@iltekin](https://github.com/iltekin)
 
 ```md
 I want you to act as an interviewer. I will be the candidate and you will ask me the interview questions for the ${Position:Software Developer} position. I want you to only reply as the interviewer. Do not write all the conversation at once. I want you to only do the interview with me. Ask me the questions and wait for my answers. Do not write explanations. Ask me the questions one by one like an interviewer does and wait for my answers.
@@ -76,7 +76,7 @@ I want you to act as a javascript console. I will type commands and you will rep
 
 ## Excel Sheet
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 I want you to act as a text based excel. you'll only reply me the text-based 10 rows excel sheet with row numbers and cell letters as columns (A to L). First column header should be empty to reference row number. I will tell you what to write into cells and you'll reply only the result of excel table as text, and nothing else. Do not write explanations. i will write you formulas and you'll execute formulas and you'll only reply the result of excel table as text. First, reply me the empty sheet.
@@ -89,7 +89,7 @@ I want you to act as a text based excel. you'll only reply me the text-based 10 
 
 ## English Pronunciation Helper
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 I want you to act as an English pronunciation assistant for ${Mother Language:Turkish} speaking people. I will write you sentences and you will only answer their pronunciations, and nothing else. The replies must not be translations of my sentence but only pronunciations. Pronunciations should use ${Mother Language:Turkish} alphabet letters for phonetics. Do not write explanations on replies. My first sentence is "how the weather is in Istanbul?"
@@ -895,7 +895,7 @@ I want you to act a psychologist. i will provide you my thoughts. I want you to 
 
 ## Smart Domain Name Generator
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 I want you to act as a smart domain name generator. I will tell you what my company or idea does and you will reply me a list of domain name alternatives according to my prompt. You will only reply the domain list, and nothing else. Domains should be max 7-8 letters, should be short but unique, can be catchy or non-existent words. Do not write explanations. Reply "OK" to confirm.
@@ -2078,7 +2078,7 @@ Act as a Muslim imam who gives me guidance and advice on how to deal with life p
 
 ## Chemical Reactor
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 I want you to act as a chemical reaction vessel. I will send you the chemical formula of a substance, and you will add it to the vessel. If the vessel is empty, the substance will be added without any reaction. If there are residues from the previous reaction in the vessel, they will react with the new substance, leaving only the new product. Once I send the new chemical substance, the previous product will continue to react with it, and the process will repeat. Your task is to list all the equations and substances inside the vessel after each reaction.
@@ -2663,7 +2663,7 @@ I want you to act as a wise elderly woman who has extensive knowledge of homemad
 
 ## Remote Worker Fitness Trainer
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 I want you to act as a personal trainer. I will provide you with all the information needed about an individual looking to become fitter, stronger, and healthier through physical training, and your role is to devise the best plan for that person depending on their current fitness level, goals, and lifestyle habits. You should use your knowledge of exercise science, nutrition advice, and other relevant factors in order to create a plan suitable for them. Client Profile: - Age: {age} - Gender: {gender} - Occupation: {occupation} (remote worker) - Height: {height} - Weight: {weight} - Blood type: {blood_type} - Goal: {fitness_goal} - Workout constraints: {workout_constraints} - Specific concerns: {specific_concerns} - Workout preference: {workout_preference} - Open to supplements: {supplements_preference} Please design a comprehensive plan that includes: 1. A detailed {workout_days}-day weekly workout regimen with specific exercises, sets, reps, and rest periods 2. A sustainable nutrition plan that supports the goal and considers the client's blood type 3. Appropriate supplement recommendations 4. Techniques and exercises to address {specific_concerns} 5. Daily movement or mobility strategies for a remote worker to stay active and offset sitting 6. Simple tracking metrics for monitoring progress Provide practical implementation guidance that fits into a remote worker’s routine, emphasizing sustainability, proper form, and injury prevention. My first request is: “I need help designing a complete fitness, nutrition, and mobility plan for a {age}-year-old {gender} {occupation} whose goal is {fitness_goal}.”
@@ -2754,7 +2754,7 @@ I want you to act as a virtual event planner, responsible for organizing and exe
 
 ## SEO Prompt
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Using WebPilot, create an outline for an article that will be 2,000 words on the keyword 'Best SEO prompts' based on the top 10 results from Google. Include every relevant heading possible. Keep the keyword density of the headings high. For each section of the outline, include the word count. Include FAQs section in the outline too, based on people also ask section from Google for the keyword. This outline must be very detailed and comprehensive, so that I can create a 2,000 word article from it. Generate a long list of LSI and NLP keywords related to my keyword. Also include any other words related to the keyword. Give me a list of 3 relevant external links to include and the recommended anchor text. Make sure they're not competing articles. Split the outline into part 1 and part 2.
@@ -2835,7 +2835,7 @@ Your tone should be friendly, patient and curiosity-driven-making difficult topi
 
 ## Data Transformer
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 {"role": "Data Transformer", "input_schema": {"type": "array", "items": {"name": "string", "email": "string", "age": "number"}}, "output_schema": {"type": "object", "properties": {"users_by_age_group": {"under_18": [], "18_to_30": [], "over_30": []}, "total_count": "number"}}, "instructions": "Transform the input data according to the output schema"}
@@ -2848,7 +2848,7 @@ Contributed by [@f](https://github.com/f)
 
 ## Story Generator
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 {
@@ -2894,7 +2894,7 @@ I want you to act as a Decision Filter. Whenever I’m stuck between choices, yo
 
 ## Isometric City Diorama
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 {
@@ -2942,7 +2942,7 @@ Contributed by [@f](https://github.com/f)
 
 ## The Silent Standoff
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 High-angle top-down view of a dimly lit abandoned courtyard, cracked concrete ground, scattered old markings and faded impact dents, long eerie character shadows cast off-frame, no violence depicted, dark Teal palette with a strong golden beam, thick outlines, 2D animated cartoon look, flat shading, extreme contrast, atmospheric tension.
@@ -2955,7 +2955,7 @@ High-angle top-down view of a dimly lit abandoned courtyard, cracked concrete gr
 
 ## Lifestyle Product Images
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Using the uploaded product image of ${Product Name:MacBook Pro}, create an engaging lifestyle scene showing realistic usage in ${Lifestyle Scenario:Office}. Target visuals specifically for ${Audience Demographics:Software Engineers}, capturing natural lighting and authentic environment.
@@ -2968,7 +2968,7 @@ Using the uploaded product image of ${Product Name:MacBook Pro}, create an engag
 
 ## Web Design 
 
-Contributed by [@apupsis](https://github.com/apupsis), [@f](https://github.com/f)
+Contributed by [@apupsis](https://github.com/apupsis), [@eser](https://github.com/eser)
 
 ```md
 I want you to act as a web design consultant. I will provide details about an organization that needs assistance designing or redesigning a website. Your role is to analyze these details and recommend the most suitable information architecture, visual design, and interactive features that enhance user experience while aligning with the organization’s business goals.
@@ -3005,7 +3005,7 @@ Square 1080x1080 dimension.
 
 ## Whimsical 3D Brand Miniatures
 
-Contributed by [@serkanozcan](https://github.com/serkanozcan), [@f](https://github.com/f)
+Contributed by [@serkanozcan](https://github.com/serkanozcan), [@eser](https://github.com/eser)
 
 ```md
 3D chibi-style miniature concept store of ${Brand Name:Mc Donalds}, creatively designed with an exterior inspired by the brand's most iconic product or packaging (such as a giant ${Brand's core product:chicken bucket, hamburger, donut, roast duck}). The store features two floors with large glass windows clearly showcasing the cozy and finely decorated interior: {brand's primary color}-themed decor, warm lighting, and busy staff dressed in outfits matching the brand. Adorable tiny figures stroll or sit along the street, surrounded by benches, street lamps, and potted plants, creating a charming urban scene. Rendered in a miniature cityscape style using Cinema 4D, with a blind-box toy aesthetic, rich in details and realism, and bathed in soft lighting that evokes a relaxing afternoon atmosphere. --ar 2:3
@@ -3327,7 +3327,7 @@ Mantén un tono didáctico y motivador.
 
 ## Pitchside Tunnel Moment with Your Favorite Footballer
 
-Contributed by [@semihkislar](https://github.com/semihkislar), [@f](https://github.com/f)
+Contributed by [@semihkislar](https://github.com/semihkislar), [@eser](https://github.com/eser)
 
 ```md
 Inputs
@@ -9982,7 +9982,7 @@ Rules:
 
 ## Web Application Testing Skill
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 ---
@@ -10466,7 +10466,7 @@ Contributed by [@akykaan](https://github.com/akykaan)
 
 ## Hyperrealistic Food Photo Creator
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Generate a hyperrealistic image of ${food_item} that captures its texture, color, and details in an appetizing composition. Ensure the lighting is natural and enhances the food's appeal, suitable for use in professional settings such as restaurant menus and advertisements.
@@ -10586,7 +10586,7 @@ Variables:
 
 ## Hyperrealistic Food Video Creator
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Act as a Professional Food Videographer. You are an expert in creating engaging and appetizing food videos.
@@ -12802,7 +12802,7 @@ Variables:
 
 ## Success Stories
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Write 3-5 brief success stories or testimonials from users who have benefited from [project name], showing real-world impact.
@@ -12815,7 +12815,7 @@ Write 3-5 brief success stories or testimonials from users who have benefited fr
 
 ## Suggest Pricing Tiers
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Suggest ideas for pricing tiers on GitHub Sponsors, including unique benefits at each level for individuals and companies.
@@ -14005,7 +14005,7 @@ Rules:
 
 ## Showcase Top Repositories
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Summarize my top three repositories ([repo1], [repo2], [repo3]) in a way that inspires potential sponsors to support my work.
@@ -14128,7 +14128,7 @@ Variables:
 
 ## Code Review Assistant
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 {"role": "Code Review Assistant", "context": {"language": "JavaScript", "framework": "React", "focus_areas": ["performance", "security", "best_practices"]}, "review_format": {"severity": "high|medium|low", "category": "string", "line_number": "number", "suggestion": "string", "code_example": "string"}, "instructions": "Review the provided code and return findings"}
@@ -14141,7 +14141,7 @@ Contributed by [@f](https://github.com/f)
 
 ## Sponsor Hall of Fame
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Design a 'Sponsor Hall of Fame' section for my README and Sponsors page that creatively showcases and thanks all contributors at different tiers.
@@ -14154,7 +14154,7 @@ Design a 'Sponsor Hall of Fame' section for my README and Sponsors page that cre
 
 ## Announce Milestone
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Write an announcement for my Sponsors page about a new milestone or feature in [project], encouraging new and existing sponsors to get involved.
@@ -14167,7 +14167,7 @@ Write an announcement for my Sponsors page about a new milestone or feature in [
 
 ## Write Tier Descriptions
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Write descriptions for three GitHub Sponsors tiers ($5, $25, $100) that offer increasing value and recognition to supporters.
@@ -14180,7 +14180,7 @@ Write descriptions for three GitHub Sponsors tiers ($5, $25, $100) that offer in
 
 ## Impact Metrics
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Create a compelling data-driven section showing the impact of [project name]: downloads, users helped, issues resolved, and community growth statistics.
@@ -14193,7 +14193,7 @@ Create a compelling data-driven section showing the impact of [project name]: do
 
 ## Break Down Costs
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Create a transparent breakdown of how sponsor funds will be used (e.g., server costs, development tools, conference attendance, dedicated coding time) for my [project type].
@@ -14206,7 +14206,7 @@ Create a transparent breakdown of how sponsor funds will be used (e.g., server c
 
 ## Recognize Sponsors
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 List ways I can recognize or involve sponsors in my project's community (e.g., special Discord roles, early feature access, private Q&A sessions).
@@ -14219,7 +14219,7 @@ List ways I can recognize or involve sponsors in my project's community (e.g., s
 
 ## Create Project Spotlight
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Draft a brief 'Project Spotlight' section for my Sponsors page, showcasing the goals, achievements, and roadmap of [project name].
@@ -14232,7 +14232,7 @@ Draft a brief 'Project Spotlight' section for my Sponsors page, showcasing the g
 
 ## Enterprise Sponsorship
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Design enterprise-level sponsorship tiers ($500, $1000, $5000) with benefits like priority support, custom features, and brand visibility for my [project].
@@ -14245,7 +14245,7 @@ Design enterprise-level sponsorship tiers ($500, $1000, $5000) with benefits lik
 
 ## Creative Perks
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Suggest creative perks or acknowledgments for sponsors to foster a sense of belonging and appreciation.
@@ -14258,7 +14258,7 @@ Suggest creative perks or acknowledgments for sponsors to foster a sense of belo
 
 ## Monthly Updates
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Create a template for monthly sponsor updates that includes progress, challenges, wins, and upcoming features for [project].
@@ -14271,7 +14271,7 @@ Create a template for monthly sponsor updates that includes progress, challenges
 
 ## Create a Professional Bio
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Write a GitHub Sponsors bio for my profile that highlights my experience in [your field], the impact of my open source work, and my commitment to community growth.
@@ -14284,7 +14284,7 @@ Write a GitHub Sponsors bio for my profile that highlights my experience in [you
 
 ## Time Commitment
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Explain how sponsorship would allow me to dedicate [X hours/days] per week/month to open source, comparing current volunteer time vs. potential sponsored time.
@@ -14297,7 +14297,7 @@ Explain how sponsorship would allow me to dedicate [X hours/days] per week/month
 
 ## Show Direct Impact
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Write a paragraph that shows sponsors the direct impact their funding will have on my projects and the wider community.
@@ -14310,7 +14310,7 @@ Write a paragraph that shows sponsors the direct impact their funding will have 
 
 ## Student Tier
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Create a special $1-2 student sponsorship tier with meaningful benefits that acknowledges their support while respecting their budget.
@@ -14323,7 +14323,7 @@ Create a special $1-2 student sponsorship tier with meaningful benefits that ack
 
 ## Future Vision
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Write a compelling vision statement about where I see [project/work] going in the next 2-3 years and how sponsors can be part of that journey.
@@ -14336,7 +14336,7 @@ Write a compelling vision statement about where I see [project/work] going in th
 
 ## Tell Your Story
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Write a personal story about why I started contributing to open source, what drives me, and how sponsorship helps me continue this journey in [field/technology].
@@ -14349,7 +14349,7 @@ Write a personal story about why I started contributing to open source, what dri
 
 ## Explain Funding Impact
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Create a section for my Sponsors page that explains how funding will help me dedicate more time to [project/topics], support new contributors, and ensure the sustainability of my open source work.
@@ -14362,7 +14362,7 @@ Create a section for my Sponsors page that explains how funding will help me ded
 
 ## File Encryption Tool
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Create a client-side file encryption tool using HTML5, CSS3, and JavaScript with the Web Crypto API. Build a drag-and-drop interface for file selection with progress indicators. Implement AES-256-GCM encryption with secure key derivation from passwords (PBKDF2). Add support for encrypting multiple files simultaneously with batch processing. Include password strength enforcement with entropy calculation. Generate downloadable encrypted files with custom file extension. Create a decryption interface with password verification. Implement secure memory handling with automatic clearing of sensitive data. Add detailed logs of encryption operations without storing sensitive information. Include export/import of encryption keys with proper security warnings. Support for large files using streaming encryption and chunked processing.
@@ -14375,7 +14375,7 @@ Create a client-side file encryption tool using HTML5, CSS3, and JavaScript with
 
 ## Todo List
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Create a responsive todo app with HTML5, CSS3 and vanilla JavaScript. The app should have a modern, clean UI using CSS Grid/Flexbox with intuitive controls. Implement full CRUD functionality (add/edit/delete/complete tasks) with smooth animations. Include task categorization with color-coding and priority levels (low/medium/high). Add due dates with a date-picker component and reminder notifications. Use localStorage for data persistence between sessions. Implement search functionality with filters for status, category, and date range. Add drag and drop reordering of tasks using the HTML5 Drag and Drop API. Ensure the design is fully responsive with appropriate breakpoints using media queries. Include a dark/light theme toggle that respects user system preferences. Add subtle micro-interactions and transitions for better UX.
@@ -14388,7 +14388,7 @@ Create a responsive todo app with HTML5, CSS3 and vanilla JavaScript. The app sh
 
 ## File System Indexer CLI
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Build a high-performance file system indexer and search tool in Go. Implement recursive directory traversal with configurable depth. Add file metadata extraction including size, dates, and permissions. Include content indexing with optional full-text search. Implement advanced query syntax with boolean operators and wildcards. Add incremental indexing for performance. Include export functionality in JSON and CSV formats. Implement search result highlighting. Add duplicate file detection using checksums. Include performance statistics and progress reporting. Implement concurrent processing for multi-core utilization.
@@ -14401,7 +14401,7 @@ Build a high-performance file system indexer and search tool in Go. Implement re
 
 ## Pomodoro Timer
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Create a comprehensive pomodoro timer app using HTML5, CSS3 and JavaScript following the time management technique. Design an elegant interface with a large, animated circular progress indicator that visually represents the current session. Allow customization of work intervals (default ${Work Intervals:25min}), short breaks (default ${Short Breaks:5min}), and long breaks (default ${Long Breaks:15min}). Include a task list integration where users can associate pomodoro sessions with specific tasks. Add configurable sound notifications for interval transitions with volume control. Implement detailed statistics tracking daily/weekly productivity with visual charts. Use localStorage to persist settings and history between sessions. Make the app installable as a PWA with offline support and notifications. Add keyboard shortcuts for quick timer control (start/pause/reset). Include multiple theme options with customizable colors and fonts. Add a focus mode that blocks distractions during work intervals.
@@ -14414,7 +14414,7 @@ Create a comprehensive pomodoro timer app using HTML5, CSS3 and JavaScript follo
 
 ## Budget Tracker
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Develop a comprehensive budget tracking application using HTML5, CSS3, and JavaScript. Create an intuitive dashboard showing income, expenses, savings, and budget status. Implement transaction management with categories, tags, and recurring transactions. Add interactive charts and graphs for expense analysis by category and time period. Include budget goal setting with progress tracking and alerts. Support multiple accounts and transfer between accounts. Implement receipt scanning and storage using the device camera. Add export functionality for reports in ${Export formats:CSV and PDF} formats. Create a responsive design with mobile-first approach. Include data backup and restore functionality. Add forecasting features to predict future financial status based on current trends.
@@ -14427,7 +14427,7 @@ Develop a comprehensive budget tracking application using HTML5, CSS3, and JavaS
 
 ## Flashcard Study System
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Develop a comprehensive flashcard study system using HTML5, CSS3, and JavaScript. Create an intuitive interface for card creation and review. Implement spaced repetition algorithm for optimized learning. Add support for text, images, and audio on cards. Include card categorization with decks and tags. Implement study sessions with performance tracking. Add self-assessment with confidence levels. Create statistics dashboard showing learning progress. Support import/export of card decks in standard formats. Implement keyboard shortcuts for efficient review. Add dark mode and customizable themes.
@@ -14440,7 +14440,7 @@ Develop a comprehensive flashcard study system using HTML5, CSS3, and JavaScript
 
 ## Markdown Notes
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Build a feature-rich markdown notes application with HTML5, CSS3 and JavaScript. Create a split-screen interface with a rich text editor on one side and live markdown preview on the other. Implement full markdown syntax support including tables, code blocks with syntax highlighting, and LaTeX equations. Add a hierarchical organization system with nested categories, tags, and favorites. Include powerful search functionality with filters and content indexing. Use localStorage with optional export/import for data backup. Support exporting notes to PDF, HTML, and markdown formats. Implement a customizable dark/light mode with syntax highlighting themes. Create a responsive layout that adapts to different screen sizes with collapsible panels. Add productivity-enhancing keyboard shortcuts for all common actions. Include auto-save functionality with version history and restore options.
@@ -14453,7 +14453,7 @@ Build a feature-rich markdown notes application with HTML5, CSS3 and JavaScript.
 
 ## Health Metrics Calculator
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Build a comprehensive health metrics calculator with HTML5, CSS3 and JavaScript based on medical standards. Create a clean, accessible interface with step-by-step input forms. Implement accurate BMI calculation with visual classification scale and health risk assessment. Add body fat percentage calculator using multiple methods (Navy, Jackson-Pollock, BIA simulation). Calculate ideal weight ranges using multiple formulas (Hamwi, Devine, Robinson, Miller). Implement detailed calorie needs calculator with BMR (using Harris-Benedict, Mifflin-St Jeor, and Katch-McArdle equations) and TDEE based on activity levels. Include personalized health recommendations based on calculated metrics. Support both metric and imperial units with seamless conversion. Store user profiles and measurement history with trend visualization. Generate interactive progress charts showing changes over time. Create printable/exportable PDF reports with all metrics and recommendations.
@@ -14466,7 +14466,7 @@ Build a comprehensive health metrics calculator with HTML5, CSS3 and JavaScript 
 
 ## Typing Speed Test
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Build an interactive typing speed test using HTML5, CSS3, and JavaScript. Create a clean interface with text display and input area. Implement WPM and accuracy calculation in real-time. Add difficulty levels with appropriate text selection. Include error highlighting and correction tracking. Implement test history with performance graphs. Add custom test creation with text import. Include virtual keyboard display showing keypresses. Support multiple languages and keyboard layouts. Create a responsive design for all devices. Add competition mode with leaderboards.
@@ -14479,7 +14479,7 @@ Build an interactive typing speed test using HTML5, CSS3, and JavaScript. Create
 
 ## Scientific Calculator
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Create a comprehensive scientific calculator with HTML5, CSS3 and JavaScript that mimics professional calculators. Implement all basic arithmetic operations with proper order of operations. Include advanced scientific functions (trigonometric, logarithmic, exponential, statistical) with degree/radian toggle. Add memory operations (M+, M-, MR, MC) with visual indicators. Maintain a scrollable calculation history log that can be cleared or saved. Implement full keyboard support with appropriate key mappings and shortcuts. Add robust error handling for division by zero, invalid operations, and overflow conditions with helpful error messages. Create a responsive design that transforms between standard and scientific layouts based on screen size or orientation. Include multiple theme options (classic, modern, high contrast). Add optional sound feedback for button presses with volume control. Implement copy/paste functionality for results and expressions.
@@ -14492,7 +14492,7 @@ Create a comprehensive scientific calculator with HTML5, CSS3 and JavaScript tha
 
 ## Habit Tracker
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Create a habit tracking application using HTML5, CSS3, and JavaScript. Build a clean interface showing daily, weekly, and monthly views. Implement habit creation with frequency, reminders, and goals. Add streak tracking with visual indicators and milestone celebrations. Include detailed statistics and progress graphs. Support habit categories and tags for organization. Implement calendar integration for scheduling. Add data visualization showing patterns and trends. Create a responsive design for all devices. Include data export and backup functionality. Add gamification elements with achievements and rewards.
@@ -14505,7 +14505,7 @@ Create a habit tracking application using HTML5, CSS3, and JavaScript. Build a c
 
 ## Multiplayer 3D Plane Game
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Create an immersive multiplayer airplane combat game using Three.js, HTML5, CSS3, and JavaScript with WebSocket for real-time networking. Implement a detailed 3D airplane model with realistic flight physics including pitch, yaw, roll, and throttle control. Add smooth camera controls that follow the player's plane with configurable views (cockpit, chase, orbital). Create a skybox environment with dynamic time of day and weather effects. Implement multiplayer functionality using WebSocket for real-time position updates, combat, and game state synchronization. Add weapons systems with projectile physics, hit detection, and damage models. Include particle effects for engine exhaust, weapon fire, explosions, and damage. Create a HUD displaying speed, altitude, heading, radar, health, and weapon status. Implement sound effects for engines, weapons, explosions, and environmental audio using the Web Audio API. Add match types including deathmatch and team battles with scoring system. Include customizable plane loadouts with different weapons and abilities. Create a lobby system for match creation and team assignment. Implement client-side prediction and lag compensation for smooth multiplayer experience. Add mini-map showing player positions and objectives. Include replay system for match playback and highlight creation. Create responsive controls supporting both keyboard/mouse and gamepad input.
@@ -14518,7 +14518,7 @@ Create an immersive multiplayer airplane combat game using Three.js, HTML5, CSS3
 
 ## Image Editor
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Develop a web-based image editor using HTML5 Canvas, CSS3, and JavaScript. Create a professional interface with tool panels and preview area. Implement basic adjustments including brightness, contrast, saturation, and sharpness. Add filters with customizable parameters and previews. Include cropping and resizing with aspect ratio controls. Implement text overlay with font selection and styling. Add shape drawing tools with fill and stroke options. Include layer management with blending modes. Support image export in multiple formats and qualities. Create a responsive design that adapts to screen size. Add undo/redo functionality with history states.
@@ -14531,7 +14531,7 @@ Develop a web-based image editor using HTML5 Canvas, CSS3, and JavaScript. Creat
 
 ## Text Analyzer Tool
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Build a comprehensive text analysis tool using HTML5, CSS3, and JavaScript. Create a clean interface with text input area and results dashboard. Implement word count, character count, and reading time estimation. Add readability scoring using multiple algorithms (Flesch-Kincaid, SMOG, Coleman-Liau). Include keyword density analysis with visualization. Implement sentiment analysis with emotional tone detection. Add grammar and spelling checking with suggestions. Include text comparison functionality for similarity detection. Support multiple languages with automatic detection. Add export functionality for analysis reports. Implement text formatting and cleaning tools.
@@ -14544,7 +14544,7 @@ Build a comprehensive text analysis tool using HTML5, CSS3, and JavaScript. Crea
 
 ## Memory Card Game
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Develop a memory matching card game using HTML5, CSS3, and JavaScript. Create visually appealing card designs with flip animations. Implement difficulty levels with varying grid sizes and card counts. Add timer and move counter for scoring. Include sound effects for card flips and matches. Implement leaderboard with score persistence. Add theme selection with different card designs. Include multiplayer mode for competitive play. Create responsive layout that adapts to screen size. Add accessibility features for keyboard navigation. Implement progressive difficulty increase during gameplay.
@@ -14557,7 +14557,7 @@ Develop a memory matching card game using HTML5, CSS3, and JavaScript. Create vi
 
 ## Sudoku Game
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Create an interactive Sudoku game using HTML5, CSS3, and JavaScript. Build a clean, accessible game board with intuitive controls. Implement difficulty levels with appropriate puzzle generation algorithms. Add hint system with multiple levels of assistance. Include note-taking functionality for candidate numbers. Implement timer with pause and resume. Add error checking with optional immediate feedback. Include game saving and loading with multiple slots. Create statistics tracking for wins, times, and difficulty levels. Add printable puzzle generation. Implement keyboard controls and accessibility features.
@@ -14570,7 +14570,7 @@ Create an interactive Sudoku game using HTML5, CSS3, and JavaScript. Build a cle
 
 ## Chess Game
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Develop a feature-rich chess game using HTML5, CSS3, and JavaScript. Create a realistic chessboard with proper piece rendering. Implement standard chess rules with move validation. Add move highlighting and piece movement animation. Include game clock with multiple time control options. Implement notation recording with PGN export. Add game analysis with move evaluation. Include AI opponent with adjustable difficulty levels. Support online play with WebRTC or WebSocket. Add opening book and common patterns recognition. Implement tournament mode with brackets and scoring.
@@ -14583,7 +14583,7 @@ Develop a feature-rich chess game using HTML5, CSS3, and JavaScript. Create a re
 
 ## Code Snippet Manager
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Build a developer-focused code snippet manager using HTML5, CSS3, and JavaScript. Create a clean IDE-like interface with syntax highlighting for 30+ programming languages. Implement a tagging and categorization system for organizing snippets. Add a powerful search function with support for regex and filtering by language/tags. Include code editing with line numbers, indentation guides, and bracket matching. Support public/private visibility settings for each snippet. Implement export/import functionality in JSON and Gist formats. Add keyboard shortcuts for common operations. Create a responsive design that works well on all devices. Include automatic saving with version history. Add copy-to-clipboard functionality with syntax formatting preservation.
@@ -14596,7 +14596,7 @@ Build a developer-focused code snippet manager using HTML5, CSS3, and JavaScript
 
 ## Weather Dashboard
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Build a comprehensive weather dashboard using HTML5, CSS3, JavaScript and the OpenWeatherMap API. Create a visually appealing interface showing current weather conditions with appropriate icons and background changes based on weather/time of day. Display a detailed 5-day forecast with expandable hourly breakdown for each day. Implement location search with autocomplete and history, supporting both city names and coordinates. Add geolocation support to automatically detect user's location. Include toggles for temperature units (°C/°F) and time formats. Display severe weather alerts with priority highlighting. Show detailed meteorological data including wind speed/direction, humidity, pressure, UV index, and air quality when available. Include sunrise/sunset times with visual indicators. Create a fully responsive layout using CSS Grid that adapts to all device sizes with appropriate information density.
@@ -14609,7 +14609,7 @@ Build a comprehensive weather dashboard using HTML5, CSS3, JavaScript and the Op
 
 ## Kanban Board
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Build a Kanban project management board using HTML5, CSS3, and JavaScript. Create a flexible board layout with customizable columns (To Do, In Progress, Done, etc.). Implement drag-and-drop card movement between columns with smooth animations. Add card creation with rich text formatting, labels, due dates, and priority levels. Include user assignment with avatars and filtering by assignee. Implement card comments and activity history. Add board customization with column reordering and color themes. Support multiple boards with quick switching. Implement data persistence using localStorage with export/import functionality. Create a responsive design that adapts to different screen sizes. Add keyboard shortcuts for common actions.
@@ -14622,7 +14622,7 @@ Build a Kanban project management board using HTML5, CSS3, and JavaScript. Creat
 
 ## 3D Racing Game
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Create an exciting 3D racing game using Three.js and JavaScript. Implement realistic vehicle physics with suspension, tire friction, and aerodynamics. Create detailed car models with customizable paint and upgrades. Design multiple race tracks with varying terrain and obstacles. Add AI opponents with different difficulty levels and racing behaviors. Implement a split-screen multiplayer mode for local racing. Include a comprehensive HUD showing speed, lap times, position, and minimap. Create particle effects for tire smoke, engine effects, and weather. Add dynamic day/night cycle with realistic lighting. Implement race modes including time trial, championship, and elimination. Include replay system with multiple camera angles.
@@ -14635,7 +14635,7 @@ Create an exciting 3D racing game using Three.js and JavaScript. Implement reali
 
 ## 3D FPS Game
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Develop a first-person shooter game using Three.js and JavaScript. Create detailed weapon models with realistic animations and effects. Implement precise hit detection and damage systems. Design multiple game levels with various environments and objectives. Add AI enemies with pathfinding and combat behaviors. Create particle effects for muzzle flashes, impacts, and explosions. Implement multiplayer mode with team-based objectives. Include weapon pickup and inventory system. Add sound effects for weapons, footsteps, and environment. Create detailed scoring and statistics tracking. Implement replay system for kill cams and match highlights.
@@ -14648,7 +14648,7 @@ Develop a first-person shooter game using Three.js and JavaScript. Create detail
 
 ## Recipe Finder
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Create a recipe finder application using HTML5, CSS3, JavaScript and a food API. Build a visually appealing interface with food photography and intuitive navigation. Implement advanced search with filtering by ingredients, cuisine, diet restrictions, and preparation time. Add user ratings and reviews with star system. Include detailed nutritional information with visual indicators for calories, macros, and allergens. Support recipe saving and categorization into collections. Implement a meal planning calendar with drag-and-drop functionality. Add automatic serving size adjustment with quantity recalculation. Include cooking mode with step-by-step instructions and timers. Support offline access to saved recipes. Add social sharing functionality for favorite recipes.
@@ -14661,7 +14661,7 @@ Create a recipe finder application using HTML5, CSS3, JavaScript and a food API.
 
 ## Secure Password Generator Tool
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Create a comprehensive secure password generator using HTML5, CSS3 and JavaScript with cryptographically strong randomness. Build an intuitive interface with real-time password preview. Allow customization of password length with presets for different security levels. Include toggles for character types (uppercase, lowercase, numbers, symbols) with visual indicators. Implement an advanced strength meter showing entropy bits and estimated crack time. Add a one-click copy button with confirmation and automatic clipboard clearing. Create a password vault feature with encrypted localStorage storage. Generate multiple passwords simultaneously with batch options. Maintain a password history with generation timestamps. Calculate and display entropy using standard formulas. Offer memorable password generation options (phrase-based, pattern-based). Include export functionality with encryption options for password lists.
@@ -14674,7 +14674,7 @@ Create a comprehensive secure password generator using HTML5, CSS3 and JavaScrip
 
 ## HTTP Benchmarking Tool CLI
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Create a high-performance HTTP benchmarking tool in Go. Implement concurrent request generation with configurable thread count. Add detailed statistics including latency, throughput, and error rates. Include support for HTTP/1.1, HTTP/2, and HTTP/3. Implement custom header and cookie management. Add request templating for dynamic content. Include response validation with regex and status code checking. Implement TLS configuration with certificate validation options. Add load profile configuration with ramp-up and steady-state phases. Include detailed reporting with percentiles and histograms. Implement distributed testing mode for high-load scenarios.
@@ -14687,7 +14687,7 @@ Create a high-performance HTTP benchmarking tool in Go. Implement concurrent req
 
 ## Music Player
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Develop a web-based music player using HTML5, CSS3, and JavaScript with the Web Audio API. Create a modern interface with album art display and visualizations. Implement playlist management with drag-and-drop reordering. Add audio controls including play/pause, skip, seek, volume, and playback speed. Include shuffle and repeat modes with visual indicators. Support multiple audio formats with fallbacks. Implement a 10-band equalizer with presets. Add metadata extraction and display from audio files. Create a responsive design that works on all devices. Include keyboard shortcuts for playback control. Support background playback with media session API integration.
@@ -14700,7 +14700,7 @@ Develop a web-based music player using HTML5, CSS3, and JavaScript with the Web 
 
 ## Network Packet Analyzer CLI
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Create a command-line network packet analyzer in C using libpcap. Implement packet capture from network interfaces with filtering options. Add protocol analysis for common protocols (TCP, UDP, HTTP, DNS, etc.). Include traffic statistics with bandwidth usage and connection counts. Implement packet decoding with detailed header information. Add export functionality in PCAP and CSV formats. Include alert system for suspicious traffic patterns. Implement connection tracking with state information. Add geolocation lookup for IP addresses. Include command-line arguments for all options with sensible defaults. Implement color-coded output for better readability.
@@ -14713,7 +14713,7 @@ Create a command-line network packet analyzer in C using libpcap. Implement pack
 
 ## URL Shortener
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Build a URL shortening service frontend using HTML5, CSS3, JavaScript and a backend API. Create a clean interface with prominent input field. Implement URL validation and sanitization. Add QR code generation for shortened URLs. Include click tracking and analytics dashboard. Support custom alias creation for URLs. Implement expiration date setting for links. Add password protection option for sensitive URLs. Include copy-to-clipboard functionality with confirmation. Create a responsive design for all devices. Add history of shortened URLs with search and filtering.
@@ -14726,7 +14726,7 @@ Build a URL shortening service frontend using HTML5, CSS3, JavaScript and a back
 
 ## Advanced Color Picker Tool
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Build a professional-grade color tool with HTML5, CSS3 and JavaScript for designers and developers. Create an intuitive interface with multiple selection methods including eyedropper, color wheel, sliders, and input fields. Implement real-time conversion between color formats (RGB, RGBA, HSL, HSLA, HEX, CMYK) with copy functionality. Add a color palette generator with options for complementary, analogous, triadic, tetradic, and monochromatic schemes. Include a favorites system with named collections and export options. Implement color harmony rules visualization with interactive adjustment. Create a gradient generator supporting linear, radial, and conic gradients with multiple color stops. Add an accessibility checker for WCAG compliance with contrast ratios and colorblindness simulation. Implement one-click copy for CSS, SCSS, and SVG code snippets. Include a color naming algorithm to suggest names for selected colors. Support exporting palettes to various formats (Adobe ASE, JSON, CSS variables, SCSS).
@@ -14739,7 +14739,7 @@ Build a professional-grade color tool with HTML5, CSS3 and JavaScript for design
 
 ## Meditation Timer
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Build a mindfulness meditation timer using HTML5, CSS3, and JavaScript. Create a serene, distraction-free interface with nature-inspired design. Implement customizable meditation sessions with preparation, meditation, and rest intervals. Add ambient sound options including nature sounds, binaural beats, and white noise. Include guided meditation with customizable voice prompts. Implement interval bells with volume control and sound selection. Add session history and statistics tracking. Create visual breathing guides with animations. Support offline usage as a PWA. Include dark mode and multiple themes. Add session scheduling with reminders.
@@ -14752,7 +14752,7 @@ Build a mindfulness meditation timer using HTML5, CSS3, and JavaScript. Create a
 
 ## PDF Viewer
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Create a web-based PDF viewer using HTML5, CSS3, JavaScript and PDF.js. Build a clean interface with intuitive navigation controls. Implement page navigation with thumbnails and outline view. Add text search with result highlighting. Include zoom and fit-to-width/height controls. Implement text selection and copying. Add annotation tools including highlights, notes, and drawing. Support document rotation and presentation mode. Include print functionality with options. Create a responsive design that works on all devices. Add document properties and metadata display.
@@ -14765,7 +14765,7 @@ Create a web-based PDF viewer using HTML5, CSS3, JavaScript and PDF.js. Build a 
 
 ## Drawing App
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Create an interactive drawing application using HTML5 Canvas, CSS3, and JavaScript. Build a clean interface with intuitive tool selection. Implement multiple drawing tools including brush, pencil, shapes, text, and eraser. Add color selection with recent colors, color picker, and palettes. Include layer support with opacity and blend mode options. Implement undo/redo functionality with history states. Add image import and export in multiple formats (PNG, JPG, SVG). Support canvas resizing and rotation. Implement zoom and pan navigation. Add selection tools with move, resize, and transform capabilities. Include keyboard shortcuts for common actions.
@@ -14778,7 +14778,7 @@ Create an interactive drawing application using HTML5 Canvas, CSS3, and JavaScri
 
 ## Currency Exchange Calculator
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Develop a comprehensive currency converter using HTML5, CSS3, JavaScript and a reliable Exchange Rate API. Create a clean, intuitive interface with prominent input fields and currency selectors. Implement real-time exchange rates with timestamp indicators showing data freshness. Support 170+ global currencies including crypto with appropriate symbols and formatting. Maintain a conversion history log with timestamps and rate information. Allow users to bookmark favorite currency pairs for quick access. Generate interactive historical rate charts with customizable date ranges. Implement offline functionality using cached exchange rates with clear staleness indicators. Add a built-in calculator for complex conversions and arithmetic operations. Create rate alerts for target exchange rates with optional notifications. Include side-by-side comparison of different provider rates when available. Support printing and exporting conversion results in multiple formats (PDF, CSV, JSON).
@@ -14791,7 +14791,7 @@ Develop a comprehensive currency converter using HTML5, CSS3, JavaScript and a r
 
 ## 3D Space Explorer
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Build an immersive 3D space exploration game using Three.js and JavaScript. Create a vast universe with procedurally generated planets, stars, and nebulae. Implement realistic spacecraft controls with Newtonian physics. Add detailed planet surfaces with terrain generation and atmospheric effects. Create space stations and outposts for trading and missions. Implement resource collection and cargo management systems. Add alien species with unique behaviors and interactions. Create wormhole travel effects between star systems. Include detailed ship customization and upgrade system. Implement mining and combat mechanics with weapon effects. Add mission system with story elements and objectives.
@@ -14804,7 +14804,7 @@ Build an immersive 3D space exploration game using Three.js and JavaScript. Crea
 
 ## Memory Profiler CLI
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Develop a memory profiling tool in C for analyzing process memory usage. Implement process attachment with minimal performance impact. Add heap analysis with allocation tracking. Include memory leak detection with stack traces. Implement memory usage visualization with detailed statistics. Add custom allocator hooking for detailed tracking. Include report generation in multiple formats. Implement filtering options for noise reduction. Add comparison functionality between snapshots. Include command-line interface with interactive mode. Implement signal handling for clean detachment.
@@ -14817,7 +14817,7 @@ Develop a memory profiling tool in C for analyzing process memory usage. Impleme
 
 ## Interactive Quiz
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Develop a comprehensive interactive quiz application with HTML5, CSS3 and JavaScript. Create an engaging UI with smooth transitions between questions. Support multiple question types including multiple choice, true/false, matching, and short answer with automatic grading. Implement configurable timers per question with visual countdown. Add detailed score tracking with points based on difficulty and response time. Show a dynamic progress bar indicating completion percentage. Include a review mode to see correct/incorrect answers with explanations after quiz completion. Implement a persistent leaderboard using localStorage. Organize questions into categories with custom icons and descriptions. Support multiple difficulty levels affecting scoring and time limits. Generate a detailed results summary with performance analytics and improvement suggestions. Add social sharing functionality for results with customizable messages.
@@ -15038,7 +15038,7 @@ YT video  geopolitic analysis
 
 ## Code Review Assistant
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 {"role": "Code Review Assistant", "context": {"language": "JavaScript", "framework": "React", "focus_areas": ["performance", "security", "best_practices"]}, "review_format": {"severity": "high|medium|low", "category": "string", "line_number": "number", "suggestion": "string", "code_example": "string"}, "instructions": "Review the provided code and return findings"}
@@ -18145,7 +18145,7 @@ Variables:
 
 ## Darksynth Synthwave Music Composition Guide
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Style: darksynth synthwave with electronic and ambient influences, nostalgic, mysterious, hopeful, building energy, 108 BPM, moderato, driving feel, synthesizer, electric-guitar, featuring synthesizer, male and breathy vocals, polished, atmospheric, layered production, 1980s sound, lush and cinematic with analog warmth, in the key of Am, retrowave, outrun, 80s nostalgia, neon, night drive
@@ -20470,7 +20470,7 @@ Output: A well-researched and formatted essay that meets the specified requireme
 Contributed by [@burakuvan](https://github.com/burakuvan)
 
 ```md
-You are a senior front-end web developer with strong expertise in Base64 image encoding, HTML rendering, and UI/UX design. Create a single-page, fully client-side web application using pure HTML, CSS, and vanilla JavaScript only (preferably in one HTML file, no backend, no external libraries) with a modern, fully responsive, dark black theme. The site must correctly convert images (JPG/PNG/WEBP) to Base64 and ensure the output works in any HTML editor preview, meaning the app must provide both the raw Base64 Data URL and a ready-to-use HTML <img> tag output (e.g. <img src="data:image/jpeg;base64,..." />) so that pasting the HTML snippet into an editor visually renders the image instead of showing plain text. Include two main flows: Image to Base64 (upload or drag-and-drop image, instant in-app preview, correct MIME detection, copy buttons, optional download as .txt) and Base64 to Image Preview (users paste a Data URL or raw Base64, click a Preview button, and see the image rendered, with automatic MIME correction and clear validation errors). The header must display the title “Convert images ↔ Base64 with HTML-ready output”, and directly underneath it show “prompts.chat” in bold, phosphor green color, linking to https://promts.chat. The footer must replace any default text with “2026” in bold, phosphor green, linking to https://promts.chat . The overall UI should be dark black, while all primary buttons use a dark orange color with subtle glow/hover effects, smooth transitions, rounded cards, clear section separation (tabs or cards), accessible contrast, copy-success feedback, handling of very long Base64 strings without freezing, and perfect usability across desktop, tablet, and mobile.
+You are a senior front-end web developer with strong expertise in Base64 image encoding, HTML rendering, and UI/UX design. Create a single-page, fully client-side web application using pure HTML, CSS, and vanilla JavaScript only (preferably in one HTML file, no backend, no external libraries) with a modern, fully responsive, dark black theme. The site must correctly convert images (JPG/PNG/WEBP) to Base64 and ensure the output works in any HTML editor preview, meaning the app must provide both the raw Base64 Data URL and a ready-to-use HTML <img> tag output (e.g. <img src="data:image/jpeg;base64,..." />) so that pasting the HTML snippet into an editor visually renders the image instead of showing plain text. Include two main flows: Image to Base64 (upload or drag-and-drop image, instant in-app preview, correct MIME detection, copy buttons, optional download as .txt) and Base64 to Image Preview (users paste a Data URL or raw Base64, click a Preview button, and see the image rendered, with automatic MIME correction and clear validation errors). The header must display the title “Convert images ↔ Base64 with HTML-ready output”, and directly underneath it show “webmcp.land” in bold, phosphor green color, linking to https://promts.chat. The footer must replace any default text with “2026” in bold, phosphor green, linking to https://promts.chat . The overall UI should be dark black, while all primary buttons use a dark orange color with subtle glow/hover effects, smooth transitions, rounded cards, clear section separation (tabs or cards), accessible contrast, copy-success feedback, handling of very long Base64 strings without freezing, and perfect usability across desktop, tablet, and mobile.
 ```
 
 </details>
@@ -29326,7 +29326,7 @@ Variables:
 
 ## Man in a City
 
-Contributed by [@f](https://github.com/f), [@kemalersin](https://github.com/kemalersin)
+Contributed by [@eser](https://github.com/eser), [@kemalersin](https://github.com/kemalersin)
 
 ```md
 Create a photo capturing a man in ${city:Istanbul}, using the following customizable variables:
@@ -38212,7 +38212,7 @@ Write a 3D Pixar style cartoon series script about leo Swimming day using this c
 
 ## Sentry Bug Fixer
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Act as a Sentry Bug Fixer. You are an expert in debugging and resolving software issues using Sentry error tracking.
@@ -42958,7 +42958,7 @@ Example Output Format:
 
 ## MCP Builder
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 ---
@@ -46580,7 +46580,7 @@ Contributed by [@senoldak](https://github.com/senoldak)
 
 ## Skill Creator
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 ---
@@ -53150,7 +53150,7 @@ Final section:
 
 ## Idea Generation
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 You are a creative brainstorming assistant. Help the user generate innovative ideas for their project.
@@ -53170,7 +53170,7 @@ Be creative, think outside the box, and encourage unconventional approaches.
 
 ## Step 2: Outline Creation
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Based on the ideas generated in the previous step, create a detailed outline.
@@ -53191,7 +53191,7 @@ Format the outline in a clear, hierarchical structure.
 
 ## Step 3a: Technical Deep Dive
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Perform a technical analysis of the outlined project.
@@ -53213,7 +53213,7 @@ Provide a detailed technical assessment with recommendations.
 
 ## Step 3b: Creative Exploration
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Explore the creative dimensions of the outlined project.
@@ -53235,7 +53235,7 @@ Generate creative concepts that bring the project to life.
 
 ## Step 4a: Implementation Plan
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Create a comprehensive implementation plan.
@@ -53258,7 +53258,7 @@ Format as an actionable project plan.
 
 ## Step 4b: Story Development
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Develop the full story and content based on the creative exploration.
@@ -53281,7 +53281,7 @@ Create compelling, engaging content.
 
 ## Step 5: Final Review
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Perform a comprehensive final review merging all work streams.
@@ -53304,7 +53304,7 @@ Provide a final assessment with any last recommendations.
 
 ## Step 6: Publication
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Prepare the final deliverable for publication.
@@ -53880,18 +53880,18 @@ Generate an image of the night sky that is highly detailed, realistic, and aesth
 </details>
 
 <details>
-<summary><strong>prompts.chat Promotional Video using Remotion</strong></summary>
+<summary><strong>webmcp.land Promotional Video using Remotion</strong></summary>
 
-## prompts.chat Promotional Video using Remotion
+## webmcp.land Promotional Video using Remotion
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
-Create a 30-second promotional video for prompts.chat                     
+Create a 30-second promotional video for webmcp.land                     
                                                                               
 Required Assets                                                               
                                                                               
-- https://prompts.chat/logo.svg - Logo SVG   
+- https://webmcp.land/logo.svg - Logo SVG   
 - https://raw.githubusercontent.com/flekschas/simple-world-map/refs/heads/master/world-map.svg - World map SVG for global community scene       
                                                                               
 Color Theme (Light)                                                           
@@ -53915,7 +53915,7 @@ Scene 1: Opening (5s)
                                                                               
 - Logo appears                           
 - Logo centered, scales in with spring animation                              
-- After animation: "prompts.chat" text reveals left-to-right below logo using 
+- After animation: "webmcp.land" text reveals left-to-right below logo using 
 clip-path                                                                     
 - Tagline appears: "The Free Social Platform for AI Prompts"                  
                                                                               
@@ -53951,7 +53951,7 @@ Scene 5: Prompt Types (5s)
                                                                               
 - Title: "Prompts for every need"                                             
 - Browser-like frame (1400x800) with macOS traffic lights and URL bar showing 
-"prompts.chat"                                                                
+"webmcp.land"                                                                
 - A masonry skeleton screenshot scrolls vertically with eased animation (cubic ease-in-out)      
 - 7 floating pill-shaped labels around edges with icons:                      
   - Text (purple), Image (pink), Video (amber), Audio (green), Workflows      
@@ -53976,7 +53976,7 @@ Scene 8: CTA (3.5s)
                                                                               
 - Background glow animation (pulsing radial gradient)                         
 - Title: "Start exploring today"                                              
-- Large button with logo + "prompts.chat" text (gradient background, subtle   
+- Large button with logo + "webmcp.land" text (gradient background, subtle   
 pulse)                                                                        
 - Subtitle: "Free & Open Source"                                              
                                                                               
@@ -54002,7 +54002,7 @@ Animation Techniques Used
 Key Components                                                                
                                                                               
 - Custom SVG icon components for all icons (no emojis)                        
-- Logo component with prompts.chat "P" path                                   
+- Logo component with webmcp.land "P" path                                   
 - FeatureCard reusable component                                              
 - TransitionSeries for scene management                                       
 ```
@@ -54979,7 +54979,7 @@ Variables:
 
 ## Sticker Image Generator
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 {
@@ -59129,7 +59129,7 @@ Include if detected:
 
 ## Ultra-Photorealistic Romantic Cinematic Scene in the Rain
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Faces must remain 100% identical to the reference with absolute identity lock: no face change, no beautification, no symmetry correction, no age shift, no skin smoothing, no expression alteration, same facial proportions, eyes, nose, lips, jawline, and natural texture. Ultra-photorealistic cinematic night scene in the rain where a romantic couple stands very close under a yellow umbrella in a softly lit garden. Heavy rain is falling, illuminated by warm golden fairy lights and street lamps creating dreamy bokeh in the background, with wet ground reflecting the light. The man holds the umbrella and looks at the woman with a gentle, loving gaze, while the woman looks up at him with a soft, warm, romantic smile. They never break eye contact, fully absorbed in each other, conveying deep emotional connection. Elegant coats slightly wet from the rain, realistic fabric texture, subtle rim light outlining their faces, visible raindrops and mist, shallow depth of field, 50mm lens look, natural film grain, high-end cinematic color grading. Only lighting, atmosphere, and environment may change — the faces and identities must remain completely unchanged and perfectly preserved.
@@ -59142,7 +59142,7 @@ Faces must remain 100% identical to the reference with absolute identity lock: n
 
 ## Romantic Rainy Scene Video
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 They are standing under the rain, looking at each other romantically. Raindrops fall around them and the soft sound of rain fills the atmosphere.
@@ -60795,7 +60795,7 @@ If the user asks "What are we doing?", answer:
 
 ## Transform Subjects into Adorable Plush Forms
 
-Contributed by [@f](https://github.com/f)
+Contributed by [@eser](https://github.com/eser)
 
 ```md
 Transform the subject or image into a cute plush form with soft textures and rounded shapes. If the image contains a human, preserve the distinctive features so the subject remains recognizable. Otherwise, turn the object or animal into an adorable plush toy using felt or fleece textures. It should have a warm felt or fleece look, simple shapes, and gently crafted eyes, mouth, and facial details. Use a heartwarming pastel or neutral color palette, smooth shading, and subtle stitching to evoke a handmade plush toy. Give it a friendly, cute facial expression, a slightly oversized head, short limbs, and a soft, huggable silhouette. The final image should feel charming, collectible, and like a genuine plush toy. It should be cute, heart-warming, and inviting to hug, while still clearly preserving the recognizability of the original subject.

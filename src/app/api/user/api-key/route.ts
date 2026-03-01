@@ -1,24 +1,26 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { eq } from "drizzle-orm";
+import { getSession } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { users } from "@/lib/schema";
 import { generateApiKey } from "@/lib/api-key";
 
 export const runtime = "nodejs";
 
 export async function GET() {
-  const session = await auth();
+  const session = await getSession();
 
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const user = await db.user.findUnique({
-    where: { id: session.user.id },
-    select: {
-      apiKey: true,
-      mcpPromptsPublicByDefault: true,
-    },
-  });
+  const [user] = await db
+    .select({
+      apiKey: users.apiKey,
+      resourcesPublicByDefault: users.resourcesPublicByDefault,
+    })
+    .from(users)
+    .where(eq(users.id, session.user.id));
 
   if (!user) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
@@ -27,12 +29,12 @@ export async function GET() {
   return NextResponse.json({
     hasApiKey: !!user.apiKey,
     apiKey: user.apiKey,
-    mcpPromptsPublicByDefault: user.mcpPromptsPublicByDefault,
+    resourcesPublicByDefault: user.resourcesPublicByDefault,
   });
 }
 
 export async function POST() {
-  const session = await auth();
+  const session = await getSession();
 
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -40,47 +42,47 @@ export async function POST() {
 
   const apiKey = generateApiKey();
 
-  await db.user.update({
-    where: { id: session.user.id },
-    data: { apiKey },
-  });
+  await db
+    .update(users)
+    .set({ apiKey })
+    .where(eq(users.id, session.user.id));
 
   return NextResponse.json({ apiKey });
 }
 
 export async function DELETE() {
-  const session = await auth();
+  const session = await getSession();
 
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  await db.user.update({
-    where: { id: session.user.id },
-    data: { apiKey: null },
-  });
+  await db
+    .update(users)
+    .set({ apiKey: null })
+    .where(eq(users.id, session.user.id));
 
   return NextResponse.json({ success: true });
 }
 
 export async function PATCH(request: Request) {
-  const session = await auth();
+  const session = await getSession();
 
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const body = await request.json();
-  const { mcpPromptsPublicByDefault } = body;
+  const { resourcesPublicByDefault } = body;
 
-  if (typeof mcpPromptsPublicByDefault !== "boolean") {
+  if (typeof resourcesPublicByDefault !== "boolean") {
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
 
-  await db.user.update({
-    where: { id: session.user.id },
-    data: { mcpPromptsPublicByDefault },
-  });
+  await db
+    .update(users)
+    .set({ resourcesPublicByDefault })
+    .where(eq(users.id, session.user.id));
 
   return NextResponse.json({ success: true });
 }

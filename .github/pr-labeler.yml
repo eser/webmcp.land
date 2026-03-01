@@ -1,0 +1,34 @@
+# Labeler configuration for actions/labeler
+# Auto-labels PRs based on changed file paths
+
+documentation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "*.md"
+          - "docs/**"
+
+api:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/app/api/**"
+
+frontend:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/components/**"
+          - "src/app/(auth)/**"
+          - "src/app/prompts/**"
+          - "src/app/admin/**"
+
+database:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "drizzle/**"
+
+infrastructure:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "Dockerfile"
+          - "compose.yml"
+          - "docker/**"
+          - ".github/workflows/**"

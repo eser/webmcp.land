@@ -48,8 +48,8 @@ export default function RandomPrompt() {
         actions={
           <ActionPanel>
             <Action.OpenInBrowser
-              title="Open prompts.chat"
-              url="https://prompts.chat"
+              title="Open webmcp.land"
+              url="https://webmcp.land"
             />
           </ActionPanel>
         }

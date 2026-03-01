@@ -1,18 +1,16 @@
+import { and, eq, isNull, ilike, or, desc } from "drizzle-orm";
 import { db } from "@/lib/db";
+import { resources, resourceTags, tags } from "@/lib/schema";
 import { semanticSearch, isAISearchEnabled } from "@/lib/ai/embeddings";
 
-export interface PromptBuilderState {
+export interface ResourceBuilderState {
   title: string;
   description: string;
-  content: string;
-  type: "TEXT" | "IMAGE" | "VIDEO" | "AUDIO" | "STRUCTURED";
-  structuredFormat?: "JSON" | "YAML";
+  endpointUrl: string;
+  serverType: "MCP" | "WEBMCP";
   categoryId?: string;
   tagIds: string[];
   isPrivate: boolean;
-  requiresMediaUpload: boolean;
-  requiredMediaType?: "IMAGE" | "VIDEO" | "DOCUMENT";
-  requiredMediaCount?: number;
 }
 
 export interface ToolResult {
@@ -21,33 +19,28 @@ export interface ToolResult {
   error?: string;
 }
 
-export const PROMPT_BUILDER_TOOLS = [
+export const RESOURCE_BUILDER_TOOLS = [
   {
     type: "function" as const,
     function: {
-      name: "search_prompts",
-      description: "Search for existing prompts to use as examples or inspiration. Returns prompts matching the query with their title, description, content preview, and tags. Use promptType filter when looking for structured prompts like JSON or YAML.",
+      name: "search_resources",
+      description: "Search for existing resources to use as examples or inspiration. Returns resources matching the query with their title, description, endpoint URL preview, and tags. Use serverType filter when looking for specific resource types.",
       parameters: {
         type: "object",
         properties: {
           query: {
             type: "string",
-            description: "Search query to find relevant prompts"
+            description: "Search query to find relevant resources"
           },
           limit: {
             type: "number",
-            description: "Maximum number of prompts to return (default 5, max 10)"
+            description: "Maximum number of resources to return (default 5, max 10)"
           },
-          promptType: {
+          serverType: {
             type: "string",
-            enum: ["TEXT", "STRUCTURED", "IMAGE", "VIDEO", "AUDIO"],
-            description: "Filter by prompt type. Use STRUCTURED to find JSON/YAML format prompts."
+            enum: ["MCP", "WEBMCP"],
+            description: "Filter by resource server type."
           },
-          structuredFormat: {
-            type: "string",
-            enum: ["JSON", "YAML"],
-            description: "When promptType is STRUCTURED, filter by specific format (JSON or YAML)"
-          }
         },
         required: ["query"]
       }
@@ -57,13 +50,13 @@ export const PROMPT_BUILDER_TOOLS = [
     type: "function" as const,
     function: {
       name: "set_title",
-      description: "Set the prompt title. The title should be concise and descriptive.",
+      description: "Set the resource title. The title should be concise and descriptive.",
       parameters: {
         type: "object",
         properties: {
           title: {
             type: "string",
-            description: "The title for the prompt (max 200 characters)"
+            description: "The title for the resource (max 200 characters)"
           }
         },
         required: ["title"]
@@ -74,13 +67,13 @@ export const PROMPT_BUILDER_TOOLS = [
     type: "function" as const,
     function: {
       name: "set_description",
-      description: "Set the prompt description. Should briefly explain what the prompt does.",
+      description: "Set the resource description. Should briefly explain what the resource does.",
       parameters: {
         type: "object",
         properties: {
           description: {
             type: "string",
-            description: "The description for the prompt (max 500 characters)"
+            description: "The description for the resource (max 500 characters)"
           }
         },
         required: ["description"]
@@ -90,40 +83,35 @@ export const PROMPT_BUILDER_TOOLS = [
   {
     type: "function" as const,
     function: {
-      name: "set_content",
-      description: "Set the main prompt content. Use ${variableName} or ${variableName:defaultValue} syntax for variables that users can customize.",
+      name: "set_endpoint_url",
+      description: "Set the MCP/WebMCP endpoint URL for the resource.",
       parameters: {
         type: "object",
         properties: {
-          content: {
+          endpointUrl: {
             type: "string",
-            description: "The prompt content with optional variable placeholders"
+            description: "The endpoint URL for the resource"
           }
         },
-        required: ["content"]
+        required: ["endpointUrl"]
       }
     }
   },
   {
     type: "function" as const,
     function: {
-      name: "set_type",
-      description: "Set the prompt type (TEXT for regular prompts, STRUCTURED for JSON/YAML workflows, IMAGE/VIDEO/AUDIO for media generation prompts).",
+      name: "set_server_type",
+      description: "Set the resource server type (MCP or WEBMCP).",
       parameters: {
         type: "object",
         properties: {
-          type: {
+          serverType: {
             type: "string",
-            enum: ["TEXT", "IMAGE", "VIDEO", "AUDIO", "STRUCTURED"],
-            description: "The type of prompt"
+            enum: ["MCP", "WEBMCP"],
+            description: "The type of resource server"
           },
-          structuredFormat: {
-            type: "string",
-            enum: ["JSON", "YAML"],
-            description: "Format for structured prompts (only when type is STRUCTURED)"
-          }
         },
-        required: ["type"]
+        required: ["serverType"]
       }
     }
   },
@@ -131,14 +119,14 @@ export const PROMPT_BUILDER_TOOLS = [
     type: "function" as const,
     function: {
       name: "set_tags",
-      description: "Set the tags for the prompt. Tags help users discover the prompt.",
+      description: "Set the tags for the resource. Tags help users discover the resource.",
       parameters: {
         type: "object",
         properties: {
           tagNames: {
             type: "array",
             items: { type: "string" },
-            description: "Array of tag names to apply to the prompt"
+            description: "Array of tag names to apply to the resource"
           }
         },
         required: ["tagNames"]
@@ -149,7 +137,7 @@ export const PROMPT_BUILDER_TOOLS = [
     type: "function" as const,
     function: {
       name: "set_category",
-      description: "Set the category for the prompt to organize it.",
+      description: "Set the category for the resource to organize it.",
       parameters: {
         type: "object",
         properties: {
@@ -166,7 +154,7 @@ export const PROMPT_BUILDER_TOOLS = [
     type: "function" as const,
     function: {
       name: "set_privacy",
-      description: "Set whether the prompt is private (only visible to the author) or public.",
+      description: "Set whether the resource is private (only visible to the author) or public.",
       parameters: {
         type: "object",
         properties: {
@@ -182,34 +170,8 @@ export const PROMPT_BUILDER_TOOLS = [
   {
     type: "function" as const,
     function: {
-      name: "set_media_requirements",
-      description: "Configure if the prompt requires users to upload media files when using it.",
-      parameters: {
-        type: "object",
-        properties: {
-          requiresMediaUpload: {
-            type: "boolean",
-            description: "Whether media upload is required"
-          },
-          mediaType: {
-            type: "string",
-            enum: ["IMAGE", "VIDEO", "DOCUMENT"],
-            description: "Type of media required"
-          },
-          mediaCount: {
-            type: "number",
-            description: "Number of media files required (1-10)"
-          }
-        },
-        required: ["requiresMediaUpload"]
-      }
-    }
-  },
-  {
-    type: "function" as const,
-    function: {
       name: "get_available_tags",
-      description: "Get all available tags that can be applied to prompts.",
+      description: "Get all available tags that can be applied to resources.",
       parameters: {
         type: "object",
         properties: {}
@@ -220,7 +182,7 @@ export const PROMPT_BUILDER_TOOLS = [
     type: "function" as const,
     function: {
       name: "get_available_categories",
-      description: "Get all available categories for organizing prompts.",
+      description: "Get all available categories for organizing resources.",
       parameters: {
         type: "object",
         properties: {}
@@ -231,7 +193,7 @@ export const PROMPT_BUILDER_TOOLS = [
     type: "function" as const,
     function: {
       name: "get_current_state",
-      description: "Get the current state of the prompt being built.",
+      description: "Get the current state of the resource being built.",
       parameters: {
         type: "object",
         properties: {}
@@ -243,57 +205,57 @@ export const PROMPT_BUILDER_TOOLS = [
 export async function executeToolCall(
   toolName: string,
   args: Record<string, unknown>,
-  currentState: PromptBuilderState,
+  currentState: ResourceBuilderState,
   availableTags: Array<{ id: string; name: string; slug: string; color: string }>,
   availableCategories: Array<{ id: string; name: string; slug: string; parentId: string | null }>
-): Promise<{ result: ToolResult; newState: PromptBuilderState }> {
+): Promise<{ result: ToolResult; newState: ResourceBuilderState }> {
   const newState = { ...currentState };
 
   switch (toolName) {
-    case "search_prompts": {
+    case "search_resources": {
       const query = args.query as string;
       const limit = Math.min(Math.max((args.limit as number) || 5, 1), 10);
-      const promptType = args.promptType as string | undefined;
-      const structuredFormat = args.structuredFormat as string | undefined;
-      
+      const serverType = args.serverType as string | undefined;
+
       try {
         // Run both full-text and semantic search in parallel
         const useSemanticSearch = await isAISearchEnabled();
-        
+
         // Full-text search
-        const textSearchPromise = db.prompt.findMany({
-          where: {
-            isPrivate: false,
-            deletedAt: null,
-            ...(promptType && { type: promptType as "TEXT" | "IMAGE" | "VIDEO" | "AUDIO" | "STRUCTURED" }),
-            ...(structuredFormat && { structuredFormat: structuredFormat as "JSON" | "YAML" }),
-            OR: [
-              { title: { contains: query, mode: "insensitive" } },
-              { description: { contains: query, mode: "insensitive" } },
-              { content: { contains: query, mode: "insensitive" } }
-            ]
-          },
-          select: {
+        const textSearchPromise = db.query.resources.findMany({
+          where: and(
+            eq(resources.isPrivate, false),
+            isNull(resources.deletedAt),
+            ...(serverType ? [eq(resources.serverType, serverType as "MCP" | "WEBMCP")] : []),
+            or(
+              ilike(resources.title, `%${query}%`),
+              ilike(resources.description, `%${query}%`),
+              ilike(resources.endpointUrl, `%${query}%`),
+            ),
+          ),
+          columns: {
             id: true,
             title: true,
             description: true,
-            content: true,
-            type: true,
-            structuredFormat: true,
-            tags: {
-              select: {
-                tag: {
-                  select: { name: true, color: true }
-                }
-              }
-            }
+            endpointUrl: true,
+            serverType: true,
           },
-          take: limit,
-          orderBy: { createdAt: "desc" }
+          with: {
+            tags: {
+              columns: {},
+              with: {
+                tag: {
+                  columns: { name: true, color: true },
+                },
+              },
+            },
+          },
+          limit,
+          orderBy: desc(resources.createdAt),
         });
 
         // Semantic search (if enabled)
-        const semanticSearchPromise = useSemanticSearch 
+        const semanticSearchPromise = useSemanticSearch
           ? semanticSearch(query, limit)
           : Promise.resolve([]);
 
@@ -308,47 +270,43 @@ export async function executeToolCall(
           id: string;
           title: string;
           description: string | null;
-          contentPreview: string;
-          type: string;
-          structuredFormat: string | null;
+          endpointUrlPreview: string;
+          serverType: string;
           tags: string[];
           source: "text" | "semantic" | "random";
           similarity?: string;
         }> = [];
 
         // Add semantic results first (higher relevance)
-        for (const p of semanticResults) {
-          if (seenIds.has(p.id)) continue;
-          if (promptType && p.type !== promptType) continue;
-          if (structuredFormat && p.structuredFormat !== structuredFormat) continue;
-          
-          seenIds.add(p.id);
+        for (const r of semanticResults) {
+          if (seenIds.has(r.id)) continue;
+          if (serverType && r.serverType !== serverType) continue;
+
+          seenIds.add(r.id);
           combinedResults.push({
-            id: p.id,
-            title: p.title,
-            description: p.description,
-            contentPreview: p.content.substring(0, 200) + (p.content.length > 200 ? "..." : ""),
-            type: p.type,
-            structuredFormat: p.structuredFormat,
-            tags: p.tags.map(t => t.tag.name),
+            id: r.id,
+            title: r.title,
+            description: r.description,
+            endpointUrlPreview: r.endpointUrl.substring(0, 200) + (r.endpointUrl.length > 200 ? "..." : ""),
+            serverType: r.serverType,
+            tags: r.tags.map(t => t.tag.name),
             source: "semantic",
-            similarity: Math.round(p.similarity * 100) + "%"
+            similarity: Math.round(r.similarity * 100) + "%"
           });
         }
 
         // Add text search results
-        for (const p of textResults) {
-          if (seenIds.has(p.id)) continue;
-          
-          seenIds.add(p.id);
+        for (const r of textResults) {
+          if (seenIds.has(r.id)) continue;
+
+          seenIds.add(r.id);
           combinedResults.push({
-            id: p.id,
-            title: p.title,
-            description: p.description,
-            contentPreview: p.content.substring(0, 200) + (p.content.length > 200 ? "..." : ""),
-            type: p.type,
-            structuredFormat: p.structuredFormat,
-            tags: p.tags.map((t: { tag: { name: string } }) => t.tag.name),
+            id: r.id,
+            title: r.title,
+            description: r.description,
+            endpointUrlPreview: r.endpointUrl.substring(0, 200) + (r.endpointUrl.length > 200 ? "..." : ""),
+            serverType: r.serverType,
+            tags: r.tags.map((t: { tag: { name: string } }) => t.tag.name),
             source: "text"
           });
         }
@@ -356,40 +314,41 @@ export async function executeToolCall(
         // Limit final results
         let finalResults = combinedResults.slice(0, limit);
 
-        // If no results found, get random prompts to learn the style
+        // If no results found, get random resources to learn the style
         if (finalResults.length === 0) {
-          const randomPrompts = await db.prompt.findMany({
-            where: {
-              isPrivate: false,
-              deletedAt: null,
-            },
-            select: {
+          const randomResources = await db.query.resources.findMany({
+            where: and(
+              eq(resources.isPrivate, false),
+              isNull(resources.deletedAt),
+            ),
+            columns: {
               id: true,
               title: true,
               description: true,
-              content: true,
-              type: true,
-              structuredFormat: true,
-              tags: {
-                select: {
-                  tag: {
-                    select: { name: true, color: true }
-                  }
-                }
-              }
+              endpointUrl: true,
+              serverType: true,
             },
-            take: limit,
-            orderBy: { createdAt: "desc" }
+            with: {
+              tags: {
+                columns: {},
+                with: {
+                  tag: {
+                    columns: { name: true, color: true },
+                  },
+                },
+              },
+            },
+            limit,
+            orderBy: desc(resources.createdAt),
           });
 
-          finalResults = randomPrompts.map(p => ({
-            id: p.id,
-            title: p.title,
-            description: p.description,
-            contentPreview: p.content.substring(0, 200) + (p.content.length > 200 ? "..." : ""),
-            type: p.type,
-            structuredFormat: p.structuredFormat,
-            tags: p.tags.map((t: { tag: { name: string } }) => t.tag.name),
+          finalResults = randomResources.map(r => ({
+            id: r.id,
+            title: r.title,
+            description: r.description,
+            endpointUrlPreview: r.endpointUrl.substring(0, 200) + (r.endpointUrl.length > 200 ? "..." : ""),
+            serverType: r.serverType,
+            tags: r.tags.map((t: { tag: { name: string } }) => t.tag.name),
             source: "random" as const
           }));
         }
@@ -398,14 +357,14 @@ export async function executeToolCall(
           result: {
             success: true,
             data: {
-              prompts: finalResults,
+              resources: finalResults,
               count: finalResults.length,
-              searchType: finalResults.length > 0 && finalResults[0].source === "random" 
-                ? "random_examples" 
+              searchType: finalResults.length > 0 && finalResults[0].source === "random"
+                ? "random_examples"
                 : (useSemanticSearch ? "hybrid" : "text"),
-              filters: { promptType, structuredFormat },
+              filters: { serverType },
               note: finalResults.length > 0 && finalResults[0].source === "random"
-                ? "No matching prompts found. Showing random examples to understand the prompt style."
+                ? "No matching resources found. Showing random examples to understand the resource style."
                 : undefined
             }
           },
@@ -413,7 +372,7 @@ export async function executeToolCall(
         };
       } catch (error) {
         return {
-          result: { success: false, error: "Failed to search prompts" },
+          result: { success: false, error: "Failed to search resources" },
           newState
         };
       }
@@ -437,22 +396,19 @@ export async function executeToolCall(
       };
     }
 
-    case "set_content": {
-      newState.content = args.content as string;
+    case "set_endpoint_url": {
+      newState.endpointUrl = args.endpointUrl as string;
       return {
-        result: { success: true, data: { content: newState.content } },
+        result: { success: true, data: { endpointUrl: newState.endpointUrl } },
         newState
       };
     }
 
-    case "set_type": {
-      const type = args.type as PromptBuilderState["type"];
-      newState.type = type;
-      if (type === "STRUCTURED" && args.structuredFormat) {
-        newState.structuredFormat = args.structuredFormat as "JSON" | "YAML";
-      }
+    case "set_server_type": {
+      const serverType = args.serverType as ResourceBuilderState["serverType"];
+      newState.serverType = serverType;
       return {
-        result: { success: true, data: { type, structuredFormat: newState.structuredFormat } },
+        result: { success: true, data: { serverType } },
         newState
       };
     }
@@ -476,7 +432,7 @@ export async function executeToolCall(
       return {
         result: {
           success: true,
-          data: { 
+          data: {
             appliedTags: matchedNames,
             notFound: tagNames.filter(n => !matchedNames.map(m => m.toLowerCase()).includes(n.toLowerCase()))
           }
@@ -508,29 +464,6 @@ export async function executeToolCall(
       newState.isPrivate = args.isPrivate as boolean;
       return {
         result: { success: true, data: { isPrivate: newState.isPrivate } },
-        newState
-      };
-    }
-
-    case "set_media_requirements": {
-      newState.requiresMediaUpload = args.requiresMediaUpload as boolean;
-      if (newState.requiresMediaUpload) {
-        if (args.mediaType) {
-          newState.requiredMediaType = args.mediaType as "IMAGE" | "VIDEO" | "DOCUMENT";
-        }
-        if (args.mediaCount) {
-          newState.requiredMediaCount = Math.min(Math.max(args.mediaCount as number, 1), 10);
-        }
-      }
-      return {
-        result: {
-          success: true,
-          data: {
-            requiresMediaUpload: newState.requiresMediaUpload,
-            mediaType: newState.requiredMediaType,
-            mediaCount: newState.requiredMediaCount
-          }
-        },
         newState
       };
     }
@@ -572,15 +505,11 @@ export async function executeToolCall(
           data: {
             title: currentState.title || "(not set)",
             description: currentState.description || "(not set)",
-            content: currentState.content || "(not set)",
-            type: currentState.type,
-            structuredFormat: currentState.structuredFormat,
+            endpointUrl: currentState.endpointUrl || "(not set)",
+            serverType: currentState.serverType,
             tags: tagNames.length ? tagNames : "(none)",
             category: categoryName || "(none)",
             isPrivate: currentState.isPrivate,
-            requiresMediaUpload: currentState.requiresMediaUpload,
-            mediaType: currentState.requiredMediaType,
-            mediaCount: currentState.requiredMediaCount
           }
         },
         newState

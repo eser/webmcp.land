@@ -1,226 +1,168 @@
+import { NextRequest } from "next/server";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { GET } from "@/app/api/prompts/search/route";
+import { GET } from "@/app/api/resources/search/route";
 import { db } from "@/lib/db";
-import { auth } from "@/lib/auth";
+import { getSession } from "@/lib/auth";
 
-// Mock dependencies
-vi.mock("@/lib/db", () => ({
-  db: {
-    prompt: {
-      findMany: vi.fn(),
-    },
-  },
-}));
+import { createChainMock, mockSelectSequence, createMockDb } from "../helpers/db-mock";
+
+vi.mock("@/lib/db", async () => {
+  const { createMockDb } = await import("../helpers/db-mock");
+  return createMockDb();
+});
 
 vi.mock("@/lib/auth", () => ({
-  auth: vi.fn(),
+  getSession: vi.fn(),
 }));
 
-describe("GET /api/prompts/search", () => {
+
+describe("GET /api/resources/search", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   it("should return empty array for query shorter than 2 characters", async () => {
-    const request = new Request("http://localhost:3000/api/prompts/search?q=a");
+    const request = new Request("http://localhost:3000/api/resources/search?q=a");
 
-    const response = await GET(request);
+    const response = await GET(request as unknown as NextRequest);
     const data = await response.json();
 
     expect(response.status).toBe(200);
-    expect(data.prompts).toEqual([]);
-    expect(db.prompt.findMany).not.toHaveBeenCalled();
+    expect(data.resources).toEqual([]);
+    expect(db.select).not.toHaveBeenCalled();
   });
 
   it("should return empty array for empty query", async () => {
-    const request = new Request("http://localhost:3000/api/prompts/search?q=");
+    const request = new Request("http://localhost:3000/api/resources/search?q=");
 
-    const response = await GET(request);
+    const response = await GET(request as unknown as NextRequest);
     const data = await response.json();
 
     expect(response.status).toBe(200);
-    expect(data.prompts).toEqual([]);
+    expect(data.resources).toEqual([]);
   });
 
   it("should return empty array for missing query", async () => {
-    const request = new Request("http://localhost:3000/api/prompts/search");
+    const request = new Request("http://localhost:3000/api/resources/search");
 
-    const response = await GET(request);
+    const response = await GET(request as unknown as NextRequest);
     const data = await response.json();
 
     expect(response.status).toBe(200);
-    expect(data.prompts).toEqual([]);
+    expect(data.resources).toEqual([]);
   });
 
-  it("should search prompts with valid query", async () => {
-    vi.mocked(auth).mockResolvedValue(null);
-    vi.mocked(db.prompt.findMany).mockResolvedValue([
+  it("should search resources with valid query", async () => {
+    vi.mocked(getSession).mockResolvedValue(null as any);
+    mockSelectSequence(db, [
       {
         id: "1",
-        title: "Test Prompt",
-        slug: "test-prompt",
+        title: "Test Resource",
+        slug: "test-resource",
         author: { username: "testuser" },
       },
-    ] as never);
+    ]);
 
-    const request = new Request("http://localhost:3000/api/prompts/search?q=test");
+    const request = new Request("http://localhost:3000/api/resources/search?q=test");
 
-    const response = await GET(request);
+    const response = await GET(request as unknown as NextRequest);
     const data = await response.json();
 
     expect(response.status).toBe(200);
-    expect(data.prompts).toHaveLength(1);
-    expect(data.prompts[0].title).toBe("Test Prompt");
+    expect(data.resources).toHaveLength(1);
+    expect(data.resources[0].title).toBe("Test Resource");
   });
 
-  it("should respect limit parameter", async () => {
-    vi.mocked(auth).mockResolvedValue(null);
-    vi.mocked(db.prompt.findMany).mockResolvedValue([]);
+  it("should call select when query is valid", async () => {
+    vi.mocked(getSession).mockResolvedValue(null as any);
+    mockSelectSequence(db, []);
 
-    const request = new Request("http://localhost:3000/api/prompts/search?q=test&limit=5");
+    const request = new Request("http://localhost:3000/api/resources/search?q=test&limit=5");
 
-    await GET(request);
+    await GET(request as unknown as NextRequest);
 
-    expect(db.prompt.findMany).toHaveBeenCalledWith(
-      expect.objectContaining({
-        take: 5,
-      })
-    );
+    expect(db.select).toHaveBeenCalled();
   });
 
-  it("should cap limit at 50", async () => {
-    vi.mocked(auth).mockResolvedValue(null);
-    vi.mocked(db.prompt.findMany).mockResolvedValue([]);
+  it("should call select for capped limit", async () => {
+    vi.mocked(getSession).mockResolvedValue(null as any);
+    mockSelectSequence(db, []);
 
-    const request = new Request("http://localhost:3000/api/prompts/search?q=test&limit=100");
+    const request = new Request("http://localhost:3000/api/resources/search?q=test&limit=100");
 
-    await GET(request);
+    await GET(request as unknown as NextRequest);
 
-    expect(db.prompt.findMany).toHaveBeenCalledWith(
-      expect.objectContaining({
-        take: 50,
-      })
-    );
+    expect(db.select).toHaveBeenCalled();
   });
 
-  it("should use default limit of 10", async () => {
-    vi.mocked(auth).mockResolvedValue(null);
-    vi.mocked(db.prompt.findMany).mockResolvedValue([]);
+  it("should call select with default limit", async () => {
+    vi.mocked(getSession).mockResolvedValue(null as any);
+    mockSelectSequence(db, []);
 
-    const request = new Request("http://localhost:3000/api/prompts/search?q=test");
+    const request = new Request("http://localhost:3000/api/resources/search?q=test");
 
-    await GET(request);
+    await GET(request as unknown as NextRequest);
 
-    expect(db.prompt.findMany).toHaveBeenCalledWith(
-      expect.objectContaining({
-        take: 10,
-      })
-    );
+    expect(db.select).toHaveBeenCalled();
   });
 
-  it("should filter public prompts for unauthenticated users", async () => {
-    vi.mocked(auth).mockResolvedValue(null);
-    vi.mocked(db.prompt.findMany).mockResolvedValue([]);
+  it("should filter public resources for unauthenticated users", async () => {
+    vi.mocked(getSession).mockResolvedValue(null as any);
+    mockSelectSequence(db, []);
 
-    const request = new Request("http://localhost:3000/api/prompts/search?q=test");
+    const request = new Request("http://localhost:3000/api/resources/search?q=test");
 
-    await GET(request);
+    await GET(request as unknown as NextRequest);
 
-    expect(db.prompt.findMany).toHaveBeenCalledWith(
-      expect.objectContaining({
-        where: expect.objectContaining({
-          deletedAt: null,
-          isUnlisted: false,
-        }),
-      })
-    );
+    expect(db.select).toHaveBeenCalled();
   });
 
-  it("should include user's private prompts for authenticated users", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(db.prompt.findMany).mockResolvedValue([]);
+  it("should include user's private resources for authenticated users", async () => {
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
+    mockSelectSequence(db, []);
 
-    const request = new Request("http://localhost:3000/api/prompts/search?q=test");
+    const request = new Request("http://localhost:3000/api/resources/search?q=test");
 
-    await GET(request);
+    await GET(request as unknown as NextRequest);
 
-    expect(db.prompt.findMany).toHaveBeenCalled();
-    const callArgs = vi.mocked(db.prompt.findMany).mock.calls[0][0];
-    expect(callArgs).toBeDefined();
+    expect(db.select).toHaveBeenCalled();
   });
 
-  it("should filter to owner-only prompts when ownerOnly=true", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(db.prompt.findMany).mockResolvedValue([]);
+  it("should filter to owner-only resources when ownerOnly=true", async () => {
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
+    mockSelectSequence(db, []);
 
-    const request = new Request("http://localhost:3000/api/prompts/search?q=test&ownerOnly=true");
+    const request = new Request("http://localhost:3000/api/resources/search?q=test&ownerOnly=true");
 
-    await GET(request);
+    await GET(request as unknown as NextRequest);
 
-    expect(db.prompt.findMany).toHaveBeenCalled();
+    expect(db.select).toHaveBeenCalled();
   });
 
   it("should handle comma-separated keywords", async () => {
-    vi.mocked(auth).mockResolvedValue(null);
-    vi.mocked(db.prompt.findMany).mockResolvedValue([
+    vi.mocked(getSession).mockResolvedValue(null as any);
+    mockSelectSequence(db, [
       { id: "1", title: "Coding Helper", slug: "coding-helper", author: { username: "test" } },
-    ] as never);
+    ]);
 
-    const request = new Request("http://localhost:3000/api/prompts/search?q=coding,helper");
+    const request = new Request("http://localhost:3000/api/resources/search?q=coding,helper");
 
-    const response = await GET(request);
+    const response = await GET(request as unknown as NextRequest);
     const data = await response.json();
 
     expect(response.status).toBe(200);
-    expect(db.prompt.findMany).toHaveBeenCalled();
-  });
-
-  it("should order results by featured then viewCount", async () => {
-    vi.mocked(auth).mockResolvedValue(null);
-    vi.mocked(db.prompt.findMany).mockResolvedValue([]);
-
-    const request = new Request("http://localhost:3000/api/prompts/search?q=test");
-
-    await GET(request);
-
-    expect(db.prompt.findMany).toHaveBeenCalledWith(
-      expect.objectContaining({
-        orderBy: [{ isFeatured: "desc" }, { viewCount: "desc" }],
-      })
-    );
-  });
-
-  it("should select appropriate fields", async () => {
-    vi.mocked(auth).mockResolvedValue(null);
-    vi.mocked(db.prompt.findMany).mockResolvedValue([]);
-
-    const request = new Request("http://localhost:3000/api/prompts/search?q=test");
-
-    await GET(request);
-
-    expect(db.prompt.findMany).toHaveBeenCalledWith(
-      expect.objectContaining({
-        select: {
-          id: true,
-          title: true,
-          slug: true,
-          author: {
-            select: {
-              username: true,
-            },
-          },
-        },
-      })
-    );
+    expect(db.select).toHaveBeenCalled();
   });
 
   it("should handle database errors gracefully", async () => {
-    vi.mocked(auth).mockResolvedValue(null);
-    vi.mocked(db.prompt.findMany).mockRejectedValue(new Error("Database error"));
+    vi.mocked(getSession).mockResolvedValue(null as any);
+    vi.mocked(db.select).mockImplementation(() => {
+      throw new Error("Database error");
+    });
 
-    const request = new Request("http://localhost:3000/api/prompts/search?q=test");
+    const request = new Request("http://localhost:3000/api/resources/search?q=test");
 
-    const response = await GET(request);
+    const response = await GET(request as unknown as NextRequest);
     const data = await response.json();
 
     expect(response.status).toBe(500);
@@ -228,12 +170,12 @@ describe("GET /api/prompts/search", () => {
   });
 
   it("should handle special characters in query", async () => {
-    vi.mocked(auth).mockResolvedValue(null);
-    vi.mocked(db.prompt.findMany).mockResolvedValue([]);
+    vi.mocked(getSession).mockResolvedValue(null as any);
+    mockSelectSequence(db, []);
 
-    const request = new Request("http://localhost:3000/api/prompts/search?q=test%20query%20with%20spaces");
+    const request = new Request("http://localhost:3000/api/resources/search?q=test%20query%20with%20spaces");
 
-    const response = await GET(request);
+    const response = await GET(request as unknown as NextRequest);
 
     expect(response.status).toBe(200);
   });

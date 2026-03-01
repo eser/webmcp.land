@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 import { MoreHorizontal, Plus, Pencil, Trash2, ChevronRight, Pin, PinOff } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -72,7 +72,7 @@ interface CategoriesTableProps {
 
 export function CategoriesTable({ categories }: CategoriesTableProps) {
   const router = useRouter();
-  const t = useTranslations("admin.categories");
+  const { t } = useTranslation();
   const [editCategory, setEditCategory] = useState<Category | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [isCreating, setIsCreating] = useState(false);
@@ -129,10 +129,10 @@ export function CategoriesTable({ categories }: CategoriesTableProps) {
 
       if (!res.ok) throw new Error("Failed to update");
 
-      toast.success(category.pinned ? t("unpinned") : t("pinned"));
+      toast.success(category.pinned ? t("admin.categories.unpinned") : t("admin.categories.pinned"));
       router.refresh();
     } catch {
-      toast.error(t("saveFailed"));
+      toast.error(t("admin.categories.saveFailed"));
     } finally {
       setLoading(false);
     }
@@ -168,12 +168,12 @@ export function CategoriesTable({ categories }: CategoriesTableProps) {
 
       if (!res.ok) throw new Error("Failed to save");
 
-      toast.success(editCategory ? t("updated") : t("created"));
+      toast.success(editCategory ? t("admin.categories.updated") : t("admin.categories.created"));
       router.refresh();
       setEditCategory(null);
       setIsCreating(false);
     } catch {
-      toast.error(t("saveFailed"));
+      toast.error(t("admin.categories.saveFailed"));
     } finally {
       setLoading(false);
     }
@@ -190,10 +190,10 @@ export function CategoriesTable({ categories }: CategoriesTableProps) {
 
       if (!res.ok) throw new Error("Failed to delete");
 
-      toast.success(t("deleted"));
+      toast.success(t("admin.categories.deleted"));
       router.refresh();
     } catch {
-      toast.error(t("deleteFailed"));
+      toast.error(t("admin.categories.deleteFailed"));
     } finally {
       setLoading(false);
       setDeleteId(null);
@@ -204,12 +204,12 @@ export function CategoriesTable({ categories }: CategoriesTableProps) {
     <>
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-lg font-semibold">{t("title")}</h3>
-          <p className="text-sm text-muted-foreground">{t("description")}</p>
+          <h3 className="text-lg font-semibold">{t("admin.categories.title")}</h3>
+          <p className="text-sm text-muted-foreground">{t("admin.categories.description")}</p>
         </div>
         <Button size="sm" onClick={openCreateDialog}>
           <Plus className="h-4 w-4 mr-2" />
-          {t("add")}
+          {t("admin.categories.add")}
         </Button>
       </div>
 
@@ -217,10 +217,10 @@ export function CategoriesTable({ categories }: CategoriesTableProps) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>{t("name")}</TableHead>
-              <TableHead>{t("slug")}</TableHead>
-              <TableHead>{t("parent")}</TableHead>
-              <TableHead className="text-center">{t("prompts")}</TableHead>
+              <TableHead>{t("admin.categories.name")}</TableHead>
+              <TableHead>{t("admin.categories.slug")}</TableHead>
+              <TableHead>{t("admin.categories.parent")}</TableHead>
+              <TableHead className="text-center">{t("admin.categories.prompts")}</TableHead>
               <TableHead className="w-[50px]"></TableHead>
             </TableRow>
           </TableHeader>
@@ -228,7 +228,7 @@ export function CategoriesTable({ categories }: CategoriesTableProps) {
             {hierarchicalCategories.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
-                  {t("noCategories")}
+                  {t("admin.categories.noCategories")}
                 </TableCell>
               </TableRow>
             ) : (
@@ -243,13 +243,13 @@ export function CategoriesTable({ categories }: CategoriesTableProps) {
                       <span className={category.level === 0 ? "font-medium" : ""}>{category.name}</span>
                       {category._count.children > 0 && (
                         <Badge variant="secondary" className="text-xs">
-                          {category._count.children} {t("subcategories")}
+                          {category._count.children} {t("admin.categories.subcategories")}
                         </Badge>
                       )}
                       {category.pinned && (
                         <Badge variant="default" className="text-xs">
                           <Pin className="h-3 w-3 mr-1" />
-                          {t("pinnedBadge")}
+                          {t("admin.categories.pinnedBadge")}
                         </Badge>
                       )}
                     </div>
@@ -260,28 +260,26 @@ export function CategoriesTable({ categories }: CategoriesTableProps) {
                       <Badge variant="outline">{category.parent.name}</Badge>
                     ) : (
                       <Badge variant="default" className="bg-primary/10 text-primary hover:bg-primary/20">
-                        {t("rootCategory")}
+                        {t("admin.categories.rootCategory")}
                       </Badge>
                     )}
                   </TableCell>
                   <TableCell className="text-center">{category._count.prompts}</TableCell>
                   <TableCell>
                     <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                      <DropdownMenuTrigger render={<Button variant="ghost" size="icon" className="h-8 w-8" />}>
                           <MoreHorizontal className="h-4 w-4" />
-                        </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem onClick={() => openEditDialog(category)}>
                           <Pencil className="h-4 w-4 mr-2" />
-                          {t("edit")}
+                          {t("admin.categories.edit")}
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => handleTogglePin(category)} disabled={loading}>
                           {category.pinned ? (
-                            <><PinOff className="h-4 w-4 mr-2" />{t("unpin")}</>
+                            <><PinOff className="h-4 w-4 mr-2" />{t("admin.categories.unpin")}</>
                           ) : (
-                            <><Pin className="h-4 w-4 mr-2" />{t("pin")}</>
+                            <><Pin className="h-4 w-4 mr-2" />{t("admin.categories.pin")}</>
                           )}
                         </DropdownMenuItem>
                         <DropdownMenuItem
@@ -289,7 +287,7 @@ export function CategoriesTable({ categories }: CategoriesTableProps) {
                           onClick={() => setDeleteId(category.id)}
                         >
                           <Trash2 className="h-4 w-4 mr-2" />
-                          {t("delete")}
+                          {t("admin.categories.delete")}
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -305,12 +303,12 @@ export function CategoriesTable({ categories }: CategoriesTableProps) {
       <Dialog open={isCreating || !!editCategory} onOpenChange={() => { setIsCreating(false); setEditCategory(null); }}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{editCategory ? t("editTitle") : t("createTitle")}</DialogTitle>
-            <DialogDescription>{editCategory ? t("editDescription") : t("createDescription")}</DialogDescription>
+            <DialogTitle>{editCategory ? t("admin.categories.editTitle") : t("admin.categories.createTitle")}</DialogTitle>
+            <DialogDescription>{editCategory ? t("admin.categories.editDescription") : t("admin.categories.createDescription")}</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
-              <Label htmlFor="name">{t("name")}</Label>
+              <Label htmlFor="name">{t("admin.categories.name")}</Label>
               <Input
                 id="name"
                 value={formData.name}
@@ -318,7 +316,7 @@ export function CategoriesTable({ categories }: CategoriesTableProps) {
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="slug">{t("slug")}</Label>
+              <Label htmlFor="slug">{t("admin.categories.slug")}</Label>
               <Input
                 id="slug"
                 value={formData.slug}
@@ -326,16 +324,16 @@ export function CategoriesTable({ categories }: CategoriesTableProps) {
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="parentId">{t("parentCategory")}</Label>
+              <Label htmlFor="parentId">{t("admin.categories.parentCategory")}</Label>
               <Select
                 value={formData.parentId}
-                onValueChange={(value) => setFormData({ ...formData, parentId: value === "none" ? "" : value })}
+                onValueChange={(value) => setFormData({ ...formData, parentId: value === "none" ? "" : value ?? "" })}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder={t("selectParent")} />
+                  <SelectValue placeholder={t("admin.categories.selectParent")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="none">{t("noParent")}</SelectItem>
+                  <SelectItem value="none">{t("admin.categories.noParent")}</SelectItem>
                   {getValidParentOptions().map((cat) => (
                     <SelectItem key={cat.id} value={cat.id}>
                       {cat.icon && <span className="mr-2">{cat.icon}</span>}
@@ -344,10 +342,10 @@ export function CategoriesTable({ categories }: CategoriesTableProps) {
                   ))}
                 </SelectContent>
               </Select>
-              <p className="text-xs text-muted-foreground">{t("parentHelp")}</p>
+              <p className="text-xs text-muted-foreground">{t("admin.categories.parentHelp")}</p>
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="description">{t("descriptionLabel")}</Label>
+              <Label htmlFor="description">{t("admin.categories.descriptionLabel")}</Label>
               <Input
                 id="description"
                 value={formData.description}
@@ -355,7 +353,7 @@ export function CategoriesTable({ categories }: CategoriesTableProps) {
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="icon">{t("icon")}</Label>
+              <Label htmlFor="icon">{t("admin.categories.icon")}</Label>
               <Input
                 id="icon"
                 value={formData.icon}
@@ -372,16 +370,16 @@ export function CategoriesTable({ categories }: CategoriesTableProps) {
                 className="h-4 w-4 rounded border-gray-300"
               />
               <Label htmlFor="pinned" className="text-sm font-normal cursor-pointer">
-                {t("pinnedLabel")}
+                {t("admin.categories.pinnedLabel")}
               </Label>
             </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => { setIsCreating(false); setEditCategory(null); }}>
-              {t("cancel")}
+              {t("admin.categories.cancel")}
             </Button>
             <Button onClick={handleSubmit} disabled={loading || !formData.name || !formData.slug}>
-              {editCategory ? t("save") : t("create")}
+              {editCategory ? t("admin.categories.save") : t("admin.categories.create")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -391,17 +389,17 @@ export function CategoriesTable({ categories }: CategoriesTableProps) {
       <AlertDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>{t("deleteConfirmTitle")}</AlertDialogTitle>
-            <AlertDialogDescription>{t("deleteConfirmDescription")}</AlertDialogDescription>
+            <AlertDialogTitle>{t("admin.categories.deleteConfirmTitle")}</AlertDialogTitle>
+            <AlertDialogDescription>{t("admin.categories.deleteConfirmDescription")}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+            <AlertDialogCancel>{t("admin.categories.cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
               disabled={loading}
               className="bg-destructive text-white hover:bg-destructive/90"
             >
-              {t("delete")}
+              {t("admin.categories.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

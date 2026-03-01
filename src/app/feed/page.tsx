@@ -1,28 +1,30 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { getTranslations } from "next-intl/server";
+import { AuthRedirect } from "@/components/auth/auth-redirect";
+import { getLocale, getTranslations } from "@/i18n/request";
 import { ArrowRight, Bell, FolderOpen, Sparkles } from "lucide-react";
-import { auth } from "@/lib/auth";
+import { and, asc, desc, eq, inArray, isNull, ne } from "drizzle-orm";
+import { getSession } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { categorySubscriptions, resources, categories, resourceConnections } from "@/lib/schema";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { PromptList } from "@/components/prompts/prompt-list";
+import { ResourceList } from "@/components/resources/resource-list";
 
 export default async function FeedPage() {
   const t = await getTranslations("feed");
-  const session = await auth();
+  const session = await getSession();
 
   // Redirect to login if not authenticated
   if (!session?.user) {
-    redirect("/login");
+    return <AuthRedirect callbackUri="/feed" />;
   }
 
   // Get user's subscribed categories
-  const subscriptions = await db.categorySubscription.findMany({
-    where: { userId: session.user.id },
-    include: {
+  const subscriptions = await db.query.categorySubscriptions.findMany({
+    where: eq(categorySubscriptions.userId, session.user.id),
+    with: {
       category: {
-        select: {
+        columns: {
           id: true,
           name: true,
           slug: true,
@@ -33,20 +35,19 @@ export default async function FeedPage() {
 
   const subscribedCategoryIds = subscriptions.map((s) => s.categoryId);
 
-  // Fetch prompts from subscribed categories
-  const promptsRaw = subscribedCategoryIds.length > 0
-    ? await db.prompt.findMany({
-        where: {
-          isPrivate: false,
-          isUnlisted: false,
-          deletedAt: null,
-          categoryId: { in: subscribedCategoryIds },
-        },
-        orderBy: { createdAt: "desc" },
-        take: 30,
-        include: {
+  // Fetch resources from subscribed categories
+  const resourcesRaw = subscribedCategoryIds.length > 0
+    ? await db.query.resources.findMany({
+        where: and(
+          eq(resources.isPrivate, false),
+          isNull(resources.deletedAt),
+          inArray(resources.categoryId, subscribedCategoryIds),
+        ),
+        orderBy: desc(resources.createdAt),
+        limit: 30,
+        with: {
           author: {
-            select: {
+            columns: {
               id: true,
               name: true,
               username: true,
@@ -55,42 +56,38 @@ export default async function FeedPage() {
             },
           },
           category: {
-            include: {
+            with: {
               parent: {
-                select: { id: true, name: true, slug: true },
+                columns: { id: true, name: true, slug: true },
               },
             },
           },
           tags: {
-            include: {
+            with: {
               tag: true,
             },
           },
-          _count: {
-            select: {
-              votes: true,
-              contributors: true,
-              outgoingConnections: { where: { label: { not: "related" } } },
-              incomingConnections: { where: { label: { not: "related" } } },
-            },
+          votes: true,
+          outgoingConnections: {
+            where: ne(resourceConnections.label, "related"),
+          },
+          incomingConnections: {
+            where: ne(resourceConnections.label, "related"),
           },
         },
       })
     : [];
 
-  const prompts = promptsRaw.map((p) => ({
+  const resourcesList = resourcesRaw.map((p) => ({
     ...p,
-    voteCount: p._count?.votes ?? 0,
-    contributorCount: p._count?.contributors ?? 0,
+    voteCount: p.votes?.length ?? 0,
   }));
 
   // Get all categories for subscription
-  const categories = await db.category.findMany({
-    orderBy: { name: "asc" },
-    include: {
-      _count: {
-        select: { prompts: true },
-      },
+  const categoriesList = await db.query.categories.findMany({
+    orderBy: asc(categories.name),
+    with: {
+      resources: true,
     },
   });
 
@@ -104,17 +101,13 @@ export default async function FeedPage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" asChild>
-            <Link href="/prompts">
+          <Button render={<Link href="/registry" />} variant="outline" size="sm">
               {t("browseAll")}
               <ArrowRight className="ml-1.5 h-4 w-4" />
-            </Link>
           </Button>
-          <Button variant="outline" size="sm" asChild>
-            <Link href="/discover">
+          <Button render={<Link href="/discover" />} variant="outline" size="sm">
               <Sparkles className="mr-1.5 h-4 w-4" />
               {t("discover")}
-            </Link>
           </Button>
         </div>
       </div>
@@ -134,31 +127,31 @@ export default async function FeedPage() {
       )}
 
       {/* Feed */}
-      {prompts.length > 0 ? (
-        <PromptList prompts={prompts} currentPage={1} totalPages={1} />
+      {resourcesList.length > 0 ? (
+        <ResourceList resources={resourcesList as any} currentPage={1} totalPages={1} />
       ) : (
         <div className="text-center py-12 border rounded-lg bg-muted/30">
           <FolderOpen className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
-          <h2 className="font-medium mb-1">{t("noPromptsInFeed")}</h2>
+          <h2 className="font-medium mb-1">{t("noResourcesInFeed")}</h2>
           <p className="text-sm text-muted-foreground mb-4">
             {t("subscribeToCategories")}
           </p>
 
           {/* Category suggestions */}
           <div className="flex flex-wrap justify-center gap-2 max-w-md mx-auto">
-            {categories.slice(0, 6).map((category) => (
+            {categoriesList.slice(0, 6).map((category) => (
               <Link key={category.id} href={`/categories/${category.slug}`}>
                 <Badge variant="outline" className="cursor-pointer hover:bg-accent">
                   {category.name}
-                  <span className="ml-1 text-muted-foreground">({category._count.prompts})</span>
+                  <span className="ml-1 text-muted-foreground">({category.resources.length})</span>
                 </Badge>
               </Link>
             ))}
           </div>
 
           <div className="mt-4">
-            <Button variant="outline" size="sm" asChild>
-              <Link href="/categories">{t("viewAllCategories")}</Link>
+            <Button render={<Link href="/categories" />} variant="outline" size="sm">
+              {t("viewAllCategories")}
             </Button>
           </div>
         </div>

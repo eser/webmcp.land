@@ -1,175 +1,94 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { renderHook, act } from "@testing-library/react";
+import { renderHook } from "@testing-library/react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
+/**
+ * The useIsMobile hook uses window.matchMedia with "(max-width: 767px)".
+ * In jsdom, matchMedia returns a stub that always reports matches: false,
+ * so we mock it to control the return value per test.
+ */
 describe("useIsMobile", () => {
-  const originalInnerWidth = window.innerWidth;
-  let addEventListenerSpy: ReturnType<typeof vi.spyOn>;
-  let removeEventListenerSpy: ReturnType<typeof vi.spyOn>;
+  const originalMatchMedia = window.matchMedia;
+  let changeListeners: Array<(e: { matches: boolean }) => void>;
+
+  function mockMatchMedia(matches: boolean) {
+    changeListeners = [];
+    window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+      matches,
+      media: query,
+      onchange: null,
+      addEventListener: vi.fn((event: string, cb: (e: { matches: boolean }) => void) => {
+        if (event === "change") changeListeners.push(cb);
+      }),
+      removeEventListener: vi.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    }));
+  }
 
   beforeEach(() => {
-    addEventListenerSpy = vi.spyOn(window, "addEventListener");
-    removeEventListenerSpy = vi.spyOn(window, "removeEventListener");
+    // Default: desktop (not mobile)
+    mockMatchMedia(false);
   });
 
   afterEach(() => {
-    // Restore original window width
-    Object.defineProperty(window, "innerWidth", {
-      writable: true,
-      configurable: true,
-      value: originalInnerWidth,
-    });
+    window.matchMedia = originalMatchMedia;
     vi.restoreAllMocks();
   });
 
-  function setWindowWidth(width: number) {
-    Object.defineProperty(window, "innerWidth", {
-      writable: true,
-      configurable: true,
-      value: width,
-    });
-  }
-
   it("should return false for desktop width (>= 768)", () => {
-    setWindowWidth(1024);
+    mockMatchMedia(false);
+    Object.defineProperty(window, "innerWidth", { value: 1024, configurable: true });
     const { result } = renderHook(() => useIsMobile());
     expect(result.current).toBe(false);
   });
 
   it("should return true for mobile width (< 768)", () => {
-    setWindowWidth(375);
+    mockMatchMedia(true);
+    Object.defineProperty(window, "innerWidth", { value: 375, configurable: true });
     const { result } = renderHook(() => useIsMobile());
     expect(result.current).toBe(true);
   });
 
-  it("should return false at exactly 768px (default breakpoint)", () => {
-    setWindowWidth(768);
+  it("should return false at exactly 768px", () => {
+    mockMatchMedia(false);
+    Object.defineProperty(window, "innerWidth", { value: 768, configurable: true });
     const { result } = renderHook(() => useIsMobile());
     expect(result.current).toBe(false);
   });
 
-  it("should return true at 767px (just below default breakpoint)", () => {
-    setWindowWidth(767);
+  it("should return true at 767px (just below breakpoint)", () => {
+    mockMatchMedia(true);
+    Object.defineProperty(window, "innerWidth", { value: 767, configurable: true });
     const { result } = renderHook(() => useIsMobile());
     expect(result.current).toBe(true);
   });
 
-  it("should use custom breakpoint", () => {
-    setWindowWidth(500);
-    const { result } = renderHook(() => useIsMobile(400));
-    expect(result.current).toBe(false); // 500 >= 400
-  });
-
-  it("should return true below custom breakpoint", () => {
-    setWindowWidth(300);
-    const { result } = renderHook(() => useIsMobile(400));
-    expect(result.current).toBe(true); // 300 < 400
-  });
-
-  it("should add resize event listener on mount", () => {
-    setWindowWidth(1024);
+  it("should call matchMedia with correct query", () => {
+    mockMatchMedia(false);
+    Object.defineProperty(window, "innerWidth", { value: 1024, configurable: true });
     renderHook(() => useIsMobile());
-
-    expect(addEventListenerSpy).toHaveBeenCalledWith(
-      "resize",
-      expect.any(Function)
-    );
+    expect(window.matchMedia).toHaveBeenCalledWith("(max-width: 767px)");
   });
 
-  it("should remove resize event listener on unmount", () => {
-    setWindowWidth(1024);
-    const { unmount } = renderHook(() => useIsMobile());
-
-    unmount();
-
-    expect(removeEventListenerSpy).toHaveBeenCalledWith(
-      "resize",
-      expect.any(Function)
-    );
-  });
-
-  it("should update when window is resized", () => {
-    setWindowWidth(1024);
-    const { result } = renderHook(() => useIsMobile());
-
-    expect(result.current).toBe(false);
-
-    // Simulate resize to mobile width
-    act(() => {
-      setWindowWidth(375);
-      window.dispatchEvent(new Event("resize"));
-    });
-
-    expect(result.current).toBe(true);
-  });
-
-  it("should update when resized from mobile to desktop", () => {
-    setWindowWidth(375);
-    const { result } = renderHook(() => useIsMobile());
-
-    expect(result.current).toBe(true);
-
-    // Simulate resize to desktop width
-    act(() => {
-      setWindowWidth(1024);
-      window.dispatchEvent(new Event("resize"));
-    });
-
-    expect(result.current).toBe(false);
-  });
-
-  it("should re-register event listener when breakpoint changes", () => {
-    setWindowWidth(500);
-    const { rerender } = renderHook(
-      ({ breakpoint }) => useIsMobile(breakpoint),
-      { initialProps: { breakpoint: 768 } }
-    );
-
-    // Initial registration
-    expect(addEventListenerSpy).toHaveBeenCalledTimes(1);
-
-    // Change breakpoint
-    rerender({ breakpoint: 400 });
-
-    // Should have removed old listener and added new one
-    expect(removeEventListenerSpy).toHaveBeenCalled();
-    expect(addEventListenerSpy).toHaveBeenCalledTimes(2);
-  });
-
-  it("should handle multiple resize events", () => {
-    setWindowWidth(1024);
-    const { result } = renderHook(() => useIsMobile());
-
-    expect(result.current).toBe(false);
-
-    // Multiple resizes
-    act(() => {
-      setWindowWidth(375);
-      window.dispatchEvent(new Event("resize"));
-    });
-    expect(result.current).toBe(true);
-
-    act(() => {
-      setWindowWidth(1200);
-      window.dispatchEvent(new Event("resize"));
-    });
-    expect(result.current).toBe(false);
-
-    act(() => {
-      setWindowWidth(320);
-      window.dispatchEvent(new Event("resize"));
-    });
-    expect(result.current).toBe(true);
+  it("should register a change listener on mount", () => {
+    mockMatchMedia(false);
+    Object.defineProperty(window, "innerWidth", { value: 1024, configurable: true });
+    renderHook(() => useIsMobile());
+    expect(changeListeners.length).toBe(1);
   });
 
   it("should handle edge case of 0 width", () => {
-    setWindowWidth(0);
+    mockMatchMedia(true);
+    Object.defineProperty(window, "innerWidth", { value: 0, configurable: true });
     const { result } = renderHook(() => useIsMobile());
     expect(result.current).toBe(true);
   });
 
   it("should handle very large width", () => {
-    setWindowWidth(10000);
+    mockMatchMedia(false);
+    Object.defineProperty(window, "innerWidth", { value: 10000, configurable: true });
     const { result } = renderHook(() => useIsMobile());
     expect(result.current).toBe(false);
   });

@@ -1,14 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
 
+const permanentRedirects: Record<string, string> = {
+  "/vibe": "/categories/vibe",
+  "/sponsors": "/categories/sponsors",
+  "/embed-preview": "/embed",
+};
+
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Rewrite .prompt.md and .prompt.yml requests to the raw API route
-  if (pathname.startsWith("/prompts/") && (pathname.endsWith(".prompt.md") || pathname.endsWith(".prompt.yml"))) {
-    const id = pathname.slice("/prompts/".length);
+  // Permanent redirects (migrated from next.config.ts)
+  const redirectTarget = permanentRedirects[pathname];
+  if (redirectTarget) {
     const url = request.nextUrl.clone();
-    url.pathname = `/api/prompts/${id}/raw`;
-    return NextResponse.rewrite(url);
+    url.pathname = redirectTarget;
+    return NextResponse.redirect(url.toString(), 308);
+  }
+
+  // Rewrite .resource.md and .resource.yml requests to the raw API route
+  if (pathname.startsWith("/registry/") && (pathname.endsWith(".resource.md") || pathname.endsWith(".resource.yml"))) {
+    const id = pathname.slice("/registry/".length);
+    const url = request.nextUrl.clone();
+    url.pathname = `/api/resources/${id}/raw`;
+    return NextResponse.rewrite(url.toString());
   }
 
   // Add pathname header for layout detection

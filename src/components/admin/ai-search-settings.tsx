@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -10,7 +10,7 @@ import { toast } from "sonner";
 
 interface AISearchSettingsProps {
   enabled: boolean;
-  promptsWithoutEmbeddings: number;
+  resourcesWithoutEmbeddings: number;
   totalPrompts: number;
 }
 
@@ -21,8 +21,8 @@ interface ProgressState {
   failed: number;
 }
 
-export function AISearchSettings({ enabled, promptsWithoutEmbeddings, totalPrompts }: AISearchSettingsProps) {
-  const t = useTranslations("admin");
+export function AISearchSettings({ enabled, resourcesWithoutEmbeddings, totalPrompts }: AISearchSettingsProps) {
+  const { t } = useTranslation();
   const [isGenerating, setIsGenerating] = useState(false);
   const [progress, setProgress] = useState<ProgressState | null>(null);
   const [result, setResult] = useState<{ success: number; failed: number } | null>(null);
@@ -54,7 +54,7 @@ export function AISearchSettings({ enabled, promptsWithoutEmbeddings, totalPromp
         if (done) break;
         
         const text = decoder.decode(value);
-        const lines = text.split("\n\n").filter(line => line.startsWith("data: "));
+        const lines = text.split("admin.\n\n").filter(line => line.startsWith("data: "));
         
         for (const line of lines) {
           const jsonStr = line.replace("data: ", "");
@@ -63,7 +63,7 @@ export function AISearchSettings({ enabled, promptsWithoutEmbeddings, totalPromp
             
             if (data.done) {
               setResult({ success: data.success, failed: data.failed });
-              toast.success(t("aiSearch.generateSuccess", { count: data.success }));
+              toast.success(t("admin.aiSearch.generateSuccess", { count: data.success }));
             } else {
               setProgress({
                 current: data.current,
@@ -96,15 +96,15 @@ export function AISearchSettings({ enabled, promptsWithoutEmbeddings, totalPromp
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Sparkles className="h-5 w-5" />
-          {t("aiSearch.title")}
+          {t("admin.aiSearch.title")}
         </CardTitle>
-        <CardDescription>{t("aiSearch.description")}</CardDescription>
+        <CardDescription>{t("admin.aiSearch.description")}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex items-center justify-between">
           <div className="text-sm">
-            <span className="text-muted-foreground">{t("aiSearch.promptsWithoutEmbeddings")}: </span>
-            <span className="font-medium">{promptsWithoutEmbeddings}</span>
+            <span className="text-muted-foreground">{t("admin.aiSearch.resourcesWithoutEmbeddings")}: </span>
+            <span className="font-medium">{resourcesWithoutEmbeddings}</span>
           </div>
         </div>
 
@@ -131,7 +131,7 @@ export function AISearchSettings({ enabled, promptsWithoutEmbeddings, totalPromp
               <AlertCircle className="h-4 w-4 text-amber-500" />
             )}
             <span>
-              {t("aiSearch.generateResult", { success: result.success, failed: result.failed })}
+              {t("admin.aiSearch.generateResult", { success: result.success, failed: result.failed })}
             </span>
           </div>
         )}
@@ -139,13 +139,13 @@ export function AISearchSettings({ enabled, promptsWithoutEmbeddings, totalPromp
         <div className="flex gap-2">
           <Button
             onClick={() => handleGenerateEmbeddings(false)}
-            disabled={isGenerating || promptsWithoutEmbeddings === 0}
+            disabled={isGenerating || resourcesWithoutEmbeddings === 0}
             className="flex-1"
           >
             {isGenerating && !progress ? (
               <>
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                {t("aiSearch.generating")}
+                {t("admin.aiSearch.generating")}
               </>
             ) : isGenerating && progress ? (
               <>
@@ -155,7 +155,7 @@ export function AISearchSettings({ enabled, promptsWithoutEmbeddings, totalPromp
             ) : (
               <>
                 <Sparkles className="h-4 w-4 mr-2" />
-                {t("aiSearch.generateButton")}
+                {t("admin.aiSearch.generateButton")}
               </>
             )}
           </Button>
@@ -164,7 +164,7 @@ export function AISearchSettings({ enabled, promptsWithoutEmbeddings, totalPromp
             variant="outline"
             onClick={() => handleGenerateEmbeddings(true)}
             disabled={isGenerating || totalPrompts === 0}
-            title={t("aiSearch.regenerateTooltip")}
+            title={t("admin.aiSearch.regenerateTooltip")}
           >
             <RefreshCw className="h-4 w-4" />
           </Button>

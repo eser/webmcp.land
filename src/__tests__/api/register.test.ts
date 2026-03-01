@@ -1,27 +1,23 @@
+import { NextRequest } from "next/server";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { POST } from "@/app/api/auth/register/route";
 import { db } from "@/lib/db";
 import { getConfig } from "@/lib/config";
 
+import { createChainMock, mockSelectSequence, createMockDb } from "../helpers/db-mock";
+
 // Mock dependencies
-vi.mock("@/lib/db", () => ({
-  db: {
-    user: {
-      findUnique: vi.fn(),
-      findFirst: vi.fn(),
-      create: vi.fn(),
-    },
-  },
-}));
+vi.mock("@/lib/db", async () => {
+  const { createMockDb } = await import("../helpers/db-mock");
+  return createMockDb();
+});
 
 vi.mock("@/lib/config", () => ({
   getConfig: vi.fn(),
 }));
 
-vi.mock("bcryptjs", () => ({
-  default: {
-    hash: vi.fn().mockResolvedValue("hashed_password"),
-  },
+vi.mock("@/lib/crypto", () => ({
+  hashPassword: vi.fn().mockResolvedValue("hashed_password"),
 }));
 
 function createRequest(body: object): Request {
@@ -32,17 +28,17 @@ function createRequest(body: object): Request {
   });
 }
 
+
 describe("POST /api/auth/register", () => {
   beforeEach(() => {
     vi.resetAllMocks();
     // Default: registration is enabled
     vi.mocked(getConfig).mockResolvedValue({
       auth: { allowRegistration: true, providers: [] },
-      features: {},
-    });
-    // Default: no existing users
-    vi.mocked(db.user.findUnique).mockResolvedValue(null);
-    vi.mocked(db.user.findFirst).mockResolvedValue(null);
+      features: { privateResources: false, changeRequests: false, categories: false, tags: false },
+    } as any);
+    // Default: no existing users (email check returns empty, username check returns empty)
+    mockSelectSequence(db, [], []);
   });
 
   describe("validation", () => {
@@ -53,7 +49,7 @@ describe("POST /api/auth/register", () => {
         password: "password123",
       });
 
-      const response = await POST(request);
+      const response = await POST(request as unknown as NextRequest);
       const data = await response.json();
 
       expect(response.status).toBe(400);
@@ -68,7 +64,7 @@ describe("POST /api/auth/register", () => {
         password: "password123",
       });
 
-      const response = await POST(request);
+      const response = await POST(request as unknown as NextRequest);
       const data = await response.json();
 
       expect(response.status).toBe(400);
@@ -82,7 +78,7 @@ describe("POST /api/auth/register", () => {
         password: "password123",
       });
 
-      const response = await POST(request);
+      const response = await POST(request as unknown as NextRequest);
       const data = await response.json();
 
       expect(response.status).toBe(400);
@@ -97,7 +93,7 @@ describe("POST /api/auth/register", () => {
         password: "password123",
       });
 
-      const response = await POST(request);
+      const response = await POST(request as unknown as NextRequest);
       const data = await response.json();
 
       expect(response.status).toBe(400);
@@ -112,7 +108,7 @@ describe("POST /api/auth/register", () => {
         password: "password123",
       });
 
-      const response = await POST(request);
+      const response = await POST(request as unknown as NextRequest);
       const data = await response.json();
 
       expect(response.status).toBe(400);
@@ -127,7 +123,7 @@ describe("POST /api/auth/register", () => {
         password: "12345",
       });
 
-      const response = await POST(request);
+      const response = await POST(request as unknown as NextRequest);
       const data = await response.json();
 
       expect(response.status).toBe(400);
@@ -139,8 +135,8 @@ describe("POST /api/auth/register", () => {
     it("should return 403 when registration is disabled", async () => {
       vi.mocked(getConfig).mockResolvedValue({
         auth: { allowRegistration: false, providers: [] },
-        features: {},
-      });
+        features: { privateResources: false, changeRequests: false, categories: false, tags: false },
+      } as any);
 
       const request = createRequest({
         name: "Test User",
@@ -149,7 +145,7 @@ describe("POST /api/auth/register", () => {
         password: "password123",
       });
 
-      const response = await POST(request);
+      const response = await POST(request as unknown as NextRequest);
       const data = await response.json();
 
       expect(response.status).toBe(403);
@@ -159,13 +155,11 @@ describe("POST /api/auth/register", () => {
 
   describe("duplicate checks", () => {
     it("should return 400 when email already exists", async () => {
-      // Mock: email check finds existing user
-      vi.mocked(db.user.findUnique).mockImplementation(async (args) => {
-        if (args?.where?.email) {
-          return { id: "1", email: "test@example.com" } as never;
-        }
-        return null;
-      });
+      // First select (email check) returns existing user, second (username) returns empty
+      mockSelectSequence(db, 
+        [{ id: "1" }],
+        [],
+      );
 
       const request = createRequest({
         name: "Test User",
@@ -174,7 +168,7 @@ describe("POST /api/auth/register", () => {
         password: "password123",
       });
 
-      const response = await POST(request);
+      const response = await POST(request as unknown as NextRequest);
       const data = await response.json();
 
       expect(response.status).toBe(400);
@@ -182,9 +176,11 @@ describe("POST /api/auth/register", () => {
     });
 
     it("should return 400 when username already exists", async () => {
-      // Mock: email check passes, username check (case-insensitive via findFirst) finds existing user
-      vi.mocked(db.user.findUnique).mockResolvedValue(null);
-      vi.mocked(db.user.findFirst).mockResolvedValue({ id: "1", username: "testuser" } as never);
+      // First select (email check) returns empty, second (username check) returns existing user
+      mockSelectSequence(db, 
+        [],
+        [{ id: "1" }],
+      );
 
       const request = createRequest({
         name: "Test User",
@@ -193,7 +189,7 @@ describe("POST /api/auth/register", () => {
         password: "password123",
       });
 
-      const response = await POST(request);
+      const response = await POST(request as unknown as NextRequest);
       const data = await response.json();
 
       expect(response.status).toBe(400);
@@ -203,9 +199,9 @@ describe("POST /api/auth/register", () => {
 
   describe("successful registration", () => {
     it("should create user and return user data", async () => {
-      vi.mocked(db.user.findUnique).mockResolvedValue(null);
-      vi.mocked(db.user.findFirst).mockResolvedValue(null);
-      vi.mocked(db.user.create).mockResolvedValue({
+      // Email and username checks pass (empty results)
+      mockSelectSequence(db, [], []);
+      vi.mocked(db.insert).mockReturnValue(createChainMock([{
         id: "user-123",
         name: "Test User",
         username: "testuser",
@@ -218,7 +214,7 @@ describe("POST /api/auth/register", () => {
         credits: 0,
         createdAt: new Date(),
         updatedAt: new Date(),
-      });
+      }]) as any);
 
       const request = createRequest({
         name: "Test User",
@@ -227,7 +223,7 @@ describe("POST /api/auth/register", () => {
         password: "password123",
       });
 
-      const response = await POST(request);
+      const response = await POST(request as unknown as NextRequest);
       const data = await response.json();
 
       expect(response.status).toBe(200);
@@ -239,9 +235,9 @@ describe("POST /api/auth/register", () => {
     });
 
     it("should accept valid username with underscores", async () => {
-      vi.mocked(db.user.findUnique).mockResolvedValue(null);
-      vi.mocked(db.user.findFirst).mockResolvedValue(null);
-      vi.mocked(db.user.create).mockResolvedValue({
+      // Email and username checks pass (empty results)
+      mockSelectSequence(db, [], []);
+      vi.mocked(db.insert).mockReturnValue(createChainMock([{
         id: "user-123",
         name: "Test User",
         username: "test_user_123",
@@ -254,7 +250,7 @@ describe("POST /api/auth/register", () => {
         credits: 0,
         createdAt: new Date(),
         updatedAt: new Date(),
-      });
+      }]) as any);
 
       const request = createRequest({
         name: "Test User",
@@ -263,23 +259,19 @@ describe("POST /api/auth/register", () => {
         password: "password123",
       });
 
-      const response = await POST(request);
+      const response = await POST(request as unknown as NextRequest);
       expect(response.status).toBe(200);
-      
-      // Verify that db.user.create was called with the correct username
-      expect(db.user.create).toHaveBeenCalledWith(
-        expect.objectContaining({
-          data: expect.objectContaining({
-            username: "test_user_123",
-          }),
-        })
-      );
+
+      // Verify that db.insert was called
+      expect(db.insert).toHaveBeenCalled();
     });
   });
 
   describe("error handling", () => {
     it("should return 500 on database error", async () => {
-      vi.mocked(db.user.findUnique).mockRejectedValue(new Error("DB Error"));
+      vi.mocked(db.select).mockImplementation(() => {
+        throw new Error("DB Error");
+      });
 
       const request = createRequest({
         name: "Test User",
@@ -288,7 +280,7 @@ describe("POST /api/auth/register", () => {
         password: "password123",
       });
 
-      const response = await POST(request);
+      const response = await POST(request as unknown as NextRequest);
       const data = await response.json();
 
       expect(response.status).toBe(500);
@@ -302,7 +294,7 @@ describe("POST /api/auth/register", () => {
         body: "invalid json",
       });
 
-      const response = await POST(request);
+      const response = await POST(request as unknown as NextRequest);
       const data = await response.json();
 
       expect(response.status).toBe(500);

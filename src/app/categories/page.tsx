@@ -1,53 +1,56 @@
 import Link from "next/link";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "@/i18n/request";
 import { unstable_cache } from "next/cache";
 import { FolderOpen, ChevronRight } from "lucide-react";
-import { auth } from "@/lib/auth";
+import { and, asc, count, eq, inArray, isNull, isNull as drizzleIsNull } from "drizzle-orm";
+import { getSession } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { categories, resources, categorySubscriptions } from "@/lib/schema";
 import { SubscribeButton } from "@/components/categories/subscribe-button";
 
-// Visible prompt filter
-const visiblePromptFilter = {
-  isPrivate: false,
-  isUnlisted: false,
-  deletedAt: null,
-};
-
-// Cached categories query with filtered prompt counts
+// Cached categories query with filtered resource counts
 const getCategories = unstable_cache(
   async () => {
-    const categories = await db.category.findMany({
-      where: { parentId: null },
-      orderBy: { order: "asc" },
-      include: {
+    const rootCategories = await db.query.categories.findMany({
+      where: isNull(categories.parentId),
+      orderBy: asc(categories.order),
+      with: {
         children: {
-          orderBy: { order: "asc" },
+          orderBy: asc(categories.order),
         },
       },
     });
 
     // Get all category IDs (parents + children)
-    const allCategoryIds = categories.flatMap((c) => [c.id, ...c.children.map((child) => child.id)]);
+    const allCategoryIds = rootCategories.flatMap((c) => [c.id, ...c.children.map((child) => child.id)]);
 
-    // Count visible prompts per category in one query
-    const counts = await db.prompt.groupBy({
-      by: ["categoryId"],
-      where: {
-        categoryId: { in: allCategoryIds },
-        ...visiblePromptFilter,
-      },
-      _count: true,
-    });
+    if (allCategoryIds.length === 0) return [];
 
-    const countMap = new Map(counts.map((c) => [c.categoryId, c._count]));
+    // Count visible resources per category in one query
+    const counts = await db
+      .select({
+        categoryId: resources.categoryId,
+        count: count(),
+      })
+      .from(resources)
+      .where(
+        and(
+          inArray(resources.categoryId, allCategoryIds),
+          eq(resources.isPrivate, false),
+          isNull(resources.deletedAt),
+        )
+      )
+      .groupBy(resources.categoryId);
+
+    const countMap = new Map(counts.map((c) => [c.categoryId, c.count]));
 
     // Attach counts to categories
-    return categories.map((category) => ({
+    return rootCategories.map((category) => ({
       ...category,
-      promptCount: countMap.get(category.id) || 0,
+      resourceCount: countMap.get(category.id) || 0,
       children: category.children.map((child) => ({
         ...child,
-        promptCount: countMap.get(child.id) || 0,
+        resourceCount: countMap.get(child.id) || 0,
       })),
     }));
   },
@@ -57,17 +60,16 @@ const getCategories = unstable_cache(
 
 export default async function CategoriesPage() {
   const t = await getTranslations("categories");
-  const session = await auth();
+  const session = await getSession();
 
   // Fetch root categories (no parent) with their children (cached)
   const rootCategories = await getCategories();
 
   // Get user's subscriptions if logged in
   const subscriptions = session?.user
-    ? await db.categorySubscription.findMany({
-        where: { userId: session.user.id },
-        select: { categoryId: true },
-      })
+    ? await db.select({ categoryId: categorySubscriptions.categoryId })
+        .from(categorySubscriptions)
+        .where(eq(categorySubscriptions.userId, session.user.id))
     : [];
 
   const subscribedIds = new Set(subscriptions.map((s) => s.categoryId));
@@ -111,7 +113,7 @@ export default async function CategoriesPage() {
                       />
                     )}
                     <span className="text-xs text-muted-foreground">
-                      {category.promptCount} {t("prompts")}
+                      {category.resourceCount} {t("resources")}
                     </span>
                   </div>
                   {category.description && (
@@ -149,7 +151,7 @@ export default async function CategoriesPage() {
                           />
                         )}
                         <span className="text-xs text-muted-foreground">
-                          {child.promptCount}
+                          {child.resourceCount}
                         </span>
                       </div>
                       {child.description && (

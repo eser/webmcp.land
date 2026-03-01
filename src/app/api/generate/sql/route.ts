@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { generateSQL, isAIGenerationEnabled } from "@/lib/ai/generation";
-import { auth } from "@/lib/auth";
+import { generateSQL, isDiscoveryEnabled } from "@/lib/ai/generation";
+import { getSession } from "@/lib/auth";
 
 export async function POST(request: NextRequest) {
   try {
     // A01: Require authentication before generating SQL
-    const session = await auth();
+    const session = await getSession();
     if (!session?.user) {
       return NextResponse.json(
         { error: "Authentication required" },
@@ -13,10 +13,10 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    const enabled = await isAIGenerationEnabled();
+    const enabled = await isDiscoveryEnabled();
     if (!enabled) {
       return NextResponse.json(
-        { error: "AI Generation is not enabled" },
+        { error: "AI features are not enabled" },
         { status: 400 }
       );
     }

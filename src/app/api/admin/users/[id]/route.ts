@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { eq } from "drizzle-orm";
+import { getSession } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { users } from "@/lib/schema";
 
 // Update user (role change or verification)
 export async function PATCH(
@@ -8,24 +10,22 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await auth();
+    const session = await getSession();
     if (!session?.user || session.user.role !== "ADMIN") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const { id } = await params;
     const body = await request.json();
-    const { role, verified, flagged, flaggedReason, dailyGenerationLimit } = body;
+    const { role, verified, flagged, flaggedReason } = body;
 
     // Build update data
-    const updateData: { 
-      role?: "ADMIN" | "USER"; 
+    const updateData: {
+      role?: "ADMIN" | "USER";
       verified?: boolean;
       flagged?: boolean;
       flaggedAt?: Date | null;
       flaggedReason?: string | null;
-      dailyGenerationLimit?: number;
-      generationCreditsRemaining?: number;
     } = {};
 
     if (role !== undefined) {
@@ -50,35 +50,23 @@ export async function PATCH(
       }
     }
 
-    if (dailyGenerationLimit !== undefined) {
-      const limit = parseInt(dailyGenerationLimit, 10);
-      if (isNaN(limit) || limit < 0) {
-        return NextResponse.json({ error: "Invalid daily generation limit" }, { status: 400 });
-      }
-      updateData.dailyGenerationLimit = limit;
-      // Also reset remaining credits to the new limit
-      updateData.generationCreditsRemaining = limit;
-    }
-
-    const user = await db.user.update({
-      where: { id },
-      data: updateData,
-      select: {
-        id: true,
-        email: true,
-        username: true,
-        name: true,
-        avatar: true,
-        role: true,
-        verified: true,
-        flagged: true,
-        flaggedAt: true,
-        flaggedReason: true,
-        dailyGenerationLimit: true,
-        generationCreditsRemaining: true,
-        createdAt: true,
-      },
-    });
+    const [user] = await db
+      .update(users)
+      .set(updateData)
+      .where(eq(users.id, id))
+      .returning({
+        id: users.id,
+        email: users.email,
+        username: users.username,
+        name: users.name,
+        avatar: users.avatar,
+        role: users.role,
+        verified: users.verified,
+        flagged: users.flagged,
+        flaggedAt: users.flaggedAt,
+        flaggedReason: users.flaggedReason,
+        createdAt: users.createdAt,
+      });
 
     return NextResponse.json(user);
   } catch (error) {
@@ -93,7 +81,7 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await auth();
+    const session = await getSession();
     if (!session?.user || session.user.role !== "ADMIN") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -105,9 +93,7 @@ export async function DELETE(
       return NextResponse.json({ error: "Cannot delete yourself" }, { status: 400 });
     }
 
-    await db.user.delete({
-      where: { id },
-    });
+    await db.delete(users).where(eq(users.id, id));
 
     return NextResponse.json({ success: true });
   } catch (error) {

@@ -1,0 +1,2117 @@
+{
+  "count": 50,
+  "prompts": [
+    {
+      "id": "res-001",
+      "title": "GitHub Repository Manager",
+      "slug": "github-repository-manager",
+      "description": "MCP service for managing GitHub repositories — create, list, search, and configure repos programmatically.",
+      "content": "MCP service for managing GitHub repositories — create, list, search, and configure repos programmatically.",
+      "type": "MCP",
+      "viewCount": 342,
+      "voteCount": 45,
+      "commentCount": 3,
+      "isFeatured": true,
+      "featuredAt": "2026-01-15T10:00:00Z",
+      "createdAt": "2026-01-10T08:00:00Z",
+      "updatedAt": "2026-02-20T14:00:00Z",
+      "category": {
+        "id": "cat-01",
+        "name": "Developer Tools",
+        "slug": "developer-tools",
+        "icon": "code"
+      },
+      "author": {
+        "username": "demo-alex",
+        "name": "Alex Demo",
+        "avatar": null,
+        "identifier": "demo-alex",
+        "verified": true
+      },
+      "tags": [
+        {
+          "id": "tag-01",
+          "name": "Git",
+          "slug": "git",
+          "color": "#f97316"
+        },
+        {
+          "id": "tag-02",
+          "name": "API",
+          "slug": "api",
+          "color": "#3b82f6"
+        }
+      ]
+    },
+    {
+      "id": "res-002",
+      "title": "SQL Query Builder",
+      "slug": "sql-query-builder",
+      "description": "WebMCP service that generates and executes SQL queries from natural language descriptions.",
+      "content": "WebMCP service that generates and executes SQL queries from natural language descriptions.",
+      "type": "WEBMCP",
+      "viewCount": 278,
+      "voteCount": 38,
+      "commentCount": 5,
+      "isFeatured": true,
+      "featuredAt": "2026-01-20T10:00:00Z",
+      "createdAt": "2026-01-12T09:00:00Z",
+      "updatedAt": "2026-02-18T11:00:00Z",
+      "category": {
+        "id": "cat-02",
+        "name": "Data & Analytics",
+        "slug": "data-analytics",
+        "icon": "database"
+      },
+      "author": {
+        "username": "demo-jordan",
+        "name": "Jordan Demo",
+        "avatar": null,
+        "identifier": "demo-jordan",
+        "verified": true
+      },
+      "tags": [
+        {
+          "id": "tag-03",
+          "name": "SQL",
+          "slug": "sql",
+          "color": "#8b5cf6"
+        },
+        {
+          "id": "tag-04",
+          "name": "Database",
+          "slug": "database",
+          "color": "#10b981"
+        }
+      ]
+    },
+    {
+      "id": "res-003",
+      "title": "Slack Notifier",
+      "slug": "slack-notifier",
+      "description": "MCP service for sending messages, managing channels, and reading threads in Slack workspaces.",
+      "content": "MCP service for sending messages, managing channels, and reading threads in Slack workspaces.",
+      "type": "MCP",
+      "viewCount": 195,
+      "voteCount": 27,
+      "commentCount": 2,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-01-14T10:30:00Z",
+      "updatedAt": "2026-02-15T09:00:00Z",
+      "category": {
+        "id": "cat-03",
+        "name": "Communication",
+        "slug": "communication",
+        "icon": "message-circle"
+      },
+      "author": {
+        "username": "demo-sam",
+        "name": "Sam Demo",
+        "avatar": null,
+        "identifier": "demo-sam",
+        "verified": false
+      },
+      "tags": [
+        {
+          "id": "tag-05",
+          "name": "Messaging",
+          "slug": "messaging",
+          "color": "#ec4899"
+        },
+        {
+          "id": "tag-06",
+          "name": "Automation",
+          "slug": "automation",
+          "color": "#f59e0b"
+        }
+      ]
+    },
+    {
+      "id": "res-004",
+      "title": "Docker Container Manager",
+      "slug": "docker-container-manager",
+      "description": "MCP service for managing Docker containers — start, stop, inspect, and monitor running containers.",
+      "content": "MCP service for managing Docker containers — start, stop, inspect, and monitor running containers.",
+      "type": "MCP",
+      "viewCount": 410,
+      "voteCount": 52,
+      "commentCount": 7,
+      "isFeatured": true,
+      "featuredAt": "2026-01-25T10:00:00Z",
+      "createdAt": "2026-01-08T14:00:00Z",
+      "updatedAt": "2026-02-22T16:00:00Z",
+      "category": {
+        "id": "cat-05",
+        "name": "DevOps",
+        "slug": "devops",
+        "icon": "server"
+      },
+      "author": {
+        "username": "demo-taylor",
+        "name": "Taylor Demo",
+        "avatar": null,
+        "identifier": "demo-taylor",
+        "verified": true
+      },
+      "tags": [
+        {
+          "id": "tag-07",
+          "name": "Docker",
+          "slug": "docker",
+          "color": "#0ea5e9"
+        },
+        {
+          "id": "tag-08",
+          "name": "Containers",
+          "slug": "containers",
+          "color": "#6366f1"
+        }
+      ]
+    },
+    {
+      "id": "res-005",
+      "title": "Stripe Payment Gateway",
+      "slug": "stripe-payment-gateway",
+      "description": "WebMCP service for processing payments, managing subscriptions, and handling invoices via Stripe.",
+      "content": "WebMCP service for processing payments, managing subscriptions, and handling invoices via Stripe.",
+      "type": "WEBMCP",
+      "viewCount": 320,
+      "voteCount": 41,
+      "commentCount": 4,
+      "isFeatured": true,
+      "featuredAt": "2026-02-01T10:00:00Z",
+      "createdAt": "2026-01-16T11:00:00Z",
+      "updatedAt": "2026-02-25T13:00:00Z",
+      "category": {
+        "id": "cat-06",
+        "name": "Finance",
+        "slug": "finance",
+        "icon": "credit-card"
+      },
+      "author": {
+        "username": "demo-morgan",
+        "name": "Morgan Demo",
+        "avatar": null,
+        "identifier": "demo-morgan",
+        "verified": true
+      },
+      "tags": [
+        {
+          "id": "tag-09",
+          "name": "Payments",
+          "slug": "payments",
+          "color": "#22c55e"
+        },
+        {
+          "id": "tag-02",
+          "name": "API",
+          "slug": "api",
+          "color": "#3b82f6"
+        }
+      ]
+    },
+    {
+      "id": "res-006",
+      "title": "Email Sender Service",
+      "slug": "email-sender-service",
+      "description": "MCP service for composing and sending emails, managing templates, and tracking delivery status.",
+      "content": "MCP service for composing and sending emails, managing templates, and tracking delivery status.",
+      "type": "MCP",
+      "viewCount": 167,
+      "voteCount": 19,
+      "commentCount": 1,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-01-18T09:00:00Z",
+      "updatedAt": "2026-02-10T10:00:00Z",
+      "category": {
+        "id": "cat-03",
+        "name": "Communication",
+        "slug": "communication",
+        "icon": "message-circle"
+      },
+      "author": {
+        "username": "demo-casey",
+        "name": "Casey Demo",
+        "avatar": null,
+        "identifier": "demo-casey",
+        "verified": false
+      },
+      "tags": [
+        {
+          "id": "tag-05",
+          "name": "Messaging",
+          "slug": "messaging",
+          "color": "#ec4899"
+        },
+        {
+          "id": "tag-10",
+          "name": "Email",
+          "slug": "email",
+          "color": "#14b8a6"
+        }
+      ]
+    },
+    {
+      "id": "res-007",
+      "title": "Kubernetes Cluster Monitor",
+      "slug": "kubernetes-cluster-monitor",
+      "description": "MCP service for monitoring Kubernetes clusters — pod status, resource usage, and alerts.",
+      "content": "MCP service for monitoring Kubernetes clusters — pod status, resource usage, and alerts.",
+      "type": "MCP",
+      "viewCount": 289,
+      "voteCount": 33,
+      "commentCount": 3,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-01-20T13:00:00Z",
+      "updatedAt": "2026-02-19T15:00:00Z",
+      "category": {
+        "id": "cat-05",
+        "name": "DevOps",
+        "slug": "devops",
+        "icon": "server"
+      },
+      "author": {
+        "username": "demo-riley",
+        "name": "Riley Demo",
+        "avatar": null,
+        "identifier": "demo-riley",
+        "verified": true
+      },
+      "tags": [
+        {
+          "id": "tag-11",
+          "name": "Kubernetes",
+          "slug": "kubernetes",
+          "color": "#326ce5"
+        },
+        {
+          "id": "tag-12",
+          "name": "Monitoring",
+          "slug": "monitoring",
+          "color": "#ef4444"
+        }
+      ]
+    },
+    {
+      "id": "res-008",
+      "title": "OpenAI Chat Proxy",
+      "slug": "openai-chat-proxy",
+      "description": "WebMCP proxy service for OpenAI chat completions with caching, rate limiting, and usage tracking.",
+      "content": "WebMCP proxy service for OpenAI chat completions with caching, rate limiting, and usage tracking.",
+      "type": "WEBMCP",
+      "viewCount": 510,
+      "voteCount": 67,
+      "commentCount": 9,
+      "isFeatured": true,
+      "featuredAt": "2026-02-05T10:00:00Z",
+      "createdAt": "2026-01-05T08:00:00Z",
+      "updatedAt": "2026-02-28T12:00:00Z",
+      "category": {
+        "id": "cat-09",
+        "name": "AI & ML",
+        "slug": "ai-ml",
+        "icon": "brain"
+      },
+      "author": {
+        "username": "demo-avery",
+        "name": "Avery Demo",
+        "avatar": null,
+        "identifier": "demo-avery",
+        "verified": true
+      },
+      "tags": [
+        {
+          "id": "tag-13",
+          "name": "LLM",
+          "slug": "llm",
+          "color": "#a855f7"
+        },
+        {
+          "id": "tag-02",
+          "name": "API",
+          "slug": "api",
+          "color": "#3b82f6"
+        }
+      ]
+    },
+    {
+      "id": "res-009",
+      "title": "File System Browser",
+      "slug": "file-system-browser",
+      "description": "MCP service for browsing, reading, and searching files in a sandboxed directory tree.",
+      "content": "MCP service for browsing, reading, and searching files in a sandboxed directory tree.",
+      "type": "MCP",
+      "viewCount": 145,
+      "voteCount": 16,
+      "commentCount": 1,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-01-22T10:00:00Z",
+      "updatedAt": "2026-02-12T11:00:00Z",
+      "category": {
+        "id": "cat-01",
+        "name": "Developer Tools",
+        "slug": "developer-tools",
+        "icon": "code"
+      },
+      "author": {
+        "username": "demo-pat",
+        "name": "Pat Demo",
+        "avatar": null,
+        "identifier": "demo-pat",
+        "verified": false
+      },
+      "tags": [
+        {
+          "id": "tag-14",
+          "name": "Files",
+          "slug": "files",
+          "color": "#78716c"
+        },
+        {
+          "id": "tag-15",
+          "name": "CLI",
+          "slug": "cli",
+          "color": "#059669"
+        }
+      ]
+    },
+    {
+      "id": "res-010",
+      "title": "Weather Forecast API",
+      "slug": "weather-forecast-api",
+      "description": "WebMCP service providing real-time weather data, forecasts, and severe weather alerts by location.",
+      "content": "WebMCP service providing real-time weather data, forecasts, and severe weather alerts by location.",
+      "type": "WEBMCP",
+      "viewCount": 230,
+      "voteCount": 29,
+      "commentCount": 2,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-01-24T15:00:00Z",
+      "updatedAt": "2026-02-17T09:00:00Z",
+      "category": {
+        "id": "cat-04",
+        "name": "Information",
+        "slug": "information",
+        "icon": "info"
+      },
+      "author": {
+        "username": "demo-quinn",
+        "name": "Quinn Demo",
+        "avatar": null,
+        "identifier": "demo-quinn",
+        "verified": false
+      },
+      "tags": [
+        {
+          "id": "tag-02",
+          "name": "API",
+          "slug": "api",
+          "color": "#3b82f6"
+        },
+        {
+          "id": "tag-16",
+          "name": "Weather",
+          "slug": "weather",
+          "color": "#06b6d4"
+        }
+      ]
+    },
+    {
+      "id": "res-011",
+      "title": "CI/CD Pipeline Runner",
+      "slug": "cicd-pipeline-runner",
+      "description": "MCP service for triggering, monitoring, and managing CI/CD pipeline runs across platforms.",
+      "content": "MCP service for triggering, monitoring, and managing CI/CD pipeline runs across platforms.",
+      "type": "MCP",
+      "viewCount": 198,
+      "voteCount": 24,
+      "commentCount": 2,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-01-26T08:00:00Z",
+      "updatedAt": "2026-02-21T10:00:00Z",
+      "category": {
+        "id": "cat-05",
+        "name": "DevOps",
+        "slug": "devops",
+        "icon": "server"
+      },
+      "author": {
+        "username": "demo-alex",
+        "name": "Alex Demo",
+        "avatar": null,
+        "identifier": "demo-alex",
+        "verified": true
+      },
+      "tags": [
+        {
+          "id": "tag-17",
+          "name": "CI/CD",
+          "slug": "ci-cd",
+          "color": "#d946ef"
+        },
+        {
+          "id": "tag-06",
+          "name": "Automation",
+          "slug": "automation",
+          "color": "#f59e0b"
+        }
+      ]
+    },
+    {
+      "id": "res-012",
+      "title": "PostgreSQL Admin Tools",
+      "slug": "postgresql-admin-tools",
+      "description": "MCP service for PostgreSQL administration — run queries, manage schemas, view stats, and optimize performance.",
+      "content": "MCP service for PostgreSQL administration — run queries, manage schemas, view stats, and optimize performance.",
+      "type": "MCP",
+      "viewCount": 356,
+      "voteCount": 44,
+      "commentCount": 6,
+      "isFeatured": true,
+      "featuredAt": "2026-02-10T10:00:00Z",
+      "createdAt": "2026-01-11T07:00:00Z",
+      "updatedAt": "2026-02-26T14:00:00Z",
+      "category": {
+        "id": "cat-02",
+        "name": "Data & Analytics",
+        "slug": "data-analytics",
+        "icon": "database"
+      },
+      "author": {
+        "username": "demo-jordan",
+        "name": "Jordan Demo",
+        "avatar": null,
+        "identifier": "demo-jordan",
+        "verified": true
+      },
+      "tags": [
+        {
+          "id": "tag-03",
+          "name": "SQL",
+          "slug": "sql",
+          "color": "#8b5cf6"
+        },
+        {
+          "id": "tag-04",
+          "name": "Database",
+          "slug": "database",
+          "color": "#10b981"
+        },
+        {
+          "id": "tag-18",
+          "name": "PostgreSQL",
+          "slug": "postgresql",
+          "color": "#336791"
+        }
+      ]
+    },
+    {
+      "id": "res-013",
+      "title": "Image Resizer & Optimizer",
+      "slug": "image-resizer-optimizer",
+      "description": "WebMCP service for resizing, compressing, and converting images in various formats.",
+      "content": "WebMCP service for resizing, compressing, and converting images in various formats.",
+      "type": "WEBMCP",
+      "viewCount": 175,
+      "voteCount": 20,
+      "commentCount": 1,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-01-28T12:00:00Z",
+      "updatedAt": "2026-02-14T08:00:00Z",
+      "category": {
+        "id": "cat-12",
+        "name": "Media & Entertainment",
+        "slug": "media-entertainment",
+        "icon": "image"
+      },
+      "author": {
+        "username": "demo-casey",
+        "name": "Casey Demo",
+        "avatar": null,
+        "identifier": "demo-casey",
+        "verified": false
+      },
+      "tags": [
+        {
+          "id": "tag-19",
+          "name": "Media",
+          "slug": "media",
+          "color": "#f43f5e"
+        },
+        {
+          "id": "tag-20",
+          "name": "Images",
+          "slug": "images",
+          "color": "#fb923c"
+        }
+      ]
+    },
+    {
+      "id": "res-014",
+      "title": "AWS S3 File Manager",
+      "slug": "aws-s3-file-manager",
+      "description": "MCP service for uploading, downloading, listing, and managing files in AWS S3 buckets.",
+      "content": "MCP service for uploading, downloading, listing, and managing files in AWS S3 buckets.",
+      "type": "MCP",
+      "viewCount": 267,
+      "voteCount": 31,
+      "commentCount": 3,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-01-30T09:00:00Z",
+      "updatedAt": "2026-02-23T11:00:00Z",
+      "category": {
+        "id": "cat-08",
+        "name": "Cloud Services",
+        "slug": "cloud-services",
+        "icon": "cloud"
+      },
+      "author": {
+        "username": "demo-taylor",
+        "name": "Taylor Demo",
+        "avatar": null,
+        "identifier": "demo-taylor",
+        "verified": true
+      },
+      "tags": [
+        {
+          "id": "tag-21",
+          "name": "AWS",
+          "slug": "aws",
+          "color": "#ff9900"
+        },
+        {
+          "id": "tag-14",
+          "name": "Files",
+          "slug": "files",
+          "color": "#78716c"
+        },
+        {
+          "id": "tag-22",
+          "name": "Cloud",
+          "slug": "cloud",
+          "color": "#38bdf8"
+        }
+      ]
+    },
+    {
+      "id": "res-015",
+      "title": "Jira Issue Tracker",
+      "slug": "jira-issue-tracker",
+      "description": "WebMCP service for creating, updating, and querying Jira issues and sprint boards.",
+      "content": "WebMCP service for creating, updating, and querying Jira issues and sprint boards.",
+      "type": "WEBMCP",
+      "viewCount": 210,
+      "voteCount": 25,
+      "commentCount": 4,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-02-01T08:00:00Z",
+      "updatedAt": "2026-02-24T10:00:00Z",
+      "category": {
+        "id": "cat-07",
+        "name": "Productivity",
+        "slug": "productivity",
+        "icon": "check-square"
+      },
+      "author": {
+        "username": "demo-morgan",
+        "name": "Morgan Demo",
+        "avatar": null,
+        "identifier": "demo-morgan",
+        "verified": true
+      },
+      "tags": [
+        {
+          "id": "tag-23",
+          "name": "Project Management",
+          "slug": "project-management",
+          "color": "#2563eb"
+        },
+        {
+          "id": "tag-02",
+          "name": "API",
+          "slug": "api",
+          "color": "#3b82f6"
+        }
+      ]
+    },
+    {
+      "id": "res-016",
+      "title": "Text-to-Speech Generator",
+      "slug": "text-to-speech-generator",
+      "description": "WebMCP service for converting text to natural-sounding speech in multiple languages and voices.",
+      "content": "WebMCP service for converting text to natural-sounding speech in multiple languages and voices.",
+      "type": "WEBMCP",
+      "viewCount": 180,
+      "voteCount": 22,
+      "commentCount": 2,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-02-02T11:00:00Z",
+      "updatedAt": "2026-02-20T09:00:00Z",
+      "category": {
+        "id": "cat-09",
+        "name": "AI & ML",
+        "slug": "ai-ml",
+        "icon": "brain"
+      },
+      "author": {
+        "username": "demo-riley",
+        "name": "Riley Demo",
+        "avatar": null,
+        "identifier": "demo-riley",
+        "verified": true
+      },
+      "tags": [
+        {
+          "id": "tag-13",
+          "name": "LLM",
+          "slug": "llm",
+          "color": "#a855f7"
+        },
+        {
+          "id": "tag-19",
+          "name": "Media",
+          "slug": "media",
+          "color": "#f43f5e"
+        }
+      ]
+    },
+    {
+      "id": "res-017",
+      "title": "Redis Cache Manager",
+      "slug": "redis-cache-manager",
+      "description": "MCP service for interacting with Redis — get, set, delete keys, manage TTLs, and monitor cache stats.",
+      "content": "MCP service for interacting with Redis — get, set, delete keys, manage TTLs, and monitor cache stats.",
+      "type": "MCP",
+      "viewCount": 156,
+      "voteCount": 18,
+      "commentCount": 1,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-02-03T14:00:00Z",
+      "updatedAt": "2026-02-18T16:00:00Z",
+      "category": {
+        "id": "cat-01",
+        "name": "Developer Tools",
+        "slug": "developer-tools",
+        "icon": "code"
+      },
+      "author": {
+        "username": "demo-avery",
+        "name": "Avery Demo",
+        "avatar": null,
+        "identifier": "demo-avery",
+        "verified": true
+      },
+      "tags": [
+        {
+          "id": "tag-04",
+          "name": "Database",
+          "slug": "database",
+          "color": "#10b981"
+        },
+        {
+          "id": "tag-24",
+          "name": "Cache",
+          "slug": "cache",
+          "color": "#dc2626"
+        }
+      ]
+    },
+    {
+      "id": "res-018",
+      "title": "PDF Document Parser",
+      "slug": "pdf-document-parser",
+      "description": "WebMCP service for extracting text, tables, and metadata from PDF documents.",
+      "content": "WebMCP service for extracting text, tables, and metadata from PDF documents.",
+      "type": "WEBMCP",
+      "viewCount": 201,
+      "voteCount": 26,
+      "commentCount": 3,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-02-04T10:00:00Z",
+      "updatedAt": "2026-02-22T12:00:00Z",
+      "category": {
+        "id": "cat-07",
+        "name": "Productivity",
+        "slug": "productivity",
+        "icon": "check-square"
+      },
+      "author": {
+        "username": "demo-pat",
+        "name": "Pat Demo",
+        "avatar": null,
+        "identifier": "demo-pat",
+        "verified": false
+      },
+      "tags": [
+        {
+          "id": "tag-14",
+          "name": "Files",
+          "slug": "files",
+          "color": "#78716c"
+        },
+        {
+          "id": "tag-25",
+          "name": "Documents",
+          "slug": "documents",
+          "color": "#64748b"
+        }
+      ]
+    },
+    {
+      "id": "res-019",
+      "title": "DNS Lookup Service",
+      "slug": "dns-lookup-service",
+      "description": "MCP service for performing DNS queries — A, AAAA, MX, CNAME, TXT, and NS record lookups.",
+      "content": "MCP service for performing DNS queries — A, AAAA, MX, CNAME, TXT, and NS record lookups.",
+      "type": "MCP",
+      "viewCount": 120,
+      "voteCount": 14,
+      "commentCount": 0,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-02-05T08:00:00Z",
+      "updatedAt": "2026-02-19T10:00:00Z",
+      "category": {
+        "id": "cat-05",
+        "name": "DevOps",
+        "slug": "devops",
+        "icon": "server"
+      },
+      "author": {
+        "username": "demo-quinn",
+        "name": "Quinn Demo",
+        "avatar": null,
+        "identifier": "demo-quinn",
+        "verified": false
+      },
+      "tags": [
+        {
+          "id": "tag-26",
+          "name": "Networking",
+          "slug": "networking",
+          "color": "#0284c7"
+        },
+        {
+          "id": "tag-15",
+          "name": "CLI",
+          "slug": "cli",
+          "color": "#059669"
+        }
+      ]
+    },
+    {
+      "id": "res-020",
+      "title": "Figma Design Exporter",
+      "slug": "figma-design-exporter",
+      "description": "WebMCP service for exporting Figma frames, components, and assets as images or SVGs.",
+      "content": "WebMCP service for exporting Figma frames, components, and assets as images or SVGs.",
+      "type": "WEBMCP",
+      "viewCount": 245,
+      "voteCount": 30,
+      "commentCount": 4,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-02-06T09:00:00Z",
+      "updatedAt": "2026-02-25T11:00:00Z",
+      "category": {
+        "id": "cat-10",
+        "name": "Design",
+        "slug": "design",
+        "icon": "palette"
+      },
+      "author": {
+        "username": "demo-sam",
+        "name": "Sam Demo",
+        "avatar": null,
+        "identifier": "demo-sam",
+        "verified": false
+      },
+      "tags": [
+        {
+          "id": "tag-27",
+          "name": "Design",
+          "slug": "design",
+          "color": "#e11d48"
+        },
+        {
+          "id": "tag-20",
+          "name": "Images",
+          "slug": "images",
+          "color": "#fb923c"
+        }
+      ]
+    },
+    {
+      "id": "res-021",
+      "title": "Sentry Error Tracker",
+      "slug": "sentry-error-tracker",
+      "description": "MCP service for querying, resolving, and analyzing errors and issues from Sentry projects.",
+      "content": "MCP service for querying, resolving, and analyzing errors and issues from Sentry projects.",
+      "type": "MCP",
+      "viewCount": 187,
+      "voteCount": 23,
+      "commentCount": 2,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-02-07T13:00:00Z",
+      "updatedAt": "2026-02-21T15:00:00Z",
+      "category": {
+        "id": "cat-01",
+        "name": "Developer Tools",
+        "slug": "developer-tools",
+        "icon": "code"
+      },
+      "author": {
+        "username": "demo-alex",
+        "name": "Alex Demo",
+        "avatar": null,
+        "identifier": "demo-alex",
+        "verified": true
+      },
+      "tags": [
+        {
+          "id": "tag-12",
+          "name": "Monitoring",
+          "slug": "monitoring",
+          "color": "#ef4444"
+        },
+        {
+          "id": "tag-28",
+          "name": "Error Tracking",
+          "slug": "error-tracking",
+          "color": "#b91c1c"
+        }
+      ]
+    },
+    {
+      "id": "res-022",
+      "title": "Google Calendar Sync",
+      "slug": "google-calendar-sync",
+      "description": "WebMCP service for reading, creating, and managing Google Calendar events and reminders.",
+      "content": "WebMCP service for reading, creating, and managing Google Calendar events and reminders.",
+      "type": "WEBMCP",
+      "viewCount": 298,
+      "voteCount": 36,
+      "commentCount": 5,
+      "isFeatured": true,
+      "featuredAt": "2026-02-12T10:00:00Z",
+      "createdAt": "2026-02-08T10:00:00Z",
+      "updatedAt": "2026-02-27T14:00:00Z",
+      "category": {
+        "id": "cat-07",
+        "name": "Productivity",
+        "slug": "productivity",
+        "icon": "check-square"
+      },
+      "author": {
+        "username": "demo-jordan",
+        "name": "Jordan Demo",
+        "avatar": null,
+        "identifier": "demo-jordan",
+        "verified": true
+      },
+      "tags": [
+        {
+          "id": "tag-29",
+          "name": "Calendar",
+          "slug": "calendar",
+          "color": "#4f46e5"
+        },
+        {
+          "id": "tag-06",
+          "name": "Automation",
+          "slug": "automation",
+          "color": "#f59e0b"
+        }
+      ]
+    },
+    {
+      "id": "res-023",
+      "title": "NPM Package Inspector",
+      "slug": "npm-package-inspector",
+      "description": "MCP service for searching, inspecting, and comparing npm packages — versions, dependencies, and downloads.",
+      "content": "MCP service for searching, inspecting, and comparing npm packages — versions, dependencies, and downloads.",
+      "type": "MCP",
+      "viewCount": 162,
+      "voteCount": 19,
+      "commentCount": 1,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-02-09T08:00:00Z",
+      "updatedAt": "2026-02-23T10:00:00Z",
+      "category": {
+        "id": "cat-01",
+        "name": "Developer Tools",
+        "slug": "developer-tools",
+        "icon": "code"
+      },
+      "author": {
+        "username": "demo-casey",
+        "name": "Casey Demo",
+        "avatar": null,
+        "identifier": "demo-casey",
+        "verified": false
+      },
+      "tags": [
+        {
+          "id": "tag-30",
+          "name": "NPM",
+          "slug": "npm",
+          "color": "#cb3837"
+        },
+        {
+          "id": "tag-31",
+          "name": "JavaScript",
+          "slug": "javascript",
+          "color": "#f7df1e"
+        }
+      ]
+    },
+    {
+      "id": "res-024",
+      "title": "Notion Page Manager",
+      "slug": "notion-page-manager",
+      "description": "WebMCP service for creating, reading, updating, and searching pages in Notion workspaces.",
+      "content": "WebMCP service for creating, reading, updating, and searching pages in Notion workspaces.",
+      "type": "WEBMCP",
+      "viewCount": 220,
+      "voteCount": 28,
+      "commentCount": 3,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-02-10T11:00:00Z",
+      "updatedAt": "2026-02-24T13:00:00Z",
+      "category": {
+        "id": "cat-07",
+        "name": "Productivity",
+        "slug": "productivity",
+        "icon": "check-square"
+      },
+      "author": {
+        "username": "demo-taylor",
+        "name": "Taylor Demo",
+        "avatar": null,
+        "identifier": "demo-taylor",
+        "verified": true
+      },
+      "tags": [
+        {
+          "id": "tag-25",
+          "name": "Documents",
+          "slug": "documents",
+          "color": "#64748b"
+        },
+        {
+          "id": "tag-02",
+          "name": "API",
+          "slug": "api",
+          "color": "#3b82f6"
+        }
+      ]
+    },
+    {
+      "id": "res-025",
+      "title": "SSL Certificate Checker",
+      "slug": "ssl-certificate-checker",
+      "description": "MCP service for verifying SSL/TLS certificates — expiry dates, chain validity, and cipher suites.",
+      "content": "MCP service for verifying SSL/TLS certificates — expiry dates, chain validity, and cipher suites.",
+      "type": "MCP",
+      "viewCount": 134,
+      "voteCount": 15,
+      "commentCount": 0,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-02-11T14:00:00Z",
+      "updatedAt": "2026-02-20T16:00:00Z",
+      "category": {
+        "id": "cat-11",
+        "name": "Security",
+        "slug": "security",
+        "icon": "shield"
+      },
+      "author": {
+        "username": "demo-riley",
+        "name": "Riley Demo",
+        "avatar": null,
+        "identifier": "demo-riley",
+        "verified": true
+      },
+      "tags": [
+        {
+          "id": "tag-32",
+          "name": "Security",
+          "slug": "security",
+          "color": "#16a34a"
+        },
+        {
+          "id": "tag-26",
+          "name": "Networking",
+          "slug": "networking",
+          "color": "#0284c7"
+        }
+      ]
+    },
+    {
+      "id": "res-026",
+      "title": "Translation Service",
+      "slug": "translation-service",
+      "description": "WebMCP service for translating text between 50+ languages with automatic language detection.",
+      "content": "WebMCP service for translating text between 50+ languages with automatic language detection.",
+      "type": "WEBMCP",
+      "viewCount": 310,
+      "voteCount": 39,
+      "commentCount": 4,
+      "isFeatured": true,
+      "featuredAt": "2026-02-15T10:00:00Z",
+      "createdAt": "2026-02-12T09:00:00Z",
+      "updatedAt": "2026-02-28T11:00:00Z",
+      "category": {
+        "id": "cat-09",
+        "name": "AI & ML",
+        "slug": "ai-ml",
+        "icon": "brain"
+      },
+      "author": {
+        "username": "demo-morgan",
+        "name": "Morgan Demo",
+        "avatar": null,
+        "identifier": "demo-morgan",
+        "verified": true
+      },
+      "tags": [
+        {
+          "id": "tag-13",
+          "name": "LLM",
+          "slug": "llm",
+          "color": "#a855f7"
+        },
+        {
+          "id": "tag-33",
+          "name": "i18n",
+          "slug": "i18n",
+          "color": "#7c3aed"
+        }
+      ]
+    },
+    {
+      "id": "res-027",
+      "title": "GitHub Actions Runner",
+      "slug": "github-actions-runner",
+      "description": "MCP service for triggering, listing, and inspecting GitHub Actions workflow runs.",
+      "content": "MCP service for triggering, listing, and inspecting GitHub Actions workflow runs.",
+      "type": "MCP",
+      "viewCount": 178,
+      "voteCount": 21,
+      "commentCount": 2,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-02-13T10:00:00Z",
+      "updatedAt": "2026-02-25T12:00:00Z",
+      "category": {
+        "id": "cat-05",
+        "name": "DevOps",
+        "slug": "devops",
+        "icon": "server"
+      },
+      "author": {
+        "username": "demo-avery",
+        "name": "Avery Demo",
+        "avatar": null,
+        "identifier": "demo-avery",
+        "verified": true
+      },
+      "tags": [
+        {
+          "id": "tag-01",
+          "name": "Git",
+          "slug": "git",
+          "color": "#f97316"
+        },
+        {
+          "id": "tag-17",
+          "name": "CI/CD",
+          "slug": "ci-cd",
+          "color": "#d946ef"
+        }
+      ]
+    },
+    {
+      "id": "res-028",
+      "title": "MongoDB Query Tool",
+      "slug": "mongodb-query-tool",
+      "description": "MCP service for querying, inserting, updating, and aggregating documents in MongoDB collections.",
+      "content": "MCP service for querying, inserting, updating, and aggregating documents in MongoDB collections.",
+      "type": "MCP",
+      "viewCount": 194,
+      "voteCount": 24,
+      "commentCount": 2,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-02-14T08:00:00Z",
+      "updatedAt": "2026-02-26T10:00:00Z",
+      "category": {
+        "id": "cat-02",
+        "name": "Data & Analytics",
+        "slug": "data-analytics",
+        "icon": "database"
+      },
+      "author": {
+        "username": "demo-pat",
+        "name": "Pat Demo",
+        "avatar": null,
+        "identifier": "demo-pat",
+        "verified": false
+      },
+      "tags": [
+        {
+          "id": "tag-04",
+          "name": "Database",
+          "slug": "database",
+          "color": "#10b981"
+        },
+        {
+          "id": "tag-34",
+          "name": "NoSQL",
+          "slug": "nosql",
+          "color": "#4ade80"
+        }
+      ]
+    },
+    {
+      "id": "res-029",
+      "title": "Twilio SMS Gateway",
+      "slug": "twilio-sms-gateway",
+      "description": "WebMCP service for sending SMS messages, managing phone numbers, and checking delivery status via Twilio.",
+      "content": "WebMCP service for sending SMS messages, managing phone numbers, and checking delivery status via Twilio.",
+      "type": "WEBMCP",
+      "viewCount": 165,
+      "voteCount": 20,
+      "commentCount": 1,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-02-15T13:00:00Z",
+      "updatedAt": "2026-02-27T15:00:00Z",
+      "category": {
+        "id": "cat-03",
+        "name": "Communication",
+        "slug": "communication",
+        "icon": "message-circle"
+      },
+      "author": {
+        "username": "demo-quinn",
+        "name": "Quinn Demo",
+        "avatar": null,
+        "identifier": "demo-quinn",
+        "verified": false
+      },
+      "tags": [
+        {
+          "id": "tag-05",
+          "name": "Messaging",
+          "slug": "messaging",
+          "color": "#ec4899"
+        },
+        {
+          "id": "tag-02",
+          "name": "API",
+          "slug": "api",
+          "color": "#3b82f6"
+        }
+      ]
+    },
+    {
+      "id": "res-030",
+      "title": "Terraform State Viewer",
+      "slug": "terraform-state-viewer",
+      "description": "MCP service for inspecting Terraform state files, resource dependencies, and drift detection.",
+      "content": "MCP service for inspecting Terraform state files, resource dependencies, and drift detection.",
+      "type": "MCP",
+      "viewCount": 143,
+      "voteCount": 17,
+      "commentCount": 1,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-02-16T09:00:00Z",
+      "updatedAt": "2026-02-28T11:00:00Z",
+      "category": {
+        "id": "cat-08",
+        "name": "Cloud Services",
+        "slug": "cloud-services",
+        "icon": "cloud"
+      },
+      "author": {
+        "username": "demo-sam",
+        "name": "Sam Demo",
+        "avatar": null,
+        "identifier": "demo-sam",
+        "verified": false
+      },
+      "tags": [
+        {
+          "id": "tag-22",
+          "name": "Cloud",
+          "slug": "cloud",
+          "color": "#38bdf8"
+        },
+        {
+          "id": "tag-35",
+          "name": "IaC",
+          "slug": "iac",
+          "color": "#7e22ce"
+        }
+      ]
+    },
+    {
+      "id": "res-031",
+      "title": "Markdown to HTML Converter",
+      "slug": "markdown-to-html-converter",
+      "description": "WebMCP service for converting Markdown documents to styled HTML with syntax highlighting and TOC generation.",
+      "content": "WebMCP service for converting Markdown documents to styled HTML with syntax highlighting and TOC generation.",
+      "type": "WEBMCP",
+      "viewCount": 130,
+      "voteCount": 15,
+      "commentCount": 0,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-02-17T11:00:00Z",
+      "updatedAt": "2026-02-25T13:00:00Z",
+      "category": {
+        "id": "cat-01",
+        "name": "Developer Tools",
+        "slug": "developer-tools",
+        "icon": "code"
+      },
+      "author": {
+        "username": "demo-alex",
+        "name": "Alex Demo",
+        "avatar": null,
+        "identifier": "demo-alex",
+        "verified": true
+      },
+      "tags": [
+        {
+          "id": "tag-25",
+          "name": "Documents",
+          "slug": "documents",
+          "color": "#64748b"
+        },
+        {
+          "id": "tag-36",
+          "name": "HTML",
+          "slug": "html",
+          "color": "#e34f26"
+        }
+      ]
+    },
+    {
+      "id": "res-032",
+      "title": "Cloudflare DNS Manager",
+      "slug": "cloudflare-dns-manager",
+      "description": "MCP service for managing Cloudflare DNS zones and records — create, update, delete, and list DNS entries.",
+      "content": "MCP service for managing Cloudflare DNS zones and records — create, update, delete, and list DNS entries.",
+      "type": "MCP",
+      "viewCount": 188,
+      "voteCount": 23,
+      "commentCount": 2,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-02-18T08:00:00Z",
+      "updatedAt": "2026-02-27T10:00:00Z",
+      "category": {
+        "id": "cat-08",
+        "name": "Cloud Services",
+        "slug": "cloud-services",
+        "icon": "cloud"
+      },
+      "author": {
+        "username": "demo-jordan",
+        "name": "Jordan Demo",
+        "avatar": null,
+        "identifier": "demo-jordan",
+        "verified": true
+      },
+      "tags": [
+        {
+          "id": "tag-26",
+          "name": "Networking",
+          "slug": "networking",
+          "color": "#0284c7"
+        },
+        {
+          "id": "tag-22",
+          "name": "Cloud",
+          "slug": "cloud",
+          "color": "#38bdf8"
+        }
+      ]
+    },
+    {
+      "id": "res-033",
+      "title": "Code Review Assistant",
+      "slug": "code-review-assistant",
+      "description": "WebMCP service that analyzes pull requests and provides code review feedback on style, bugs, and security.",
+      "content": "WebMCP service that analyzes pull requests and provides code review feedback on style, bugs, and security.",
+      "type": "WEBMCP",
+      "viewCount": 275,
+      "voteCount": 35,
+      "commentCount": 5,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-02-19T10:00:00Z",
+      "updatedAt": "2026-02-28T12:00:00Z",
+      "category": {
+        "id": "cat-01",
+        "name": "Developer Tools",
+        "slug": "developer-tools",
+        "icon": "code"
+      },
+      "author": {
+        "username": "demo-taylor",
+        "name": "Taylor Demo",
+        "avatar": null,
+        "identifier": "demo-taylor",
+        "verified": true
+      },
+      "tags": [
+        {
+          "id": "tag-01",
+          "name": "Git",
+          "slug": "git",
+          "color": "#f97316"
+        },
+        {
+          "id": "tag-32",
+          "name": "Security",
+          "slug": "security",
+          "color": "#16a34a"
+        }
+      ]
+    },
+    {
+      "id": "res-034",
+      "title": "GraphQL Playground",
+      "slug": "graphql-playground",
+      "description": "MCP service for introspecting GraphQL schemas, running queries, and testing mutations against any endpoint.",
+      "content": "MCP service for introspecting GraphQL schemas, running queries, and testing mutations against any endpoint.",
+      "type": "MCP",
+      "viewCount": 205,
+      "voteCount": 26,
+      "commentCount": 3,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-02-20T14:00:00Z",
+      "updatedAt": "2026-02-28T16:00:00Z",
+      "category": {
+        "id": "cat-01",
+        "name": "Developer Tools",
+        "slug": "developer-tools",
+        "icon": "code"
+      },
+      "author": {
+        "username": "demo-morgan",
+        "name": "Morgan Demo",
+        "avatar": null,
+        "identifier": "demo-morgan",
+        "verified": true
+      },
+      "tags": [
+        {
+          "id": "tag-02",
+          "name": "API",
+          "slug": "api",
+          "color": "#3b82f6"
+        },
+        {
+          "id": "tag-37",
+          "name": "GraphQL",
+          "slug": "graphql",
+          "color": "#e10098"
+        }
+      ]
+    },
+    {
+      "id": "res-035",
+      "title": "Prometheus Metrics Exporter",
+      "slug": "prometheus-metrics-exporter",
+      "description": "MCP service for querying Prometheus metrics, setting up alerts, and generating dashboards.",
+      "content": "MCP service for querying Prometheus metrics, setting up alerts, and generating dashboards.",
+      "type": "MCP",
+      "viewCount": 152,
+      "voteCount": 18,
+      "commentCount": 1,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-02-21T09:00:00Z",
+      "updatedAt": "2026-02-28T11:00:00Z",
+      "category": {
+        "id": "cat-05",
+        "name": "DevOps",
+        "slug": "devops",
+        "icon": "server"
+      },
+      "author": {
+        "username": "demo-riley",
+        "name": "Riley Demo",
+        "avatar": null,
+        "identifier": "demo-riley",
+        "verified": true
+      },
+      "tags": [
+        {
+          "id": "tag-12",
+          "name": "Monitoring",
+          "slug": "monitoring",
+          "color": "#ef4444"
+        },
+        {
+          "id": "tag-02",
+          "name": "API",
+          "slug": "api",
+          "color": "#3b82f6"
+        }
+      ]
+    },
+    {
+      "id": "res-036",
+      "title": "Webhook Relay",
+      "slug": "webhook-relay",
+      "description": "WebMCP service for receiving, inspecting, replaying, and forwarding webhooks from any source.",
+      "content": "WebMCP service for receiving, inspecting, replaying, and forwarding webhooks from any source.",
+      "type": "WEBMCP",
+      "viewCount": 140,
+      "voteCount": 16,
+      "commentCount": 1,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-02-22T13:00:00Z",
+      "updatedAt": "2026-02-28T15:00:00Z",
+      "category": {
+        "id": "cat-01",
+        "name": "Developer Tools",
+        "slug": "developer-tools",
+        "icon": "code"
+      },
+      "author": {
+        "username": "demo-casey",
+        "name": "Casey Demo",
+        "avatar": null,
+        "identifier": "demo-casey",
+        "verified": false
+      },
+      "tags": [
+        {
+          "id": "tag-02",
+          "name": "API",
+          "slug": "api",
+          "color": "#3b82f6"
+        },
+        {
+          "id": "tag-06",
+          "name": "Automation",
+          "slug": "automation",
+          "color": "#f59e0b"
+        }
+      ]
+    },
+    {
+      "id": "res-037",
+      "title": "Currency Exchange Rates",
+      "slug": "currency-exchange-rates",
+      "description": "WebMCP service providing real-time and historical currency exchange rates for 160+ currencies.",
+      "content": "WebMCP service providing real-time and historical currency exchange rates for 160+ currencies.",
+      "type": "WEBMCP",
+      "viewCount": 190,
+      "voteCount": 23,
+      "commentCount": 2,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-02-23T08:00:00Z",
+      "updatedAt": "2026-02-28T10:00:00Z",
+      "category": {
+        "id": "cat-06",
+        "name": "Finance",
+        "slug": "finance",
+        "icon": "credit-card"
+      },
+      "author": {
+        "username": "demo-avery",
+        "name": "Avery Demo",
+        "avatar": null,
+        "identifier": "demo-avery",
+        "verified": true
+      },
+      "tags": [
+        {
+          "id": "tag-09",
+          "name": "Payments",
+          "slug": "payments",
+          "color": "#22c55e"
+        },
+        {
+          "id": "tag-02",
+          "name": "API",
+          "slug": "api",
+          "color": "#3b82f6"
+        }
+      ]
+    },
+    {
+      "id": "res-038",
+      "title": "Elasticsearch Query Builder",
+      "slug": "elasticsearch-query-builder",
+      "description": "MCP service for building and executing Elasticsearch queries, managing indices, and viewing cluster health.",
+      "content": "MCP service for building and executing Elasticsearch queries, managing indices, and viewing cluster health.",
+      "type": "MCP",
+      "viewCount": 168,
+      "voteCount": 20,
+      "commentCount": 1,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-02-24T11:00:00Z",
+      "updatedAt": "2026-02-28T13:00:00Z",
+      "category": {
+        "id": "cat-02",
+        "name": "Data & Analytics",
+        "slug": "data-analytics",
+        "icon": "database"
+      },
+      "author": {
+        "username": "demo-pat",
+        "name": "Pat Demo",
+        "avatar": null,
+        "identifier": "demo-pat",
+        "verified": false
+      },
+      "tags": [
+        {
+          "id": "tag-04",
+          "name": "Database",
+          "slug": "database",
+          "color": "#10b981"
+        },
+        {
+          "id": "tag-38",
+          "name": "Search",
+          "slug": "search",
+          "color": "#eab308"
+        }
+      ]
+    },
+    {
+      "id": "res-039",
+      "title": "Discord Bot Controller",
+      "slug": "discord-bot-controller",
+      "description": "MCP service for managing Discord bots — send messages, manage roles, moderate channels, and configure webhooks.",
+      "content": "MCP service for managing Discord bots — send messages, manage roles, moderate channels, and configure webhooks.",
+      "type": "MCP",
+      "viewCount": 225,
+      "voteCount": 28,
+      "commentCount": 3,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-02-25T10:00:00Z",
+      "updatedAt": "2026-02-28T12:00:00Z",
+      "category": {
+        "id": "cat-03",
+        "name": "Communication",
+        "slug": "communication",
+        "icon": "message-circle"
+      },
+      "author": {
+        "username": "demo-quinn",
+        "name": "Quinn Demo",
+        "avatar": null,
+        "identifier": "demo-quinn",
+        "verified": false
+      },
+      "tags": [
+        {
+          "id": "tag-05",
+          "name": "Messaging",
+          "slug": "messaging",
+          "color": "#ec4899"
+        },
+        {
+          "id": "tag-39",
+          "name": "Bots",
+          "slug": "bots",
+          "color": "#7c3aed"
+        }
+      ]
+    },
+    {
+      "id": "res-040",
+      "title": "Cron Job Scheduler",
+      "slug": "cron-job-scheduler",
+      "description": "WebMCP service for scheduling, managing, and monitoring cron jobs with retry logic and failure alerts.",
+      "content": "WebMCP service for scheduling, managing, and monitoring cron jobs with retry logic and failure alerts.",
+      "type": "WEBMCP",
+      "viewCount": 155,
+      "voteCount": 18,
+      "commentCount": 1,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-02-26T14:00:00Z",
+      "updatedAt": "2026-02-28T16:00:00Z",
+      "category": {
+        "id": "cat-05",
+        "name": "DevOps",
+        "slug": "devops",
+        "icon": "server"
+      },
+      "author": {
+        "username": "demo-sam",
+        "name": "Sam Demo",
+        "avatar": null,
+        "identifier": "demo-sam",
+        "verified": false
+      },
+      "tags": [
+        {
+          "id": "tag-06",
+          "name": "Automation",
+          "slug": "automation",
+          "color": "#f59e0b"
+        },
+        {
+          "id": "tag-17",
+          "name": "CI/CD",
+          "slug": "ci-cd",
+          "color": "#d946ef"
+        }
+      ]
+    },
+    {
+      "id": "res-041",
+      "title": "OAuth Token Manager",
+      "slug": "oauth-token-manager",
+      "description": "MCP service for managing OAuth2 tokens — refresh, revoke, introspect, and generate tokens for multiple providers.",
+      "content": "MCP service for managing OAuth2 tokens — refresh, revoke, introspect, and generate tokens for multiple providers.",
+      "type": "MCP",
+      "viewCount": 176,
+      "voteCount": 21,
+      "commentCount": 2,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-02-27T08:00:00Z",
+      "updatedAt": "2026-02-28T10:00:00Z",
+      "category": {
+        "id": "cat-11",
+        "name": "Security",
+        "slug": "security",
+        "icon": "shield"
+      },
+      "author": {
+        "username": "demo-alex",
+        "name": "Alex Demo",
+        "avatar": null,
+        "identifier": "demo-alex",
+        "verified": true
+      },
+      "tags": [
+        {
+          "id": "tag-32",
+          "name": "Security",
+          "slug": "security",
+          "color": "#16a34a"
+        },
+        {
+          "id": "tag-40",
+          "name": "Auth",
+          "slug": "auth",
+          "color": "#0f766e"
+        }
+      ]
+    },
+    {
+      "id": "res-042",
+      "title": "CSV Data Processor",
+      "slug": "csv-data-processor",
+      "description": "WebMCP service for parsing, transforming, filtering, and exporting CSV data with column mapping support.",
+      "content": "WebMCP service for parsing, transforming, filtering, and exporting CSV data with column mapping support.",
+      "type": "WEBMCP",
+      "viewCount": 142,
+      "voteCount": 16,
+      "commentCount": 0,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-02-27T11:00:00Z",
+      "updatedAt": "2026-02-28T13:00:00Z",
+      "category": {
+        "id": "cat-02",
+        "name": "Data & Analytics",
+        "slug": "data-analytics",
+        "icon": "database"
+      },
+      "author": {
+        "username": "demo-jordan",
+        "name": "Jordan Demo",
+        "avatar": null,
+        "identifier": "demo-jordan",
+        "verified": true
+      },
+      "tags": [
+        {
+          "id": "tag-14",
+          "name": "Files",
+          "slug": "files",
+          "color": "#78716c"
+        },
+        {
+          "id": "tag-41",
+          "name": "Data Processing",
+          "slug": "data-processing",
+          "color": "#0891b2"
+        }
+      ]
+    },
+    {
+      "id": "res-043",
+      "title": "Log Analyzer",
+      "slug": "log-analyzer",
+      "description": "MCP service for parsing, searching, and analyzing application logs with pattern detection and alerting.",
+      "content": "MCP service for parsing, searching, and analyzing application logs with pattern detection and alerting.",
+      "type": "MCP",
+      "viewCount": 189,
+      "voteCount": 22,
+      "commentCount": 2,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-02-27T14:00:00Z",
+      "updatedAt": "2026-02-28T16:00:00Z",
+      "category": {
+        "id": "cat-05",
+        "name": "DevOps",
+        "slug": "devops",
+        "icon": "server"
+      },
+      "author": {
+        "username": "demo-taylor",
+        "name": "Taylor Demo",
+        "avatar": null,
+        "identifier": "demo-taylor",
+        "verified": true
+      },
+      "tags": [
+        {
+          "id": "tag-12",
+          "name": "Monitoring",
+          "slug": "monitoring",
+          "color": "#ef4444"
+        },
+        {
+          "id": "tag-38",
+          "name": "Search",
+          "slug": "search",
+          "color": "#eab308"
+        }
+      ]
+    },
+    {
+      "id": "res-044",
+      "title": "Vercel Deployment Manager",
+      "slug": "vercel-deployment-manager",
+      "description": "WebMCP service for deploying, previewing, and managing Vercel projects and serverless functions.",
+      "content": "WebMCP service for deploying, previewing, and managing Vercel projects and serverless functions.",
+      "type": "WEBMCP",
+      "viewCount": 210,
+      "voteCount": 26,
+      "commentCount": 3,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-02-28T08:00:00Z",
+      "updatedAt": "2026-02-28T10:00:00Z",
+      "category": {
+        "id": "cat-08",
+        "name": "Cloud Services",
+        "slug": "cloud-services",
+        "icon": "cloud"
+      },
+      "author": {
+        "username": "demo-morgan",
+        "name": "Morgan Demo",
+        "avatar": null,
+        "identifier": "demo-morgan",
+        "verified": true
+      },
+      "tags": [
+        {
+          "id": "tag-22",
+          "name": "Cloud",
+          "slug": "cloud",
+          "color": "#38bdf8"
+        },
+        {
+          "id": "tag-17",
+          "name": "CI/CD",
+          "slug": "ci-cd",
+          "color": "#d946ef"
+        }
+      ]
+    },
+    {
+      "id": "res-045",
+      "title": "JSON Schema Validator",
+      "slug": "json-schema-validator",
+      "description": "MCP service for validating JSON documents against schemas, generating schemas from samples, and converting formats.",
+      "content": "MCP service for validating JSON documents against schemas, generating schemas from samples, and converting formats.",
+      "type": "MCP",
+      "viewCount": 125,
+      "voteCount": 14,
+      "commentCount": 0,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-02-28T10:00:00Z",
+      "updatedAt": "2026-02-28T12:00:00Z",
+      "category": {
+        "id": "cat-01",
+        "name": "Developer Tools",
+        "slug": "developer-tools",
+        "icon": "code"
+      },
+      "author": {
+        "username": "demo-casey",
+        "name": "Casey Demo",
+        "avatar": null,
+        "identifier": "demo-casey",
+        "verified": false
+      },
+      "tags": [
+        {
+          "id": "tag-02",
+          "name": "API",
+          "slug": "api",
+          "color": "#3b82f6"
+        },
+        {
+          "id": "tag-31",
+          "name": "JavaScript",
+          "slug": "javascript",
+          "color": "#f7df1e"
+        }
+      ]
+    },
+    {
+      "id": "res-046",
+      "title": "Embeddings Generator",
+      "slug": "embeddings-generator",
+      "description": "WebMCP service for generating text embeddings using multiple models, with similarity search and clustering.",
+      "content": "WebMCP service for generating text embeddings using multiple models, with similarity search and clustering.",
+      "type": "WEBMCP",
+      "viewCount": 235,
+      "voteCount": 30,
+      "commentCount": 4,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-02-28T11:00:00Z",
+      "updatedAt": "2026-02-28T13:00:00Z",
+      "category": {
+        "id": "cat-09",
+        "name": "AI & ML",
+        "slug": "ai-ml",
+        "icon": "brain"
+      },
+      "author": {
+        "username": "demo-riley",
+        "name": "Riley Demo",
+        "avatar": null,
+        "identifier": "demo-riley",
+        "verified": true
+      },
+      "tags": [
+        {
+          "id": "tag-13",
+          "name": "LLM",
+          "slug": "llm",
+          "color": "#a855f7"
+        },
+        {
+          "id": "tag-38",
+          "name": "Search",
+          "slug": "search",
+          "color": "#eab308"
+        }
+      ]
+    },
+    {
+      "id": "res-047",
+      "title": "Secrets Vault",
+      "slug": "secrets-vault",
+      "description": "MCP service for securely storing and retrieving secrets, API keys, and configuration values.",
+      "content": "MCP service for securely storing and retrieving secrets, API keys, and configuration values.",
+      "type": "MCP",
+      "viewCount": 198,
+      "voteCount": 25,
+      "commentCount": 3,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-02-28T12:00:00Z",
+      "updatedAt": "2026-02-28T14:00:00Z",
+      "category": {
+        "id": "cat-11",
+        "name": "Security",
+        "slug": "security",
+        "icon": "shield"
+      },
+      "author": {
+        "username": "demo-avery",
+        "name": "Avery Demo",
+        "avatar": null,
+        "identifier": "demo-avery",
+        "verified": true
+      },
+      "tags": [
+        {
+          "id": "tag-32",
+          "name": "Security",
+          "slug": "security",
+          "color": "#16a34a"
+        },
+        {
+          "id": "tag-40",
+          "name": "Auth",
+          "slug": "auth",
+          "color": "#0f766e"
+        }
+      ]
+    },
+    {
+      "id": "res-048",
+      "title": "Sitemap Generator",
+      "slug": "sitemap-generator",
+      "description": "WebMCP service for crawling websites and generating XML sitemaps with priority and frequency settings.",
+      "content": "WebMCP service for crawling websites and generating XML sitemaps with priority and frequency settings.",
+      "type": "WEBMCP",
+      "viewCount": 115,
+      "voteCount": 13,
+      "commentCount": 0,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-02-28T13:00:00Z",
+      "updatedAt": "2026-02-28T15:00:00Z",
+      "category": {
+        "id": "cat-01",
+        "name": "Developer Tools",
+        "slug": "developer-tools",
+        "icon": "code"
+      },
+      "author": {
+        "username": "demo-pat",
+        "name": "Pat Demo",
+        "avatar": null,
+        "identifier": "demo-pat",
+        "verified": false
+      },
+      "tags": [
+        {
+          "id": "tag-36",
+          "name": "HTML",
+          "slug": "html",
+          "color": "#e34f26"
+        },
+        {
+          "id": "tag-42",
+          "name": "SEO",
+          "slug": "seo",
+          "color": "#ca8a04"
+        }
+      ]
+    },
+    {
+      "id": "res-049",
+      "title": "Linear Issue Sync",
+      "slug": "linear-issue-sync",
+      "description": "WebMCP service for syncing, creating, and managing Linear issues and project boards.",
+      "content": "WebMCP service for syncing, creating, and managing Linear issues and project boards.",
+      "type": "WEBMCP",
+      "viewCount": 172,
+      "voteCount": 20,
+      "commentCount": 2,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-02-28T14:00:00Z",
+      "updatedAt": "2026-02-28T16:00:00Z",
+      "category": {
+        "id": "cat-07",
+        "name": "Productivity",
+        "slug": "productivity",
+        "icon": "check-square"
+      },
+      "author": {
+        "username": "demo-quinn",
+        "name": "Quinn Demo",
+        "avatar": null,
+        "identifier": "demo-quinn",
+        "verified": false
+      },
+      "tags": [
+        {
+          "id": "tag-23",
+          "name": "Project Management",
+          "slug": "project-management",
+          "color": "#2563eb"
+        },
+        {
+          "id": "tag-06",
+          "name": "Automation",
+          "slug": "automation",
+          "color": "#f59e0b"
+        }
+      ]
+    },
+    {
+      "id": "res-050",
+      "title": "API Rate Limiter",
+      "slug": "api-rate-limiter",
+      "description": "MCP service for implementing and managing API rate limiting with sliding window and token bucket algorithms.",
+      "content": "MCP service for implementing and managing API rate limiting with sliding window and token bucket algorithms.",
+      "type": "MCP",
+      "viewCount": 148,
+      "voteCount": 17,
+      "commentCount": 1,
+      "isFeatured": false,
+      "featuredAt": null,
+      "createdAt": "2026-02-28T15:00:00Z",
+      "updatedAt": "2026-02-28T17:00:00Z",
+      "category": {
+        "id": "cat-01",
+        "name": "Developer Tools",
+        "slug": "developer-tools",
+        "icon": "code"
+      },
+      "author": {
+        "username": "demo-sam",
+        "name": "Sam Demo",
+        "avatar": null,
+        "identifier": "demo-sam",
+        "verified": false
+      },
+      "tags": [
+        {
+          "id": "tag-02",
+          "name": "API",
+          "slug": "api",
+          "color": "#3b82f6"
+        },
+        {
+          "id": "tag-32",
+          "name": "Security",
+          "slug": "security",
+          "color": "#16a34a"
+        }
+      ]
+    }
+  ]
+}

@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { signIn } from "next-auth/react";
-import { useTranslations } from "next-intl";
+import { authClient } from "@/lib/auth/client";
+import { useTranslation } from "react-i18next";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { analyticsAuth } from "@/lib/analytics";
@@ -10,6 +10,7 @@ import { analyticsAuth } from "@/lib/analytics";
 interface OAuthButtonProps {
   provider: string;
   providerName: string;
+  callbackUri?: string;
 }
 
 const providerIcons: Record<string, React.ReactNode> = {
@@ -38,15 +39,15 @@ const providerIcons: Record<string, React.ReactNode> = {
   ),
 };
 
-export function OAuthButton({ provider, providerName }: OAuthButtonProps) {
-  const t = useTranslations("auth");
+export function OAuthButton({ provider, providerName, callbackUri }: OAuthButtonProps) {
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSignIn = async () => {
     setIsLoading(true);
     analyticsAuth.oauthStart(provider);
     try {
-      await signIn(provider, { callbackUrl: "/" });
+      await authClient.signIn.social({ provider: provider as any, callbackURL: callbackUri || "/" });
     } catch (error) {
       console.error("Sign in error:", error);
       setIsLoading(false);
@@ -66,7 +67,7 @@ export function OAuthButton({ provider, providerName }: OAuthButtonProps) {
       ) : (
         <span className="mr-2">{providerIcons[provider]}</span>
       )}
-      {t("signInWith", { provider: providerName })}
+      {t("auth.signInWith", { provider: providerName })}
     </Button>
   );
 }

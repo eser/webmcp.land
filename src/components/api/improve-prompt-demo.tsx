@@ -38,7 +38,7 @@ interface ImproveResponse {
   model: string;
 }
 
-export function ImprovePromptDemo() {
+export function ImproveResourceDemo() {
   const [prompt, setPrompt] = useState("");
   const [outputType, setOutputType] = useState<OutputType>("text");
   const [outputFormat, setOutputFormat] = useState<OutputFormat>("text");
@@ -56,7 +56,7 @@ export function ImprovePromptDemo() {
     setResult(null);
 
     try {
-      const response = await fetch("/api/improve-prompt", {
+      const response = await fetch("/api/improve-resource", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt: prompt.trim(), outputType, outputFormat }),
@@ -210,7 +210,7 @@ export function ImprovePromptDemo() {
 
       <div className="rounded-lg bg-muted p-4 font-mono text-sm overflow-x-auto">
         <p className="text-muted-foreground mb-2"># API Request</p>
-        <pre>{`curl -X POST ${typeof window !== "undefined" ? window.location.origin : ""}/api/improve-prompt \\
+        <pre>{`curl -X POST ${typeof window !== "undefined" ? window.location.origin : ""}/api/improve-resource \\
   -H "Content-Type: application/json" \\
   -d '{
     "prompt": "${prompt.slice(0, 50).replace(/"/g, '\\"')}${prompt.length > 50 ? "..." : ""}",

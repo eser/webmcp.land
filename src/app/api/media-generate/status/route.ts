@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { getSession } from "@/lib/auth";
 import { getMediaGeneratorPlugin } from "@/lib/plugins/media-generators";
 
 /**
@@ -7,7 +7,7 @@ import { getMediaGeneratorPlugin } from "@/lib/plugins/media-generators";
  * Used by providers that don't support WebSocket (e.g., Fal.ai)
  */
 export async function GET(request: NextRequest) {
-  const session = await auth();
+  const session = await getSession();
 
   if (!session?.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

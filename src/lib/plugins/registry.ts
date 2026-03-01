@@ -1,26 +1,9 @@
-import type { AuthPlugin, StoragePlugin, PluginRegistry } from "./types";
+import type { StoragePlugin, PluginRegistry } from "./types";
 
 // Global plugin registry
 const registry: PluginRegistry = {
-  auth: new Map(),
   storage: new Map(),
 };
-
-// ============================================
-// Auth Plugin Registration
-// ============================================
-
-export function registerAuthPlugin(plugin: AuthPlugin): void {
-  registry.auth.set(plugin.id, plugin);
-}
-
-export function getAuthPlugin(id: string): AuthPlugin | undefined {
-  return registry.auth.get(id);
-}
-
-export function getAllAuthPlugins(): AuthPlugin[] {
-  return Array.from(registry.auth.values());
-}
 
 // ============================================
 // Storage Plugin Registration

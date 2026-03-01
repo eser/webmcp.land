@@ -1,13 +1,13 @@
 import { getPreferenceValues } from "@raycast/api";
 import type { Prompt, PromptsResponse } from "./types";
 
-interface PromptsChatPreferences {
+interface SitePreferences {
   baseUrl?: string;
 }
 
 function getBaseUrl(): string {
-  const { baseUrl } = getPreferenceValues<PromptsChatPreferences>();
-  return baseUrl?.replace(/\/$/, "") || "https://prompts.chat";
+  const { baseUrl } = getPreferenceValues<SitePreferences>();
+  return baseUrl?.replace(/\/$/, "") || "https://webmcp.land";
 }
 
 export async function fetchPrompts(options: {

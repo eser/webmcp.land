@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Users, FolderTree, Tags, FileText, Webhook, Flag } from "lucide-react";
 
-const VALID_TABS = ["users", "categories", "tags", "webhooks", "prompts", "reports"] as const;
+const VALID_TABS = ["users", "categories", "tags", "webhooks", "resources", "reports"] as const;
 type TabValue = (typeof VALID_TABS)[number];
 
 interface AdminTabsProps {
@@ -13,7 +13,7 @@ interface AdminTabsProps {
     categories: string;
     tags: string;
     webhooks: string;
-    prompts: string;
+    resources: string;
     reports: string;
   };
   pendingReportsCount: number;
@@ -22,7 +22,7 @@ interface AdminTabsProps {
     categories: React.ReactNode;
     tags: React.ReactNode;
     webhooks: React.ReactNode;
-    prompts: React.ReactNode;
+    resources: React.ReactNode;
     reports: React.ReactNode;
   };
 }
@@ -76,9 +76,9 @@ export function AdminTabs({ translations, pendingReportsCount, children }: Admin
             <Webhook className="h-4 w-4" />
             <span className="hidden sm:inline">{translations.webhooks}</span>
           </TabsTrigger>
-          <TabsTrigger value="prompts" className="gap-1.5 sm:gap-2 px-2.5 sm:px-3">
+          <TabsTrigger value="resources" className="gap-1.5 sm:gap-2 px-2.5 sm:px-3">
             <FileText className="h-4 w-4" />
-            <span className="hidden sm:inline">{translations.prompts}</span>
+            <span className="hidden sm:inline">{translations.resources}</span>
           </TabsTrigger>
           <TabsTrigger value="reports" className="gap-1.5 sm:gap-2 px-2.5 sm:px-3">
             <Flag className="h-4 w-4" />
@@ -96,7 +96,7 @@ export function AdminTabs({ translations, pendingReportsCount, children }: Admin
       <TabsContent value="categories">{children.categories}</TabsContent>
       <TabsContent value="tags">{children.tags}</TabsContent>
       <TabsContent value="webhooks">{children.webhooks}</TabsContent>
-      <TabsContent value="prompts">{children.prompts}</TabsContent>
+      <TabsContent value="resources">{children.resources}</TabsContent>
       <TabsContent value="reports">{children.reports}</TabsContent>
     </Tabs>
   );

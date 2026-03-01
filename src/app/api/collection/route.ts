@@ -1,27 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { and, eq } from "drizzle-orm";
+import { getSession } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { collections, resources } from "@/lib/schema";
 import { z } from "zod";
 
 const addToCollectionSchema = z.object({
-  promptId: z.string().min(1),
+  resourceId: z.string().min(1),
 });
 
 export async function GET() {
-  const session = await auth();
-  
+  const session = await getSession();
+
   if (!session?.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const collections = await db.collection.findMany({
-    where: { userId: session.user.id },
-    orderBy: { createdAt: "desc" },
-    include: {
-      prompt: {
-        include: {
+  const result = await db.query.collections.findMany({
+    where: eq(collections.userId, session.user.id),
+    orderBy: (table, { desc }) => [desc(table.createdAt)],
+    with: {
+      resource: {
+        with: {
           author: {
-            select: {
+            columns: {
               id: true,
               name: true,
               username: true,
@@ -30,71 +32,94 @@ export async function GET() {
             },
           },
           category: {
-            include: {
+            with: {
               parent: {
-                select: { id: true, name: true, slug: true },
+                columns: { id: true, name: true, slug: true },
               },
             },
           },
           tags: {
-            include: {
-              tag: true,
-            },
+            with: { tag: true },
           },
-          _count: {
-            select: { votes: true, contributors: true },
-          },
+          votes: true,
         },
       },
     },
   });
 
-  return NextResponse.json({ collections });
+  // Transform to match expected format with _count
+  const collectionsData = result.map((c) => ({
+    ...c,
+    resource: {
+      ...c.resource,
+      _count: {
+        votes: c.resource.votes.length,
+      },
+      votes: undefined,
+    },
+  }));
+
+  return NextResponse.json({ collections: collectionsData });
 }
 
 export async function POST(req: NextRequest) {
-  const session = await auth();
-  
+  const session = await getSession();
+
   if (!session?.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   try {
     const body = await req.json();
-    const { promptId } = addToCollectionSchema.parse(body);
+    const { resourceId } = addToCollectionSchema.parse(body);
 
-    const existingCollection = await db.collection.findUnique({
-      where: {
-        userId_promptId: {
-          userId: session.user.id,
-          promptId,
-        },
-      },
-    });
+    const [existingCollection] = await db
+      .select()
+      .from(collections)
+      .where(
+        and(
+          eq(collections.userId, session.user.id),
+          eq(collections.resourceId, resourceId),
+        ),
+      );
 
     if (existingCollection) {
-      return NextResponse.json({ error: "Already in collection" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Already in collection" },
+        { status: 400 },
+      );
     }
 
-    const prompt = await db.prompt.findUnique({
-      where: { id: promptId },
-      select: { id: true, isPrivate: true, authorId: true },
-    });
+    const [resource] = await db
+      .select({
+        id: resources.id,
+        isPrivate: resources.isPrivate,
+        authorId: resources.authorId,
+      })
+      .from(resources)
+      .where(eq(resources.id, resourceId));
 
-    if (!prompt) {
-      return NextResponse.json({ error: "Prompt not found" }, { status: 404 });
+    if (!resource) {
+      return NextResponse.json(
+        { error: "Resource not found" },
+        { status: 404 },
+      );
     }
 
-    if (prompt.isPrivate && prompt.authorId !== session.user.id) {
-      return NextResponse.json({ error: "Cannot add private prompt" }, { status: 403 });
+    if (resource.isPrivate && resource.authorId !== session.user.id) {
+      return NextResponse.json(
+        { error: "Cannot add private resource" },
+        { status: 403 },
+      );
     }
 
-    const collection = await db.collection.create({
-      data: {
+    const [collection] = await db
+      .insert(collections)
+      .values({
         userId: session.user.id,
-        promptId,
-      },
-    });
+        resourceId,
+      })
+      .returning();
 
     return NextResponse.json({ collection, added: true });
   } catch (error) {
@@ -102,37 +127,46 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid input" }, { status: 400 });
     }
     console.error("Failed to add to collection:", error);
-    return NextResponse.json({ error: "Failed to add to collection" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to add to collection" },
+      { status: 500 },
+    );
   }
 }
 
 export async function DELETE(req: NextRequest) {
-  const session = await auth();
-  
+  const session = await getSession();
+
   if (!session?.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   try {
     const { searchParams } = new URL(req.url);
-    const promptId = searchParams.get("promptId");
+    const resourceId = searchParams.get("resourceId");
 
-    if (!promptId) {
-      return NextResponse.json({ error: "promptId required" }, { status: 400 });
+    if (!resourceId) {
+      return NextResponse.json(
+        { error: "resourceId required" },
+        { status: 400 },
+      );
     }
 
-    await db.collection.delete({
-      where: {
-        userId_promptId: {
-          userId: session.user.id,
-          promptId,
-        },
-      },
-    });
+    await db
+      .delete(collections)
+      .where(
+        and(
+          eq(collections.userId, session.user.id),
+          eq(collections.resourceId, resourceId),
+        ),
+      );
 
     return NextResponse.json({ removed: true });
   } catch (error) {
     console.error("Failed to remove from collection:", error);
-    return NextResponse.json({ error: "Failed to remove from collection" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to remove from collection" },
+      { status: 500 },
+    );
   }
 }

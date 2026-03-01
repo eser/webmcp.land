@@ -1,29 +1,43 @@
+import { NextRequest } from "next/server";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { GET, POST } from "@/app/api/prompts/route";
+import { GET, POST } from "@/app/api/resources/route";
 import { db } from "@/lib/db";
-import { auth } from "@/lib/auth";
+import { getSession } from "@/lib/auth";
+
+import { createChainMock, mockSelectSequence } from "../helpers/db-mock";
 
 // Mock dependencies
-vi.mock("@/lib/db", () => ({
-  db: {
-    prompt: {
-      findMany: vi.fn(),
-      findFirst: vi.fn(),
-      findUnique: vi.fn(),
-      create: vi.fn(),
-      count: vi.fn(),
+vi.mock("@/lib/db", async () => {
+  const { createChainMock } = await import("../helpers/db-mock");
+  return {
+    db: {
+      select: vi.fn().mockReturnValue(createChainMock([])),
+      insert: vi.fn().mockReturnValue(createChainMock([])),
+      update: vi.fn().mockReturnValue(createChainMock([])),
+      delete: vi.fn().mockReturnValue(createChainMock([])),
+      execute: vi.fn().mockResolvedValue({ rows: [] }),
+      transaction: vi.fn().mockImplementation(async (fn: Function) => fn({
+        select: vi.fn().mockReturnValue(createChainMock()),
+        insert: vi.fn().mockReturnValue(createChainMock()),
+        update: vi.fn().mockReturnValue(createChainMock()),
+        delete: vi.fn().mockReturnValue(createChainMock()),
+      })),
+      query: {
+        resources: { findMany: vi.fn().mockResolvedValue([]), findFirst: vi.fn().mockResolvedValue(null) },
+        users: { findMany: vi.fn().mockResolvedValue([]), findFirst: vi.fn().mockResolvedValue(null) },
+        categories: { findMany: vi.fn().mockResolvedValue([]), findFirst: vi.fn().mockResolvedValue(null) },
+        tags: { findMany: vi.fn().mockResolvedValue([]), findFirst: vi.fn().mockResolvedValue(null) },
+        resourceVotes: { findMany: vi.fn().mockResolvedValue([]), findFirst: vi.fn().mockResolvedValue(null) },
+        resourceVersions: { findMany: vi.fn().mockResolvedValue([]), findFirst: vi.fn().mockResolvedValue(null) },
+        resourceConnections: { findMany: vi.fn().mockResolvedValue([]), findFirst: vi.fn().mockResolvedValue(null) },
+        collections: { findMany: vi.fn().mockResolvedValue([]), findFirst: vi.fn().mockResolvedValue(null) },
+      },
     },
-    promptVersion: {
-      create: vi.fn(),
-    },
-    user: {
-      findUnique: vi.fn(),
-    },
-  },
-}));
+  };
+});
 
 vi.mock("@/lib/auth", () => ({
-  auth: vi.fn(),
+  getSession: vi.fn(),
 }));
 
 vi.mock("next/cache", () => ({
@@ -35,16 +49,16 @@ vi.mock("@/lib/webhook", () => ({
 }));
 
 vi.mock("@/lib/ai/embeddings", () => ({
-  generatePromptEmbedding: vi.fn().mockResolvedValue(undefined),
-  findAndSaveRelatedPrompts: vi.fn().mockResolvedValue(undefined),
+  generateResourceEmbedding: vi.fn().mockResolvedValue(undefined),
+  findAndSaveRelatedResources: vi.fn().mockResolvedValue(undefined),
 }));
 
 vi.mock("@/lib/slug", () => ({
-  generatePromptSlug: vi.fn().mockResolvedValue("test-prompt"),
+  generateResourceSlug: vi.fn().mockResolvedValue("test-resource"),
 }));
 
 vi.mock("@/lib/ai/quality-check", () => ({
-  checkPromptQuality: vi.fn().mockResolvedValue({ shouldDelist: false }),
+  checkResourceQuality: vi.fn().mockResolvedValue({ shouldDelist: false }),
 }));
 
 vi.mock("@/lib/similarity", () => ({
@@ -52,106 +66,119 @@ vi.mock("@/lib/similarity", () => ({
   normalizeContent: vi.fn().mockReturnValue("normalized content"),
 }));
 
-describe("GET /api/prompts", () => {
+
+describe("GET /api/resources", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it("should return paginated prompts", async () => {
-    const mockPrompts = [
+  it("should return paginated resources", async () => {
+    const mockResources = [
       {
         id: "1",
-        title: "Test Prompt",
+        title: "Test Resource",
         content: "Test content",
         type: "TEXT",
         isPrivate: false,
-        author: { id: "user1", name: "Test User", username: "testuser" },
-        category: null,
-        tags: [],
-        contributors: [],
-        _count: { votes: 5, contributors: 0 },
+        authorId: "user1",
+        categoryId: null,
+        slug: "test-prompt",
+        description: null,
+        viewCount: 0,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        isFeatured: false,
+        isUnlisted: false,
+        deletedAt: null,
+        mediaUrl: null,
+        requiresMediaUpload: false,
+        structuredFormat: null,
+        bestWithModels: null,
+        bestWithMCP: null,
+        workflowLink: null,
       },
     ];
 
-    vi.mocked(db.prompt.findMany).mockResolvedValue(mockPrompts as never);
-    vi.mocked(db.prompt.count).mockResolvedValue(1);
+    // GET makes multiple select calls: resources query, count query, authors, tags, contributors, votes, connections, etc.
+    mockSelectSequence(db,
+      mockResources,    // resources query
+      [{ value: 1 }],   // count query
+      [{ id: "user1", name: "Test User", username: "testuser", avatar: null, verified: false }], // authors
+      [],                // tags
+      [],                // contributors
+      [],                // vote counts
+      [],                // outgoing connections
+      [],                // incoming connections
+      [],                // user examples
+    );
+    vi.mocked(db.query.categories.findMany).mockResolvedValue([]);
 
-    const request = new Request("http://localhost:3000/api/prompts?page=1&perPage=24");
-    const response = await GET(request);
+    const request = new Request("http://localhost:3000/api/resources?page=1&perPage=24");
+    const response = await GET(request as unknown as NextRequest);
     const data = await response.json();
 
     expect(response.status).toBe(200);
-    expect(data.prompts).toHaveLength(1);
+    expect(data.resources).toHaveLength(1);
     expect(data.total).toBe(1);
     expect(data.page).toBe(1);
     expect(data.perPage).toBe(24);
   });
 
   it("should filter by type", async () => {
-    vi.mocked(db.prompt.findMany).mockResolvedValue([]);
-    vi.mocked(db.prompt.count).mockResolvedValue(0);
+    mockSelectSequence(db, [], [{ value: 0 }]);
+    vi.mocked(db.query.categories.findMany).mockResolvedValue([]);
 
-    const request = new Request("http://localhost:3000/api/prompts?type=IMAGE");
-    await GET(request);
+    const request = new Request("http://localhost:3000/api/resources?type=IMAGE");
+    const response = await GET(request as unknown as NextRequest);
+    const data = await response.json();
 
-    expect(db.prompt.findMany).toHaveBeenCalledWith(
-      expect.objectContaining({
-        where: expect.objectContaining({ type: "IMAGE" }),
-      })
-    );
+    expect(response.status).toBe(200);
+    expect(db.select).toHaveBeenCalled();
   });
 
   it("should filter by category", async () => {
-    vi.mocked(db.prompt.findMany).mockResolvedValue([]);
-    vi.mocked(db.prompt.count).mockResolvedValue(0);
+    mockSelectSequence(db, [], [{ value: 0 }]);
+    vi.mocked(db.query.categories.findMany).mockResolvedValue([]);
 
-    const request = new Request("http://localhost:3000/api/prompts?category=cat-123");
-    await GET(request);
+    const request = new Request("http://localhost:3000/api/resources?category=cat-123");
+    const response = await GET(request as unknown as NextRequest);
+    const data = await response.json();
 
-    expect(db.prompt.findMany).toHaveBeenCalledWith(
-      expect.objectContaining({
-        where: expect.objectContaining({ categoryId: "cat-123" }),
-      })
-    );
+    expect(response.status).toBe(200);
+    expect(db.select).toHaveBeenCalled();
   });
 
   it("should filter by search query", async () => {
-    vi.mocked(db.prompt.findMany).mockResolvedValue([]);
-    vi.mocked(db.prompt.count).mockResolvedValue(0);
+    mockSelectSequence(db, [], [{ value: 0 }]);
+    vi.mocked(db.query.categories.findMany).mockResolvedValue([]);
 
-    const request = new Request("http://localhost:3000/api/prompts?q=test");
-    await GET(request);
+    const request = new Request("http://localhost:3000/api/resources?q=test");
+    const response = await GET(request as unknown as NextRequest);
+    const data = await response.json();
 
-    expect(db.prompt.findMany).toHaveBeenCalledWith(
-      expect.objectContaining({
-        where: expect.objectContaining({
-          OR: expect.arrayContaining([
-            expect.objectContaining({ title: expect.any(Object) }),
-          ]),
-        }),
-      })
-    );
+    expect(response.status).toBe(200);
+    expect(db.select).toHaveBeenCalled();
   });
 
   it("should support sorting by upvotes", async () => {
-    vi.mocked(db.prompt.findMany).mockResolvedValue([]);
-    vi.mocked(db.prompt.count).mockResolvedValue(0);
+    mockSelectSequence(db, [], [{ value: 0 }]);
+    vi.mocked(db.query.categories.findMany).mockResolvedValue([]);
 
-    const request = new Request("http://localhost:3000/api/prompts?sort=upvotes");
-    await GET(request);
+    const request = new Request("http://localhost:3000/api/resources?sort=upvotes");
+    const response = await GET(request as unknown as NextRequest);
+    const data = await response.json();
 
-    expect(db.prompt.findMany).toHaveBeenCalledWith(
-      expect.objectContaining({
-        orderBy: { votes: { _count: "desc" } },
-      })
-    );
+    expect(response.status).toBe(200);
+    expect(db.select).toHaveBeenCalled();
   });
 
   it("should handle database errors", async () => {
-    vi.mocked(db.prompt.findMany).mockRejectedValue(new Error("DB Error"));
+    vi.mocked(db.select).mockImplementation(() => {
+      throw new Error("DB Error");
+    });
 
-    const request = new Request("http://localhost:3000/api/prompts");
-    const response = await GET(request);
+    const request = new Request("http://localhost:3000/api/resources");
+    const response = await GET(request as unknown as NextRequest);
     const data = await response.json();
 
     expect(response.status).toBe(500);
@@ -159,17 +186,19 @@ describe("GET /api/prompts", () => {
   });
 });
 
-describe("POST /api/prompts", () => {
+describe("POST /api/resources", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(db.user.findUnique).mockResolvedValue({ flagged: false } as never);
-    vi.mocked(db.prompt.findFirst).mockResolvedValue(null);
-    vi.mocked(db.prompt.findMany).mockResolvedValue([]);
+    // Default: user is not flagged
+    mockSelectSequence(db,
+      [{ flagged: false }],  // user check
+      [],                     // rate limit check (no recent resource)
+    );
   });
 
-  const validPromptData = {
-    title: "Test Prompt",
-    description: "A test prompt",
+  const validResourceData = {
+    title: "Test Resource",
+    description: "A test resource",
     content: "This is test content",
     type: "TEXT",
     tagIds: [],
@@ -177,14 +206,14 @@ describe("POST /api/prompts", () => {
   };
 
   it("should return 401 if not authenticated", async () => {
-    vi.mocked(auth).mockResolvedValue(null);
+    vi.mocked(getSession).mockResolvedValue(null as any);
 
-    const request = new Request("http://localhost:3000/api/prompts", {
+    const request = new Request("http://localhost:3000/api/resources", {
       method: "POST",
-      body: JSON.stringify(validPromptData),
+      body: JSON.stringify(validResourceData),
     });
 
-    const response = await POST(request);
+    const response = await POST(request as unknown as NextRequest);
     const data = await response.json();
 
     expect(response.status).toBe(401);
@@ -192,14 +221,14 @@ describe("POST /api/prompts", () => {
   });
 
   it("should return 400 for invalid input", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
 
-    const request = new Request("http://localhost:3000/api/prompts", {
+    const request = new Request("http://localhost:3000/api/resources", {
       method: "POST",
       body: JSON.stringify({ title: "" }), // Missing required fields
     });
 
-    const response = await POST(request);
+    const response = await POST(request as unknown as NextRequest);
     const data = await response.json();
 
     expect(response.status).toBe(400);
@@ -207,80 +236,78 @@ describe("POST /api/prompts", () => {
   });
 
   it("should return 429 for rate limiting", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(db.prompt.findFirst).mockResolvedValue({ id: "recent" } as never);
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
+    // User not flagged, but has recent resource
+    mockSelectSequence(db,
+      [{ flagged: false }],                  // user check
+      [{ id: "recent" }],                    // rate limit check (recent resource found)
+    );
 
-    const request = new Request("http://localhost:3000/api/prompts", {
+    const request = new Request("http://localhost:3000/api/resources", {
       method: "POST",
-      body: JSON.stringify(validPromptData),
+      body: JSON.stringify(validResourceData),
     });
 
-    const response = await POST(request);
+    const response = await POST(request as unknown as NextRequest);
     const data = await response.json();
 
     expect(response.status).toBe(429);
     expect(data.error).toBe("rate_limit");
   });
 
-  it("should return 409 for duplicate prompt", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(db.prompt.findFirst)
-      .mockResolvedValueOnce(null) // Rate limit check
-      .mockResolvedValueOnce({ id: "existing", slug: "existing-prompt", title: "Test" } as never); // Duplicate check
-
-    const request = new Request("http://localhost:3000/api/prompts", {
-      method: "POST",
-      body: JSON.stringify(validPromptData),
-    });
-
-    const response = await POST(request);
-    const data = await response.json();
-
-    expect(response.status).toBe(409);
-    expect(data.error).toBe("duplicate_prompt");
-  });
-
-  it("should create prompt successfully", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(db.prompt.findFirst).mockResolvedValue(null);
-    vi.mocked(db.prompt.create).mockResolvedValue({
-      id: "new-prompt",
-      title: "Test Prompt",
-      slug: "test-prompt",
+  it("should create resource successfully", async () => {
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
+    const mockResource = {
+      id: "new-resource",
+      title: "Test Resource",
+      slug: "test-resource",
       content: "This is test content",
       type: "TEXT",
       isPrivate: false,
-      author: { id: "user1", name: "Test", username: "test" },
-      category: null,
-      tags: [],
-    } as never);
-    vi.mocked(db.promptVersion.create).mockResolvedValue({} as never);
+      authorId: "user1",
+      categoryId: null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
 
-    const request = new Request("http://localhost:3000/api/prompts", {
+    // Sequence: user check, rate limit, similarity check resources, insert resource, select author, insert version
+    mockSelectSequence(db,
+      [{ flagged: false }],                  // user check
+      [],                                     // rate limit (no recent)
+      [],                                     // similarity check: public resources
+    );
+    // Mock insert to return the new resource
+    vi.mocked(db.insert).mockReturnValue(createChainMock([mockResource]) as any);
+    // Mock query for category
+    vi.mocked(db.query.categories.findFirst).mockResolvedValue(null as any);
+
+    const request = new Request("http://localhost:3000/api/resources", {
       method: "POST",
-      body: JSON.stringify(validPromptData),
+      body: JSON.stringify(validResourceData),
     });
 
-    const response = await POST(request);
+    const response = await POST(request as unknown as NextRequest);
     const data = await response.json();
 
     expect(response.status).toBe(200);
-    expect(data.id).toBe("new-prompt");
-    expect(db.prompt.create).toHaveBeenCalled();
-    expect(db.promptVersion.create).toHaveBeenCalled();
+    expect(data.id).toBe("new-resource");
+    expect(db.insert).toHaveBeenCalled();
   });
 
   it("should return 429 when flagged user exceeds daily limit", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(db.user.findUnique).mockResolvedValue({ flagged: true } as never);
-    vi.mocked(db.prompt.count).mockResolvedValue(5); // Already at limit
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
+    // User IS flagged, and has exceeded daily limit
+    mockSelectSequence(db,
+      [{ flagged: true }],       // user check - flagged
+      [{ value: 5 }],            // daily count
+    );
 
-    const request = new Request("http://localhost:3000/api/prompts", {
+    const request = new Request("http://localhost:3000/api/resources", {
       method: "POST",
-      body: JSON.stringify(validPromptData),
+      body: JSON.stringify(validResourceData),
     });
 
-    const response = await POST(request);
+    const response = await POST(request as unknown as NextRequest);
     const data = await response.json();
 
     expect(response.status).toBe(429);

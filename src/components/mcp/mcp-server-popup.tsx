@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { useTranslations } from "next-intl";
-import { useSession } from "next-auth/react";
+import { useTranslation } from "react-i18next";
+import { useSession } from "@/lib/auth/client";
 import Link from "next/link";
 import { Plus, X, ChevronDown, Key } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -44,7 +44,7 @@ interface McpServerPopupProps {
   initialTags?: string[];
   /** Base URL override */
   baseUrl?: string;
-  /** Show official prompts.chat branding (VS Code buttons, registry mention) */
+  /** Show official webmcp.land branding (VS Code buttons, registry mention) */
   showOfficialBranding?: boolean;
 }
 
@@ -55,7 +55,7 @@ export function McpServerPopup({
   baseUrl,
   showOfficialBranding = false,
 }: McpServerPopupProps) {
-  const t = useTranslations("mcp");
+  const { t } = useTranslation();
   const { data: session } = useSession();
   const [isOpen, setIsOpen] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -89,13 +89,13 @@ export function McpServerPopup({
     const params = new URLSearchParams();
     
     if (users.length > 0) {
-      params.set("users", users.join(","));
+      params.set("mcp.users", users.join(","));
     }
     if (categories.length > 0) {
-      params.set("categories", categories.join(","));
+      params.set("mcp.categories", categories.join(","));
     }
     if (tags.length > 0) {
-      params.set("tags", tags.join(","));
+      params.set("mcp.tags", tags.join(","));
     }
 
     return params.toString();
@@ -105,7 +105,7 @@ export function McpServerPopup({
     const value = userInput.trim().replace(/^@/, "");
     if (value && !users.includes(value)) {
       setUsers([...users, value]);
-      setUserInput("");
+      setUserInput("mcp.");
     }
   };
 
@@ -113,7 +113,7 @@ export function McpServerPopup({
     const value = categoryInput.trim().toLowerCase();
     if (value && !categories.includes(value)) {
       setCategories([...categories, value]);
-      setCategoryInput("");
+      setCategoryInput("mcp.");
     }
   };
 
@@ -121,7 +121,7 @@ export function McpServerPopup({
     const value = tagInput.trim().toLowerCase();
     if (value && !tags.includes(value)) {
       setTags([...tags, value]);
-      setTagInput("");
+      setTagInput("mcp.");
     }
   };
 
@@ -134,19 +134,17 @@ export function McpServerPopup({
         if (open) analyticsMcp.openPopup();
         setIsOpen(open);
       }}>
-      <PopoverTrigger asChild>
-        <Button variant="outline" size="sm" className="h-8 gap-1.5">
+      <PopoverTrigger render={<Button variant="outline" size="sm" className="h-8 gap-1.5" />}>
           <McpIcon className="h-4 w-4" />
-          <span className="hidden sm:inline">{t("button")}</span>
-        </Button>
+          <span className="hidden sm:inline">{t("mcp.button")}</span>
       </PopoverTrigger>
-      <PopoverContent align="end" className="w-[calc(100vw-2rem)] sm:w-[480px] p-3" sideOffset={8} collisionPadding={16}>
+      <PopoverContent align="end" className="w-[calc(100vw-2rem)] sm:w-[480px] p-3" sideOffset={8}>
         <div className="space-y-2">
           {/* Header with Mode Toggle */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <McpIcon className="h-4 w-4" />
-              <h3 className="font-semibold text-sm">{t("title")}</h3>
+              <h3 className="font-semibold text-sm">{t("mcp.title")}</h3>
             </div>
             <div className="flex gap-0.5">
               <button
@@ -176,7 +174,7 @@ export function McpServerPopup({
 
           {/* Description */}
           <p className="text-[11px] text-muted-foreground">
-            {t("description")}
+            {t("mcp.description")}
           </p>
 
           {/* Config Tabs */}
@@ -189,7 +187,7 @@ export function McpServerPopup({
               className="flex items-center gap-1.5 text-[11px] text-primary hover:underline"
             >
               <Key className="h-3 w-3" />
-              {t("generateApiKey")}
+              {t("mcp.generateApiKey")}
             </Link>
           )}
 
@@ -199,7 +197,7 @@ export function McpServerPopup({
               onClick={() => setFiltersOpen(!filtersOpen)}
               className="flex items-center justify-between w-full text-[11px] text-muted-foreground hover:text-foreground transition-colors"
             >
-              <span>{t("customizeFilters")}</span>
+              <span>{t("mcp.customizeFilters")}</span>
               <ChevronDown className={cn("h-3 w-3 transition-transform", filtersOpen && "rotate-180")} />
             </button>
             
@@ -207,13 +205,13 @@ export function McpServerPopup({
               <div className="space-y-2 mt-2">
                 {/* Users */}
                 <div className="space-y-1">
-                  <label className="text-[11px] font-medium">{t("users")}</label>
+                  <label className="text-[11px] font-medium">{t("mcp.users")}</label>
                   <div className="flex gap-1">
                     <Input
                       value={userInput}
                       onChange={(e) => setUserInput(e.target.value)}
                       onKeyDown={(e) => e.key === "Enter" && addUser()}
-                      placeholder={t("userPlaceholder")}
+                      placeholder={t("mcp.userPlaceholder")}
                       className="h-6 text-[11px] flex-1"
                     />
                     <Button size="sm" variant="outline" className="h-6 px-1.5" onClick={addUser}>
@@ -236,13 +234,13 @@ export function McpServerPopup({
 
                 {/* Categories */}
                 <div className="space-y-1">
-                  <label className="text-[11px] font-medium">{t("categories")}</label>
+                  <label className="text-[11px] font-medium">{t("mcp.categories")}</label>
                   <div className="flex gap-1">
                     <Input
                       value={categoryInput}
                       onChange={(e) => setCategoryInput(e.target.value)}
                       onKeyDown={(e) => e.key === "Enter" && addCategory()}
-                      placeholder={t("categoryPlaceholder")}
+                      placeholder={t("mcp.categoryPlaceholder")}
                       className="h-6 text-[11px] flex-1"
                     />
                     <Button size="sm" variant="outline" className="h-6 px-1.5" onClick={addCategory}>
@@ -265,13 +263,13 @@ export function McpServerPopup({
 
                 {/* Tags */}
                 <div className="space-y-1">
-                  <label className="text-[11px] font-medium">{t("tags")}</label>
+                  <label className="text-[11px] font-medium">{t("mcp.tags")}</label>
                   <div className="flex gap-1">
                     <Input
                       value={tagInput}
                       onChange={(e) => setTagInput(e.target.value)}
                       onKeyDown={(e) => e.key === "Enter" && addTag()}
-                      placeholder={t("tagPlaceholder")}
+                      placeholder={t("mcp.tagPlaceholder")}
                       className="h-6 text-[11px] flex-1"
                     />
                     <Button size="sm" variant="outline" className="h-6 px-1.5" onClick={addTag}>

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { sql } from "drizzle-orm";
 import { db } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -6,7 +7,7 @@ export const dynamic = "force-dynamic";
 export async function GET() {
   try {
     // Check database connection
-    await db.$queryRaw`SELECT 1`;
+    await db.execute(sql`SELECT 1`);
 
     return NextResponse.json(
       {

@@ -1,14 +1,14 @@
-# prompts.chat Bootstrap Docker Image
+# webmcp.land Bootstrap Docker Image
 # Lightweight image that clones and builds on first run
 #
 # Usage:
-#   docker run -p 4444:3000 -v prompts-data:/data ghcr.io/f/prompts.chat
-#   docker run -p 4444:3000 -v prompts-data:/data -e PCHAT_NAME="My App" ghcr.io/f/prompts.chat
+#   docker run -p 4444:3000 -v prompts-data:/data ghcr.io/eser/webmcp.land
+#   docker run -p 4444:3000 -v prompts-data:/data -e PCHAT_NAME="My App" ghcr.io/eser/webmcp.land
 
-FROM node:24-bookworm-slim
+FROM node:25-bookworm-slim
 
-LABEL org.opencontainers.image.source="https://github.com/f/prompts.chat"
-LABEL org.opencontainers.image.description="prompts.chat - Self-hosted AI prompt library"
+LABEL org.opencontainers.image.source="https://github.com/eser/webmcp.land"
+LABEL org.opencontainers.image.description="webmcp.land - Self-hosted AI prompt library"
 LABEL org.opencontainers.image.licenses="MIT"
 
 # Install PostgreSQL, git, and utilities
@@ -39,7 +39,7 @@ ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 ENV DATABASE_URL="postgresql://prompts:prompts@localhost:5432/prompts?schema=public"
 ENV DIRECT_URL="postgresql://prompts:prompts@localhost:5432/prompts?schema=public"
-ENV REPO_URL="https://github.com/f/prompts.chat.git"
+ENV REPO_URL="https://github.com/eser/webmcp.land.git"
 
 EXPOSE 3000
 

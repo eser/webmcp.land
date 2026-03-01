@@ -8,7 +8,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 
 type ExtensionPreferences = {
-  /** Base URL - The base URL of the prompts.chat instance */
+  /** Base URL - The base URL of the webmcp.land instance */
   "baseUrl": string
 }
 

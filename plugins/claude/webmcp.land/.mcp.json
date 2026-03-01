@@ -1,0 +1,6 @@
+{
+  "webmcp.land": {
+    "type": "http",
+    "url": "https://webmcp.land/api/mcp"
+  }
+}

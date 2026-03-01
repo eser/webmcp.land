@@ -1,6 +1,7 @@
 import OpenAI from "openai";
-import { Prisma } from "@prisma/client";
+import { and, eq, isNull, isNotNull, ne } from "drizzle-orm";
 import { db } from "@/lib/db";
+import { resources, resourceConnections, users, categories, resourceTags, tags, resourceVotes } from "@/lib/schema";
 import { getConfig } from "@/lib/config";
 import { loadPrompt, getSystemPrompt } from "./load-prompt";
 
@@ -14,7 +15,7 @@ function getOpenAIClient(): OpenAI {
     if (!apiKey) {
       throw new Error("OPENAI_API_KEY is not set");
     }
-    openai = new OpenAI({ 
+    openai = new OpenAI({
       apiKey,
       baseURL: process.env.OPENAI_BASE_URL || undefined,
     });
@@ -31,7 +32,7 @@ const TRANSLATION_MODEL = process.env.OPENAI_TRANSLATION_MODEL || "gpt-4o-mini";
  */
 export async function translateQueryToEnglish(query: string): Promise<string> {
   const client = getOpenAIClient();
-  
+
   try {
     const response = await client.chat.completions.create({
       model: TRANSLATION_MODEL,
@@ -48,7 +49,7 @@ export async function translateQueryToEnglish(query: string): Promise<string> {
       max_tokens: queryTranslatorPrompt.modelParameters?.maxTokens || 100,
       temperature: queryTranslatorPrompt.modelParameters?.temperature || 0,
     });
-    
+
     const translatedQuery = response.choices[0]?.message?.content?.trim();
     return translatedQuery || query;
   } catch (error) {
@@ -69,42 +70,41 @@ function containsNonEnglish(text: string): boolean {
 
 export async function generateEmbedding(text: string): Promise<number[]> {
   const client = getOpenAIClient();
-  
+
   const response = await client.embeddings.create({
     model: EMBEDDING_MODEL,
     input: text,
   });
-  
+
   return response.data[0].embedding;
 }
 
-export async function generatePromptEmbedding(promptId: string): Promise<void> {
+export async function generateResourceEmbedding(resourceId: string): Promise<void> {
   const config = await getConfig();
   if (!config.features.aiSearch) return;
 
-  const prompt = await db.prompt.findUnique({
-    where: { id: promptId },
-    select: { title: true, description: true, content: true, isPrivate: true },
-  });
+  const [resource] = await db.select({
+    title: resources.title,
+    description: resources.description,
+    endpointUrl: resources.endpointUrl,
+    isPrivate: resources.isPrivate,
+  }).from(resources).where(eq(resources.id, resourceId));
 
-  if (!prompt) return;
+  if (!resource) return;
 
-  // Never generate embeddings for private prompts
-  if (prompt.isPrivate) return;
+  // Never generate embeddings for private resources
+  if (resource.isPrivate) return;
 
-  // Combine title, description, and content for embedding
+  // Combine title, description, and endpoint URL for embedding
   const textToEmbed = [
-    prompt.title,
-    prompt.description || "",
-    prompt.content,
+    resource.title,
+    resource.description || "",
+    resource.endpointUrl,
   ].join("\n\n").trim();
 
   const embedding = await generateEmbedding(textToEmbed);
-  
-  await db.prompt.update({
-    where: { id: promptId },
-    data: { embedding },
-  });
+
+  await db.update(resources).set({ embedding }).where(eq(resources.id, resourceId));
 }
 
 // Delay helper to avoid rate limits
@@ -121,36 +121,35 @@ export async function generateAllEmbeddings(
     throw new Error("AI Search is not enabled");
   }
 
-  const prompts = await db.prompt.findMany({
-    where: { 
-      ...(regenerate ? {} : { embedding: { equals: Prisma.DbNull } }),
-      isPrivate: false,
-      deletedAt: null,
-    },
-    select: { id: true },
-  });
+  const resourceRows = await db.select({ id: resources.id }).from(resources).where(
+    and(
+      eq(resources.isPrivate, false),
+      isNull(resources.deletedAt),
+      ...(regenerate ? [] : [isNull(resources.embedding)])
+    )
+  );
 
-  const total = prompts.length;
+  const total = resourceRows.length;
   let success = 0;
   let failed = 0;
 
-  for (let i = 0; i < prompts.length; i++) {
-    const prompt = prompts[i];
+  for (let i = 0; i < resourceRows.length; i++) {
+    const resource = resourceRows[i];
     try {
-      await generatePromptEmbedding(prompt.id);
+      await generateResourceEmbedding(resource.id);
       success++;
     } catch {
       failed++;
     }
-    
+
     // Report progress
     if (onProgress) {
       onProgress(i + 1, total, success, failed);
     }
-    
+
     // Rate limit: wait 1000ms between requests to avoid hitting API limits
     // (GitHub Models API and other providers have stricter rate limits)
-    if (i < prompts.length - 1) {
+    if (i < resourceRows.length - 1) {
       await delay(1000);
     }
   }
@@ -162,21 +161,23 @@ function cosineSimilarity(a: number[], b: number[]): number {
   let dotProduct = 0;
   let normA = 0;
   let normB = 0;
-  
+
   for (let i = 0; i < a.length; i++) {
     dotProduct += a[i] * b[i];
     normA += a[i] * a[i];
     normB += b[i] * b[i];
   }
-  
+
   return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
 }
 
 export interface SemanticSearchResult {
   id: string;
   title: string;
+  slug: string | null;
   description: string | null;
-  content: string;
+  endpointUrl: string;
+  status: string;
   similarity: number;
   author: {
     id: string;
@@ -199,9 +200,7 @@ export interface SemanticSearchResult {
     };
   }>;
   voteCount: number;
-  type: string;
-  structuredFormat: string | null;
-  mediaUrl: string | null;
+  serverType: string;
   isPrivate: boolean;
   createdAt: Date;
 }
@@ -224,26 +223,28 @@ export async function semanticSearch(
   // Generate embedding for the query
   const queryEmbedding = await generateEmbedding(searchQuery);
 
-  // Fetch all public prompts with embeddings (excluding soft-deleted)
-  const prompts = await db.prompt.findMany({
-    where: {
-      isPrivate: false,
-      deletedAt: null,
-      embedding: { not: Prisma.DbNull },
-    },
-    select: {
+  // Fetch all public resources with embeddings (excluding soft-deleted)
+  const resourceRows = await db.query.resources.findMany({
+    where: and(
+      eq(resources.isPrivate, false),
+      isNull(resources.deletedAt),
+      isNotNull(resources.embedding),
+    ),
+    columns: {
       id: true,
       title: true,
+      slug: true,
       description: true,
-      content: true,
-      type: true,
-      structuredFormat: true,
-      mediaUrl: true,
+      endpointUrl: true,
+      serverType: true,
+      status: true,
       isPrivate: true,
       createdAt: true,
       embedding: true,
+    },
+    with: {
       author: {
-        select: {
+        columns: {
           id: true,
           name: true,
           username: true,
@@ -252,42 +253,40 @@ export async function semanticSearch(
         },
       },
       category: {
-        select: {
+        columns: {
           id: true,
           name: true,
           slug: true,
         },
       },
       tags: {
-        include: {
+        with: {
           tag: true,
         },
       },
-      _count: {
-        select: { votes: true },
-      },
+      votes: true,
     },
   });
 
   // Calculate similarity scores and filter by threshold
   const SIMILARITY_THRESHOLD = 0.4; // Filter out results below this similarity
-  
-  const scoredPrompts = prompts
-    .map((prompt) => {
-      const embedding = prompt.embedding as number[];
+
+  const scoredResources = resourceRows
+    .map((resource) => {
+      const embedding = resource.embedding as number[];
       const similarity = cosineSimilarity(queryEmbedding, embedding);
       return {
-        ...prompt,
+        ...resource,
         similarity,
-        voteCount: prompt._count.votes,
+        voteCount: resource.votes.length,
       };
     })
-    .filter((prompt) => prompt.similarity >= SIMILARITY_THRESHOLD);
+    .filter((resource) => resource.similarity >= SIMILARITY_THRESHOLD);
 
   // Sort by similarity and return top results
-  scoredPrompts.sort((a, b) => b.similarity - a.similarity);
+  scoredResources.sort((a, b) => b.similarity - a.similarity);
 
-  return scoredPrompts.slice(0, limit).map(({ _count, embedding, ...rest }) => rest);
+  return scoredResources.slice(0, limit).map(({ votes, embedding, ...rest }) => rest);
 }
 
 export async function isAISearchEnabled(): Promise<boolean> {
@@ -296,69 +295,70 @@ export async function isAISearchEnabled(): Promise<boolean> {
 }
 
 /**
- * Find and save 4 related prompts based on embedding similarity
- * Uses PromptConnection with label "related" to store relationships
+ * Find and save 4 related resources based on embedding similarity
+ * Uses ResourceConnection with label "related" to store relationships
  */
-export async function findAndSaveRelatedPrompts(promptId: string): Promise<void> {
+export async function findAndSaveRelatedResources(resourceId: string): Promise<void> {
   const config = await getConfig();
   if (!config.features.aiSearch) return;
 
-  const prompt = await db.prompt.findUnique({
-    where: { id: promptId },
-    select: { embedding: true, isPrivate: true, authorId: true, type: true },
-  });
+  const [resource] = await db.select({
+    embedding: resources.embedding,
+    isPrivate: resources.isPrivate,
+    authorId: resources.authorId,
+    serverType: resources.serverType,
+  }).from(resources).where(eq(resources.id, resourceId));
 
-  if (!prompt || !prompt.embedding || prompt.isPrivate) return;
+  if (!resource || !resource.embedding || resource.isPrivate) return;
 
-  const promptEmbedding = prompt.embedding as number[];
+  const resourceEmbedding = resource.embedding as number[];
 
-  // Fetch all public prompts with embeddings (excluding this prompt and soft-deleted)
-  // Only match prompts of the same type
-  const candidates = await db.prompt.findMany({
-    where: {
-      id: { not: promptId },
-      isPrivate: false,
-      isUnlisted: false,
-      deletedAt: null,
-      embedding: { not: Prisma.DbNull },
-      type: prompt.type, // Must match the same type
-    },
-    select: {
-      id: true,
-      embedding: true,
-    },
-  });
+  // Fetch all public resources with embeddings (excluding this resource and soft-deleted)
+  // Only match resources of the same type
+  const candidates = await db.select({
+    id: resources.id,
+    embedding: resources.embedding,
+  }).from(resources).where(
+    and(
+      ne(resources.id, resourceId),
+      eq(resources.isPrivate, false),
+      isNull(resources.deletedAt),
+      isNotNull(resources.embedding),
+      eq(resources.serverType, resource.serverType),
+    )
+  );
 
   // Calculate similarity scores
   const SIMILARITY_THRESHOLD = 0.5;
-  
-  const scoredPrompts = candidates
-    .map((p) => ({
-      id: p.id,
-      similarity: cosineSimilarity(promptEmbedding, p.embedding as number[]),
+
+  const scoredResources = candidates
+    .map((r) => ({
+      id: r.id,
+      similarity: cosineSimilarity(resourceEmbedding, r.embedding as number[]),
     }))
-    .filter((p) => p.similarity >= SIMILARITY_THRESHOLD)
+    .filter((r) => r.similarity >= SIMILARITY_THRESHOLD)
     .sort((a, b) => b.similarity - a.similarity)
     .slice(0, 4);
 
-  if (scoredPrompts.length === 0) return;
+  if (scoredResources.length === 0) return;
 
-  // Delete existing related connections for this prompt
-  await db.promptConnection.deleteMany({
-    where: {
-      sourceId: promptId,
-      label: "related",
-    },
-  });
+  // Delete existing related connections for this resource
+  await db.delete(resourceConnections).where(
+    and(
+      eq(resourceConnections.sourceId, resourceId),
+      eq(resourceConnections.label, "related"),
+    )
+  );
 
   // Create new related connections
-  await db.promptConnection.createMany({
-    data: scoredPrompts.map((p, index) => ({
-      sourceId: promptId,
-      targetId: p.id,
-      label: "related",
-      order: index,
-    })),
-    skipDuplicates: true,
-  });
+  if (scoredResources.length > 0) {
+    await db.insert(resourceConnections).values(
+      scoredResources.map((r, index) => ({
+        sourceId: resourceId,
+        targetId: r.id,
+        label: "related",
+        order: index,
+      }))
+    ).onConflictDoNothing();
+  }
 }

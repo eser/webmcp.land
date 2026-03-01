@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
-import { useTranslations } from "next-intl";
+import { useSession } from "@/lib/auth/client";
+import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -77,10 +77,8 @@ interface ProfileFormProps {
 
 export function ProfileForm({ user, showVerifiedSection = false }: ProfileFormProps) {
   const router = useRouter();
-  const { update } = useSession();
-  const t = useTranslations("profile");
-  const tCommon = useTranslations("common");
-  const tSettings = useTranslations("settings");
+  const { refetch } = useSession();
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const [isVerifiedSectionDismissed, setIsVerifiedSectionDismissed] = useState(true);
   const [hasMounted, setHasMounted] = useState(false);
@@ -151,14 +149,14 @@ export function ProfileForm({ user, showVerifiedSection = false }: ProfileFormPr
         throw new Error(error.message || "Failed to update profile");
       }
 
-      // Trigger NextAuth session refresh - JWT callback will fetch updated data from DB
-      await update({});
+      // Refresh session to pick up updated user data
+      await refetch();
 
       analyticsProfile.updateProfile();
       if (data.avatar !== user.avatar) {
         analyticsProfile.updateAvatar();
       }
-      toast.success(t("profileUpdated"));
+      toast.success(t("profile.profileUpdated"));
       router.refresh();
 
       // If username changed, redirect to new profile
@@ -166,7 +164,7 @@ export function ProfileForm({ user, showVerifiedSection = false }: ProfileFormPr
         router.push(`/@${data.username}`);
       }
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : tCommon("error"));
+      toast.error(error instanceof Error ? error.message : t("common.error"));
     } finally {
       setIsLoading(false);
     }
@@ -176,9 +174,9 @@ export function ProfileForm({ user, showVerifiedSection = false }: ProfileFormPr
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">{t("title")}</CardTitle>
+          <CardTitle className="text-base">{t("profile.title")}</CardTitle>
           <CardDescription>
-            {t("updateInfo")}
+            {t("profile.updateInfo")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -191,7 +189,7 @@ export function ProfileForm({ user, showVerifiedSection = false }: ProfileFormPr
               </AvatarFallback>
             </Avatar>
             <div className="flex-1">
-              <Label htmlFor="avatar">{t("avatarUrl")}</Label>
+              <Label htmlFor="avatar">{t("profile.avatarUrl")}</Label>
               <Input
                 id="avatar"
                 placeholder="https://example.com/avatar.jpg"
@@ -208,10 +206,10 @@ export function ProfileForm({ user, showVerifiedSection = false }: ProfileFormPr
 
           {/* Name */}
           <div className="space-y-2">
-            <Label htmlFor="name">{t("displayName")}</Label>
+            <Label htmlFor="name">{t("profile.displayName")}</Label>
             <Input
               id="name"
-              placeholder={t("namePlaceholder")}
+              placeholder={t("profile.namePlaceholder")}
               {...form.register("name")}
             />
             {form.formState.errors.name && (
@@ -223,12 +221,12 @@ export function ProfileForm({ user, showVerifiedSection = false }: ProfileFormPr
 
           {/* Username */}
           <div className="space-y-2">
-            <Label htmlFor="username">{t("username")}</Label>
+            <Label htmlFor="username">{t("profile.username")}</Label>
             <div className="flex items-center">
               <span className="text-muted-foreground text-sm mr-1">@</span>
               <Input
                 id="username"
-                placeholder={t("usernamePlaceholder")}
+                placeholder={t("profile.usernamePlaceholder")}
                 {...form.register("username")}
               />
             </div>
@@ -239,7 +237,7 @@ export function ProfileForm({ user, showVerifiedSection = false }: ProfileFormPr
             )}
             <div className="flex items-center justify-between">
               <p className="text-xs text-muted-foreground">
-                {t("profileUrl")}: /{form.watch("username") || user.username}
+                {t("profile.profileUrl")}: /{form.watch("username") || user.username}
               </p>
               {showVerifiedSection && !user.verified && hasMounted && isVerifiedSectionDismissed && (
                 <button
@@ -248,7 +246,7 @@ export function ProfileForm({ user, showVerifiedSection = false }: ProfileFormPr
                   className="inline-flex items-center gap-1 text-xs text-amber-600 dark:text-amber-400 hover:underline"
                 >
                   <BadgeCheck className="h-3 w-3" />
-                  {tSettings("getVerifiedTitle")}
+                  {t("settings.getVerifiedTitle")}
                 </button>
               )}
             </div>
@@ -260,12 +258,12 @@ export function ProfileForm({ user, showVerifiedSection = false }: ProfileFormPr
               <div className="flex items-center gap-2 p-3 rounded-lg border border-blue-500/30 bg-blue-500/5">
                 <BadgeCheck className="h-5 w-5 text-blue-500 shrink-0" />
                 <div>
-                  <p className="text-sm font-medium">{tSettings("verifiedTitle")}</p>
-                  <p className="text-xs text-muted-foreground">{tSettings("verifiedThankYou")}</p>
+                  <p className="text-sm font-medium">{t("settings.verifiedTitle")}</p>
+                  <p className="text-xs text-muted-foreground">{t("settings.verifiedThankYou")}</p>
                 </div>
               </div>
             ) : hasMounted && !isVerifiedSectionDismissed && (
-              <div className="relative p-4 rounded-lg border-2 border-amber-500/50 bg-gradient-to-r from-amber-500/10 to-yellow-500/10">
+              <div className="relative p-4 rounded-lg border-2 border-amber-500/50 bg-linear-to-r from-amber-500/10 to-yellow-500/10">
                 <button
                   type="button"
                   onClick={() => handleDismissVerifiedSection(true)}
@@ -275,9 +273,9 @@ export function ProfileForm({ user, showVerifiedSection = false }: ProfileFormPr
                 </button>
                 <div className="flex items-center gap-2 mb-1">
                   <BadgeCheck className="h-5 w-5 text-blue-500" />
-                  <p className="text-sm font-semibold">{tSettings("getVerifiedTitle")}</p>
+                  <p className="text-sm font-semibold">{t("settings.getVerifiedTitle")}</p>
                 </div>
-                <p className="text-sm text-muted-foreground mb-3 pr-6">{tSettings("getVerifiedDescription")}</p>
+                <p className="text-sm text-muted-foreground mb-3 pr-6">{t("settings.getVerifiedDescription")}</p>
                 <a
                   href="https://donate.stripe.com/aFa9AS5RJeAR23nej0dMI03"
                   target="_blank"
@@ -285,8 +283,8 @@ export function ProfileForm({ user, showVerifiedSection = false }: ProfileFormPr
                   className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md bg-blue-500 text-white hover:bg-blue-600 transition-colors"
                 >
                   <BadgeCheck className="h-4 w-4" />
-                  {tSettings("getVerifiedButton")}
-                  <span className="text-blue-100">({tSettings("verifiedBadgePrice")})</span>
+                  {t("settings.getVerifiedButton")}
+                  <span className="text-blue-100">({t("settings.verifiedBadgePrice")})</span>
                   <ExternalLink className="h-3 w-3" />
                 </a>
               </div>
@@ -295,7 +293,7 @@ export function ProfileForm({ user, showVerifiedSection = false }: ProfileFormPr
 
           {/* Email (read-only) */}
           <div className="space-y-2">
-            <Label htmlFor="email">{t("email")}</Label>
+            <Label htmlFor="email">{t("profile.email")}</Label>
             <Input
               id="email"
               value={user.email}
@@ -303,16 +301,16 @@ export function ProfileForm({ user, showVerifiedSection = false }: ProfileFormPr
               className="bg-muted"
             />
             <p className="text-xs text-muted-foreground">
-              {t("emailCannotChange")}
+              {t("profile.emailCannotChange")}
             </p>
           </div>
 
           {/* Bio */}
           <div className="space-y-2">
-            <Label htmlFor="bio">{t("bio")}</Label>
+            <Label htmlFor="bio">{t("profile.bio")}</Label>
             <Textarea
               id="bio"
-              placeholder={t("bioPlaceholder")}
+              placeholder={t("profile.bioPlaceholder")}
               {...form.register("bio")}
               maxLength={250}
               rows={3}
@@ -325,7 +323,7 @@ export function ProfileForm({ user, showVerifiedSection = false }: ProfileFormPr
                 </p>
               )}
               <p className="text-xs text-muted-foreground ml-auto">
-                {t("bioCharCount", { count: bioValue.length })}
+                {t("profile.bioCharCount", { count: bioValue.length })}
               </p>
             </div>
           </div>
@@ -334,11 +332,11 @@ export function ProfileForm({ user, showVerifiedSection = false }: ProfileFormPr
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <div>
-                <Label>{t("customLinks")}</Label>
-                <p className="text-xs text-muted-foreground">{t("customLinksDescription")}</p>
+                <Label>{t("profile.customLinks")}</Label>
+                <p className="text-xs text-muted-foreground">{t("profile.customLinksDescription")}</p>
               </div>
             </div>
-            
+
             {customLinks.map((link, index) => (
               <div key={index} className="flex gap-2 items-start">
                 <div className="flex flex-col">
@@ -365,7 +363,7 @@ export function ProfileForm({ user, showVerifiedSection = false }: ProfileFormPr
                 </div>
                 <Select
                   value={link.type}
-                  onValueChange={(value) => updateLink(index, "type", value)}
+                  onValueChange={(value) => value && updateLink(index, "type", value)}
                 >
                   <SelectTrigger className="w-[140px]">
                     <SelectValue />
@@ -388,7 +386,7 @@ export function ProfileForm({ user, showVerifiedSection = false }: ProfileFormPr
                   className="flex-1"
                 />
                 <Input
-                  placeholder={t("linkLabelPlaceholder")}
+                  placeholder={t("profile.linkLabelPlaceholder")}
                   value={link.label || ""}
                   onChange={(e) => updateLink(index, "label", e.target.value)}
                   className="w-[120px]"
@@ -404,7 +402,7 @@ export function ProfileForm({ user, showVerifiedSection = false }: ProfileFormPr
                 </Button>
               </div>
             ))}
-            
+
             {customLinks.length < 5 && (
               <Button
                 type="button"
@@ -414,11 +412,11 @@ export function ProfileForm({ user, showVerifiedSection = false }: ProfileFormPr
                 className="w-full"
               >
                 <Plus className="h-4 w-4 mr-2" />
-                {t("addLink")}
+                {t("profile.addLink")}
               </Button>
             )}
             {customLinks.length >= 5 && (
-              <p className="text-xs text-muted-foreground text-center">{t("maxLinksReached")}</p>
+              <p className="text-xs text-muted-foreground text-center">{t("profile.maxLinksReached")}</p>
             )}
           </div>
         </CardContent>
@@ -427,7 +425,7 @@ export function ProfileForm({ user, showVerifiedSection = false }: ProfileFormPr
       <div className="flex justify-end">
         <Button type="submit" disabled={isLoading}>
           {isLoading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-          {t("saveChanges")}
+          {t("profile.saveChanges")}
         </Button>
       </div>
     </form>

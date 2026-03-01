@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 import { Copy, Eye, EyeOff, RefreshCw, Trash2, Key, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
@@ -35,8 +35,7 @@ export function ApiKeySettings({
   initialApiKey,
   initialPublicByDefault,
 }: ApiKeySettingsProps) {
-  const t = useTranslations("apiKey");
-  const tCommon = useTranslations("common");
+  const { t } = useTranslation();
   const [apiKey, setApiKey] = useState<string | null>(initialApiKey);
   const [showKey, setShowKey] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -52,9 +51,9 @@ export function ApiKeySettings({
       const data = await response.json();
       setApiKey(data.apiKey);
       setShowKey(true);
-      toast.success(t("keyGenerated"));
+      toast.success(t("apiKey.keyGenerated"));
     } catch {
-      toast.error(tCommon("error"));
+      toast.error(t("common.error"));
     } finally {
       setIsLoading(false);
     }
@@ -70,9 +69,9 @@ export function ApiKeySettings({
       const data = await response.json();
       setApiKey(data.apiKey);
       setShowKey(true);
-      toast.success(t("keyRegenerated"));
+      toast.success(t("apiKey.keyRegenerated"));
     } catch {
-      toast.error(tCommon("error"));
+      toast.error(t("common.error"));
     } finally {
       setIsLoading(false);
     }
@@ -87,9 +86,9 @@ export function ApiKeySettings({
       if (!response.ok) throw new Error("Failed to revoke API key");
       setApiKey(null);
       setShowKey(false);
-      toast.success(t("keyRevoked"));
+      toast.success(t("apiKey.keyRevoked"));
     } catch {
-      toast.error(tCommon("error"));
+      toast.error(t("common.error"));
     } finally {
       setIsLoading(false);
     }
@@ -104,16 +103,16 @@ export function ApiKeySettings({
       });
       if (!response.ok) throw new Error("Failed to update setting");
       setPublicByDefault(value);
-      toast.success(t("settingUpdated"));
+      toast.success(t("apiKey.settingUpdated"));
     } catch {
-      toast.error(tCommon("error"));
+      toast.error(t("common.error"));
     }
   };
 
   const copyToClipboard = () => {
     if (apiKey) {
       navigator.clipboard.writeText(apiKey);
-      toast.success(tCommon("copied"));
+      toast.success(t("common.copied"));
     }
   };
 
@@ -126,15 +125,15 @@ export function ApiKeySettings({
       <CardHeader>
         <CardTitle className="text-base flex items-center gap-2">
           <Key className="h-4 w-4" />
-          {t("title")}
+          {t("apiKey.title")}
         </CardTitle>
-        <CardDescription>{t("description")}</CardDescription>
+        <CardDescription>{t("apiKey.description")}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         {apiKey ? (
           <>
             <div className="space-y-2">
-              <Label>{t("yourApiKey")}</Label>
+              <Label>{t("apiKey.yourApiKey")}</Label>
               <div className="flex items-center gap-2">
                 <code className="flex-1 bg-muted px-3 py-2 rounded-md text-sm font-mono overflow-hidden text-ellipsis">
                   {showKey ? apiKey : maskedKey}
@@ -154,14 +153,14 @@ export function ApiKeySettings({
                   <Copy className="h-4 w-4" />
                 </Button>
               </div>
-              <p className="text-xs text-muted-foreground">{t("keyWarning")}</p>
+              <p className="text-xs text-muted-foreground">{t("apiKey.keyWarning")}</p>
             </div>
 
             <div className="flex items-center justify-between rounded-lg border p-3">
               <div className="space-y-0.5">
-                <Label htmlFor="public-default">{t("publicByDefault")}</Label>
+                <Label htmlFor="public-default">{t("apiKey.publicByDefault")}</Label>
                 <p className="text-xs text-muted-foreground">
-                  {t("publicByDefaultDescription")}
+                  {t("apiKey.publicByDefaultDescription")}
                 </p>
               </div>
               <Switch
@@ -173,49 +172,45 @@ export function ApiKeySettings({
 
             <div className="flex gap-2">
               <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button variant="outline" disabled={isLoading}>
+                <AlertDialogTrigger render={<Button variant="outline" disabled={isLoading} />}>
                     <RefreshCw className="h-4 w-4 mr-2" />
-                    {t("regenerate")}
-                  </Button>
+                    {t("apiKey.regenerate")}
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>{t("regenerateTitle")}</AlertDialogTitle>
+                    <AlertDialogTitle>{t("apiKey.regenerateTitle")}</AlertDialogTitle>
                     <AlertDialogDescription>
-                      {t("regenerateDescription")}
+                      {t("apiKey.regenerateDescription")}
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel>{tCommon("cancel")}</AlertDialogCancel>
+                    <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
                     <AlertDialogAction onClick={regenerateKey}>
-                      {t("regenerate")}
+                      {t("apiKey.regenerate")}
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
 
               <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button variant="destructive" disabled={isLoading} className="text-white">
+                <AlertDialogTrigger render={<Button variant="destructive" disabled={isLoading} className="text-white" />}>
                     <Trash2 className="h-4 w-4 mr-2" />
-                    {t("revoke")}
-                  </Button>
+                    {t("apiKey.revoke")}
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>{t("revokeTitle")}</AlertDialogTitle>
+                    <AlertDialogTitle>{t("apiKey.revokeTitle")}</AlertDialogTitle>
                     <AlertDialogDescription>
-                      {t("revokeDescription")}
+                      {t("apiKey.revokeDescription")}
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel>{tCommon("cancel")}</AlertDialogCancel>
+                    <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
                     <AlertDialogAction
                       onClick={revokeKey}
                       className="bg-destructive text-white hover:bg-destructive/90"
                     >
-                      {t("revoke")}
+                      {t("apiKey.revoke")}
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
@@ -225,7 +220,7 @@ export function ApiKeySettings({
         ) : (
           <div className="text-center py-4">
             <p className="text-sm text-muted-foreground mb-4">
-              {t("noApiKey")}
+              {t("apiKey.noApiKey")}
             </p>
             <Button onClick={generateKey} disabled={isLoading}>
               {isLoading ? (
@@ -233,7 +228,7 @@ export function ApiKeySettings({
               ) : (
                 <Key className="h-4 w-4 mr-2" />
               )}
-              {t("generate")}
+              {t("apiKey.generate")}
             </Button>
           </div>
         )}

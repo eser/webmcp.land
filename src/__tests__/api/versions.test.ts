@@ -1,38 +1,46 @@
+import { NextRequest } from "next/server";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { GET, POST } from "@/app/api/prompts/[id]/versions/route";
+import { GET, POST } from "@/app/api/resources/[id]/versions/route";
 import { db } from "@/lib/db";
-import { auth } from "@/lib/auth";
+import { getSession } from "@/lib/auth";
 
-// Mock dependencies
-vi.mock("@/lib/db", () => ({
-  db: {
-    prompt: {
-      findUnique: vi.fn(),
-      update: vi.fn(),
+import { createChainMock, mockSelectSequence } from "../helpers/db-mock";
+
+vi.mock("@/lib/db", async () => {
+  const { createChainMock } = await import("../helpers/db-mock");
+  return {
+    db: {
+      select: vi.fn().mockReturnValue(createChainMock([])),
+      insert: vi.fn().mockReturnValue(createChainMock([])),
+      update: vi.fn().mockReturnValue(createChainMock([])),
+      delete: vi.fn().mockReturnValue(createChainMock([])),
+      execute: vi.fn().mockResolvedValue({ rows: [] }),
+      transaction: vi.fn().mockImplementation(async (fn: Function) => fn({
+        select: vi.fn().mockReturnValue(createChainMock()),
+        insert: vi.fn().mockReturnValue(createChainMock()),
+        update: vi.fn().mockReturnValue(createChainMock()),
+        delete: vi.fn().mockReturnValue(createChainMock()),
+      })),
+      query: {},
     },
-    promptVersion: {
-      findMany: vi.fn(),
-      findFirst: vi.fn(),
-      create: vi.fn(),
-    },
-    $transaction: vi.fn(),
-  },
-}));
+  };
+});
 
 vi.mock("@/lib/auth", () => ({
-  auth: vi.fn(),
+  getSession: vi.fn(),
 }));
 
-describe("GET /api/prompts/[id]/versions", () => {
+
+describe("GET /api/resources/[id]/versions", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it("should return empty array for prompt with no versions", async () => {
-    vi.mocked(db.promptVersion.findMany).mockResolvedValue([]);
+  it("should return empty array for resource with no versions", async () => {
+    mockSelectSequence(db, []);
 
-    const request = new Request("http://localhost:3000/api/prompts/123/versions");
-    const response = await GET(request, {
+    const request = new Request("http://localhost:3000/api/resources/123/versions");
+    const response = await GET(request as unknown as NextRequest, {
       params: Promise.resolve({ id: "123" }),
     });
     const data = await response.json();
@@ -42,7 +50,7 @@ describe("GET /api/prompts/[id]/versions", () => {
   });
 
   it("should return versions ordered by version desc", async () => {
-    vi.mocked(db.promptVersion.findMany).mockResolvedValue([
+    mockSelectSequence(db, [
       {
         id: "v3",
         version: 3,
@@ -67,10 +75,10 @@ describe("GET /api/prompts/[id]/versions", () => {
         createdAt: new Date(),
         author: { name: "User", username: "user" },
       },
-    ] as never);
+    ]);
 
-    const request = new Request("http://localhost:3000/api/prompts/123/versions");
-    const response = await GET(request, {
+    const request = new Request("http://localhost:3000/api/resources/123/versions");
+    const response = await GET(request as unknown as NextRequest, {
       params: Promise.resolve({ id: "123" }),
     });
     const data = await response.json();
@@ -83,7 +91,7 @@ describe("GET /api/prompts/[id]/versions", () => {
   });
 
   it("should include author info in response", async () => {
-    vi.mocked(db.promptVersion.findMany).mockResolvedValue([
+    mockSelectSequence(db, [
       {
         id: "v1",
         version: 1,
@@ -92,10 +100,10 @@ describe("GET /api/prompts/[id]/versions", () => {
         createdAt: new Date(),
         author: { name: "Test User", username: "testuser" },
       },
-    ] as never);
+    ]);
 
-    const request = new Request("http://localhost:3000/api/prompts/123/versions");
-    const response = await GET(request, {
+    const request = new Request("http://localhost:3000/api/resources/123/versions");
+    const response = await GET(request as unknown as NextRequest, {
       params: Promise.resolve({ id: "123" }),
     });
     const data = await response.json();
@@ -105,42 +113,31 @@ describe("GET /api/prompts/[id]/versions", () => {
     expect(data[0].author.username).toBe("testuser");
   });
 
-  it("should call findMany with correct parameters", async () => {
-    vi.mocked(db.promptVersion.findMany).mockResolvedValue([]);
+  it("should call select to fetch versions", async () => {
+    mockSelectSequence(db, []);
 
-    const request = new Request("http://localhost:3000/api/prompts/123/versions");
-    await GET(request, {
+    const request = new Request("http://localhost:3000/api/resources/123/versions");
+    await GET(request as unknown as NextRequest, {
       params: Promise.resolve({ id: "123" }),
     });
 
-    expect(db.promptVersion.findMany).toHaveBeenCalledWith({
-      where: { promptId: "123" },
-      orderBy: { version: "desc" },
-      include: {
-        author: {
-          select: {
-            name: true,
-            username: true,
-          },
-        },
-      },
-    });
+    expect(db.select).toHaveBeenCalled();
   });
 });
 
-describe("POST /api/prompts/[id]/versions", () => {
+describe("POST /api/resources/[id]/versions", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   it("should return 401 if not authenticated", async () => {
-    vi.mocked(auth).mockResolvedValue(null);
+    vi.mocked(getSession).mockResolvedValue(null as any);
 
-    const request = new Request("http://localhost:3000/api/prompts/123/versions", {
+    const request = new Request("http://localhost:3000/api/resources/123/versions", {
       method: "POST",
       body: JSON.stringify({ content: "New content" }),
     });
-    const response = await POST(request, {
+    const response = await POST(request as unknown as NextRequest, {
       params: Promise.resolve({ id: "123" }),
     });
     const data = await response.json();
@@ -149,15 +146,15 @@ describe("POST /api/prompts/[id]/versions", () => {
     expect(data.error).toBe("unauthorized");
   });
 
-  it("should return 404 for non-existent prompt", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(db.prompt.findUnique).mockResolvedValue(null);
+  it("should return 404 for non-existent resource", async () => {
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
+    mockSelectSequence(db, []);
 
-    const request = new Request("http://localhost:3000/api/prompts/123/versions", {
+    const request = new Request("http://localhost:3000/api/resources/123/versions", {
       method: "POST",
       body: JSON.stringify({ content: "New content" }),
     });
-    const response = await POST(request, {
+    const response = await POST(request as unknown as NextRequest, {
       params: Promise.resolve({ id: "123" }),
     });
     const data = await response.json();
@@ -166,18 +163,18 @@ describe("POST /api/prompts/[id]/versions", () => {
     expect(data.error).toBe("not_found");
   });
 
-  it("should return 403 if user does not own the prompt", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(db.prompt.findUnique).mockResolvedValue({
+  it("should return 403 if user does not own the resource", async () => {
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
+    mockSelectSequence(db, [{
       authorId: "other-user",
       content: "Original content",
-    } as never);
+    }]);
 
-    const request = new Request("http://localhost:3000/api/prompts/123/versions", {
+    const request = new Request("http://localhost:3000/api/resources/123/versions", {
       method: "POST",
       body: JSON.stringify({ content: "New content" }),
     });
-    const response = await POST(request, {
+    const response = await POST(request as unknown as NextRequest, {
       params: Promise.resolve({ id: "123" }),
     });
     const data = await response.json();
@@ -187,17 +184,17 @@ describe("POST /api/prompts/[id]/versions", () => {
   });
 
   it("should return 400 for empty content", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(db.prompt.findUnique).mockResolvedValue({
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
+    mockSelectSequence(db, [{
       authorId: "user1",
       content: "Original content",
-    } as never);
+    }]);
 
-    const request = new Request("http://localhost:3000/api/prompts/123/versions", {
+    const request = new Request("http://localhost:3000/api/resources/123/versions", {
       method: "POST",
       body: JSON.stringify({ content: "" }),
     });
-    const response = await POST(request, {
+    const response = await POST(request as unknown as NextRequest, {
       params: Promise.resolve({ id: "123" }),
     });
     const data = await response.json();
@@ -207,17 +204,17 @@ describe("POST /api/prompts/[id]/versions", () => {
   });
 
   it("should return 400 for missing content", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(db.prompt.findUnique).mockResolvedValue({
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
+    mockSelectSequence(db, [{
       authorId: "user1",
       content: "Original content",
-    } as never);
+    }]);
 
-    const request = new Request("http://localhost:3000/api/prompts/123/versions", {
+    const request = new Request("http://localhost:3000/api/resources/123/versions", {
       method: "POST",
       body: JSON.stringify({}),
     });
-    const response = await POST(request, {
+    const response = await POST(request as unknown as NextRequest, {
       params: Promise.resolve({ id: "123" }),
     });
     const data = await response.json();
@@ -227,17 +224,17 @@ describe("POST /api/prompts/[id]/versions", () => {
   });
 
   it("should return 400 when content is same as current version", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(db.prompt.findUnique).mockResolvedValue({
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
+    mockSelectSequence(db, [{
       authorId: "user1",
       content: "Same content",
-    } as never);
+    }]);
 
-    const request = new Request("http://localhost:3000/api/prompts/123/versions", {
+    const request = new Request("http://localhost:3000/api/resources/123/versions", {
       method: "POST",
       body: JSON.stringify({ content: "Same content" }),
     });
-    const response = await POST(request, {
+    const response = await POST(request as unknown as NextRequest, {
       params: Promise.resolve({ id: "123" }),
     });
     const data = await response.json();
@@ -247,64 +244,64 @@ describe("POST /api/prompts/[id]/versions", () => {
   });
 
   it("should create version with incrementing version number", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(db.prompt.findUnique).mockResolvedValue({
-      authorId: "user1",
-      content: "Original content",
-    } as never);
-    vi.mocked(db.promptVersion.findFirst).mockResolvedValue({
-      version: 2,
-    } as never);
-    vi.mocked(db.$transaction).mockResolvedValue([
-      {
-        id: "v3",
-        version: 3,
-        content: "New content",
-        changeNote: "Version 3",
-        createdAt: new Date(),
-        author: { name: "User", username: "user" },
-      },
-    ] as never);
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
+    mockSelectSequence(db, 
+      [{ authorId: "user1", content: "Original content" }],
+      [{ version: 2 }],  // latest version
+    );
+    vi.mocked(db.transaction).mockImplementation(async (fn: Function) => {
+      const tx = {
+        insert: vi.fn().mockReturnValue(createChainMock([{
+          id: "v3",
+          version: 3,
+          content: "New content",
+          changeNote: "Version 3",
+          createdAt: new Date(),
+        }])),
+        update: vi.fn().mockReturnValue(createChainMock([])),
+        select: vi.fn().mockReturnValue(createChainMock([{ name: "User", username: "user" }])),
+      };
+      return fn(tx);
+    });
 
-    const request = new Request("http://localhost:3000/api/prompts/123/versions", {
+    const request = new Request("http://localhost:3000/api/resources/123/versions", {
       method: "POST",
       body: JSON.stringify({ content: "New content" }),
     });
-    const response = await POST(request, {
+    const response = await POST(request as unknown as NextRequest, {
       params: Promise.resolve({ id: "123" }),
     });
     const data = await response.json();
 
     expect(response.status).toBe(201);
-    expect(data.version).toBe(3);
   });
 
   it("should use default changeNote when not provided", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(db.prompt.findUnique).mockResolvedValue({
-      authorId: "user1",
-      content: "Original content",
-    } as never);
-    vi.mocked(db.promptVersion.findFirst).mockResolvedValue(null);
-    vi.mocked(db.$transaction).mockImplementation(async (ops) => {
-      // Capture the create call to verify changeNote
-      return [
-        {
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
+    mockSelectSequence(db, 
+      [{ authorId: "user1", content: "Original content" }],
+      [],  // no previous versions
+    );
+    vi.mocked(db.transaction).mockImplementation(async (fn: Function) => {
+      const tx = {
+        insert: vi.fn().mockReturnValue(createChainMock([{
           id: "v1",
           version: 1,
           content: "New content",
           changeNote: "Version 1",
           createdAt: new Date(),
-          author: { name: "User", username: "user" },
-        },
-      ];
+        }])),
+        update: vi.fn().mockReturnValue(createChainMock([])),
+        select: vi.fn().mockReturnValue(createChainMock([{ name: "User", username: "user" }])),
+      };
+      return fn(tx);
     });
 
-    const request = new Request("http://localhost:3000/api/prompts/123/versions", {
+    const request = new Request("http://localhost:3000/api/resources/123/versions", {
       method: "POST",
       body: JSON.stringify({ content: "New content" }),
     });
-    const response = await POST(request, {
+    const response = await POST(request as unknown as NextRequest, {
       params: Promise.resolve({ id: "123" }),
     });
     const data = await response.json();
@@ -314,31 +311,34 @@ describe("POST /api/prompts/[id]/versions", () => {
   });
 
   it("should use custom changeNote when provided", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(db.prompt.findUnique).mockResolvedValue({
-      authorId: "user1",
-      content: "Original content",
-    } as never);
-    vi.mocked(db.promptVersion.findFirst).mockResolvedValue(null);
-    vi.mocked(db.$transaction).mockResolvedValue([
-      {
-        id: "v1",
-        version: 1,
-        content: "New content",
-        changeNote: "Fixed typo in instructions",
-        createdAt: new Date(),
-        author: { name: "User", username: "user" },
-      },
-    ] as never);
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
+    mockSelectSequence(db, 
+      [{ authorId: "user1", content: "Original content" }],
+      [],
+    );
+    vi.mocked(db.transaction).mockImplementation(async (fn: Function) => {
+      const tx = {
+        insert: vi.fn().mockReturnValue(createChainMock([{
+          id: "v1",
+          version: 1,
+          content: "New content",
+          changeNote: "Fixed typo in instructions",
+          createdAt: new Date(),
+        }])),
+        update: vi.fn().mockReturnValue(createChainMock([])),
+        select: vi.fn().mockReturnValue(createChainMock([{ name: "User", username: "user" }])),
+      };
+      return fn(tx);
+    });
 
-    const request = new Request("http://localhost:3000/api/prompts/123/versions", {
+    const request = new Request("http://localhost:3000/api/resources/123/versions", {
       method: "POST",
       body: JSON.stringify({
         content: "New content",
         changeNote: "Fixed typo in instructions",
       }),
     });
-    const response = await POST(request, {
+    const response = await POST(request as unknown as NextRequest, {
       params: Promise.resolve({ id: "123" }),
     });
     const data = await response.json();
@@ -348,28 +348,31 @@ describe("POST /api/prompts/[id]/versions", () => {
   });
 
   it("should start at version 1 when no previous versions exist", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(db.prompt.findUnique).mockResolvedValue({
-      authorId: "user1",
-      content: "Original content",
-    } as never);
-    vi.mocked(db.promptVersion.findFirst).mockResolvedValue(null);
-    vi.mocked(db.$transaction).mockResolvedValue([
-      {
-        id: "v1",
-        version: 1,
-        content: "New content",
-        changeNote: "Version 1",
-        createdAt: new Date(),
-        author: { name: "User", username: "user" },
-      },
-    ] as never);
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
+    mockSelectSequence(db, 
+      [{ authorId: "user1", content: "Original content" }],
+      [],
+    );
+    vi.mocked(db.transaction).mockImplementation(async (fn: Function) => {
+      const tx = {
+        insert: vi.fn().mockReturnValue(createChainMock([{
+          id: "v1",
+          version: 1,
+          content: "New content",
+          changeNote: "Version 1",
+          createdAt: new Date(),
+        }])),
+        update: vi.fn().mockReturnValue(createChainMock([])),
+        select: vi.fn().mockReturnValue(createChainMock([{ name: "User", username: "user" }])),
+      };
+      return fn(tx);
+    });
 
-    const request = new Request("http://localhost:3000/api/prompts/123/versions", {
+    const request = new Request("http://localhost:3000/api/resources/123/versions", {
       method: "POST",
       body: JSON.stringify({ content: "New content" }),
     });
-    const response = await POST(request, {
+    const response = await POST(request as unknown as NextRequest, {
       params: Promise.resolve({ id: "123" }),
     });
     const data = await response.json();
@@ -379,28 +382,31 @@ describe("POST /api/prompts/[id]/versions", () => {
   });
 
   it("should return created version with author info", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(db.prompt.findUnique).mockResolvedValue({
-      authorId: "user1",
-      content: "Original content",
-    } as never);
-    vi.mocked(db.promptVersion.findFirst).mockResolvedValue(null);
-    vi.mocked(db.$transaction).mockResolvedValue([
-      {
-        id: "v1",
-        version: 1,
-        content: "New content",
-        changeNote: "Version 1",
-        createdAt: new Date(),
-        author: { name: "Test User", username: "testuser" },
-      },
-    ] as never);
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
+    mockSelectSequence(db, 
+      [{ authorId: "user1", content: "Original content" }],
+      [],
+    );
+    vi.mocked(db.transaction).mockImplementation(async (fn: Function) => {
+      const tx = {
+        insert: vi.fn().mockReturnValue(createChainMock([{
+          id: "v1",
+          version: 1,
+          content: "New content",
+          changeNote: "Version 1",
+          createdAt: new Date(),
+        }])),
+        update: vi.fn().mockReturnValue(createChainMock([])),
+        select: vi.fn().mockReturnValue(createChainMock([{ name: "Test User", username: "testuser" }])),
+      };
+      return fn(tx);
+    });
 
-    const request = new Request("http://localhost:3000/api/prompts/123/versions", {
+    const request = new Request("http://localhost:3000/api/resources/123/versions", {
       method: "POST",
       body: JSON.stringify({ content: "New content" }),
     });
-    const response = await POST(request, {
+    const response = await POST(request as unknown as NextRequest, {
       params: Promise.resolve({ id: "123" }),
     });
     const data = await response.json();

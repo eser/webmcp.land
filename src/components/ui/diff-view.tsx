@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 
 interface DiffViewProps {
@@ -91,7 +91,7 @@ function computeWordDiff(original: string, modified: string): WordDiff[] {
 }
 
 export function DiffView({ original, modified, className, mode = "word", language }: DiffViewProps) {
-  const t = useTranslations("diff");
+  const { t } = useTranslation();
   const isCode = !!language;
   const wordDiff = useMemo(() => computeWordDiff(original, modified), [original, modified]);
 
@@ -116,11 +116,11 @@ export function DiffView({ original, modified, className, mode = "word", languag
         <div className="flex items-center gap-3">
           {hasChanges ? (
             <>
-              <span className="text-green-600 dark:text-green-400 font-medium">≈+{stats.additions} {t("tokens")}</span>
-              <span className="text-red-600 dark:text-red-400 font-medium">≈-{stats.deletions} {t("tokens")}</span>
+              <span className="text-green-600 dark:text-green-400 font-medium">≈+{stats.additions} {t("diff.tokens")}</span>
+              <span className="text-red-600 dark:text-red-400 font-medium">≈-{stats.deletions} {t("diff.tokens")}</span>
             </>
           ) : (
-            <span className="text-muted-foreground">{t("noChanges")}</span>
+            <span className="text-muted-foreground">{t("diff.noChanges")}</span>
           )}
         </div>
       </div>
@@ -152,7 +152,7 @@ function CodeDiffContent({ wordDiff, language }: { wordDiff: WordDiff[]; languag
   // Build combined text with diff markers
   const lines = useMemo(() => {
     const combined = wordDiff.map(d => d.text).join("");
-    const lineTexts = combined.split("\n");
+    const lineTexts = combined.split("diff.\n");
     
     // Track which lines have changes
     let charIndex = 0;

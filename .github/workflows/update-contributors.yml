@@ -8,7 +8,7 @@ on:
 jobs:
   update-contributors:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -45,12 +45,12 @@ jobs:
           python3 << 'EOF'
           import os
           from huggingface_hub import HfApi
-          
+
           api = HfApi(token=os.environ["HF_API_TOKEN"])
           api.upload_file(
               path_or_fileobj="prompts.csv",
               path_in_repo="prompts.csv",
-              repo_id="fka/prompts.chat",
+              repo_id="eserozvataf/webmcp.land",
               repo_type="dataset",
               commit_message="Update prompts.csv"
           )

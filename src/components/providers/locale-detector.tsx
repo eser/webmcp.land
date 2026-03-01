@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useLocale } from "next-intl";
+import { useTranslation } from "react-i18next";
 import { LOCALE_COOKIE } from "@/lib/i18n/config";
 
 /**
@@ -9,15 +9,14 @@ import { LOCALE_COOKIE } from "@/lib/i18n/config";
  * This ensures the detected language is remembered without requiring user interaction.
  */
 export function LocaleDetector() {
-  const locale = useLocale();
+  const { i18n } = useTranslation();
+  const locale = i18n.language;
 
   useEffect(() => {
-    // Check if locale cookie already exists
     const hasLocaleCookie = document.cookie
       .split(";")
       .some((c) => c.trim().startsWith(`${LOCALE_COOKIE}=`));
 
-    // If no cookie exists, save the current (auto-detected) locale
     if (!hasLocaleCookie && locale) {
       document.cookie = `${LOCALE_COOKIE}=${locale}; path=/; max-age=${60 * 60 * 24 * 365}; SameSite=Lax`;
     }

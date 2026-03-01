@@ -1,60 +1,53 @@
+import { NextRequest } from "next/server";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { GET, POST } from "@/app/api/prompts/[id]/connections/route";
+import { GET, POST } from "@/app/api/resources/[id]/connections/route";
 import { db } from "@/lib/db";
-import { auth } from "@/lib/auth";
+import { getSession } from "@/lib/auth";
 
-// Mock dependencies
-vi.mock("@/lib/db", () => ({
-  db: {
-    prompt: {
-      findUnique: vi.fn(),
-    },
-    promptConnection: {
-      findMany: vi.fn(),
-      findUnique: vi.fn(),
-      findFirst: vi.fn(),
-      create: vi.fn(),
-    },
-  },
-}));
+import { createChainMock, mockSelectSequence, createMockDb } from "../helpers/db-mock";
+
+vi.mock("@/lib/db", async () => {
+  const { createMockDb } = await import("../helpers/db-mock");
+  return createMockDb();
+});
 
 vi.mock("@/lib/auth", () => ({
-  auth: vi.fn(),
+  getSession: vi.fn(),
 }));
 
 vi.mock("next/cache", () => ({
   revalidateTag: vi.fn(),
 }));
 
-describe("GET /api/prompts/[id]/connections", () => {
+
+describe("GET /api/resources/[id]/connections", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it("should return 404 for non-existent prompt", async () => {
-    vi.mocked(db.prompt.findUnique).mockResolvedValue(null);
+  it("should return 404 for non-existent resource", async () => {
+    mockSelectSequence(db, []);
 
-    const request = new Request("http://localhost:3000/api/prompts/123/connections");
-    const response = await GET(request, {
+    const request = new Request("http://localhost:3000/api/resources/123/connections");
+    const response = await GET(request as unknown as NextRequest, {
       params: Promise.resolve({ id: "123" }),
     });
     const data = await response.json();
 
     expect(response.status).toBe(404);
-    expect(data.error).toBe("Prompt not found");
+    expect(data.error).toBe("Resource not found");
   });
 
-  it("should return empty connections for prompt with none", async () => {
-    vi.mocked(db.prompt.findUnique).mockResolvedValue({
-      id: "123",
-      isPrivate: false,
-      authorId: "user1",
-    } as never);
-    vi.mocked(db.promptConnection.findMany).mockResolvedValue([]);
-    vi.mocked(auth).mockResolvedValue(null);
+  it("should return empty connections for resource with none", async () => {
+    mockSelectSequence(db, 
+      [{ id: "123", isPrivate: false, authorId: "user1" }],
+      [],  // outgoing
+      [],  // incoming
+    );
+    vi.mocked(getSession).mockResolvedValue(null as any);
 
-    const request = new Request("http://localhost:3000/api/prompts/123/connections");
-    const response = await GET(request, {
+    const request = new Request("http://localhost:3000/api/resources/123/connections");
+    const response = await GET(request as unknown as NextRequest, {
       params: Promise.resolve({ id: "123" }),
     });
     const data = await response.json();
@@ -65,32 +58,25 @@ describe("GET /api/prompts/[id]/connections", () => {
   });
 
   it("should return outgoing and incoming connections", async () => {
-    vi.mocked(db.prompt.findUnique).mockResolvedValue({
-      id: "123",
-      isPrivate: false,
-      authorId: "user1",
-    } as never);
-    vi.mocked(db.promptConnection.findMany)
-      .mockResolvedValueOnce([
-        {
-          id: "conn1",
-          label: "next",
-          order: 0,
-          target: { id: "target1", title: "Target Prompt", slug: "target", isPrivate: false, authorId: "user1" },
-        },
-      ] as never)
-      .mockResolvedValueOnce([
-        {
-          id: "conn2",
-          label: "previous",
-          order: 0,
-          source: { id: "source1", title: "Source Prompt", slug: "source", isPrivate: false, authorId: "user2" },
-        },
-      ] as never);
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
+    mockSelectSequence(db, 
+      [{ id: "123", isPrivate: false, authorId: "user1" }],
+      [{
+        id: "conn1",
+        label: "next",
+        order: 0,
+        target: { id: "target1", title: "Target Prompt", slug: "target", isPrivate: false, authorId: "user1" },
+      }],
+      [{
+        id: "conn2",
+        label: "previous",
+        order: 0,
+        source: { id: "source1", title: "Source Prompt", slug: "source", isPrivate: false, authorId: "user2" },
+      }],
+    );
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
 
-    const request = new Request("http://localhost:3000/api/prompts/123/connections");
-    const response = await GET(request, {
+    const request = new Request("http://localhost:3000/api/resources/123/connections");
+    const response = await GET(request as unknown as NextRequest, {
       params: Promise.resolve({ id: "123" }),
     });
     const data = await response.json();
@@ -100,25 +86,20 @@ describe("GET /api/prompts/[id]/connections", () => {
     expect(data.incoming).toHaveLength(1);
   });
 
-  it("should filter out private prompts the user cannot see", async () => {
-    vi.mocked(db.prompt.findUnique).mockResolvedValue({
-      id: "123",
-      isPrivate: false,
-      authorId: "user1",
-    } as never);
-    vi.mocked(db.promptConnection.findMany)
-      .mockResolvedValueOnce([
-        {
-          id: "conn1",
-          label: "next",
-          target: { id: "target1", title: "Private", slug: "private", isPrivate: true, authorId: "other-user" },
-        },
-      ] as never)
-      .mockResolvedValueOnce([]);
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
+  it("should filter out private resources the user cannot see", async () => {
+    mockSelectSequence(db, 
+      [{ id: "123", isPrivate: false, authorId: "user1" }],
+      [{
+        id: "conn1",
+        label: "next",
+        target: { id: "target1", title: "Private", slug: "private", isPrivate: true, authorId: "other-user" },
+      }],
+      [],
+    );
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
 
-    const request = new Request("http://localhost:3000/api/prompts/123/connections");
-    const response = await GET(request, {
+    const request = new Request("http://localhost:3000/api/resources/123/connections");
+    const response = await GET(request as unknown as NextRequest, {
       params: Promise.resolve({ id: "123" }),
     });
     const data = await response.json();
@@ -126,25 +107,20 @@ describe("GET /api/prompts/[id]/connections", () => {
     expect(data.outgoing).toHaveLength(0);
   });
 
-  it("should show private prompts owned by the user", async () => {
-    vi.mocked(db.prompt.findUnique).mockResolvedValue({
-      id: "123",
-      isPrivate: false,
-      authorId: "user1",
-    } as never);
-    vi.mocked(db.promptConnection.findMany)
-      .mockResolvedValueOnce([
-        {
-          id: "conn1",
-          label: "next",
-          target: { id: "target1", title: "My Private", slug: "private", isPrivate: true, authorId: "user1" },
-        },
-      ] as never)
-      .mockResolvedValueOnce([]);
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
+  it("should show private resources owned by the user", async () => {
+    mockSelectSequence(db, 
+      [{ id: "123", isPrivate: false, authorId: "user1" }],
+      [{
+        id: "conn1",
+        label: "next",
+        target: { id: "target1", title: "My Private", slug: "private", isPrivate: true, authorId: "user1" },
+      }],
+      [],
+    );
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
 
-    const request = new Request("http://localhost:3000/api/prompts/123/connections");
-    const response = await GET(request, {
+    const request = new Request("http://localhost:3000/api/resources/123/connections");
+    const response = await GET(request as unknown as NextRequest, {
       params: Promise.resolve({ id: "123" }),
     });
     const data = await response.json();
@@ -153,19 +129,19 @@ describe("GET /api/prompts/[id]/connections", () => {
   });
 });
 
-describe("POST /api/prompts/[id]/connections", () => {
+describe("POST /api/resources/[id]/connections", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   it("should return 401 if not authenticated", async () => {
-    vi.mocked(auth).mockResolvedValue(null);
+    vi.mocked(getSession).mockResolvedValue(null as any);
 
-    const request = new Request("http://localhost:3000/api/prompts/123/connections", {
+    const request = new Request("http://localhost:3000/api/resources/123/connections", {
       method: "POST",
       body: JSON.stringify({ targetId: "456", label: "next" }),
     });
-    const response = await POST(request, {
+    const response = await POST(request as unknown as NextRequest, {
       params: Promise.resolve({ id: "123" }),
     });
     const data = await response.json();
@@ -174,109 +150,113 @@ describe("POST /api/prompts/[id]/connections", () => {
     expect(data.error).toBe("Unauthorized");
   });
 
-  it("should return 404 if source prompt not found", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(db.prompt.findUnique).mockResolvedValue(null);
+  it("should return 404 if source resource not found", async () => {
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
+    mockSelectSequence(db, []);
 
-    const request = new Request("http://localhost:3000/api/prompts/123/connections", {
+    const request = new Request("http://localhost:3000/api/resources/123/connections", {
       method: "POST",
       body: JSON.stringify({ targetId: "456", label: "next" }),
     });
-    const response = await POST(request, {
+    const response = await POST(request as unknown as NextRequest, {
       params: Promise.resolve({ id: "123" }),
     });
     const data = await response.json();
 
     expect(response.status).toBe(404);
-    expect(data.error).toBe("Source prompt not found");
+    expect(data.error).toBe("Source resource not found");
   });
 
-  it("should return 403 if user does not own source prompt", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1", role: "USER" } } as never);
-    vi.mocked(db.prompt.findUnique).mockResolvedValue({ authorId: "other-user" } as never);
+  it("should return 403 if user does not own source resource", async () => {
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1", role: "USER" } } as never);
+    mockSelectSequence(db, [{ authorId: "other-user" }]);
 
-    const request = new Request("http://localhost:3000/api/prompts/123/connections", {
+    const request = new Request("http://localhost:3000/api/resources/123/connections", {
       method: "POST",
       body: JSON.stringify({ targetId: "456", label: "next" }),
     });
-    const response = await POST(request, {
+    const response = await POST(request as unknown as NextRequest, {
       params: Promise.resolve({ id: "123" }),
     });
     const data = await response.json();
 
     expect(response.status).toBe(403);
-    expect(data.error).toBe("You can only add connections to your own prompts");
+    expect(data.error).toBe("You can only add connections to your own resources");
   });
 
-  it("should return 404 if target prompt not found", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1", role: "USER" } } as never);
-    vi.mocked(db.prompt.findUnique)
-      .mockResolvedValueOnce({ authorId: "user1" } as never) // Source
-      .mockResolvedValueOnce(null); // Target
+  it("should return 404 if target resource not found", async () => {
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1", role: "USER" } } as never);
+    mockSelectSequence(db, 
+      [{ authorId: "user1" }],  // Source
+      [],                         // Target not found
+    );
 
-    const request = new Request("http://localhost:3000/api/prompts/123/connections", {
+    const request = new Request("http://localhost:3000/api/resources/123/connections", {
       method: "POST",
       body: JSON.stringify({ targetId: "456", label: "next" }),
     });
-    const response = await POST(request, {
+    const response = await POST(request as unknown as NextRequest, {
       params: Promise.resolve({ id: "123" }),
     });
     const data = await response.json();
 
     expect(response.status).toBe(404);
-    expect(data.error).toBe("Target prompt not found");
+    expect(data.error).toBe("Target resource not found");
   });
 
-  it("should return 403 if user does not own target prompt", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1", role: "USER" } } as never);
-    vi.mocked(db.prompt.findUnique)
-      .mockResolvedValueOnce({ authorId: "user1" } as never) // Source
-      .mockResolvedValueOnce({ id: "456", authorId: "other-user" } as never); // Target
+  it("should return 403 if user does not own target resource", async () => {
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1", role: "USER" } } as never);
+    mockSelectSequence(db, 
+      [{ authorId: "user1" }],                    // Source
+      [{ id: "456", title: "T", authorId: "other-user" }],  // Target
+    );
 
-    const request = new Request("http://localhost:3000/api/prompts/123/connections", {
+    const request = new Request("http://localhost:3000/api/resources/123/connections", {
       method: "POST",
       body: JSON.stringify({ targetId: "456", label: "next" }),
     });
-    const response = await POST(request, {
+    const response = await POST(request as unknown as NextRequest, {
       params: Promise.resolve({ id: "123" }),
     });
     const data = await response.json();
 
     expect(response.status).toBe(403);
-    expect(data.error).toBe("You can only connect to your own prompts");
+    expect(data.error).toBe("You can only connect to your own resources");
   });
 
   it("should return 400 for self-connection", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(db.prompt.findUnique)
-      .mockResolvedValueOnce({ authorId: "user1" } as never)
-      .mockResolvedValueOnce({ id: "123", authorId: "user1" } as never);
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
+    mockSelectSequence(db, 
+      [{ authorId: "user1" }],
+      [{ id: "123", title: "T", authorId: "user1" }],
+    );
 
-    const request = new Request("http://localhost:3000/api/prompts/123/connections", {
+    const request = new Request("http://localhost:3000/api/resources/123/connections", {
       method: "POST",
       body: JSON.stringify({ targetId: "123", label: "next" }),
     });
-    const response = await POST(request, {
+    const response = await POST(request as unknown as NextRequest, {
       params: Promise.resolve({ id: "123" }),
     });
     const data = await response.json();
 
     expect(response.status).toBe(400);
-    expect(data.error).toBe("Cannot connect a prompt to itself");
+    expect(data.error).toBe("Cannot connect a resource to itself");
   });
 
   it("should return 400 if connection already exists", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(db.prompt.findUnique)
-      .mockResolvedValueOnce({ authorId: "user1" } as never)
-      .mockResolvedValueOnce({ id: "456", authorId: "user1" } as never);
-    vi.mocked(db.promptConnection.findUnique).mockResolvedValue({ id: "existing" } as never);
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
+    mockSelectSequence(db, 
+      [{ authorId: "user1" }],
+      [{ id: "456", title: "T", authorId: "user1" }],
+      [{ id: "existing" }],  // existing connection
+    );
 
-    const request = new Request("http://localhost:3000/api/prompts/123/connections", {
+    const request = new Request("http://localhost:3000/api/resources/123/connections", {
       method: "POST",
       body: JSON.stringify({ targetId: "456", label: "next" }),
     });
-    const response = await POST(request, {
+    const response = await POST(request as unknown as NextRequest, {
       params: Promise.resolve({ id: "123" }),
     });
     const data = await response.json();
@@ -286,26 +266,27 @@ describe("POST /api/prompts/[id]/connections", () => {
   });
 
   it("should create connection successfully", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(db.prompt.findUnique)
-      .mockResolvedValueOnce({ authorId: "user1" } as never)
-      .mockResolvedValueOnce({ id: "456", authorId: "user1" } as never);
-    vi.mocked(db.promptConnection.findUnique).mockResolvedValue(null);
-    vi.mocked(db.promptConnection.findFirst).mockResolvedValue(null);
-    vi.mocked(db.promptConnection.create).mockResolvedValue({
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
+    mockSelectSequence(db, 
+      [{ authorId: "user1" }],                      // source resource
+      [{ id: "456", title: "Target", authorId: "user1" }],  // target resource
+      [],                                              // no existing connection
+      [],                                              // no last connection (for order)
+      [{ slug: "target" }],                           // slug lookup
+    );
+    vi.mocked(db.insert).mockReturnValue(createChainMock([{
       id: "conn1",
       sourceId: "123",
       targetId: "456",
       label: "next",
       order: 0,
-      target: { id: "456", title: "Target", slug: "target" },
-    } as never);
+    }]) as any);
 
-    const request = new Request("http://localhost:3000/api/prompts/123/connections", {
+    const request = new Request("http://localhost:3000/api/resources/123/connections", {
       method: "POST",
       body: JSON.stringify({ targetId: "456", label: "next" }),
     });
-    const response = await POST(request, {
+    const response = await POST(request as unknown as NextRequest, {
       params: Promise.resolve({ id: "123" }),
     });
     const data = await response.json();
@@ -314,65 +295,42 @@ describe("POST /api/prompts/[id]/connections", () => {
     expect(data.label).toBe("next");
   });
 
-  it("should auto-increment order when not provided", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(db.prompt.findUnique)
-      .mockResolvedValueOnce({ authorId: "user1" } as never)
-      .mockResolvedValueOnce({ id: "456", authorId: "user1" } as never);
-    vi.mocked(db.promptConnection.findUnique).mockResolvedValue(null);
-    vi.mocked(db.promptConnection.findFirst).mockResolvedValue({ order: 2 } as never);
-    vi.mocked(db.promptConnection.create).mockResolvedValue({
-      id: "conn1",
-      order: 3,
-      target: {},
-    } as never);
-
-    const request = new Request("http://localhost:3000/api/prompts/123/connections", {
-      method: "POST",
-      body: JSON.stringify({ targetId: "456", label: "next" }),
-    });
-    await POST(request, {
-      params: Promise.resolve({ id: "123" }),
-    });
-
-    expect(db.promptConnection.create).toHaveBeenCalledWith(
-      expect.objectContaining({
-        data: expect.objectContaining({ order: 3 }),
-      })
-    );
-  });
-
   it("should return 400 for missing required fields", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
 
-    const request = new Request("http://localhost:3000/api/prompts/123/connections", {
+    const request = new Request("http://localhost:3000/api/resources/123/connections", {
       method: "POST",
       body: JSON.stringify({ targetId: "456" }), // Missing label
     });
-    const response = await POST(request, {
+    const response = await POST(request as unknown as NextRequest, {
       params: Promise.resolve({ id: "123" }),
     });
 
     expect(response.status).toBe(400);
   });
 
-  it("should allow admin to create connections for any prompt", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "admin1", role: "ADMIN" } } as never);
-    vi.mocked(db.prompt.findUnique)
-      .mockResolvedValueOnce({ authorId: "other-user" } as never)
-      .mockResolvedValueOnce({ id: "456", authorId: "another-user" } as never);
-    vi.mocked(db.promptConnection.findUnique).mockResolvedValue(null);
-    vi.mocked(db.promptConnection.findFirst).mockResolvedValue(null);
-    vi.mocked(db.promptConnection.create).mockResolvedValue({
+  it("should allow admin to create connections for any resource", async () => {
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "admin1", role: "ADMIN" } } as never);
+    mockSelectSequence(db, 
+      [{ authorId: "other-user" }],
+      [{ id: "456", title: "T", authorId: "another-user" }],
+      [],  // no existing connection
+      [],  // no last connection
+      [{ slug: "target" }],
+    );
+    vi.mocked(db.insert).mockReturnValue(createChainMock([{
       id: "conn1",
-      target: {},
-    } as never);
+      sourceId: "123",
+      targetId: "456",
+      label: "admin-link",
+      order: 0,
+    }]) as any);
 
-    const request = new Request("http://localhost:3000/api/prompts/123/connections", {
+    const request = new Request("http://localhost:3000/api/resources/123/connections", {
       method: "POST",
       body: JSON.stringify({ targetId: "456", label: "admin-link" }),
     });
-    const response = await POST(request, {
+    const response = await POST(request as unknown as NextRequest, {
       params: Promise.resolve({ id: "123" }),
     });
 

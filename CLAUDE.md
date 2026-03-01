@@ -1,10 +1,10 @@
 # CLAUDE.md
 
-> Quick reference for Claude Code when working on prompts.chat
+> Quick reference for Claude Code when working on webmcp.land
 
 ## Project Overview
 
-**prompts.chat** is a social platform for AI prompts built with Next.js 16 App Router, React 19, TypeScript, and PostgreSQL/Prisma. It allows users to share, discover, and collect prompts.
+**webmcp.land** is an MCP/WebMCP service registry and discovery platform built with vinext (Vite-based App Router), rolldown-vite, React 19, TypeScript, and PostgreSQL/Drizzle ORM. Users register their MCP/WebMCP endpoints; the platform discovers, indexes, and exposes their tools/methods so others can search by use case.
 
 For detailed agent guidelines, see [AGENTS.md](AGENTS.md).
 
@@ -12,47 +12,58 @@ For detailed agent guidelines, see [AGENTS.md](AGENTS.md).
 
 ```bash
 # Development
-npm run dev              # Start dev server at localhost:3000
-npm run build            # Production build (runs prisma generate)
-npm run lint             # Run ESLint
+pnpm run dev              # Start vinext dev server at localhost:3000
+pnpm run build            # Production build (vite build)
+pnpm run start            # Production server (node server.js)
+pnpm run lint             # Run oxlint
 
 # Database
-npm run db:migrate       # Run Prisma migrations
-npm run db:push          # Push schema changes
-npm run db:studio        # Open Prisma Studio
-npm run db:seed          # Seed database
+pnpm run db:generate      # Generate Drizzle migration files
+pnpm run db:migrate       # Run Drizzle migrations
+pnpm run db:push          # Push schema changes directly
+pnpm run db:studio        # Open Drizzle Studio
+pnpm run db:seed          # Seed database
 
 # Type checking
-npx tsc --noEmit         # Check TypeScript types
+pnpm exec tsc --noEmit         # Check TypeScript types
 ```
 
 ## Key Files
 
 | File | Purpose |
 |------|---------|
-| `prompts.config.ts` | Main app configuration (branding, theme, auth, features) |
-| `prisma/schema.prisma` | Database schema |
-| `src/lib/auth/index.ts` | NextAuth configuration |
-| `src/lib/db.ts` | Prisma client singleton |
+| `vite.config.ts` | Vite/vinext configuration (plugins, aliases, build) |
+| `server.js` | Production server entry point (vinext prod server) |
+| `webmcp.config.ts` | Main app configuration (branding, theme, auth, features) |
+| `src/lib/schema.ts` | Drizzle ORM database schema (tables, enums, relations) |
+| `drizzle.config.ts` | Drizzle Kit configuration |
+| `src/lib/auth/index.ts` | Auth configuration |
+| `src/lib/db.ts` | Drizzle database client singleton |
 | `messages/*.json` | i18n translation files |
 
 ## Project Structure
 
 ```
 src/
-├── app/              # Next.js App Router pages
+├── app/              # App Router pages (vinext)
 │   ├── (auth)/       # Login, register
 │   ├── api/          # API routes
-│   ├── prompts/      # Prompt CRUD pages
+│   ├── registry/     # Resource CRUD pages
 │   └── admin/        # Admin dashboard
 ├── components/       # React components
 │   ├── ui/           # shadcn/ui base components
-│   └── prompts/      # Prompt-related components
+│   └── resources/    # Resource-related components
 └── lib/              # Utilities and config
-    ├── ai/           # OpenAI integration
-    ├── auth/         # NextAuth setup
+    ├── ai/           # OpenAI integration (embeddings, discovery)
+    ├── auth/         # Auth setup
     └── plugins/      # Auth and storage plugins
 ```
+
+## Core Concepts
+
+- **Resource** — A registered MCP or WebMCP service endpoint
+- **Discovery** — Automatic fetching of an endpoint's capabilities and tools
+- **Use Cases** — Searchable descriptions of what a resource can do
 
 ## Code Patterns
 
@@ -60,11 +71,11 @@ src/
 - **Translations:** Use `useTranslations()` or `getTranslations()` from next-intl
 - **Styling:** Tailwind CSS with `cn()` utility for conditional classes
 - **Forms:** React Hook Form + Zod validation
-- **Database:** Prisma client from `@/lib/db`
+- **Database:** Drizzle ORM — `db` from `@/lib/db`, schema from `@/lib/schema`
 
 ## Before Committing
 
-1. Run `npm run lint` to check for issues
+1. Run `pnpm run lint` to check for issues
 2. Add translations for any user-facing text
 3. Use existing UI components from `src/components/ui/`
 4. Never commit secrets (use `.env`)

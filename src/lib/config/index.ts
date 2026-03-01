@@ -37,12 +37,12 @@ export interface I18nConfig {
 }
 
 export interface FeaturesConfig {
-  privatePrompts: boolean;
+  privateResources: boolean;
   changeRequests: boolean;
   categories: boolean;
   tags: boolean;
   aiSearch?: boolean;
-  aiGeneration?: boolean;
+  discovery?: boolean;
   mcp?: boolean;
   comments?: boolean;
 }
@@ -56,7 +56,7 @@ export interface Sponsor {
 }
 
 export interface HomepageConfig {
-  // Hide prompts.chat repo branding (achievements, GitHub links) and use clone's branding
+  // Hide webmcp.land repo branding (achievements, GitHub links) and use clone's branding
   useCloneBranding?: boolean;
   achievements?: {
     enabled: boolean;
@@ -67,7 +67,7 @@ export interface HomepageConfig {
   };
 }
 
-export interface PromptsConfig {
+export interface WebMCPConfig {
   branding: BrandingConfig;
   theme: ThemeConfig;
   auth: AuthConfig;
@@ -76,36 +76,39 @@ export interface PromptsConfig {
   homepage?: HomepageConfig;
 }
 
-export function defineConfig(config: PromptsConfig): PromptsConfig {
+/** @deprecated Use WebMCPConfig instead */
+export type PromptsConfig = WebMCPConfig;
+
+export function defineConfig(config: WebMCPConfig): WebMCPConfig {
   return config;
 }
 
 // Load the user's config
-let cachedConfig: PromptsConfig | null = null;
+let cachedConfig: WebMCPConfig | null = null;
 
 /**
  * Apply runtime environment variable overrides to config.
  * This allows customization via Docker env vars without rebuilding.
- * 
- * All env vars are prefixed with PCHAT_ to avoid conflicts.
- * 
+ *
+ * All env vars are prefixed with WMCP_ to avoid conflicts.
+ *
  * Supported env vars:
- *   PCHAT_NAME, PCHAT_DESCRIPTION, PCHAT_LOGO, PCHAT_LOGO_DARK, PCHAT_FAVICON, PCHAT_COLOR
- *   PCHAT_THEME_RADIUS (none|sm|md|lg), PCHAT_THEME_VARIANT (default|flat|brutal), PCHAT_THEME_DENSITY
- *   PCHAT_AUTH_PROVIDERS (comma-separated), PCHAT_ALLOW_REGISTRATION (true|false)
- *   PCHAT_LOCALES (comma-separated), PCHAT_DEFAULT_LOCALE
- *   PCHAT_FEATURE_* (true|false for each feature)
+ *   WMCP_NAME, WMCP_DESCRIPTION, WMCP_LOGO, WMCP_LOGO_DARK, WMCP_FAVICON, WMCP_COLOR
+ *   WMCP_THEME_RADIUS (none|sm|md|lg), WMCP_THEME_VARIANT (default|flat|brutal), WMCP_THEME_DENSITY
+ *   WMCP_AUTH_PROVIDERS (comma-separated), WMCP_ALLOW_REGISTRATION (true|false)
+ *   WMCP_LOCALES (comma-separated), WMCP_DEFAULT_LOCALE
+ *   WMCP_FEATURE_* (true|false for each feature)
  */
-function applyEnvOverrides(config: PromptsConfig): PromptsConfig {
+function applyEnvOverrides(config: WebMCPConfig): WebMCPConfig {
   const env = process.env;
-  
+
   // Helper functions
   const envBool = (key: string, fallback: boolean): boolean => {
     const val = env[key];
     if (val === undefined) return fallback;
     return val.toLowerCase() === 'true' || val === '1';
   };
-  
+
   const envArray = (key: string, fallback: string[]): string[] => {
     const val = env[key];
     if (!val) return fallback;
@@ -114,49 +117,49 @@ function applyEnvOverrides(config: PromptsConfig): PromptsConfig {
 
   return {
     branding: {
-      name: env.PCHAT_NAME || config.branding.name,
-      description: env.PCHAT_DESCRIPTION || config.branding.description,
-      logo: env.PCHAT_LOGO || config.branding.logo,
-      logoDark: env.PCHAT_LOGO_DARK || env.PCHAT_LOGO || config.branding.logoDark,
-      favicon: env.PCHAT_FAVICON || config.branding.favicon,
+      name: env.WMCP_NAME || config.branding.name,
+      description: env.WMCP_DESCRIPTION || config.branding.description,
+      logo: env.WMCP_LOGO || config.branding.logo,
+      logoDark: env.WMCP_LOGO_DARK || env.WMCP_LOGO || config.branding.logoDark,
+      favicon: env.WMCP_FAVICON || config.branding.favicon,
       appStoreUrl: config.branding.appStoreUrl,
       chromeExtensionUrl: config.branding.chromeExtensionUrl,
     },
     theme: {
-      radius: (env.PCHAT_THEME_RADIUS as ThemeConfig['radius']) || config.theme.radius,
-      variant: (env.PCHAT_THEME_VARIANT as ThemeConfig['variant']) || config.theme.variant,
-      density: (env.PCHAT_THEME_DENSITY as ThemeConfig['density']) || config.theme.density,
+      radius: (env.WMCP_THEME_RADIUS as ThemeConfig['radius']) || config.theme.radius,
+      variant: (env.WMCP_THEME_VARIANT as ThemeConfig['variant']) || config.theme.variant,
+      density: (env.WMCP_THEME_DENSITY as ThemeConfig['density']) || config.theme.density,
       colors: {
-        primary: env.PCHAT_COLOR || config.theme.colors.primary,
+        primary: env.WMCP_COLOR || config.theme.colors.primary,
         secondary: config.theme.colors.secondary,
         accent: config.theme.colors.accent,
       },
     },
     auth: {
-      providers: env.PCHAT_AUTH_PROVIDERS 
-        ? envArray('PCHAT_AUTH_PROVIDERS', config.auth.providers || ['credentials'])
+      providers: env.WMCP_AUTH_PROVIDERS
+        ? envArray('WMCP_AUTH_PROVIDERS', config.auth.providers || ['credentials'])
         : config.auth.providers,
-      allowRegistration: env.PCHAT_ALLOW_REGISTRATION !== undefined
-        ? envBool('PCHAT_ALLOW_REGISTRATION', config.auth.allowRegistration)
+      allowRegistration: env.WMCP_ALLOW_REGISTRATION !== undefined
+        ? envBool('WMCP_ALLOW_REGISTRATION', config.auth.allowRegistration)
         : config.auth.allowRegistration,
     },
     i18n: {
-      locales: env.PCHAT_LOCALES 
-        ? envArray('PCHAT_LOCALES', config.i18n.locales)
+      locales: env.WMCP_LOCALES
+        ? envArray('WMCP_LOCALES', config.i18n.locales)
         : config.i18n.locales,
-      defaultLocale: env.PCHAT_DEFAULT_LOCALE || config.i18n.defaultLocale,
+      defaultLocale: env.WMCP_DEFAULT_LOCALE || config.i18n.defaultLocale,
     },
     features: {
-      privatePrompts: envBool('PCHAT_FEATURE_PRIVATE_PROMPTS', config.features.privatePrompts),
-      changeRequests: envBool('PCHAT_FEATURE_CHANGE_REQUESTS', config.features.changeRequests),
-      categories: envBool('PCHAT_FEATURE_CATEGORIES', config.features.categories),
-      tags: envBool('PCHAT_FEATURE_TAGS', config.features.tags),
-      aiSearch: envBool('PCHAT_FEATURE_AI_SEARCH', config.features.aiSearch ?? false),
-      aiGeneration: envBool('PCHAT_FEATURE_AI_GENERATION', config.features.aiGeneration ?? false),
-      mcp: envBool('PCHAT_FEATURE_MCP', config.features.mcp ?? false),
-      comments: envBool('PCHAT_FEATURE_COMMENTS', config.features.comments ?? true),
+      privateResources: envBool('WMCP_FEATURE_PRIVATE_RESOURCES', config.features.privateResources),
+      changeRequests: envBool('WMCP_FEATURE_CHANGE_REQUESTS', config.features.changeRequests),
+      categories: envBool('WMCP_FEATURE_CATEGORIES', config.features.categories),
+      tags: envBool('WMCP_FEATURE_TAGS', config.features.tags),
+      aiSearch: envBool('WMCP_FEATURE_AI_SEARCH', config.features.aiSearch ?? false),
+      discovery: envBool('WMCP_FEATURE_DISCOVERY', config.features.discovery ?? false),
+      mcp: envBool('WMCP_FEATURE_MCP', config.features.mcp ?? false),
+      comments: envBool('WMCP_FEATURE_COMMENTS', config.features.comments ?? true),
     },
-    homepage: env.PCHAT_NAME ? {
+    homepage: env.WMCP_NAME ? {
       // If custom branding via env, use clone branding mode
       useCloneBranding: true,
       achievements: { enabled: false },
@@ -165,24 +168,24 @@ function applyEnvOverrides(config: PromptsConfig): PromptsConfig {
   };
 }
 
-export async function getConfig(): Promise<PromptsConfig> {
+export async function getConfig(): Promise<WebMCPConfig> {
   if (cachedConfig) return cachedConfig;
 
-  let baseConfig: PromptsConfig;
-  
+  let baseConfig: WebMCPConfig;
+
   try {
     // Dynamic import of user config
-    const userConfig = await import("@/../prompts.config");
+    const userConfig = await import("@/../webmcp.config");
     baseConfig = userConfig.default;
   } catch {
     // Fallback to default config
     baseConfig = {
       branding: {
-        name: "prompts.chat",
+        name: "webmcp.land",
         logo: "/logo.svg",
         logoDark: "/logo-dark.svg",
         favicon: "/favicon.ico",
-        description: "Collect, organize, and share AI prompts",
+        description: "Discover and connect MCP services for any task",
       },
       theme: {
         radius: "sm",
@@ -201,24 +204,24 @@ export async function getConfig(): Promise<PromptsConfig> {
         defaultLocale: "en",
       },
       features: {
-        privatePrompts: true,
+        privateResources: true,
         changeRequests: true,
         categories: true,
         tags: true,
         aiSearch: false,
-        aiGeneration: false,
+        discovery: false,
         comments: true,
       },
     };
   }
-  
+
   // Apply runtime environment variable overrides
   cachedConfig = applyEnvOverrides(baseConfig);
   return cachedConfig;
 }
 
 // Sync version for client components (must be initialized first)
-export function getConfigSync(): PromptsConfig {
+export function getConfigSync(): WebMCPConfig {
   if (!cachedConfig) {
     throw new Error("Config not initialized. Call getConfig() first in a server component.");
   }

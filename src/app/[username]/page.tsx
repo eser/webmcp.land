@@ -1,22 +1,24 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getTranslations, getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "@/i18n/request";
+import { and, count, desc, asc, eq, gte, lte, isNull, ne, inArray, sql } from "drizzle-orm";
 import { formatDistanceToNow } from "@/lib/date";
-import { getPromptUrl } from "@/lib/urls";
-import { Calendar, ArrowBigUp, FileText, Settings, GitPullRequest, Clock, Check, X, Pin, BadgeCheck, Users, ShieldCheck, Heart, ImageIcon } from "lucide-react";
-import { auth } from "@/lib/auth";
+import { getResourceUrl } from "@/lib/urls";
+import { Calendar, ArrowBigUp, FileText, Settings, GitPullRequest, Clock, Check, X, Pin, BadgeCheck, ShieldCheck, Heart } from "lucide-react";
+import { getSession } from "@/lib/auth";
 import { db } from "@/lib/db";
-import config from "@/../prompts.config";
+import { users, resources, resourceVotes, pinnedResources as pinnedResourcesTable, resourceConnections, changeRequests, comments } from "@/lib/schema";
+import config from "@/../webmcp.config";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { PromptList } from "@/components/prompts/prompt-list";
-import { PromptCard, type PromptCardProps } from "@/components/prompts/prompt-card";
+import { ResourceList } from "@/components/resources/resource-list";
+import { ResourceCard, type ResourceCardProps } from "@/components/resources/resource-card";
+import { PrivateResourcesNote } from "@/components/resources/private-resources-note";
 import { Masonry } from "@/components/ui/masonry";
 import { McpServerPopup } from "@/components/mcp/mcp-server-popup";
-import { PrivatePromptsNote } from "@/components/prompts/private-prompts-note";
 import { ActivityChartWrapper } from "@/components/user/activity-chart-wrapper";
 import { ProfileLinks, type CustomLink } from "@/components/user/profile-links";
 
@@ -28,17 +30,17 @@ interface UserProfilePageProps {
 export async function generateMetadata({ params }: UserProfilePageProps): Promise<Metadata> {
   const { username: rawUsername } = await params;
   const decodedUsername = decodeURIComponent(rawUsername);
-  
+
   // Only support /@username format
   if (!decodedUsername.startsWith("@")) {
     return { title: "User Not Found" };
   }
-  
+
   const username = decodedUsername.slice(1);
-    
-  const user = await db.user.findFirst({
-    where: { username: { equals: username, mode: "insensitive" } },
-    select: { name: true, username: true },
+
+  const user = await db.query.users.findFirst({
+    where: sql`lower(${users.username}) = lower(${username})`,
+    columns: { name: true, username: true },
   });
 
   if (!user) {
@@ -47,32 +49,68 @@ export async function generateMetadata({ params }: UserProfilePageProps): Promis
 
   return {
     title: `${user.name || user.username} (@${user.username})`,
-    description: `View ${user.name || user.username}'s prompts`,
+    description: `View ${user.name || user.username}'s resources`,
+  };
+}
+
+// Drizzle relational "with" for resource cards
+const resourceWith = {
+  author: {
+    columns: {
+      id: true,
+      name: true,
+      username: true,
+      avatar: true,
+      verified: true,
+    },
+  },
+  category: {
+    with: {
+      parent: {
+        columns: { id: true, name: true, slug: true },
+      },
+    },
+  },
+  tags: {
+    with: {
+      tag: true,
+    },
+  },
+  votes: true,
+  outgoingConnections: {
+    where: ne(resourceConnections.label, "related"),
+  },
+  incomingConnections: {
+    where: ne(resourceConnections.label, "related"),
+  },
+} as const;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function mapResource(p: any) {
+  return {
+    ...p,
+    voteCount: p.votes?.length ?? 0,
   };
 }
 
 export default async function UserProfilePage({ params, searchParams }: UserProfilePageProps) {
   const { username: rawUsername } = await params;
   const { page: pageParam, tab, date: dateFilter } = await searchParams;
-  const session = await auth();
+  const session = await getSession();
   const t = await getTranslations("user");
-  const tChanges = await getTranslations("changeRequests");
-  const tPrompts = await getTranslations("prompts");
   const locale = await getLocale();
 
-  // Decode URL-encoded @ symbol
   const decodedUsername = decodeURIComponent(rawUsername);
-  
-  // Only support /@username format - reject URLs without @
+
   if (!decodedUsername.startsWith("@")) {
     notFound();
   }
-  
+
   const username = decodedUsername.slice(1);
 
-  const user = await db.user.findFirst({
-    where: { username: { equals: username, mode: "insensitive" } },
-    select: {
+  const userRow = await db.query.users.findFirst({
+    where: sql`lower(${users.username}) = lower(${username})`,
+    columns: {
       id: true,
       name: true,
       username: true,
@@ -83,346 +121,190 @@ export default async function UserProfilePage({ params, searchParams }: UserProf
       createdAt: true,
       bio: true,
       customLinks: true,
-      _count: {
-        select: {
-          prompts: true,
-          contributions: true,
-        },
-      },
+    },
+    with: {
+      resources: { columns: { id: true } },
     },
   });
 
-  if (!user) {
+  if (!userRow) {
     notFound();
   }
+
+  const user = {
+    ...userRow,
+    _count: {
+      resources: userRow.resources.length,
+    },
+  };
 
   const page = Math.max(1, parseInt(pageParam || "1") || 1);
   const perPage = 24;
   const isOwner = session?.user?.id === user.id;
-  const isUnclaimed = user.email?.endsWith("@unclaimed.prompts.chat") ?? false;
+  const isUnclaimed = user.email?.endsWith("@unclaimed.webmcp.land") ?? false;
 
-  // Parse date filter for filtering prompts by day (validate YYYY-MM-DD format)
   const isValidDateFilter = dateFilter && /^\d{4}-\d{2}-\d{2}$/.test(dateFilter);
   const filterDateStart = isValidDateFilter ? new Date(dateFilter + "T00:00:00") : null;
   const filterDateEnd = isValidDateFilter ? new Date(dateFilter + "T23:59:59") : null;
-  // Also verify the Date objects are valid (e.g., 2024-02-30 would fail)
   const validFilterDateStart = filterDateStart && !isNaN(filterDateStart.getTime()) ? filterDateStart : null;
   const validFilterDateEnd = filterDateEnd && !isNaN(filterDateEnd.getTime()) ? filterDateEnd : null;
 
-  // Build where clause - show private prompts only if owner (unlisted prompts are visible on profiles)
-  // Exclude intermediate flow prompts (only show first prompts or standalone)
-  // Note: "related" connections are AI-suggested similar prompts, not flow connections
-  const where = {
-    authorId: user.id,
-    deletedAt: null,
-    incomingConnections: { none: { label: { not: "related" } } },
-    ...(isOwner ? {} : { isPrivate: false }),
-    ...(validFilterDateStart && validFilterDateEnd ? {
-      createdAt: {
-        gte: validFilterDateStart,
-        lte: validFilterDateEnd,
-      },
-    } : {}),
-  };
+  const baseConditions = [
+    eq(resources.authorId, user.id),
+    isNull(resources.deletedAt),
+  ];
+  if (!isOwner) {
+    baseConditions.push(eq(resources.isPrivate, false));
+  }
+  if (validFilterDateStart && validFilterDateEnd) {
+    baseConditions.push(gte(resources.createdAt, validFilterDateStart));
+    baseConditions.push(lte(resources.createdAt, validFilterDateEnd));
+  }
+  const resourceWhereClause = and(...baseConditions);
 
-  // Common prompt include for both queries
-  const promptInclude = {
-    author: {
-      select: {
-        id: true,
-        name: true,
-        username: true,
-        avatar: true,
-        verified: true,
-      },
-    },
-    category: {
-      include: {
-        parent: {
-          select: { id: true, name: true, slug: true },
-        },
-      },
-    },
-    tags: {
-      include: {
-        tag: true,
-      },
-    },
-    _count: {
-      select: {
-        votes: true,
-        contributors: true,
-        outgoingConnections: { where: { label: { not: "related" } } },
-        incomingConnections: { where: { label: { not: "related" } } },
-      },
-    },
-  };
-
-  // Calculate date range for activity (last 12 months)
   const oneYearAgo = new Date();
   oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
   oneYearAgo.setHours(0, 0, 0, 0);
 
-  // Fetch prompts, pinned prompts, contributions, liked prompts, user examples, counts, and activity data
-  const [promptsRaw, total, totalUpvotes, pinnedPromptsRaw, contributionsRaw, likedPromptsRaw, userExamplesRaw, privatePromptsCount, activityPrompts, activityVotes, activityChangeRequests, activityComments] = await Promise.all([
-    db.prompt.findMany({
-      where,
-      orderBy: { createdAt: "desc" },
-      skip: (page - 1) * perPage,
-      take: perPage,
-      include: promptInclude,
+  const votedResourceIds = await db
+    .select({ resourceId: resourceVotes.resourceId })
+    .from(resourceVotes)
+    .where(eq(resourceVotes.userId, user.id));
+  const likedIds = votedResourceIds.map((v) => v.resourceId);
+
+  const [
+    resourcesRaw,
+    [{ value: total }],
+    [{ value: totalUpvotes }],
+    pinnedResourcesRaw,
+    likedResourcesRaw,
+    privateResourcesCount,
+    activityResourcesData,
+    activityVotesData,
+    activityChangeRequestsData,
+    activityCommentsData,
+  ] = await Promise.all([
+    db.query.resources.findMany({
+      where: resourceWhereClause,
+      orderBy: desc(resources.createdAt),
+      offset: (page - 1) * perPage,
+      limit: perPage,
+      with: resourceWith,
     }),
-    db.prompt.count({ where }),
-    db.promptVote.count({
-      where: {
-        prompt: {
-          authorId: user.id,
+    db.select({ value: count() }).from(resources).where(resourceWhereClause),
+    db.select({ value: count() })
+      .from(resourceVotes)
+      .innerJoin(resources, eq(resourceVotes.resourceId, resources.id))
+      .where(eq(resources.authorId, user.id)),
+    db.query.pinnedResources.findMany({
+      where: eq(pinnedResourcesTable.userId, user.id),
+      orderBy: asc(pinnedResourcesTable.order),
+      with: {
+        resource: {
+          with: resourceWith,
         },
       },
     }),
-    db.pinnedPrompt.findMany({
-      where: { userId: user.id },
-      orderBy: { order: "asc" },
-      include: {
-        prompt: {
-          include: promptInclude,
-        },
-      },
-    }),
-    // Fetch contributions (prompts where user is contributor but not author)
-    // Limited to 50 to prevent memory issues
-    db.prompt.findMany({
-      where: {
-        contributors: {
-          some: { id: user.id },
-        },
-        authorId: { not: user.id },
-        isPrivate: false,
-        deletedAt: null,
-      },
-      orderBy: { updatedAt: "desc" },
-      take: 50,
-      include: promptInclude,
-    }),
-    // Fetch liked prompts (prompts user has voted for)
-    db.prompt.findMany({
-      where: {
-        votes: {
-          some: { userId: user.id },
-        },
-        isPrivate: false,
-        deletedAt: null,
-      },
-      orderBy: { createdAt: "desc" },
-      take: 50,
-      include: promptInclude,
-    }),
-    // Fetch user's example media submissions (only their own examples, not original prompt media)
-    // Get the prompts that user has added examples to, including their specific example
-    db.prompt.findMany({
-      where: {
-        userExamples: {
-          some: { userId: user.id },
-        },
-        isPrivate: false,
-        deletedAt: null,
-      },
-      orderBy: { createdAt: "desc" },
-      take: 50,
-      include: {
-        ...promptInclude,
-        userExamples: {
-          where: { userId: user.id },
-          take: 1,
-          orderBy: { createdAt: "desc" },
-          select: { mediaUrl: true },
-        },
-      },
-    }),
-    // Count private prompts (only relevant for owner)
-    isOwner ? db.prompt.count({
-      where: {
-        authorId: user.id,
-        isPrivate: true,
-        deletedAt: null,
-      },
-    }) : Promise.resolve(0),
-    // Activity: prompts created in last year
-    db.prompt.findMany({
-      where: {
-        authorId: user.id,
-        createdAt: { gte: oneYearAgo },
-      },
-      select: { createdAt: true },
-    }),
-    // Activity: votes given in last year
-    db.promptVote.findMany({
-      where: {
-        userId: user.id,
-        createdAt: { gte: oneYearAgo },
-      },
-      select: { createdAt: true },
-    }),
-    // Activity: change requests in last year
-    db.changeRequest.findMany({
-      where: {
-        authorId: user.id,
-        createdAt: { gte: oneYearAgo },
-      },
-      select: { createdAt: true },
-    }),
-    // Activity: comments in last year
-    db.comment.findMany({
-      where: {
-        authorId: user.id,
-        createdAt: { gte: oneYearAgo },
-      },
-      select: { createdAt: true },
-    }),
+    likedIds.length > 0
+      ? db.query.resources.findMany({
+          where: and(
+            inArray(resources.id, likedIds),
+            eq(resources.isPrivate, false),
+            isNull(resources.deletedAt),
+          ),
+          orderBy: desc(resources.createdAt),
+          limit: 50,
+          with: resourceWith,
+        })
+      : Promise.resolve([]),
+    isOwner
+      ? db.select({ value: count() }).from(resources).where(
+          and(eq(resources.authorId, user.id), eq(resources.isPrivate, true), isNull(resources.deletedAt)),
+        ).then((r) => r[0].value)
+      : Promise.resolve(0),
+    db.select({ createdAt: resources.createdAt }).from(resources)
+      .where(and(eq(resources.authorId, user.id), gte(resources.createdAt, oneYearAgo))),
+    db.select({ createdAt: resourceVotes.createdAt }).from(resourceVotes)
+      .where(and(eq(resourceVotes.userId, user.id), gte(resourceVotes.createdAt, oneYearAgo))),
+    db.select({ createdAt: changeRequests.createdAt }).from(changeRequests)
+      .where(and(eq(changeRequests.authorId, user.id), gte(changeRequests.createdAt, oneYearAgo))),
+    db.select({ createdAt: comments.createdAt }).from(comments)
+      .where(and(eq(comments.authorId, user.id), gte(comments.createdAt, oneYearAgo))),
   ]);
 
-  // Transform to include voteCount and contributorCount
-  const prompts = promptsRaw.map((p) => ({
-    ...p,
-    voteCount: p._count?.votes ?? 0,
-    contributorCount: p._count?.contributors ?? 0,
-  }));
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const filterStandaloneResources = (list: any[]) =>
+    list.filter((p) => !p.incomingConnections || p.incomingConnections.length === 0);
 
-  // Transform contributions
-  const contributions = contributionsRaw.map((p) => ({
-    ...p,
-    voteCount: p._count?.votes ?? 0,
-    contributorCount: p._count?.contributors ?? 0,
-  }));
+  const resourcesList = filterStandaloneResources(resourcesRaw).map(mapResource);
+  const likedResources = likedResourcesRaw.map(mapResource);
 
-  // Transform liked prompts
-  const likedPrompts = likedPromptsRaw.map((p) => ({
-    ...p,
-    voteCount: p._count?.votes ?? 0,
-    contributorCount: p._count?.contributors ?? 0,
-  }));
-
-  // Transform user examples (prompts where user added examples)
-  // Override mediaUrl with user's example mediaUrl
-  const userExamples = userExamplesRaw.map((p) => ({
-    ...p,
-    mediaUrl: p.userExamples?.[0]?.mediaUrl ?? p.mediaUrl,
-    userExamples: undefined, // Remove to avoid type conflict with PromptCard
-    voteCount: p._count?.votes ?? 0,
-    contributorCount: p._count?.contributors ?? 0,
-  }));
-
-  // Process activity data into daily counts
   const activityMap = new Map<string, number>();
   const allActivities = [
-    ...activityPrompts,
-    ...activityVotes,
-    ...activityChangeRequests,
-    ...activityComments,
+    ...activityResourcesData,
+    ...activityVotesData,
+    ...activityChangeRequestsData,
+    ...activityCommentsData,
   ];
-  
+
   allActivities.forEach((item) => {
     const dateStr = item.createdAt.toISOString().split("T")[0];
     activityMap.set(dateStr, (activityMap.get(dateStr) || 0) + 1);
   });
 
-  const activityData = Array.from(activityMap.entries()).map(([date, count]) => ({
+  const activityData = Array.from(activityMap.entries()).map(([date, actCount]) => ({
     date,
-    count,
+    count: actCount,
   }));
 
-  // Transform pinned prompts - filter out private prompts for non-owners (unlisted are visible)
-  const pinnedPrompts = pinnedPromptsRaw
-    .filter((pp) => isOwner || !pp.prompt.isPrivate)
-    .map((pp) => ({
-      ...pp.prompt,
-      voteCount: pp.prompt._count?.votes ?? 0,
-      contributorCount: pp.prompt._count?.contributors ?? 0,
-    }));
+  const pinnedResourcesList = pinnedResourcesRaw
+    .filter((pp) => isOwner || !pp.resource.isPrivate)
+    .map((pp) => mapResource(pp.resource));
 
-  // Get set of pinned prompt IDs for easy lookup
-  const pinnedIds = new Set<string>(pinnedPrompts.map((p: { id: string }) => p.id));
-
+  const pinnedIds = new Set<string>(pinnedResourcesList.map((p: { id: string }) => p.id));
   const totalPages = Math.ceil(total / perPage);
 
-  // Fetch change requests for this user
-  // 1. Change requests the user submitted (all statuses for owner, approved only for others)
-  // 2. Change requests received on user's prompts (approved ones)
-  // Limited to 100 each to prevent memory issues
+  const submittedCRConditions = [eq(changeRequests.authorId, user.id)];
+  if (!isOwner) submittedCRConditions.push(eq(changeRequests.status, "APPROVED"));
+
+  const receivedCRConditions = [ne(changeRequests.authorId, user.id)];
+  if (!isOwner) receivedCRConditions.push(eq(changeRequests.status, "APPROVED"));
+
+  const userResourceIds = await db
+    .select({ id: resources.id })
+    .from(resources)
+    .where(eq(resources.authorId, user.id));
+  const ownedResourceIds = userResourceIds.map((p) => p.id);
+
   const [submittedChangeRequests, receivedChangeRequests] = await Promise.all([
-    // CRs user submitted
-    db.changeRequest.findMany({
-      where: {
-        authorId: user.id,
-        // Non-owners only see approved CRs
-        ...(isOwner ? {} : { status: "APPROVED" }),
-      },
-      orderBy: { createdAt: "desc" },
-      take: 100,
-      include: {
-        author: {
-          select: {
-            id: true,
-            name: true,
-            username: true,
-            avatar: true,
-          },
-        },
-        prompt: {
-          select: {
-            id: true,
-            slug: true,
-            title: true,
-            author: {
-              select: {
-                id: true,
-                name: true,
-                username: true,
-              },
-            },
-          },
+    db.query.changeRequests.findMany({
+      where: and(...submittedCRConditions),
+      orderBy: desc(changeRequests.createdAt),
+      limit: 100,
+      with: {
+        author: { columns: { id: true, name: true, username: true, avatar: true } },
+        resource: {
+          columns: { id: true, slug: true, title: true },
+          with: { author: { columns: { id: true, name: true, username: true } } },
         },
       },
     }),
-    // CRs received on user's prompts (all statuses for owner, approved only for others)
-    db.changeRequest.findMany({
-      where: {
-        prompt: {
-          authorId: user.id,
-        },
-        ...(isOwner ? {} : { status: "APPROVED" }),
-        authorId: { not: user.id }, // Exclude self-submitted
-      },
-      orderBy: { createdAt: "desc" },
-      take: 100,
-      include: {
-        author: {
-          select: {
-            id: true,
-            name: true,
-            username: true,
-            avatar: true,
-          },
-        },
-        prompt: {
-          select: {
-            id: true,
-            slug: true,
-            title: true,
-            author: {
-              select: {
-                id: true,
-                name: true,
-                username: true,
-              },
+    ownedResourceIds.length > 0
+      ? db.query.changeRequests.findMany({
+          where: and(inArray(changeRequests.resourceId, ownedResourceIds), ...receivedCRConditions),
+          orderBy: desc(changeRequests.createdAt),
+          limit: 100,
+          with: {
+            author: { columns: { id: true, name: true, username: true, avatar: true } },
+            resource: {
+              columns: { id: true, slug: true, title: true },
+              with: { author: { columns: { id: true, name: true, username: true } } },
             },
           },
-        },
-      },
-    }),
+        })
+      : Promise.resolve([]),
   ]);
 
-  // Combine and sort by date, marking the type
   const allChangeRequests = [
     ...submittedChangeRequests.map((cr) => ({ ...cr, type: "submitted" as const })),
     ...receivedChangeRequests.map((cr) => ({ ...cr, type: "received" as const })),
@@ -430,7 +312,7 @@ export default async function UserProfilePage({ params, searchParams }: UserProf
 
   const pendingCount = submittedChangeRequests.filter((cr) => cr.status === "PENDING").length +
     receivedChangeRequests.filter((cr) => cr.status === "PENDING").length;
-  const defaultTab = tab === "changes" ? "changes" : tab === "contributions" ? "contributions" : tab === "likes" ? "likes" : tab === "examples" ? "examples" : "prompts";
+  const defaultTab = tab === "changes" ? "changes" : tab === "likes" ? "likes" : "resources";
 
   const statusColors = {
     PENDING: "bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 border-yellow-500/20",
@@ -448,7 +330,6 @@ export default async function UserProfilePage({ params, searchParams }: UserProf
     <div className="container py-6">
       {/* Profile Header */}
       <div className="flex flex-col gap-4 mb-8">
-        {/* Avatar + Name row */}
         <div className="flex items-center gap-4">
           <Avatar className="h-16 w-16 md:h-20 md:w-20 shrink-0">
             <AvatarImage src={user.avatar || undefined} />
@@ -486,56 +367,43 @@ export default async function UserProfilePage({ params, searchParams }: UserProf
               )}
             </p>
           </div>
-          {/* Actions - desktop only */}
           <div className="hidden md:flex items-center gap-2 shrink-0">
             {config.features.mcp !== false && <McpServerPopup initialUsers={[user.username]} showOfficialBranding={!config.homepage?.useCloneBranding} />}
             {isOwner && (
-              <Button variant="outline" size="sm" asChild>
-                <Link href="/settings">
+              <Button render={<Link href="/settings" />} variant="outline" size="sm">
                   <Settings className="h-4 w-4 mr-1.5" />
                   {t("editProfile")}
-                </Link>
               </Button>
             )}
           </div>
         </div>
 
-        {/* Actions - mobile only */}
         <div className="md:hidden flex gap-2">
           {config.features.mcp !== false && <McpServerPopup initialUsers={[user.username]} showOfficialBranding={!config.homepage?.useCloneBranding} />}
           {isOwner && (
-            <Button variant="outline" size="sm" asChild className="flex-1">
-              <Link href="/settings">
+            <Button render={<Link href="/settings" />} variant="outline" size="sm" className="flex-1">
                 <Settings className="h-4 w-4 mr-1.5" />
                 {t("editProfile")}
-              </Link>
             </Button>
           )}
         </div>
 
-        {/* Bio and Social Links */}
-        <ProfileLinks 
-          bio={user.bio} 
+        <ProfileLinks
+          bio={user.bio}
           customLinks={user.customLinks as CustomLink[] | null}
           className="mb-2"
         />
 
-        {/* Stats - stacked on mobile, inline on desktop */}
         <div className="flex flex-col gap-2 md:flex-row md:items-center md:gap-6 text-sm">
           <div className="flex items-center gap-1.5">
             <FileText className="h-4 w-4 text-muted-foreground" />
-            <span className="font-medium">{user._count.prompts}</span>
-            <span className="text-muted-foreground">{t("prompts").toLowerCase()}</span>
+            <span className="font-medium">{user._count.resources}</span>
+            <span className="text-muted-foreground">{t("resources").toLowerCase()}</span>
           </div>
           <div className="flex items-center gap-1.5">
             <ArrowBigUp className="h-4 w-4 text-muted-foreground" />
             <span className="font-medium">{totalUpvotes}</span>
             <span className="text-muted-foreground">{t("upvotesReceived")}</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <Users className="h-4 w-4 text-muted-foreground" />
-            <span className="font-medium">{user._count.contributions}</span>
-            <span className="text-muted-foreground">{t("contributionsCount")}</span>
           </div>
           <div className="flex items-center gap-1.5 text-muted-foreground">
             <Calendar className="h-4 w-4" />
@@ -545,48 +413,28 @@ export default async function UserProfilePage({ params, searchParams }: UserProf
 
         </div>
 
-      {/* Activity Chart - above tabs */}
       <div className="mb-6">
         <ActivityChartWrapper data={activityData} locale={locale} />
       </div>
 
-      {/* Tabs for Prompts and Change Requests */}
       <Tabs defaultValue={defaultTab} className="w-full">
           <TabsList className="mb-4">
-          <TabsTrigger value="prompts" className="gap-2">
+          <TabsTrigger value="resources" className="gap-2">
             <FileText className="h-4 w-4" />
-            {t("prompts")}
-          </TabsTrigger>
-          <TabsTrigger value="contributions" className="gap-2">
-            <Users className="h-4 w-4" />
-            {t("contributions")}
-            {contributions.length > 0 && (
-              <Badge variant="secondary" className="ml-1 h-5 min-w-5 px-1 text-xs">
-                {contributions.length}
-              </Badge>
-            )}
+            {t("resources")}
           </TabsTrigger>
           <TabsTrigger value="likes" className="gap-2">
             <Heart className="h-4 w-4" />
             {t("likes")}
-            {likedPrompts.length > 0 && (
+            {likedResources.length > 0 && (
               <Badge variant="secondary" className="ml-1 h-5 min-w-5 px-1 text-xs">
-                {likedPrompts.length}
-              </Badge>
-            )}
-          </TabsTrigger>
-          <TabsTrigger value="examples" className="gap-2">
-            <ImageIcon className="h-4 w-4" />
-            {t("examples")}
-            {userExamples.length > 0 && (
-              <Badge variant="secondary" className="ml-1 h-5 min-w-5 px-1 text-xs">
-                {userExamples.length}
+                {likedResources.length}
               </Badge>
             )}
           </TabsTrigger>
           <TabsTrigger value="changes" className="gap-2">
             <GitPullRequest className="h-4 w-4" />
-            {tChanges("title")}
+            {t("title")}
             {isOwner && pendingCount > 0 && (
               <Badge variant="destructive" className="ml-1 h-5 min-w-5 px-1 text-xs">
                 {pendingCount}
@@ -595,72 +443,66 @@ export default async function UserProfilePage({ params, searchParams }: UserProf
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="prompts">
-          {/* Date Filter Indicator */}
+        <TabsContent value="resources">
           {validFilterDateStart && (
             <div className="flex items-center gap-2 mb-4 p-3 bg-primary/10 border border-primary/20 rounded-lg">
               <Calendar className="h-4 w-4 text-primary" />
               <span className="text-sm">
                 {t("filteringByDate", { date: validFilterDateStart.toLocaleDateString(locale, { weekday: "long", year: "numeric", month: "long", day: "numeric" }) })}
               </span>
-              <Link 
-                href={`/@${user.username}`} 
-                className="ml-auto text-xs text-primary hover:underline"
-              >
+              <Link href={`/@${user.username}`} className="ml-auto text-xs text-primary hover:underline">
                 {t("clearFilter")}
               </Link>
             </div>
           )}
 
-          {/* Private Prompts MCP Note - only shown to owner with private prompts */}
-          {isOwner && <PrivatePromptsNote count={privatePromptsCount} />}
+          {isOwner && <PrivateResourcesNote count={privateResourcesCount} />}
 
-          {/* Pinned Prompts Section */}
-          {pinnedPrompts.length > 0 && (
+          {pinnedResourcesList.length > 0 && (
             <div className="mb-6 pb-6 border-b">
               <div className="flex items-center gap-2 mb-3">
                 <Pin className="h-4 w-4 text-primary" />
-                <h3 className="text-sm font-medium">{tPrompts("pinnedPrompts")}</h3>
+                <h3 className="text-sm font-medium">{t("pinnedResources")}</h3>
               </div>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {pinnedPrompts.map((prompt: PromptCardProps["prompt"]) => (
-                  <PromptCard key={prompt.id} prompt={prompt} showPinButton={isOwner} isPinned={isOwner} />
+                {pinnedResourcesList.map((resource: ResourceCardProps["resource"]) => (
+                  <ResourceCard key={resource.id} resource={resource} showPinButton={isOwner} isPinned={isOwner} />
                 ))}
               </div>
             </div>
           )}
 
-          {prompts.length === 0 && pinnedPrompts.length === 0 ? (
+          {resourcesList.length === 0 && pinnedResourcesList.length === 0 ? (
             <div className="text-center py-12 border rounded-lg bg-muted/30">
               {validFilterDateStart ? (
                 <>
                   <p className="text-muted-foreground">
-                    {isOwner ? t("noPromptsOnDateOwner") : t("noPromptsOnDate")}
+                    {isOwner ? t("noResourcesOnDateOwner") : t("noResourcesOnDate")}
                   </p>
                   {isOwner && (
-                    <Button asChild className="mt-4" size="sm">
-                      <Link href="/prompts/new">{t("createForToday")}</Link>
+                    <Button render={<Link href="/registry/new" />} className="mt-4" size="sm">
+                      {t("createForToday")}
                     </Button>
                   )}
                 </>
               ) : (
                 <>
-                  <p className="text-muted-foreground">{isOwner ? t("noPromptsOwner") : t("noPrompts")}</p>
+                  <p className="text-muted-foreground">{isOwner ? t("noResourcesOwner") : t("noResources")}</p>
                   {isOwner && (
-                    <Button asChild className="mt-4" size="sm">
-                      <Link href="/prompts/new">{t("createFirstPrompt")}</Link>
+                    <Button render={<Link href="/registry/new" />} className="mt-4" size="sm">
+                      {t("createFirstResource")}
                     </Button>
                   )}
                 </>
               )}
             </div>
-          ) : prompts.length > 0 ? (
+          ) : resourcesList.length > 0 ? (
             <>
-              {pinnedPrompts.length > 0 && (
-                <h3 className="text-sm font-medium mb-3">{t("allPrompts")}</h3>
+              {pinnedResourcesList.length > 0 && (
+                <h3 className="text-sm font-medium mb-3">{t("allResources")}</h3>
               )}
-              <PromptList
-                prompts={prompts}
+              <ResourceList
+                resources={resourcesList}
                 currentPage={page}
                 totalPages={totalPages}
                 pinnedIds={pinnedIds}
@@ -670,48 +512,18 @@ export default async function UserProfilePage({ params, searchParams }: UserProf
           ) : null}
         </TabsContent>
 
-        <TabsContent value="contributions">
-          {contributions.length === 0 ? (
-            <div className="text-center py-12 border rounded-lg bg-muted/30">
-              <Users className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
-              <p className="text-muted-foreground">{isOwner ? t("noContributionsOwner") : t("noContributions")}</p>
-            </div>
-          ) : (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {contributions.map((prompt: PromptCardProps["prompt"]) => (
-                <PromptCard key={prompt.id} prompt={prompt} />
-              ))}
-            </div>
-          )}
-        </TabsContent>
-
         <TabsContent value="likes">
-          {likedPrompts.length === 0 ? (
+          {likedResources.length === 0 ? (
             <div className="text-center py-12 border rounded-lg bg-muted/30">
               <Heart className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
               <p className="text-muted-foreground">{isOwner ? t("noLikesOwner") : t("noLikes")}</p>
             </div>
           ) : (
             <Masonry columnCount={{ default: 1, md: 2, lg: 3 }} gap={16}>
-              {likedPrompts.map((prompt: PromptCardProps["prompt"]) => (
-                <PromptCard key={prompt.id} prompt={prompt} />
+              {likedResources.map((resource: ResourceCardProps["resource"]) => (
+                <ResourceCard key={resource.id} resource={resource} />
               ))}
             </Masonry>
-          )}
-        </TabsContent>
-
-        <TabsContent value="examples">
-          {userExamples.length === 0 ? (
-            <div className="text-center py-12 border rounded-lg bg-muted/30">
-              <ImageIcon className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
-              <p className="text-muted-foreground">{isOwner ? t("noExamplesOwner") : t("noExamples")}</p>
-            </div>
-          ) : (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {userExamples.map((prompt: PromptCardProps["prompt"]) => (
-                <PromptCard key={prompt.id} prompt={prompt} />
-              ))}
-            </div>
           )}
         </TabsContent>
 
@@ -719,24 +531,24 @@ export default async function UserProfilePage({ params, searchParams }: UserProf
           {allChangeRequests.length === 0 ? (
             <div className="text-center py-12 border rounded-lg bg-muted/30">
               <GitPullRequest className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
-              <p className="text-muted-foreground">{tChanges("noRequests")}</p>
+              <p className="text-muted-foreground">{t("noRequests")}</p>
             </div>
           ) : (
             <div className="divide-y border rounded-lg">
               {allChangeRequests.map((cr) => {
                 const StatusIcon = statusIcons[cr.status as keyof typeof statusIcons];
                 return (
-                  <Link 
-                    key={cr.id} 
-                    href={`${getPromptUrl(cr.prompt.id, cr.prompt.slug)}/changes/${cr.id}`}
+                  <Link
+                    key={cr.id}
+                    href={`${getResourceUrl(cr.resource.id, cr.resource.slug)}/changes/${cr.id}`}
                     className="flex items-center justify-between px-3 py-2 hover:bg-accent/50 transition-colors"
                   >
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium truncate">{cr.prompt.title}</p>
+                      <p className="text-sm font-medium truncate">{cr.resource.title}</p>
                       <p className="text-xs text-muted-foreground">
-                        {cr.type === "submitted" 
-                          ? tChanges("submittedTo", { author: cr.prompt.author?.name || cr.prompt.author?.username })
-                          : tChanges("receivedFrom", { author: cr.author.name || cr.author.username })
+                        {cr.type === "submitted"
+                          ? t("submittedTo", { author: cr.resource.author?.name || cr.resource.author?.username })
+                          : t("receivedFrom", { author: cr.author.name || cr.author.username })
                         }
                         {" · "}
                         {formatDistanceToNow(cr.createdAt, locale)}
@@ -744,7 +556,7 @@ export default async function UserProfilePage({ params, searchParams }: UserProf
                     </div>
                     <Badge className={`ml-2 shrink-0 ${statusColors[cr.status as keyof typeof statusColors]}`}>
                       <StatusIcon className="h-3 w-3 mr-1" />
-                      {tChanges(cr.status.toLowerCase())}
+                      {t(cr.status.toLowerCase())}
                     </Badge>
                   </Link>
                 );

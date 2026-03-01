@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { headers } from "next/headers";
 import { Code, Zap, Terminal, Search, Box, Key, Save, Sparkles, Cpu, FilePlus, FileX } from "lucide-react";
-import { ImprovePromptDemo } from "@/components/api/improve-prompt-demo";
+import { ImproveResourceDemo } from "@/components/api/improve-prompt-demo";
 import {
   Table,
   TableBody,
@@ -11,25 +11,25 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { McpConfigTabs } from "@/components/mcp/mcp-config-tabs";
-import config from "@/../prompts.config";
+import config from "@/../webmcp.config";
 
 export const metadata = {
-  title: "API Documentation - prompts.chat",
-  description: "API for searching and discovering AI prompts programmatically",
+  title: "API Documentation - webmcp.land",
+  description: "API for searching and discovering MCP resources programmatically",
 };
 
 export default async function ApiDocsPage() {
   const headersList = await headers();
-  const host = headersList.get("host") || "prompts.chat";
+  const host = headersList.get("host") || "webmcp.land";
   const protocol = host.includes("localhost") ? "http" : "https";
   const baseUrl = `${protocol}://${host}`;
   return (
     <div className="container max-w-4xl py-10">
       <h1 className="text-2xl font-bold mb-2">API Documentation</h1>
       <p className="text-muted-foreground mb-8">
-        {config.features.mcp !== false 
-          ? "prompts.chat provides an MCP-first API for searching and discovering AI prompts programmatically. Use the MCP endpoint directly with any MCP-compatible client, or make standard HTTP requests."
-          : "prompts.chat provides an API for searching and discovering AI prompts programmatically."
+        {config.features.mcp !== false
+          ? "webmcp.land provides an MCP-first API for searching and discovering MCP resources programmatically. Use the MCP endpoint directly with any MCP-compatible client, or make standard HTTP requests."
+          : "webmcp.land provides an API for searching and discovering MCP resources programmatically."
         }
       </p>
 
@@ -68,11 +68,11 @@ export default async function ApiDocsPage() {
                 Using with MCP Clients
               </h2>
               <p className="text-muted-foreground">
-                Add prompts.chat to your MCP client configuration. Choose your client and connection type below:
+                Add webmcp.land to your MCP client configuration. Choose your client and connection type below:
               </p>
               <McpConfigTabs baseUrl={baseUrl} className="[&_button]:text-sm [&_button]:px-3 [&_button]:py-1.5 [&_pre]:text-sm [&_pre]:p-4" />
               <p className="text-muted-foreground text-sm">
-                <strong>Remote</strong> connects directly to prompts.chat API. <strong>Local</strong> runs the MCP server locally via npx.
+                <strong>Remote</strong> connects directly to webmcp.land API. <strong>Local</strong> runs the MCP server locally via npx.
               </p>
             </section>
 
@@ -83,10 +83,10 @@ export default async function ApiDocsPage() {
                 Authentication
               </h2>
               <p className="text-muted-foreground">
-                Most API features work without authentication. However, to save prompts via MCP or access your private prompts,
+                Most API features work without authentication. However, to save resources via MCP or access your private resources,
                 you need to authenticate using an API key.
               </p>
-              
+
               <div className="bg-muted/50 rounded-lg p-4 text-sm space-y-3">
                 <div>
                   <p className="font-medium">Generate an API Key</p>
@@ -108,7 +108,7 @@ export default async function ApiDocsPage() {
 
               <div className="bg-muted rounded-lg p-4 font-mono text-sm overflow-x-auto">
                 <pre>{`# Remote: HTTP transport with headers
-"prompts-chat": {
+"webmcp-land": {
   "url": "${baseUrl}/api/mcp",
   "headers": {
     "PROMPTS_API_KEY": "pchat_your_api_key_here"
@@ -116,9 +116,9 @@ export default async function ApiDocsPage() {
 }
 
 # Local: stdio transport with environment variable
-"prompts-chat": {
+"webmcp-land": {
   "command": "npx",
-  "args": ["-y", "@fkadev/prompts.chat-mcp"],
+  "args": ["-y", "@eser/webmcp.land-mcp"],
   "env": {
     "PROMPTS_API_KEY": "pchat_your_api_key_here"
   }
@@ -132,10 +132,10 @@ curl -X POST ${baseUrl}/api/mcp \\
               </div>
 
               <p className="text-muted-foreground text-sm">
-                <strong>Remote (HTTP)</strong> sends requests to prompts.chat with the API key in headers. 
+                <strong>Remote (HTTP)</strong> sends requests to webmcp.land with the API key in headers.
                 <strong> Local (stdio)</strong> runs the MCP server locally via npx with the API key as an environment variable.
-                With authentication, you can use the <code className="bg-muted px-1.5 py-0.5 rounded">save_prompt</code> tool 
-                and search results will include your private prompts.
+                With authentication, you can use the <code className="bg-muted px-1.5 py-0.5 rounded">save_prompt</code> tool
+                and search results will include your private resources.
               </p>
             </section>
 
@@ -146,42 +146,42 @@ curl -X POST ${baseUrl}/api/mcp \\
                 MCP Prompts
               </h2>
               <p className="text-muted-foreground">
-                All public prompts are exposed as native MCP prompts. This allows MCP clients to list 
-                and use prompts directly via slash commands or prompt pickers. You can filter prompts 
+                All public resources are exposed as native MCP prompts. This allows MCP clients to list
+                and use resources directly via slash commands or prompt pickers. You can filter resources
                 by category or tag using URL query parameters.
               </p>
-              
+
               <div className="bg-muted rounded-lg p-4 font-mono text-sm overflow-x-auto">
                 <pre>{`# Filter by users (one or more usernames)
-"prompts-chat": {
+"webmcp-land": {
   "url": "${baseUrl}/api/mcp?users=f,torvalds"
 }
 
 # Filter by categories
-"prompts-chat": {
+"webmcp-land": {
   "url": "${baseUrl}/api/mcp?categories=coding,marketing"
 }
 
 # Filter by tags
-"prompts-chat": {
+"webmcp-land": {
   "url": "${baseUrl}/api/mcp?tags=chatgpt,writing"
 }
 
 # Combine filters
-"prompts-chat": {
+"webmcp-land": {
   "url": "${baseUrl}/api/mcp?users=f&categories=coding&tags=js"
 }`}</pre>
               </div>
-              
+
               <div className="bg-muted/50 rounded-lg p-4 text-sm space-y-3">
                 <div>
                   <p className="font-medium">prompts/list</p>
-                  <p className="text-muted-foreground">Browse all available prompts with pagination support.</p>
+                  <p className="text-muted-foreground">Browse all available resources with pagination support.</p>
                 </div>
                 <div>
                   <p className="font-medium">prompts/get</p>
                   <p className="text-muted-foreground">
-                    Retrieve a prompt by ID. Variables ({"${name}"} or {"${name:default}"}) are automatically 
+                    Retrieve a resource by ID. Variables ({"${name}"} or {"${name:default}"}) are automatically
                     substituted with provided arguments.
                   </p>
                 </div>
@@ -221,10 +221,10 @@ curl -X POST ${baseUrl}/api/mcp \\
           <div className="space-y-4">
             <h3 className="font-medium flex items-center gap-2">
               <Search className="h-4 w-4" />
-              search_prompts
+              search_resources
             </h3>
             <p className="text-muted-foreground">
-              Search for AI prompts by keyword. Returns matching prompts with title, description, 
+              Search for MCP resources by keyword. Returns matching resources with title, description,
               content, author, category, and tags.
             </p>
 
@@ -243,7 +243,7 @@ curl -X POST ${baseUrl}/api/mcp \\
                     <TableCell className="font-mono text-xs">query</TableCell>
                     <TableCell className="text-muted-foreground text-xs">string</TableCell>
                     <TableCell className="text-xs">Yes</TableCell>
-                    <TableCell className="text-muted-foreground text-sm">Search query to find relevant prompts</TableCell>
+                    <TableCell className="text-muted-foreground text-sm">Search query to find relevant resources</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell className="font-mono text-xs">limit</TableCell>
@@ -280,10 +280,10 @@ curl -X POST ${baseUrl}/api/mcp \\
           <div className="space-y-4">
             <h3 className="font-medium flex items-center gap-2">
               <Box className="h-4 w-4" />
-              get_prompt
+              get_resource
             </h3>
             <p className="text-muted-foreground">
-              Get a prompt by ID. If the prompt contains template variables (like {"${variable}"} or {"${variable:default}"}), 
+              Get a resource by ID. If the resource contains template variables (like {"${variable}"} or {"${variable:default}"}),
               the MCP client will be asked to provide values through elicitation.
             </p>
 
@@ -302,7 +302,7 @@ curl -X POST ${baseUrl}/api/mcp \\
                     <TableCell className="font-mono text-xs">id</TableCell>
                     <TableCell className="text-muted-foreground text-xs">string</TableCell>
                     <TableCell className="text-xs">Yes</TableCell>
-                    <TableCell className="text-muted-foreground text-sm">The ID of the prompt to retrieve</TableCell>
+                    <TableCell className="text-muted-foreground text-sm">The ID of the resource to retrieve</TableCell>
                   </TableRow>
                 </TableBody>
               </Table>
@@ -311,9 +311,9 @@ curl -X POST ${baseUrl}/api/mcp \\
             <div className="bg-muted/50 rounded-lg p-4 text-sm">
               <p className="font-medium mb-2">Variable Elicitation</p>
               <p className="text-muted-foreground">
-                When a prompt contains variables like {"${name}"} or {"${topic:default value}"}, MCP clients 
-                that support elicitation will prompt the user to fill in these values. Variables with 
-                default values (after the colon) are optional. The prompt content will be returned with 
+                When a resource contains variables like {"${name}"} or {"${topic:default value}"}, MCP clients
+                that support elicitation will prompt the user to fill in these values. Variables with
+                default values (after the colon) are optional. The resource content will be returned with
                 variables replaced.
               </p>
             </div>
@@ -323,11 +323,11 @@ curl -X POST ${baseUrl}/api/mcp \\
           <div className="space-y-4">
             <h3 className="font-medium flex items-center gap-2">
               <Save className="h-4 w-4" />
-              save_prompt
+              save_resource
               <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded">Requires Auth</span>
             </h3>
             <p className="text-muted-foreground">
-              Save a new prompt to your account. Requires API key authentication. Prompts are private by default
+              Save a new resource to your account. Requires API key authentication. Resources are private by default
               unless you&apos;ve changed the default in your settings.
             </p>
 
@@ -346,13 +346,13 @@ curl -X POST ${baseUrl}/api/mcp \\
                     <TableCell className="font-mono text-xs">title</TableCell>
                     <TableCell className="text-muted-foreground text-xs">string</TableCell>
                     <TableCell className="text-xs">Yes</TableCell>
-                    <TableCell className="text-muted-foreground text-sm">Title of the prompt (max 200 chars)</TableCell>
+                    <TableCell className="text-muted-foreground text-sm">Title of the resource (max 200 chars)</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell className="font-mono text-xs">content</TableCell>
                     <TableCell className="text-muted-foreground text-xs">string</TableCell>
                     <TableCell className="text-xs">Yes</TableCell>
-                    <TableCell className="text-muted-foreground text-sm">The prompt content. Can include variables like {"${var}"}</TableCell>
+                    <TableCell className="text-muted-foreground text-sm">The resource content. Can include variables like {"${var}"}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell className="font-mono text-xs">description</TableCell>
@@ -391,7 +391,7 @@ curl -X POST ${baseUrl}/api/mcp \\
             </div>
 
             <div className="bg-muted rounded-lg p-4 font-mono text-sm overflow-x-auto">
-              <pre>{`# Save a prompt via MCP
+              <pre>{`# Save a resource via MCP
 curl -X POST ${baseUrl}/api/mcp \\
   -H "Content-Type: application/json" \\
   -H "PROMPTS_API_KEY: pchat_your_api_key_here" \\
@@ -400,7 +400,7 @@ curl -X POST ${baseUrl}/api/mcp \\
     "id": 1,
     "method": "tools/call",
     "params": {
-      "name": "save_prompt",
+      "name": "save_resource",
       "arguments": {
         "title": "My Code Review Prompt",
         "content": "Review this code for \${language} best practices:\\n\\n\${code}",
@@ -753,7 +753,7 @@ curl -X POST ${baseUrl}/api/mcp \\
               </div>
 
               <div className="space-y-3">
-                <h3 className="font-medium">Search Prompts</h3>
+                <h3 className="font-medium">Search Resources</h3>
                 <div className="bg-muted rounded-lg p-4 font-mono text-sm overflow-x-auto">
                   <pre>{`curl -X POST ${baseUrl}/api/mcp \\
   -H "Content-Type: application/json" \\
@@ -763,7 +763,7 @@ curl -X POST ${baseUrl}/api/mcp \\
     "id": 3,
     "method": "tools/call",
     "params": {
-      "name": "search_prompts",
+      "name": "search_resources",
       "arguments": {
         "query": "code review",
         "limit": 5
@@ -778,17 +778,17 @@ curl -X POST ${baseUrl}/api/mcp \\
             <section className="space-y-4">
               <h2 className="text-lg font-semibold">Response Format</h2>
               <p className="text-muted-foreground">
-                The <code className="bg-muted px-1.5 py-0.5 rounded text-sm">search_prompts</code> tool returns results in the following format:
+                The <code className="bg-muted px-1.5 py-0.5 rounded text-sm">search_resources</code> tool returns results in the following format:
               </p>
               <div className="bg-muted rounded-lg p-4 font-mono text-sm overflow-x-auto">
                 <pre>{`{
   "query": "code review",
   "count": 2,
-  "prompts": [
+  "resources": [
     {
       "id": "abc123",
       "title": "Code Review Assistant",
-      "description": "A prompt for conducting thorough code reviews",
+      "description": "A resource for conducting thorough code reviews",
       "content": "You are an expert code reviewer...",
       "type": "TEXT",
       "author": "username",
@@ -885,7 +885,7 @@ curl -X POST ${baseUrl}/api/improve-prompt \\
 
           <div className="pt-4">
             <h3 className="font-medium mb-4">Try It Out</h3>
-            <ImprovePromptDemo />
+            <ImproveResourceDemo />
           </div>
         </section>
 
@@ -893,14 +893,14 @@ curl -X POST ${baseUrl}/api/improve-prompt \\
         <section className="space-y-4">
           <h2 className="text-lg font-semibold">REST API</h2>
           <p className="text-muted-foreground">
-            Use the standard REST endpoint to search and retrieve prompts:
+            Use the standard REST endpoint to search and retrieve resources:
           </p>
           <div className="bg-muted rounded-lg p-4 font-mono text-sm overflow-x-auto">
-            <pre>{`# Search prompts via REST
-curl "${baseUrl}/api/prompts?q=code+review&perPage=10"
+            <pre>{`# Search resources via REST
+curl "${baseUrl}/api/resources?q=code+review&perPage=10"
 
-# Get prompt by ID
-curl "${baseUrl}/api/prompts/{id}"`}</pre>
+# Get resource by ID
+curl "${baseUrl}/api/resources/{id}"`}</pre>
           </div>
         </section>
 
@@ -926,7 +926,7 @@ curl "${baseUrl}/api/prompts/{id}"`}</pre>
           <p className="text-muted-foreground">
             For issues and feature requests, please open a{" "}
             <Link
-              href="https://github.com/f/prompts.chat/issues"
+              href="https://github.com/eser/webmcp.land/issues"
               target="_blank"
               rel="noopener noreferrer"
               className="underline hover:text-foreground"

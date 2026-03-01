@@ -1,7 +1,7 @@
 // Types and constants for "Works Best With" feature
 
-// MCP Server configuration for a prompt
-export interface PromptMCPConfig {
+// MCP Server configuration for a resource
+export interface ResourceMCPConfig {
   command: string;
   tools?: string[];
 }

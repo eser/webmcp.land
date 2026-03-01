@@ -1,7 +1,10 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { auth } from "@/lib/auth";
+import { eq } from "drizzle-orm";
+import { getSession } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { resourceReports } from "@/lib/schema";
+import type { ReportStatus } from "@/lib/schema";
 
 const updateSchema = z.object({
   status: z.enum(["PENDING", "REVIEWED", "DISMISSED"]),
@@ -12,7 +15,7 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await auth();
+    const session = await getSession();
     if (!session?.user || session.user.role !== "ADMIN") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -21,10 +24,11 @@ export async function PATCH(
     const body = await request.json();
     const { status } = updateSchema.parse(body);
 
-    const report = await db.promptReport.update({
-      where: { id },
-      data: { status },
-    });
+    const [report] = await db
+      .update(resourceReports)
+      .set({ status: status as ReportStatus })
+      .where(eq(resourceReports.id, id))
+      .returning();
 
     return NextResponse.json(report);
   } catch (error) {

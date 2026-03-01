@@ -21,7 +21,7 @@ interface McpConfigTabsProps {
   hideModeToggle?: boolean;
   /** API key for authenticated access */
   apiKey?: string | null;
-  /** Show official prompts.chat branding (VS Code buttons, registry mention) */
+  /** Show official webmcp.land branding (VS Code buttons, registry mention) */
   showOfficialBranding?: boolean;
 }
 
@@ -34,12 +34,12 @@ const CLIENT_LABELS: Record<Client, string> = {
   gemini: "Gemini",
 };
 
-const NPM_PACKAGE = "@fkadev/prompts.chat-mcp";
+const NPM_PACKAGE = "@eser/webmcp.land-mcp";
 
 function buildLocalEnv(apiKey?: string | null, queryParams?: string): Record<string, string> | undefined {
   const env: Record<string, string> = {};
-  if (apiKey) env.PROMPTS_API_KEY = apiKey;
-  if (queryParams) env.PROMPTS_QUERY = queryParams;
+  if (apiKey) env.WEBMCP_API_KEY = apiKey;
+  if (queryParams) env.WEBMCP_QUERY = queryParams;
   return Object.keys(env).length > 0 ? env : undefined;
 }
 
@@ -52,9 +52,9 @@ function getConfig(client: Client, mode: Mode, mcpUrl: string, apiKey?: string |
       if (mode === "remote") {
         const config: Record<string, unknown> = {
           mcpServers: {
-            "prompts.chat": {
+            "webmcp.land": {
               url: mcpUrl,
-              ...(apiKey && { headers: { "PROMPTS_API_KEY": apiKey } }),
+              ...(apiKey && { headers: { "WEBMCP_API_KEY": apiKey } }),
             },
           },
         };
@@ -62,7 +62,7 @@ function getConfig(client: Client, mode: Mode, mcpUrl: string, apiKey?: string |
       } else {
         const config: Record<string, unknown> = {
           mcpServers: {
-            "prompts.chat": {
+            "webmcp.land": {
               command: "npx",
               args: ["-y", packageName],
               ...(localEnv && { env: localEnv }),
@@ -75,14 +75,14 @@ function getConfig(client: Client, mode: Mode, mcpUrl: string, apiKey?: string |
     case "claude-code":
       if (mode === "remote") {
         if (apiKey) {
-          return `claude mcp add --transport http prompts.chat ${mcpUrl} --header "PROMPTS_API_KEY: ${apiKey}"`;
+          return `claude mcp add --transport http webmcp.land ${mcpUrl} --header "WEBMCP_API_KEY: ${apiKey}"`;
         }
-        return `claude mcp add --transport http prompts.chat ${mcpUrl}`;
+        return `claude mcp add --transport http webmcp.land ${mcpUrl}`;
       } else {
         const envPrefix = localEnv 
           ? Object.entries(localEnv).map(([k, v]) => `${k}="${v}"`).join(" ") + " "
           : "";
-        return `${envPrefix}claude mcp add prompts.chat -- npx -y ${packageName}`;
+        return `${envPrefix}claude mcp add webmcp.land -- npx -y ${packageName}`;
       }
 
     case "vscode":
@@ -90,10 +90,10 @@ function getConfig(client: Client, mode: Mode, mcpUrl: string, apiKey?: string |
         const config: Record<string, unknown> = {
           mcp: {
             servers: {
-              "prompts.chat": {
+              "webmcp.land": {
                 type: "http",
                 url: mcpUrl,
-                ...(apiKey && { headers: { "PROMPTS_API_KEY": apiKey } }),
+                ...(apiKey && { headers: { "WEBMCP_API_KEY": apiKey } }),
               },
             },
           },
@@ -103,7 +103,7 @@ function getConfig(client: Client, mode: Mode, mcpUrl: string, apiKey?: string |
         const config: Record<string, unknown> = {
           mcp: {
             servers: {
-              "prompts.chat": {
+              "webmcp.land": {
                 type: "stdio",
                 command: "npx",
                 args: ["-y", packageName],
@@ -118,20 +118,20 @@ function getConfig(client: Client, mode: Mode, mcpUrl: string, apiKey?: string |
     case "codex":
       if (mode === "remote") {
         if (apiKey) {
-          return `[mcp_servers.prompts_chat]
+          return `[mcp_servers.webmcp_land]
 url = "${mcpUrl}"
 
-[mcp_servers.prompts_chat.headers]
-PROMPTS_API_KEY = "${apiKey}"`;
+[mcp_servers.webmcp_land.headers]
+WEBMCP_API_KEY = "${apiKey}"`;
         }
-        return `[mcp_servers.prompts_chat]
+        return `[mcp_servers.webmcp_land]
 url = "${mcpUrl}"`;
       } else {
-        let config = `[mcp_servers.prompts_chat]
+        let config = `[mcp_servers.webmcp_land]
 command = "npx"
 args = ["-y", "${packageName}"]`;
         if (localEnv) {
-          config += "\n\n[mcp_servers.prompts_chat.env]";
+          config += "\n\n[mcp_servers.webmcp_land.env]";
           for (const [key, value] of Object.entries(localEnv)) {
             config += `\n${key} = "${value}"`;
           }
@@ -143,9 +143,9 @@ args = ["-y", "${packageName}"]`;
       if (mode === "remote") {
         const config: Record<string, unknown> = {
           mcpServers: {
-            "prompts.chat": {
+            "webmcp.land": {
               serverUrl: mcpUrl,
-              ...(apiKey && { headers: { "PROMPTS_API_KEY": apiKey } }),
+              ...(apiKey && { headers: { "WEBMCP_API_KEY": apiKey } }),
             },
           },
         };
@@ -153,7 +153,7 @@ args = ["-y", "${packageName}"]`;
       } else {
         const config: Record<string, unknown> = {
           mcpServers: {
-            "prompts.chat": {
+            "webmcp.land": {
               command: "npx",
               args: ["-y", packageName],
               ...(localEnv && { env: localEnv }),
@@ -166,14 +166,14 @@ args = ["-y", "${packageName}"]`;
     case "gemini":
       if (mode === "remote") {
         if (apiKey) {
-          return `PROMPTS_API_KEY=${apiKey} gemini mcp add prompts.chat --transport sse ${mcpUrl}`;
+          return `WEBMCP_API_KEY=${apiKey} gemini mcp add webmcp.land --transport sse ${mcpUrl}`;
         }
-        return `gemini mcp add prompts.chat --transport sse ${mcpUrl}`;
+        return `gemini mcp add webmcp.land --transport sse ${mcpUrl}`;
       } else {
         const envPrefix = localEnv 
           ? Object.entries(localEnv).map(([k, v]) => `${k}="${v}"`).join(" ") + " "
           : "";
-        return `${envPrefix}gemini mcp add prompts.chat -- npx -y ${packageName}`;
+        return `${envPrefix}gemini mcp add webmcp.land -- npx -y ${packageName}`;
       }
 
     default:
@@ -196,7 +196,7 @@ export function McpConfigTabs({ baseUrl, queryParams, className, mode, onModeCha
     }
   };
 
-  const base = baseUrl || (typeof window !== "undefined" ? window.location.origin : "https://prompts.chat");
+  const base = baseUrl || (typeof window !== "undefined" ? window.location.origin : "https://webmcp.land");
   const mcpUrl = queryParams ? `${base}/api/mcp?${queryParams}` : `${base}/api/mcp`;
   
   // Full config with actual API key (for copying)
@@ -325,7 +325,7 @@ export function McpConfigTabs({ baseUrl, queryParams, className, mode, onModeCha
               const localEnv = buildLocalEnv(apiKey, queryParams);
               if (localEnv) cursorConfig.env = localEnv;
               const configBase64 = btoa(JSON.stringify(cursorConfig));
-              window.open(`cursor://anysphere.cursor-deeplink/mcp/install?name=${encodeURIComponent("prompts.chat")}&config=${configBase64}`, "_self");
+              window.open(`cursor://anysphere.cursor-deeplink/mcp/install?name=${encodeURIComponent("webmcp.land")}&config=${configBase64}`, "_self");
             }}
           >
             <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor">
@@ -344,7 +344,7 @@ export function McpConfigTabs({ baseUrl, queryParams, className, mode, onModeCha
               variant="outline"
               size="sm"
               className="h-7 text-[11px] gap-1.5"
-              onClick={() => window.open("vscode:mcp/by-name/io.github.f/prompts.chat-mcp", "_self")}
+              onClick={() => window.open("vscode:mcp/by-name/io.github.eser/webmcp.land-mcp", "_self")}
             >
               <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="#007ACC" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="16 18 22 12 16 6" />
@@ -356,7 +356,7 @@ export function McpConfigTabs({ baseUrl, queryParams, className, mode, onModeCha
               variant="outline"
               size="sm"
               className="h-7 text-[11px] gap-1.5"
-              onClick={() => window.open("vscode-insiders:mcp/by-name/io.github.f/prompts.chat-mcp", "_self")}
+              onClick={() => window.open("vscode-insiders:mcp/by-name/io.github.eser/webmcp.land-mcp", "_self")}
             >
               <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="#24bfa5" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="16 18 22 12 16 6" />
@@ -366,7 +366,7 @@ export function McpConfigTabs({ baseUrl, queryParams, className, mode, onModeCha
             </Button>
           </div>
           <p className="text-[10px] text-muted-foreground">
-            prompts.chat is in the official{" "}
+            webmcp.land is in the official{" "}
             <a
               href="https://github.com/mcp"
               target="_blank"

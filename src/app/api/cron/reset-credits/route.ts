@@ -1,14 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
+import { sql } from "drizzle-orm";
 import { db } from "@/lib/db";
 
 /**
  * Cron job endpoint to reset daily generation credits for all users.
- * Should be called daily via external cron service (e.g., Vercel Cron, GitHub Actions).
- * 
+ * Should be called daily via an external cron service.
+ *
  * Requires CRON_SECRET environment variable for authentication.
- * 
+ *
  * Cron Notation: 0 0 * * * (Every day at midnight)
- * 
+ *
  * Example cron call:
  * curl -X POST https://your-domain.com/api/cron/reset-credits \
  *   -H "Authorization: Bearer YOUR_CRON_SECRET"
@@ -37,18 +38,19 @@ export async function POST(request: NextRequest) {
 
   try {
     // Reset generation credits for all users to their daily limit
-    const result = await db.$executeRaw`
-      UPDATE users 
+    const result = await db.execute(sql`
+      UPDATE users
       SET "generationCreditsRemaining" = "dailyGenerationLimit",
           "generationCreditsResetAt" = NOW()
-    `;
+    `);
 
-    console.log(`Daily credit reset completed. Updated ${result} users.`);
+    const rowCount = result.rowCount ?? 0;
+    console.log(`Daily credit reset completed. Updated ${rowCount} users.`);
 
     return NextResponse.json({
       success: true,
       message: "Daily generation credits reset successfully",
-      usersUpdated: result,
+      usersUpdated: rowCount,
       timestamp: new Date().toISOString(),
     });
   } catch (error) {

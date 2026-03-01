@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "@/i18n/request";
 import { getConfig } from "@/lib/config";
 import { AuthContent } from "@/components/auth/auth-content";
 
@@ -20,9 +20,14 @@ function getProviders(config: Awaited<ReturnType<typeof getConfig>>): string[] {
   return ["credentials"];
 }
 
-export default async function LoginPage() {
+interface LoginPageProps {
+  searchParams: Promise<{ callbackUri?: string }>;
+}
+
+export default async function LoginPage({ searchParams }: LoginPageProps) {
   const t = await getTranslations("auth");
   const config = await getConfig();
+  const { callbackUri } = await searchParams;
   const providers = getProviders(config);
   const hasCredentials = providers.includes("credentials");
   const hasOnlyCredentials = providers.length === 1 && hasCredentials;
@@ -38,7 +43,7 @@ export default async function LoginPage() {
           </p>
         </div>
         <div className="border rounded-lg p-4">
-          <AuthContent providers={providers} mode="login" useCloneBranding={useCloneBranding} />
+          <AuthContent providers={providers} mode="login" useCloneBranding={useCloneBranding} callbackUri={callbackUri} />
         </div>
         {hasCredentials && (
           <p className="text-center text-xs text-muted-foreground">

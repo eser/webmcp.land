@@ -5,7 +5,7 @@ import { db } from "@/lib/db";
 // Mock the db module
 vi.mock("@/lib/db", () => ({
   db: {
-    $queryRaw: vi.fn(),
+    execute: vi.fn(),
   },
 }));
 
@@ -16,7 +16,7 @@ describe("GET /api/health", () => {
 
   it("should return healthy status when database is connected", async () => {
     // Mock successful database query
-    vi.mocked(db.$queryRaw).mockResolvedValueOnce([{ "?column?": 1 }]);
+    vi.mocked(db.execute).mockResolvedValueOnce([{ "?column?": 1 }] as never);
 
     const response = await GET();
     const data = await response.json();
@@ -29,7 +29,7 @@ describe("GET /api/health", () => {
 
   it("should return unhealthy status when database is disconnected", async () => {
     // Mock database error
-    vi.mocked(db.$queryRaw).mockRejectedValueOnce(new Error("Connection failed"));
+    vi.mocked(db.execute).mockRejectedValueOnce(new Error("Connection failed"));
 
     const response = await GET();
     const data = await response.json();
@@ -43,7 +43,7 @@ describe("GET /api/health", () => {
 
   it("should handle unknown error type", async () => {
     // Mock non-Error rejection
-    vi.mocked(db.$queryRaw).mockRejectedValueOnce("Unknown error");
+    vi.mocked(db.execute).mockRejectedValueOnce("Unknown error");
 
     const response = await GET();
     const data = await response.json();
@@ -54,7 +54,7 @@ describe("GET /api/health", () => {
   });
 
   it("should include ISO timestamp in response", async () => {
-    vi.mocked(db.$queryRaw).mockResolvedValueOnce([{ "?column?": 1 }]);
+    vi.mocked(db.execute).mockResolvedValueOnce([{ "?column?": 1 }] as never);
 
     const response = await GET();
     const data = await response.json();

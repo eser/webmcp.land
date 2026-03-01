@@ -1,14 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 import Link from "next/link";
 import { formatDistanceToNow } from "@/lib/date";
-import { 
-  ChevronUp, 
-  ChevronDown, 
-  MessageSquare, 
-  Trash2, 
+import {
+  ChevronUp,
+  ChevronDown,
+  MessageSquare,
+  Trash2,
   Flag,
   Loader2,
   MoreHorizontal,
@@ -58,7 +58,7 @@ interface Comment {
 
 interface CommentItemProps {
   comment: Comment;
-  promptId: string;
+  resourceId: string;
   currentUserId?: string;
   isAdmin: boolean;
   isLoggedIn: boolean;
@@ -75,7 +75,7 @@ interface CommentItemProps {
 function autoLinkText(text: string): React.ReactNode[] {
   const urlRegex = /(https?:\/\/[^\s<]+[^<.,:;"')\]\s])/g;
   const parts = text.split(urlRegex);
-  
+
   return parts.map((part, index) => {
     if (urlRegex.test(part)) {
       // Reset regex lastIndex
@@ -98,7 +98,7 @@ function autoLinkText(text: string): React.ReactNode[] {
 
 export function CommentItem({
   comment,
-  promptId,
+  resourceId,
   currentUserId,
   isAdmin,
   isLoggedIn,
@@ -110,8 +110,7 @@ export function CommentItem({
   onCommentUpdated,
   depth = 0,
 }: CommentItemProps) {
-  const t = useTranslations("comments");
-  const tCommon = useTranslations("common");
+  const { t } = useTranslation();
   const [isReplying, setIsReplying] = useState(false);
   const [isVoting, setIsVoting] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -128,7 +127,7 @@ export function CommentItem({
 
   const handleVote = async (value: 1 | -1) => {
     if (!isLoggedIn) {
-      toast.error(t("loginToVote"));
+      toast.error(t("comments.loginToVote"));
       return;
     }
 
@@ -136,7 +135,7 @@ export function CommentItem({
 
     try {
       const response = await fetch(
-        `/api/prompts/${promptId}/comments/${comment.id}/vote`,
+        `/api/resources/${resourceId}/comments/${comment.id}/vote`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -153,7 +152,7 @@ export function CommentItem({
       setLocalUserVote(data.userVote);
       onCommentUpdated({ ...comment, score: data.score, userVote: data.userVote });
     } catch {
-      toast.error(tCommon("error"));
+      toast.error(t("common.error"));
     } finally {
       setIsVoting(false);
     }
@@ -164,7 +163,7 @@ export function CommentItem({
 
     try {
       const response = await fetch(
-        `/api/prompts/${promptId}/comments/${comment.id}`,
+        `/api/resources/${resourceId}/comments/${comment.id}`,
         { method: "DELETE" }
       );
 
@@ -173,9 +172,9 @@ export function CommentItem({
       }
 
       onCommentDeleted(comment.id);
-      toast.success(t("commentDeleted"));
+      toast.success(t("comments.commentDeleted"));
     } catch {
-      toast.error(tCommon("error"));
+      toast.error(t("common.error"));
     } finally {
       setIsDeleting(false);
       setShowDeleteDialog(false);
@@ -187,7 +186,7 @@ export function CommentItem({
 
     try {
       const response = await fetch(
-        `/api/prompts/${promptId}/comments/${comment.id}/flag`,
+        `/api/resources/${resourceId}/comments/${comment.id}/flag`,
         { method: "POST" }
       );
 
@@ -198,9 +197,9 @@ export function CommentItem({
       const data = await response.json();
       setLocalFlagged(data.flagged);
       onCommentUpdated({ ...comment, flagged: data.flagged });
-      toast.success(data.flagged ? t("commentFlagged") : t("commentUnflagged"));
+      toast.success(data.flagged ? t("comments.commentFlagged") : t("comments.commentUnflagged"));
     } catch {
-      toast.error(tCommon("error"));
+      toast.error(t("common.error"));
     } finally {
       setIsFlagging(false);
     }
@@ -238,7 +237,7 @@ export function CommentItem({
           </Link>
           {comment.author.role === "ADMIN" && (
             <span className="text-[10px] px-1.5 py-0.5 rounded bg-primary/10 text-primary font-medium">
-              {t("admin")}
+              {t("comments.admin")}
             </span>
           )}
           <span className="text-xs text-muted-foreground">
@@ -246,7 +245,7 @@ export function CommentItem({
           </span>
           {localFlagged && (
             <span className="text-[10px] px-1.5 py-0.5 rounded bg-red-500/10 text-red-500 font-medium">
-              {t("flagged")}
+              {t("comments.flagged")}
             </span>
           )}
         </div>
@@ -267,7 +266,7 @@ export function CommentItem({
                 "p-1 rounded hover:bg-accent transition-colors",
                 localUserVote === 1 && "text-primary"
               )}
-              title={t("upvote")}
+              title={t("comments.upvote")}
             >
               <ChevronUp className="h-4 w-4" />
             </button>
@@ -287,7 +286,7 @@ export function CommentItem({
                 "p-1 rounded hover:bg-accent transition-colors",
                 localUserVote === -1 && "text-destructive"
               )}
-              title={t("downvote")}
+              title={t("comments.downvote")}
             >
               <ChevronDown className="h-4 w-4" />
             </button>
@@ -302,27 +301,25 @@ export function CommentItem({
               onClick={() => setIsReplying(!isReplying)}
             >
               <MessageSquare className="h-3.5 w-3.5 mr-1" />
-              {t("reply")}
+              {t("comments.reply")}
             </Button>
           )}
 
           {/* More actions */}
           {(canDelete || isAdmin) && (
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
+              <DropdownMenuTrigger render={<Button
                   variant="ghost"
                   size="sm"
                   className="h-7 w-7 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                >
+                 />}>
                   <MoreHorizontal className="h-4 w-4" />
-                </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 {isAdmin && (
                   <DropdownMenuItem onClick={handleFlag} disabled={isFlagging}>
                     <Flag className="h-4 w-4 mr-2" />
-                    {localFlagged ? t("unflag") : t("flag")}
+                    {localFlagged ? t("comments.unflag") : t("comments.flag")}
                   </DropdownMenuItem>
                 )}
                 {canDelete && (
@@ -331,7 +328,7 @@ export function CommentItem({
                     className="text-destructive focus:text-destructive"
                   >
                     <Trash2 className="h-4 w-4 mr-2" />
-                    {tCommon("delete")}
+                    {t("common.delete")}
                   </DropdownMenuItem>
                 )}
               </DropdownMenuContent>
@@ -343,12 +340,12 @@ export function CommentItem({
         {isReplying && (
           <div className="mt-3">
             <CommentForm
-              promptId={promptId}
+              resourceId={resourceId}
               parentId={comment.id}
               isLoggedIn={isLoggedIn}
               onCommentAdded={handleReplyAdded}
               onCancel={() => setIsReplying(false)}
-              placeholder={t("replyTo", { username: comment.author.username })}
+              placeholder={t("comments.replyTo", { username: comment.author.username })}
               autoFocus
             />
           </div>
@@ -370,18 +367,18 @@ export function CommentItem({
             )}
             <span>
               {isCollapsed
-                ? t("showReplies", { count: nestedReplies.length })
-                : t("hideReplies")}
+                ? t("comments.showReplies", { count: nestedReplies.length })
+                : t("comments.hideReplies")}
             </span>
           </button>
-          
+
           {!isCollapsed && (
             <div>
               {nestedReplies.map((reply) => (
                 <CommentItem
                   key={reply.id}
                   comment={reply}
-                  promptId={promptId}
+                  resourceId={resourceId}
                   currentUserId={currentUserId}
                   isAdmin={isAdmin}
                   isLoggedIn={isLoggedIn}
@@ -403,14 +400,14 @@ export function CommentItem({
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>{t("deleteCommentTitle")}</AlertDialogTitle>
+            <AlertDialogTitle>{t("comments.deleteCommentTitle")}</AlertDialogTitle>
             <AlertDialogDescription>
-              {t("deleteCommentDescription")}
+              {t("comments.deleteCommentDescription")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel disabled={isDeleting}>
-              {tCommon("cancel")}
+              {t("common.cancel")}
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
@@ -420,10 +417,10 @@ export function CommentItem({
               {isDeleting ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  {t("deleting")}
+                  {t("comments.deleting")}
                 </>
               ) : (
-                tCommon("delete")
+                t("common.delete")
               )}
             </AlertDialogAction>
           </AlertDialogFooter>

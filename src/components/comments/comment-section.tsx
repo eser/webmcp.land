@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 import { MessageSquare, Loader2 } from "lucide-react";
 import { CommentForm } from "./comment-form";
 import { CommentItem } from "./comment-item";
@@ -27,7 +27,7 @@ interface Comment {
 }
 
 interface CommentSectionProps {
-  promptId: string;
+  resourceId: string;
   currentUserId?: string;
   isAdmin: boolean;
   isLoggedIn: boolean;
@@ -35,31 +35,30 @@ interface CommentSectionProps {
 }
 
 export function CommentSection({
-  promptId,
+  resourceId,
   currentUserId,
   isAdmin,
   isLoggedIn,
   locale,
 }: CommentSectionProps) {
-  const t = useTranslations("comments");
-  const tCommon = useTranslations("common");
+  const { t } = useTranslation();
   const [comments, setComments] = useState<Comment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     fetchComments();
-  }, [promptId]);
+  }, [resourceId]);
 
   const fetchComments = async () => {
     try {
-      const response = await fetch(`/api/prompts/${promptId}/comments`);
+      const response = await fetch(`/api/resources/${resourceId}/comments`);
       if (!response.ok) {
         throw new Error("Failed to fetch comments");
       }
       const data = await response.json();
       setComments(data.comments);
     } catch {
-      toast.error(tCommon("error"));
+      toast.error(t("common.error"));
     } finally {
       setIsLoading(false);
     }
@@ -102,14 +101,14 @@ export function CommentSection({
       <div className="flex items-center gap-2 mb-4">
         <MessageSquare className="h-5 w-5" />
         <h2 className="text-lg font-semibold">
-          {t("comments")} ({comments.length})
+          {t("comments.comments")} ({comments.length})
         </h2>
       </div>
 
       {/* New comment form */}
       <div className="mb-6">
         <CommentForm
-          promptId={promptId}
+          resourceId={resourceId}
           isLoggedIn={isLoggedIn}
           onCommentAdded={handleCommentAdded}
         />
@@ -122,7 +121,7 @@ export function CommentSection({
         </div>
       ) : comments.length === 0 ? (
         <p className="text-center text-muted-foreground py-8">
-          {t("noComments")}
+          {t("comments.noComments")}
         </p>
       ) : (
         <div className="divide-y">
@@ -130,7 +129,7 @@ export function CommentSection({
             <CommentItem
               key={comment.id}
               comment={comment}
-              promptId={promptId}
+              resourceId={resourceId}
               currentUserId={currentUserId}
               isAdmin={isAdmin}
               isLoggedIn={isLoggedIn}

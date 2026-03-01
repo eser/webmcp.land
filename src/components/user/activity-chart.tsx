@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, useEffect } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 import {
   Tooltip,
   TooltipContent,
@@ -22,7 +22,7 @@ interface ActivityChartProps {
 }
 
 export function ActivityChart({ data, locale = "en", selectedDate, onDateClick }: ActivityChartProps) {
-  const t = useTranslations("user");
+  const { t } = useTranslation();
   const [isMobile, setIsMobile] = useState(false);
 
   // Detect screen size for responsive behavior
@@ -51,7 +51,7 @@ export function ActivityChart({ data, locale = "en", selectedDate, onDateClick }
     const currentDate = new Date(startDate);
 
     while (currentDate <= today) {
-      const dateStr = currentDate.toISOString().split("T")[0];
+      const dateStr = currentDate.toISOString().split("user.T")[0];
       currentWeek.push({
         date: new Date(currentDate),
         count: dataMap.get(dateStr) || 0,
@@ -134,7 +134,7 @@ export function ActivityChart({ data, locale = "en", selectedDate, onDateClick }
   return (
     <div className="w-full flex flex-col items-center md:items-start">
       <div className="text-sm text-muted-foreground mb-3">
-        {totalContributions} {totalContributions === 1 ? t("contribution") : t("contributionsPlural")} {isMobile ? t("inLast6Months") : t("inLastYear")}
+        {totalContributions} {totalContributions === 1 ? t("user.contribution") : t("user.contributionsPlural")} {isMobile ? t("user.inLast6Months") : t("user.inLastYear")}
       </div>
 
       <div className="inline-block">
@@ -162,7 +162,7 @@ export function ActivityChart({ data, locale = "en", selectedDate, onDateClick }
           </div>
 
           {/* Activity grid */}
-          <TooltipProvider delayDuration={100}>
+          <TooltipProvider delay={100}>
           <div className="flex gap-0.5">
             {weeks.map((week, weekIndex) => (
               <div key={weekIndex} className="flex flex-col gap-0.5">
@@ -176,7 +176,7 @@ export function ActivityChart({ data, locale = "en", selectedDate, onDateClick }
                     return <div key={dayIndex} className="w-[10px] h-[10px]" />;
                   }
 
-                  const dateStr = day.date.toISOString().split("T")[0];
+                  const dateStr = day.date.toISOString().split("user.T")[0];
                   const isSelected = selectedDate === dateStr;
 
                   const handleClick = () => {
@@ -188,7 +188,7 @@ export function ActivityChart({ data, locale = "en", selectedDate, onDateClick }
 
                   return (
                     <Tooltip key={dayIndex}>
-                      <TooltipTrigger asChild>
+                      <TooltipTrigger render={
                         <div
                           onClick={handleClick}
                           className={`
@@ -208,10 +208,10 @@ export function ActivityChart({ data, locale = "en", selectedDate, onDateClick }
                             }
                           `}
                         />
-                      </TooltipTrigger>
+                      } />
                       <TooltipContent side="top" className="text-xs">
                         <p className="font-medium">
-                          {day.count} {day.count === 1 ? t("contribution") : t("contributionsPlural")}
+                          {day.count} {day.count === 1 ? t("user.contribution") : t("user.contributionsPlural")}
                         </p>
                         <p className="text-muted-foreground">
                           {day.date.toLocaleDateString(locale, {
@@ -233,13 +233,13 @@ export function ActivityChart({ data, locale = "en", selectedDate, onDateClick }
 
         {/* Legend */}
         <div className="flex items-center gap-1 mt-3 text-xs text-muted-foreground justify-end">
-          <span>{t("less")}</span>
+          <span>{t("user.less")}</span>
           <div className="w-[10px] h-[10px] rounded-full bg-muted" />
           <div className="w-[10px] h-[10px] rounded-full bg-primary/20" />
           <div className="w-[10px] h-[10px] rounded-full bg-primary/40" />
           <div className="w-[10px] h-[10px] rounded-full bg-primary/70" />
           <div className="w-[10px] h-[10px] rounded-full bg-primary" />
-          <span>{t("more")}</span>
+          <span>{t("user.more")}</span>
         </div>
       </div>
     </div>

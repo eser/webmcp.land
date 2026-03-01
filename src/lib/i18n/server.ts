@@ -2,8 +2,10 @@
 
 import { cookies } from "next/headers";
 import { LOCALE_COOKIE, supportedLocales } from "./config";
+import { eq } from "drizzle-orm";
 import { db } from "@/lib/db";
-import { auth } from "@/lib/auth";
+import { users } from "@/lib/schema";
+import { getSession } from "@/lib/auth";
 
 /**
  * Set the user's locale preference (server action)
@@ -19,16 +21,13 @@ export async function setLocaleServer(locale: string): Promise<void> {
   cookieStore.set(LOCALE_COOKIE, locale, {
     path: "/",
     maxAge: 60 * 60 * 24 * 365, // 1 year
-    sameSite: "lax",
+    sameSite: "Lax",
   });
   
   // Update database if user is logged in
-  const session = await auth();
+  const session = await getSession();
   if (session?.user?.id) {
-    await db.user.update({
-      where: { id: session.user.id },
-      data: { locale },
-    });
+    await db.update(users).set({ locale }).where(eq(users.id, session.user.id));
   }
 }
 
@@ -36,17 +35,14 @@ export async function setLocaleServer(locale: string): Promise<void> {
  * Sync locale from database to cookie on login
  */
 export async function syncLocaleFromUser(userId: string): Promise<void> {
-  const user = await db.user.findUnique({
-    where: { id: userId },
-    select: { locale: true },
-  });
+  const [user] = await db.select({ locale: users.locale }).from(users).where(eq(users.id, userId));
   
   if (user?.locale) {
     const cookieStore = await cookies();
     cookieStore.set(LOCALE_COOKIE, user.locale, {
       path: "/",
       maxAge: 60 * 60 * 24 * 365,
-      sameSite: "lax",
+      sameSite: "Lax",
     });
   }
 }

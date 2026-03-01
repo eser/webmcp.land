@@ -1,16 +1,19 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, act } from "@testing-library/react";
-import { CopyButton } from "@/components/prompts/copy-button";
+import { CopyButton } from "@/components/resources/copy-button";
 
 // Mock dependencies - use inline functions since vi.mock is hoisted
-vi.mock("next-intl", () => ({
-  useTranslations: () => (key: string) => {
-    const translations: Record<string, string> = {
-      copied: "Copied!",
-      failedToCopy: "Failed to copy",
-    };
-    return translations[key] || key;
-  },
+vi.mock("react-i18next", () => ({
+  useTranslation: () => ({
+    t: (key: string) => {
+      const translations: Record<string, string> = {
+        "common.copied": "Copied!",
+        "common.failedToCopy": "Failed to copy",
+      };
+      return translations[key] || key;
+    },
+    i18n: { language: "en" },
+  }),
 }));
 
 vi.mock("sonner", () => ({
@@ -21,14 +24,14 @@ vi.mock("sonner", () => ({
 }));
 
 vi.mock("@/lib/analytics", () => ({
-  analyticsPrompt: {
+  analyticsResource: {
     copy: vi.fn(),
   },
 }));
 
 // Import mocked modules after vi.mock calls
 import { toast } from "sonner";
-import { analyticsPrompt } from "@/lib/analytics";
+import { analyticsResource } from "@/lib/analytics";
 
 describe("CopyButton", () => {
   const mockClipboard = {
@@ -73,24 +76,24 @@ describe("CopyButton", () => {
     expect(toast.success).toHaveBeenCalledWith("Copied!");
   });
 
-  it("should track analytics with promptId when provided", async () => {
-    render(<CopyButton content="test" promptId="prompt-123" />);
+  it("should track analytics with resourceId when provided", async () => {
+    render(<CopyButton content="test" resourceId="resource-123" />);
 
     await act(async () => {
       fireEvent.click(screen.getByRole("button"));
     });
 
-    expect(analyticsPrompt.copy).toHaveBeenCalledWith("prompt-123");
+    expect(analyticsResource.copy).toHaveBeenCalledWith("resource-123");
   });
 
-  it("should track analytics with undefined when promptId not provided", async () => {
+  it("should track analytics with undefined when resourceId not provided", async () => {
     render(<CopyButton content="test" />);
 
     await act(async () => {
       fireEvent.click(screen.getByRole("button"));
     });
 
-    expect(analyticsPrompt.copy).toHaveBeenCalledWith(undefined);
+    expect(analyticsResource.copy).toHaveBeenCalledWith(undefined);
   });
 
   it("should show Check icon after successful copy", async () => {

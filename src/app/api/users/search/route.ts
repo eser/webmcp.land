@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { asc, ilike, or } from "drizzle-orm";
+import { getSession } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { users } from "@/lib/schema";
 
 export async function GET(request: Request) {
   try {
-    const session = await auth();
-    
+    const session = await getSession();
+
     if (!session?.user) {
       return NextResponse.json(
         { error: "unauthorized", message: "You must be logged in" },
@@ -20,24 +22,24 @@ export async function GET(request: Request) {
       return NextResponse.json([]);
     }
 
-    const users = await db.user.findMany({
-      where: {
-        OR: [
-          { username: { contains: query, mode: "insensitive" } },
-          { name: { contains: query, mode: "insensitive" } },
-        ],
-      },
-      select: {
-        id: true,
-        username: true,
-        name: true,
-        avatar: true,
-      },
-      take: 10,
-      orderBy: { username: "asc" },
-    });
+    const results = await db
+      .select({
+        id: users.id,
+        username: users.username,
+        name: users.name,
+        avatar: users.avatar,
+      })
+      .from(users)
+      .where(
+        or(
+          ilike(users.username, `%${query}%`),
+          ilike(users.name, `%${query}%`),
+        ),
+      )
+      .orderBy(asc(users.username))
+      .limit(10);
 
-    return NextResponse.json(users);
+    return NextResponse.json(results);
   } catch (error) {
     console.error("User search error:", error);
     return NextResponse.json(

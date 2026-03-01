@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { Prisma } from "@prisma/client";
-import { auth } from "@/lib/auth";
+import { eq } from "drizzle-orm";
+import { getSession } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { users } from "@/lib/schema";
 
 const customLinkSchema = z.object({
   type: z.enum(["website", "github", "twitter", "linkedin", "instagram", "youtube", "twitch", "discord", "mastodon", "bluesky", "sponsor"]),
@@ -24,7 +25,7 @@ const updateProfileSchema = z.object({
 
 export async function PATCH(request: NextRequest) {
   try {
-    const session = await auth();
+    const session = await getSession();
     if (!session?.user) {
       return NextResponse.json(
         { error: "unauthorized", message: "You must be logged in" },
@@ -46,10 +47,10 @@ export async function PATCH(request: NextRequest) {
 
     // Check if username is taken by another user
     if (username !== session.user.username) {
-      const existingUser = await db.user.findUnique({
-        where: { username },
-        select: { id: true },
-      });
+      const [existingUser] = await db
+        .select({ id: users.id })
+        .from(users)
+        .where(eq(users.username, username));
 
       if (existingUser && existingUser.id !== session.user.id) {
         return NextResponse.json(
@@ -60,25 +61,25 @@ export async function PATCH(request: NextRequest) {
     }
 
     // Update user
-    const user = await db.user.update({
-      where: { id: session.user.id },
-      data: {
+    const [user] = await db
+      .update(users)
+      .set({
         name,
         username,
         avatar: avatar || null,
         bio: bio || null,
-        customLinks: customLinks && customLinks.length > 0 ? customLinks : Prisma.DbNull,
-      },
-      select: {
-        id: true,
-        name: true,
-        username: true,
-        email: true,
-        avatar: true,
-        bio: true,
-        customLinks: true,
-      },
-    });
+        customLinks: customLinks && customLinks.length > 0 ? customLinks : null,
+      })
+      .where(eq(users.id, session.user.id))
+      .returning({
+        id: users.id,
+        name: users.name,
+        username: users.username,
+        email: users.email,
+        avatar: users.avatar,
+        bio: users.bio,
+        customLinks: users.customLinks,
+      });
 
     return NextResponse.json(user);
   } catch (error) {
@@ -92,7 +93,7 @@ export async function PATCH(request: NextRequest) {
 
 export async function GET() {
   try {
-    const session = await auth();
+    const session = await getSession();
     if (!session?.user) {
       return NextResponse.json(
         { error: "unauthorized", message: "You must be logged in" },
@@ -100,18 +101,18 @@ export async function GET() {
       );
     }
 
-    const user = await db.user.findUnique({
-      where: { id: session.user.id },
-      select: {
-        id: true,
-        name: true,
-        username: true,
-        email: true,
-        avatar: true,
-        role: true,
-        createdAt: true,
-      },
-    });
+    const [user] = await db
+      .select({
+        id: users.id,
+        name: users.name,
+        username: users.username,
+        email: users.email,
+        avatar: users.avatar,
+        role: users.role,
+        createdAt: users.createdAt,
+      })
+      .from(users)
+      .where(eq(users.id, session.user.id));
 
     if (!user) {
       return NextResponse.json(

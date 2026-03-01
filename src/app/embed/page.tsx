@@ -3,7 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState, useMemo } from "react";
 import { cn } from "@/lib/utils";
-import { RunPromptButton } from "@/components/prompts/run-prompt-button";
+import { RunResourceButton } from "@/components/resources/run-resource-button";
 
 interface TreeNode {
   name: string;
@@ -281,7 +281,7 @@ function EmbedContent() {
         ["--border" as string]: isDark ? "64 64 64" : "226 232 240",
       } as React.CSSProperties}
     >
-      <style jsx global>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         .mention {
           background-color: rgb(var(--primary) / 0.1);
           color: rgb(var(--primary));
@@ -297,7 +297,7 @@ function EmbedContent() {
         .border-border { border-color: rgb(var(--border)); }
         .text-muted-foreground { color: rgb(var(--muted-foreground)); }
         .bg-background { background-color: rgb(var(--background)); }
-      `}</style>
+      ` }} />
 
       {/* File Sidebar */}
       {fileTree.length > 0 && (
@@ -584,7 +584,7 @@ function EmbedContent() {
           </div>
           <div className="flex items-center gap-2">
             <a 
-              href="https://prompts.chat" 
+              href="https://webmcp.land" 
               target="_blank" 
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 text-[10px] font-medium transition-opacity hover:opacity-80"
@@ -592,14 +592,14 @@ function EmbedContent() {
             >
               <img 
                 src={isDark ? "/logo-dark.svg" : "/logo.svg"} 
-                alt="prompts.chat" 
+                alt="webmcp.land" 
                 className="w-3.5 h-3.5"
               />
-              <span>prompts.chat</span>
+              <span>webmcp.land</span>
             </a>
             {config.prompt && (
               <div className={isDark ? "dark" : ""}>
-                <RunPromptButton
+                <RunResourceButton
                   content={config.prompt}
                   variant="outline"
                   size="icon"

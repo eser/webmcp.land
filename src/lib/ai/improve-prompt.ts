@@ -1,6 +1,7 @@
 import OpenAI from "openai";
-import { Prisma } from "@prisma/client";
+import { and, eq, isNull, isNotNull } from "drizzle-orm";
 import { db } from "@/lib/db";
+import { resources } from "@/lib/schema";
 import { generateEmbedding, isAISearchEnabled } from "@/lib/ai/embeddings";
 import { loadPrompt, getSystemPrompt, interpolatePrompt } from "@/lib/ai/load-prompt";
 import { TYPE_DEFINITIONS } from "@/data/type-definitions";
@@ -26,13 +27,13 @@ function getOpenAIClient(): OpenAI {
 export type OutputType = "text" | "image" | "video" | "sound";
 export type OutputFormat = "text" | "structured_json" | "structured_yaml";
 
-export interface ImprovePromptInput {
-  prompt: string;
+export interface ImproveDescriptionInput {
+  description: string;
   outputType?: OutputType;
   outputFormat?: OutputFormat;
 }
 
-export interface ImprovePromptResult {
+export interface ImproveDescriptionResult {
   original: string;
   improved: string;
   outputType: OutputType;
@@ -55,105 +56,91 @@ function cosineSimilarity(a: number[], b: number[]): number {
   return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
 }
 
-function mapOutputTypeToDbType(outputType: OutputType): "TEXT" | "IMAGE" | "VIDEO" | "AUDIO" | null {
-  switch (outputType) {
-    case "image": return "IMAGE";
-    case "video": return "VIDEO";
-    case "sound": return "AUDIO";
-    default: return null;
-  }
-}
-
-async function findSimilarPrompts(
+async function findSimilarResources(
   query: string,
-  outputType: OutputType,
   limit: number = 3
-): Promise<Array<{ id: string; slug: string | null; title: string; content: string; similarity: number }>> {
+): Promise<Array<{ id: string; slug: string | null; title: string; description: string | null; similarity: number }>> {
   const aiSearchEnabled = await isAISearchEnabled();
   if (!aiSearchEnabled) {
-    console.log("[improve-prompt] AI search is not enabled");
+    console.log("[improve-description] AI search is not enabled");
     return [];
   }
 
   try {
     const queryEmbedding = await generateEmbedding(query);
-    const dbType = mapOutputTypeToDbType(outputType);
 
-    const prompts = await db.prompt.findMany({
-      where: {
-        isPrivate: false,
-        deletedAt: null,
-        embedding: { not: Prisma.DbNull },
-        ...(dbType ? { type: dbType } : {}),
-      },
-      select: {
-        id: true,
-        slug: true,
-        title: true,
-        content: true,
-        embedding: true,
-      },
-      take: 100,
-    });
+    const resourceRows = await db.select({
+      id: resources.id,
+      slug: resources.slug,
+      title: resources.title,
+      description: resources.description,
+      embedding: resources.embedding,
+    }).from(resources).where(
+      and(
+        eq(resources.isPrivate, false),
+        isNull(resources.deletedAt),
+        isNotNull(resources.embedding),
+      )
+    ).limit(100);
 
-    console.log(`[improve-prompt] Found ${prompts.length} prompts with embeddings`);
+    console.log(`[improve-description] Found ${resourceRows.length} resources with embeddings`);
 
     const SIMILARITY_THRESHOLD = 0.3;
 
-    const scoredPrompts = prompts
-      .map((prompt) => {
-        const embedding = prompt.embedding as number[];
+    const scoredResources = resourceRows
+      .map((r) => {
+        const embedding = r.embedding as number[];
         const similarity = cosineSimilarity(queryEmbedding, embedding);
         return {
-          id: prompt.id,
-          slug: prompt.slug,
-          title: prompt.title,
-          content: prompt.content,
+          id: r.id,
+          slug: r.slug,
+          title: r.title,
+          description: r.description,
           similarity,
         };
       })
-      .filter((prompt) => prompt.similarity >= SIMILARITY_THRESHOLD);
+      .filter((resource) => resource.similarity >= SIMILARITY_THRESHOLD);
 
-    scoredPrompts.sort((a, b) => b.similarity - a.similarity);
+    scoredResources.sort((a, b) => b.similarity - a.similarity);
 
-    return scoredPrompts.slice(0, limit);
+    return scoredResources.slice(0, limit);
   } catch (error) {
-    console.error("[improve-prompt] Error finding similar prompts:", error);
+    console.error("[improve-description] Error finding similar resources:", error);
     return [];
   }
 }
 
-function formatSimilarPrompts(
-  prompts: Array<{ title: string; content: string; similarity: number }>
+function formatSimilarResources(
+  resources: Array<{ title: string; description: string | null; similarity: number }>
 ): string {
-  if (prompts.length === 0) {
-    return "No similar prompts found for inspiration.";
+  if (resources.length === 0) {
+    return "No similar resources found for inspiration.";
   }
 
-  return prompts
+  return resources
     .map(
-      (p, i) =>
-        `### Inspiration ${i + 1}: ${p.title}\n${p.content.slice(0, 500)}${p.content.length > 500 ? "..." : ""}`
+      (r, i) =>
+        `### Inspiration ${i + 1}: ${r.title}\n${(r.description || "").slice(0, 500)}${(r.description || "").length > 500 ? "..." : ""}`
     )
     .join("\n\n");
 }
 
-export async function improvePrompt(input: ImprovePromptInput): Promise<ImprovePromptResult> {
-  const { prompt, outputType = "text", outputFormat = "text" } = input;
+export async function improveDescription(input: ImproveDescriptionInput): Promise<ImproveDescriptionResult> {
+  const { description, outputType = "text", outputFormat = "text" } = input;
 
   if (!process.env.OPENAI_API_KEY) {
     throw new Error("AI features are not configured");
   }
 
-  // Find similar prompts for inspiration
-  const similarPrompts = await findSimilarPrompts(prompt, outputType);
-  const similarPromptsText = formatSimilarPrompts(similarPrompts);
+  // Find similar resources for inspiration
+  const similarResources = await findSimilarResources(description);
+  const similarResourcesText = formatSimilarResources(similarResources);
 
   // Load and interpolate the prompt template
   const improvePromptFile = loadPrompt("src/lib/ai/improve-prompt.prompt.yml");
 
   const systemPrompt = interpolatePrompt(getSystemPrompt(improvePromptFile), {
-    similarPrompts: similarPromptsText,
+    similarPrompts: similarResourcesText,
     typeDefinitions: TYPE_DEFINITIONS,
   });
 
@@ -161,7 +148,7 @@ export async function improvePrompt(input: ImprovePromptInput): Promise<ImproveP
   const userPrompt = interpolatePrompt(userMessage?.content || "", {
     outputFormat,
     outputType,
-    originalPrompt: prompt,
+    originalPrompt: description,
   });
 
   // Call OpenAI
@@ -176,22 +163,22 @@ export async function improvePrompt(input: ImprovePromptInput): Promise<ImproveP
     max_tokens: improvePromptFile.modelParameters?.maxTokens ?? 4000,
   });
 
-  const improvedPrompt = response.choices[0]?.message?.content?.trim() || "";
+  const improvedDescription = response.choices[0]?.message?.content?.trim() || "";
 
-  if (!improvedPrompt) {
-    throw new Error("Failed to generate improved prompt");
+  if (!improvedDescription) {
+    throw new Error("Failed to generate improved description");
   }
 
   return {
-    original: prompt,
-    improved: improvedPrompt,
+    original: description,
+    improved: improvedDescription,
     outputType,
     outputFormat,
-    inspirations: similarPrompts.map((p) => ({
-      id: p.id,
-      slug: p.slug,
-      title: p.title,
-      similarity: Math.round(p.similarity * 100),
+    inspirations: similarResources.map((r) => ({
+      id: r.id,
+      slug: r.slug,
+      title: r.title,
+      similarity: Math.round(r.similarity * 100),
     })),
     model: IMPROVE_MODEL,
   };

@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useTranslations, useLocale } from "next-intl";
+import { useTranslation } from "react-i18next";
 import Link from "next/link";
 import { formatDistanceToNow } from "@/lib/date";
-import { getPromptUrl } from "@/lib/urls";
+import { getResourceUrl } from "@/lib/urls";
 import { MoreHorizontal, Check, X, Eye, ExternalLink, RotateCcw, ListPlus } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -33,7 +33,7 @@ interface Report {
   details: string | null;
   status: "PENDING" | "REVIEWED" | "DISMISSED";
   createdAt: Date;
-  prompt: {
+  resource: {
     id: string;
     slug?: string | null;
     title: string;
@@ -54,9 +54,8 @@ interface ReportsTableProps {
 
 export function ReportsTable({ reports }: ReportsTableProps) {
   const router = useRouter();
-  const t = useTranslations("admin.reports");
-  const tReport = useTranslations("report");
-  const locale = useLocale();
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language;
   const [loading, setLoading] = useState<string | null>(null);
 
   const handleStatusChange = async (reportId: string, status: "REVIEWED" | "DISMISSED") => {
@@ -70,48 +69,48 @@ export function ReportsTable({ reports }: ReportsTableProps) {
 
       if (!res.ok) throw new Error("Failed to update status");
 
-      toast.success(status === "REVIEWED" ? t("markedReviewed") : t("dismissed"));
+      toast.success(status === "REVIEWED" ? t("admin.reports.markedReviewed") : t("admin.reports.dismissed"));
       router.refresh();
     } catch {
-      toast.error(t("updateFailed"));
+      toast.error(t("admin.reports.updateFailed"));
     } finally {
       setLoading(null);
     }
   };
 
-  const handleRelistPrompt = async (promptId: string) => {
-    setLoading(promptId);
+  const handleRelistPrompt = async (resourceId: string) => {
+    setLoading(resourceId);
     try {
-      const res = await fetch(`/api/prompts/${promptId}/unlist`, {
+      const res = await fetch(`/api/resources/${resourceId}/unlist`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ unlist: false }),
       });
 
-      if (!res.ok) throw new Error("Failed to relist prompt");
+      if (!res.ok) throw new Error("Failed to relist resource");
 
-      toast.success(t("promptRelisted"));
+      toast.success(t("admin.reports.resourceRelisted"));
       router.refresh();
     } catch {
-      toast.error(t("relistFailed"));
+      toast.error(t("admin.reports.relistFailed"));
     } finally {
       setLoading(null);
     }
   };
 
-  const handleRestorePrompt = async (promptId: string) => {
-    setLoading(promptId);
+  const handleRestorePrompt = async (resourceId: string) => {
+    setLoading(resourceId);
     try {
-      const res = await fetch(`/api/prompts/${promptId}/restore`, {
+      const res = await fetch(`/api/resources/${resourceId}/restore`, {
         method: "POST",
       });
 
-      if (!res.ok) throw new Error("Failed to restore prompt");
+      if (!res.ok) throw new Error("Failed to restore resource");
 
-      toast.success(t("promptRestored"));
+      toast.success(t("admin.reports.resourceRestored"));
       router.refresh();
     } catch {
-      toast.error(t("restoreFailed"));
+      toast.error(t("admin.reports.restoreFailed"));
     } finally {
       setLoading(null);
     }
@@ -124,37 +123,37 @@ export function ReportsTable({ reports }: ReportsTableProps) {
   };
 
   const reasonLabels: Record<string, string> = {
-    SPAM: tReport("reasons.spam"),
-    INAPPROPRIATE: tReport("reasons.inappropriate"),
-    COPYRIGHT: tReport("reasons.copyright"),
-    MISLEADING: tReport("reasons.misleading"),
-    RELIST_REQUEST: tReport("reasons.relistRequest"),
-    OTHER: tReport("reasons.other"),
+    SPAM: t("report.admin.reports.reasons.spam"),
+    INAPPROPRIATE: t("report.admin.reports.reasons.inappropriate"),
+    COPYRIGHT: t("report.admin.reports.reasons.copyright"),
+    MISLEADING: t("report.admin.reports.reasons.misleading"),
+    RELIST_REQUEST: t("report.admin.reports.reasons.relistRequest"),
+    OTHER: t("report.admin.reports.reasons.other"),
   };
 
   return (
     <>
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-lg font-semibold">{t("title")}</h3>
-          <p className="text-sm text-muted-foreground">{t("description")}</p>
+          <h3 className="text-lg font-semibold">{t("admin.reports.title")}</h3>
+          <p className="text-sm text-muted-foreground">{t("admin.reports.description")}</p>
         </div>
       </div>
 
       {reports.length === 0 ? (
         <div className="text-center py-12 text-muted-foreground border rounded-md">
-          {t("noReports")}
+          {t("admin.reports.noReports")}
         </div>
       ) : (
         <div className="rounded-md border">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>{t("prompt")}</TableHead>
-                <TableHead>{t("reason")}</TableHead>
-                <TableHead>{t("reportedBy")}</TableHead>
-                <TableHead>{t("status")}</TableHead>
-                <TableHead>{t("date")}</TableHead>
+                <TableHead>{t("admin.reports.resource")}</TableHead>
+                <TableHead>{t("admin.reports.reason")}</TableHead>
+                <TableHead>{t("admin.reports.reportedBy")}</TableHead>
+                <TableHead>{t("admin.reports.status")}</TableHead>
+                <TableHead>{t("admin.reports.date")}</TableHead>
                 <TableHead className="w-[50px]"></TableHead>
               </TableRow>
             </TableHeader>
@@ -162,12 +161,12 @@ export function ReportsTable({ reports }: ReportsTableProps) {
               {reports.map((report) => (
                 <TableRow key={report.id}>
                   <TableCell>
-                    <Link 
-                      href={getPromptUrl(report.prompt.id, report.prompt.slug)}
+                    <Link
+                      href={getResourceUrl(report.resource.id, report.resource.slug)}
                       prefetch={false}
                       className="font-medium hover:underline flex items-center gap-1"
                     >
-                      {report.prompt.title}
+                      {report.resource.title}
                       <ExternalLink className="h-3 w-3" />
                     </Link>
                   </TableCell>
@@ -194,7 +193,7 @@ export function ReportsTable({ reports }: ReportsTableProps) {
                   </TableCell>
                   <TableCell>
                     <Badge variant="outline" className={statusColors[report.status]}>
-                      {t(`statuses.${report.status.toLowerCase()}`)}
+                      {t(`admin.reports.statuses.${report.status.toLowerCase()}`)}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-sm text-muted-foreground">
@@ -202,60 +201,56 @@ export function ReportsTable({ reports }: ReportsTableProps) {
                   </TableCell>
                   <TableCell>
                     <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
+                      <DropdownMenuTrigger render={<Button
+                          variant="ghost"
+                          size="icon"
                           className="h-8 w-8"
                           disabled={loading === report.id}
-                        >
+                         />}>
                           <MoreHorizontal className="h-4 w-4" />
-                        </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem asChild>
-                          <Link href={getPromptUrl(report.prompt.id, report.prompt.slug)} prefetch={false}>
+                        <DropdownMenuItem render={<Link href={getResourceUrl(report.resource.id, report.resource.slug)} prefetch={false} />}>
                             <Eye className="h-4 w-4 mr-2" />
-                            {t("viewPrompt")}
-                          </Link>
+                            {t("admin.reports.viewResource")}
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         {report.status === "PENDING" && (
                           <>
                             <DropdownMenuItem onClick={() => handleStatusChange(report.id, "REVIEWED")}>
                               <Check className="h-4 w-4 mr-2" />
-                              {t("markReviewed")}
+                              {t("admin.reports.markReviewed")}
                             </DropdownMenuItem>
                             <DropdownMenuItem onClick={() => handleStatusChange(report.id, "DISMISSED")}>
                               <X className="h-4 w-4 mr-2" />
-                              {t("dismiss")}
+                              {t("admin.reports.dismiss")}
                             </DropdownMenuItem>
                           </>
                         )}
                         {report.status !== "PENDING" && (
-                          <DropdownMenuItem 
+                          <DropdownMenuItem
                             onClick={() => handleStatusChange(report.id, "REVIEWED")}
                             disabled={report.status === "REVIEWED"}
                           >
                             <Check className="h-4 w-4 mr-2" />
-                            {t("markReviewed")}
+                            {t("admin.reports.markReviewed")}
                           </DropdownMenuItem>
                         )}
-                        {report.reason === "RELIST_REQUEST" && report.prompt.isUnlisted && (
+                        {report.reason === "RELIST_REQUEST" && report.resource.isUnlisted && (
                           <>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem onClick={() => handleRelistPrompt(report.prompt.id)}>
+                            <DropdownMenuItem onClick={() => handleRelistPrompt(report.resource.id)}>
                               <ListPlus className="h-4 w-4 mr-2" />
-                              {t("relistPrompt")}
+                              {t("admin.reports.relistResource")}
                             </DropdownMenuItem>
                           </>
                         )}
-                        {report.prompt.deletedAt && (
+                        {report.resource.deletedAt && (
                           <>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem onClick={() => handleRestorePrompt(report.prompt.id)}>
+                            <DropdownMenuItem onClick={() => handleRestorePrompt(report.resource.id)}>
                               <RotateCcw className="h-4 w-4 mr-2" />
-                              {t("restorePrompt")}
+                              {t("admin.reports.restoreResource")}
                             </DropdownMenuItem>
                           </>
                         )}

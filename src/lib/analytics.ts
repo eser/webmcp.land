@@ -1,6 +1,6 @@
 /**
  * Google Analytics Event Tracking Utility
- * 
+ *
  * Provides typed functions for tracking user interactions throughout the app.
  * Events are only sent if GOOGLE_ANALYTICS_ID is configured.
  */
@@ -87,155 +87,155 @@ export const analyticsAuth = {
 };
 
 // ============================================================================
-// Prompt Events
+// Resource Events
 // ============================================================================
 
-export const analyticsPrompt = {
-  view: (promptId: string, promptTitle?: string) => {
+export const analyticsResource = {
+  view: (resourceId: string, resourceTitle?: string) => {
     trackEvent({
-      action: "view_prompt",
-      category: "prompt",
-      label: promptTitle,
-      prompt_id: promptId,
+      action: "view_resource",
+      category: "resource",
+      label: resourceTitle,
+      resource_id: resourceId,
     });
   },
 
-  create: (promptType: string) => {
+  register: (resourceType: string) => {
     trackEvent({
-      action: "create_prompt",
-      category: "prompt",
-      label: promptType,
+      action: "register_resource",
+      category: "resource",
+      label: resourceType,
     });
   },
 
-  edit: (promptId: string) => {
+  edit: (resourceId: string) => {
     trackEvent({
-      action: "edit_prompt",
-      category: "prompt",
-      prompt_id: promptId,
+      action: "edit_resource",
+      category: "resource",
+      resource_id: resourceId,
     });
   },
 
-  delete: (promptId: string) => {
+  delete: (resourceId: string) => {
     trackEvent({
-      action: "delete_prompt",
-      category: "prompt",
-      prompt_id: promptId,
+      action: "delete_resource",
+      category: "resource",
+      resource_id: resourceId,
     });
   },
 
-  copy: (promptId?: string) => {
+  copy: (resourceId?: string) => {
     trackEvent({
-      action: "copy_prompt",
-      category: "prompt",
-      prompt_id: promptId,
+      action: "copy_resource",
+      category: "resource",
+      resource_id: resourceId,
     });
   },
 
-  upvote: (promptId: string) => {
+  upvote: (resourceId: string) => {
     trackEvent({
-      action: "upvote_prompt",
-      category: "prompt",
-      prompt_id: promptId,
+      action: "upvote_resource",
+      category: "resource",
+      resource_id: resourceId,
     });
   },
 
-  removeUpvote: (promptId: string) => {
+  removeUpvote: (resourceId: string) => {
     trackEvent({
       action: "remove_upvote",
-      category: "prompt",
-      prompt_id: promptId,
+      category: "resource",
+      resource_id: resourceId,
     });
   },
 
-  report: (promptId: string, reason: string) => {
+  report: (resourceId: string, reason: string) => {
     trackEvent({
-      action: "report_prompt",
-      category: "prompt",
+      action: "report_resource",
+      category: "resource",
       label: reason,
-      prompt_id: promptId,
+      resource_id: resourceId,
     });
   },
 
-  run: (promptId: string | undefined, platform: string) => {
+  share: (resourceId: string | undefined, platform: "twitter" | "hackernews" | "copy_link") => {
     trackEvent({
-      action: "run_prompt",
-      category: "prompt",
+      action: "share_resource",
+      category: "resource",
       label: platform,
-      prompt_id: promptId,
+      resource_id: resourceId,
     });
   },
 
-  share: (promptId: string | undefined, platform: "twitter" | "hackernews" | "copy_link") => {
-    trackEvent({
-      action: "share_prompt",
-      category: "prompt",
-      label: platform,
-      prompt_id: promptId,
-    });
-  },
-
-  addVersion: (promptId: string) => {
+  addVersion: (resourceId: string) => {
     trackEvent({
       action: "add_version",
-      category: "prompt",
-      prompt_id: promptId,
+      category: "resource",
+      resource_id: resourceId,
     });
   },
 
-  compareVersions: (promptId: string) => {
+  compareVersions: (resourceId: string) => {
     trackEvent({
       action: "compare_versions",
-      category: "prompt",
-      prompt_id: promptId,
+      category: "resource",
+      resource_id: resourceId,
     });
   },
 
-  fillVariables: (promptId?: string) => {
-    trackEvent({
-      action: "fill_variables",
-      category: "prompt",
-      prompt_id: promptId,
-    });
-  },
-
-  changeRequest: (promptId: string, action: "create" | "approve" | "dismiss" | "reopen") => {
+  changeRequest: (resourceId: string, action: "create" | "approve" | "dismiss" | "reopen") => {
     trackEvent({
       action: `change_request_${action}`,
-      category: "prompt",
-      prompt_id: promptId,
+      category: "resource",
+      resource_id: resourceId,
     });
   },
 
-  pin: (promptId: string) => {
+  pin: (resourceId: string) => {
     trackEvent({
-      action: "pin_prompt",
-      category: "prompt",
-      prompt_id: promptId,
+      action: "pin_resource",
+      category: "resource",
+      resource_id: resourceId,
     });
   },
 
-  unpin: (promptId: string) => {
+  unpin: (resourceId: string) => {
     trackEvent({
-      action: "unpin_prompt",
-      category: "prompt",
-      prompt_id: promptId,
+      action: "unpin_resource",
+      category: "resource",
+      resource_id: resourceId,
     });
   },
 
-  feature: (promptId: string) => {
+  feature: (resourceId: string) => {
     trackEvent({
-      action: "feature_prompt",
-      category: "prompt",
-      prompt_id: promptId,
+      action: "feature_resource",
+      category: "resource",
+      resource_id: resourceId,
     });
   },
 
-  unfeature: (promptId: string) => {
+  unfeature: (resourceId: string) => {
     trackEvent({
-      action: "unfeature_prompt",
-      category: "prompt",
-      prompt_id: promptId,
+      action: "unfeature_resource",
+      category: "resource",
+      resource_id: resourceId,
+    });
+  },
+
+  discover: (resourceId: string) => {
+    trackEvent({
+      action: "discover_resource",
+      category: "resource",
+      resource_id: resourceId,
+    });
+  },
+
+  healthCheck: (resourceId: string, status: string) => {
+    trackEvent({
+      action: "health_check",
+      category: "resource",
+      label: status,
+      resource_id: resourceId,
     });
   },
 };
@@ -471,15 +471,15 @@ export const analyticsSettings = {
 // ============================================================================
 
 export const analyticsHero = {
-  submitPromptIdea: (promptText: string) => {
+  submitSearch: (searchText: string) => {
     trackEvent({
-      action: "hero_submit_prompt",
+      action: "hero_submit_search",
       category: "homepage",
-      label: promptText.substring(0, 100),
+      label: searchText.substring(0, 100),
     });
   },
 
-  clickAnimatedPrompt: () => {
+  clickAnimatedResource: () => {
     trackEvent({
       action: "hero_click_animated",
       category: "homepage",
@@ -581,11 +581,11 @@ export const analyticsEngagement = {
 // ============================================================================
 
 export const analyticsComment = {
-  post: (promptId: string, isReply: boolean) => {
+  post: (resourceId: string, isReply: boolean) => {
     trackEvent({
       action: isReply ? "post_reply" : "post_comment",
       category: "comment",
-      prompt_id: promptId,
+      resource_id: resourceId,
     });
   },
 };
@@ -595,19 +595,19 @@ export const analyticsComment = {
 // ============================================================================
 
 export const analyticsCollection = {
-  add: (promptId: string) => {
+  add: (resourceId: string) => {
     trackEvent({
       action: "add_to_collection",
       category: "collection",
-      prompt_id: promptId,
+      resource_id: resourceId,
     });
   },
 
-  remove: (promptId: string) => {
+  remove: (resourceId: string) => {
     trackEvent({
       action: "remove_from_collection",
       category: "collection",
-      prompt_id: promptId,
+      resource_id: resourceId,
     });
   },
 };
@@ -619,7 +619,7 @@ export const analyticsCollection = {
 export const analyticsTranslate = {
   translate: (targetLanguage: string) => {
     trackEvent({
-      action: "translate_prompt",
+      action: "translate_resource",
       category: "translate",
       label: targetLanguage,
     });
@@ -648,49 +648,6 @@ export const analyticsExternal = {
 };
 
 // ============================================================================
-// Widget Events
-// ============================================================================
-
-export const analyticsWidget = {
-  view: (widgetId: string, actionName?: string) => {
-    trackEvent({
-      action: "widget_view",
-      category: "widget",
-      label: actionName,
-      widget_id: widgetId,
-    });
-  },
-
-  click: (widgetId: string, actionName?: string) => {
-    trackEvent({
-      action: "widget_click",
-      category: "widget",
-      label: actionName,
-      widget_id: widgetId,
-    });
-  },
-
-  copy: (widgetId: string, actionName?: string) => {
-    trackEvent({
-      action: "widget_copy",
-      category: "widget",
-      label: actionName,
-      widget_id: widgetId,
-    });
-  },
-
-  action: (widgetId: string, actionName?: string, actionUrl?: string) => {
-    trackEvent({
-      action: "widget_action",
-      category: "widget",
-      label: actionName,
-      widget_id: widgetId,
-      action_url: actionUrl,
-    });
-  },
-};
-
-// ============================================================================
 // Admin Events
 // ============================================================================
 
@@ -709,95 +666,18 @@ export const analyticsAdmin = {
     });
   },
 
-  managePrompts: (action: "feature" | "unfeature" | "delete" | "approve" | "reject") => {
+  manageResources: (action: "feature" | "unfeature" | "delete" | "approve" | "reject") => {
     trackEvent({
-      action: `prompt_${action}`,
+      action: `resource_${action}`,
       category: "admin",
     });
   },
 
-  importPrompts: (count: number) => {
+  importResources: (count: number) => {
     trackEvent({
-      action: "import_prompts",
+      action: "import_resources",
       category: "admin",
       value: count,
-    });
-  },
-};
-
-// ============================================================================
-// Kids Mode Events
-// ============================================================================
-
-export const analyticsKids = {
-  startGame: () => {
-    trackEvent({
-      action: "kids_start_game",
-      category: "kids",
-    });
-  },
-
-  viewLevel: (levelSlug: string, world: number) => {
-    trackEvent({
-      action: "kids_view_level",
-      category: "kids",
-      label: levelSlug,
-      world,
-    });
-  },
-
-  completeLevel: (levelSlug: string, world: number, stars: number) => {
-    trackEvent({
-      action: "kids_complete_level",
-      category: "kids",
-      label: levelSlug,
-      world,
-      value: stars,
-    });
-  },
-
-  completeWorld: (world: number) => {
-    trackEvent({
-      action: "kids_complete_world",
-      category: "kids",
-      value: world,
-    });
-  },
-
-  interactiveComplete: (componentType: string, levelSlug: string) => {
-    trackEvent({
-      action: "kids_interactive_complete",
-      category: "kids",
-      label: `${componentType}:${levelSlug}`,
-    });
-  },
-
-  openSettings: () => {
-    trackEvent({
-      action: "kids_open_settings",
-      category: "kids",
-    });
-  },
-
-  changeLanguage: (locale: string) => {
-    trackEvent({
-      action: "kids_change_language",
-      category: "kids",
-      label: locale,
-    });
-  },
-
-  resetProgress: () => {
-    trackEvent({
-      action: "kids_reset_progress",
-      category: "kids",
-    });
-  },
-
-  viewMap: () => {
-    trackEvent({
-      action: "kids_view_map",
-      category: "kids",
     });
   },
 };

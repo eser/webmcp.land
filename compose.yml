@@ -1,0 +1,91 @@
+name: webmcp-land-development
+
+# ============================================================================
+# Docker Compose for webmcp.land Local Development
+# ============================================================================
+# Usage:
+#   docker compose up                # Start all services
+#   docker compose up db             # Start database only
+#   docker compose watch             # Start with hot reload (Watch mode)
+#   docker compose down -v           # Tear down with volume cleanup
+#
+# UIs:
+#   Application:  http://localhost:3000
+#   PostgreSQL:   localhost:5432
+#
+# Production:
+#   Deployed via Coolify using the root Dockerfile (target: runner).
+#   Coolify builds the Dockerfile directly and manages environment variables,
+#   reverse proxy (Traefik), SSL, and database through its dashboard.
+# ============================================================================
+
+services:
+  app:
+    tty: true
+    stdin_open: true
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    develop:
+      watch:
+        - action: sync
+          path: ./src
+          target: /app/src
+        - action: sync
+          path: ./public
+          target: /app/public
+        - action: sync
+          path: ./messages
+          target: /app/messages
+        - action: sync
+          path: ./prompts.config.ts
+          target: /app/prompts.config.ts
+        - action: rebuild
+          path: ./package.json
+        - action: rebuild
+          path: ./pnpm-lock.yaml
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/webmcp_land?schema=public
+      DIRECT_URL: postgresql://postgres:postgres@db:5432/webmcp_land?schema=public
+      BETTER_AUTH_URL: http://localhost:3000
+      BETTER_AUTH_SECRET: dev-secret-change-in-production
+      CRON_SECRET: dev-cron-secret
+    env_file:
+      - path: .env
+        required: false
+    networks:
+      - prompts-network
+    ports:
+      - 3000:3000
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:16-bookworm
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: webmcp_land
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d webmcp_land"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - prompts-network
+    ports:
+      - 5432:5432
+
+volumes:
+  postgres-data:
+
+networks:
+  prompts-network:
+    driver: bridge

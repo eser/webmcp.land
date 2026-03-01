@@ -36,8 +36,9 @@
   "nav": {
     "collection": "我的收藏",
     "feed": "动态",
-    "promptmasters": "Promptmasters",
-    "prompts": "提示词",
+    "topProviders": "顶级提供者",
+    "resources": "注册中心",
+    "registry": "Registry",
     "skills": "技能",
     "workflows": "工作流程",
     "categories": "分类",
@@ -48,10 +49,7 @@
     "login": "登录",
     "register": "注册",
     "logout": "退出登录",
-    "ide": "Typed-Prompts IDE",
-    "developers": "开发者",
-    "book": "书籍",
-    "forKids": "儿童版",
+    "webmasters": "Top Providers",
     "more": "更多"
   },
   "brand": {
@@ -78,7 +76,7 @@
     "guideline4": "请勿为标志添加阴影或渐变等效果",
     "guideline5": "标志应在背景上清晰可见",
     "license": "许可证",
-    "licenseText": "{name}品牌资源根据<link>CC0 1.0 Universal</link>提供。您可以自由使用这些资源，无需署名。"
+    "licenseText": "{name}品牌资源根据<a href=\"https://www.apache.org/licenses/LICENSE-2.0\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"underline hover:text-foreground\">Apache License 2.0</a>提供。您可以自由使用这些资源，无需署名。"
   },
   "auth": {
     "login": "登录",
@@ -103,7 +101,7 @@
     "registrationFailed": "注册失败",
     "githubAttributionHint": "使用 GitHub 登录，将您的贡献与开源社区关联"
   },
-  "prompts": {
+  "resources": {
     "title": "提示词",
     "create": "创建提示词",
     "createSkill": "创建技能",
@@ -121,17 +119,17 @@
     },
     "edit": "编辑提示词",
     "delete": "删除提示词",
-    "noPrompts": "未找到提示词",
-    "noPromptsDescription": "尝试调整搜索或筛选条件以找到您需要的内容。",
-    "promptTitle": "标题",
-    "promptContent": "内容",
-    "promptDescription": "描述",
-    "promptType": "类型",
-    "promptCategory": "分类",
-    "promptTags": "标签",
+    "noResources": "未找到提示词",
+    "noResourcesDescription": "尝试调整搜索或筛选条件以找到您需要的内容。",
+    "resourceTitle": "标题",
+    "resourceContent": "内容",
+    "resourceDescription": "描述",
+    "resourceType": "类型",
+    "resourceCategory": "分类",
+    "resourceTags": "标签",
     "searchTags": "搜索标签...",
     "noTagsFound": "未找到标签",
-    "promptContributors": "贡献者",
+    "resourceContributors": "贡献者",
     "contributorsDescription": "帮助编写此提示词的其他用户。变更请求被批准的用户会自动添加。",
     "worksBestWithModels": "最佳适用模型",
     "worksBestWithModelsDescription": "此提示词最适合的AI模型（最多3个）",
@@ -150,15 +148,15 @@
     "noUsersFound": "未找到用户",
     "worksBestWith": "最适合",
     "mcpTools": "MCP 工具",
-    "promptPrivate": "私有",
+    "resourcePrivate": "私有",
     "feature": "精选",
     "featured": "已精选",
     "unlist": "取消列出",
     "relist": "重新列出",
     "adminArea": "管理员区域",
-    "promptDeleted": "此提示词已被删除",
-    "promptDeletedDescription": "此提示词已被删除，仅管理员可见。它不会出现在搜索结果或公开列表中。",
-    "promptDelisted": "此提示词已被下架",
+    "resourceDeleted": "此提示词已被删除",
+    "resourceDeletedDescription": "此提示词已被删除，仅管理员可见。它不会出现在搜索结果或公开列表中。",
+    "resourceDelisted": "此提示词已被下架",
     "delistReasonTooShort": "此提示词因内容过短而被自动下架。它仍会显示在您的个人资料中，但不会导出到GitHub，也不会出现在搜索结果中。",
     "delistReasonNotEnglish": "此提示词因非英语内容而被自动下架。我们仅收录英语提示词，以便在全球范围内使用。它仍会显示在您的个人资料中，但不会导出到GitHub，也不会出现在搜索结果中。",
     "delistReasonLowQuality": "此提示词因质量问题而被自动下架。它仍会显示在您的个人资料中，但不会导出到GitHub，也不会出现在搜索结果中。",
@@ -171,15 +169,15 @@
     "relistRequestSent": "您的重新上架请求已提交。管理员将很快审核。",
     "relistRequestAlreadySent": "您已经为此提示词提交了重新上架请求。",
     "relistRequestError": "提交重新上架请求失败。请重试。",
-    "relatedPrompts": "相关提示词",
-    "deletePrompt": "删除提示词",
-    "deletePromptTitle": "删除此提示词？",
-    "deletePromptDescription": "此操作无法撤销。提示词将被永久删除。",
+    "relatedResources": "相关提示词",
+    "deleteResource": "删除提示词",
+    "deleteResourceTitle": "删除此提示词？",
+    "deleteResourceDescription": "此操作无法撤销。提示词将被永久删除。",
     "deleteError": "删除提示词失败",
-    "restorePrompt": "恢复提示词",
-    "promptRestored": "提示词已成功恢复",
+    "restoreResource": "恢复提示词",
+    "resourceRestored": "提示词已成功恢复",
     "restoreError": "恢复失败",
-    "noMorePrompts": "已经到底了",
+    "noMoreResources": "已经到底了",
     "loadMore": "加载更多",
     "loading": "加载中...",
     "types": {
@@ -232,11 +230,11 @@
     "viewCount": "浏览量",
     "createdAt": "创建时间",
     "updatedAt": "更新时间",
-    "promptCreated": "提示词已创建",
-    "promptUpdated": "提示词已更新",
+    "resourceCreated": "提示词已创建",
+    "resourceUpdated": "提示词已更新",
     "rateLimitError": "请等待30秒后再创建下一个提示词",
     "dailyLimitError": "您已达到每日5个提示词的上限",
-    "duplicatePromptError": "您已有相同标题或内容的提示词",
+    "duplicateResourceError": "您已有相同标题或内容的提示词",
     "contentExistsError": "此内容的提示词已存在：「{title}」作者：{author}",
     "run": "运行",
     "downloadMarkdown": "下载 MD",
@@ -274,8 +272,8 @@
     "downloadFailed": "下载失败",
     "urlCopied": "链接已复制",
     "failedToCopyUrl": "复制链接失败",
-    "promptCopied": "提示词已复制",
-    "promptCopiedDescription": "提示词已复制到剪贴板。打开 {platform} 后粘贴即可。",
+    "resourceCopied": "提示词已复制",
+    "resourceCopiedDescription": "提示词已复制到剪贴板。打开 {platform} 后粘贴即可。",
     "openPlatform": "打开 {platform}",
     "cancel": "取消",
     "titleRequired": "标题为必填项",
@@ -315,8 +313,8 @@
     "uploadInstead": "改为上传",
     "confirmGeneration": "确认生成",
     "confirmGenerationDescription": "使用 {provider} 的 {model} 模型生成媒体？",
-    "promptPreview": "提示词预览",
-    "noPromptProvided": "未提供提示词",
+    "resourcePreview": "提示词预览",
+    "noResourceProvided": "未提供提示词",
     "inputImage": "输入图片",
     "aspectRatio": "宽高比",
     "startGeneration": "开始生成",
@@ -324,7 +322,7 @@
     "doNotCloseWindow": "生成过程中请勿关闭此窗口。",
     "generationComplete": "生成完成",
     "generationFailed": "生成失败",
-    "mediaAddedToPrompt": "媒体已添加到您的提示词。",
+    "mediaAddedToResource": "媒体已添加到您的提示词。",
     "mediaGenerated": "媒体生成成功！",
     "aiGenerationAvailable": "✨ AI生成可用",
     "generateWith": "使用AI生成",
@@ -367,7 +365,7 @@
     "pinned": "已置顶到个人资料",
     "unpinned": "已从个人资料取消置顶",
     "pinFailed": "置顶更新失败",
-    "pinnedPrompts": "已置顶",
+    "pinnedResources": "已置顶",
     "previous": "上一个",
     "next": "下一个",
     "mediaLoadError": "无法加载此提示词的媒体。URL可能无效或资源已不可用。",
@@ -384,16 +382,30 @@
     "translated": "内容已翻译",
     "translationFailed": "翻译失败",
     "alreadyTranslated": "已翻译",
-    "learnHowToWritePrompts": "学习如何写出有效的提示词 →",
     "structuredFormatDetected": "检测到 {format} 格式",
     "structuredFormatWarningDescription": "您的提示词内容看起来像结构化数据。考虑切换到结构化模式以获得更好的语法高亮和验证。",
-    "switchToStructured": "切换到 {format}"
+    "switchToStructured": "切换到 {format}",
+    "endpointUrl": "端点URL",
+    "serverType": "服务器类型",
+    "status": "状态",
+    "capabilities": "功能",
+    "methods": "方法",
+    "tools": "工具",
+    "useCases": "使用场景",
+    "discover": "发现",
+    "register": "注册",
+    "healthStatus": "健康状态",
+    "lastChecked": "最后检查",
+    "active": "活跃",
+    "pending": "待处理",
+    "unreachable": "不可达",
+    "suspended": "已暂停",
+    "learnHowToWriteResources": "学习如何写出有效的提示词 →"
   },
   "changeRequests": {
     "title": "变更请求",
     "create": "创建变更请求",
     "createDescription": "为此提示词建议改进或修复",
-    "backToPrompt": "返回提示词",
     "proposedTitle": "建议的标题",
     "proposedContent": "建议的内容",
     "proposedContentPlaceholder": "输入您对提示词的建议变更...",
@@ -428,7 +440,8 @@
     "dismiss": "撤回",
     "dismissed": "变更请求已撤回",
     "dismissConfirmTitle": "撤回变更请求？",
-    "dismissConfirmDescription": "这将永久删除您的变更请求。此操作无法撤销。"
+    "dismissConfirmDescription": "这将永久删除您的变更请求。此操作无法撤销。",
+    "backToResource": "返回提示词"
   },
   "categories": {
     "title": "分类",
@@ -440,8 +453,7 @@
     "name": "名称",
     "parent": "父分类",
     "noCategories": "未找到分类",
-    "prompts": "个提示词",
-    "promptCount": "{count} 个提示词",
+    "resources": "个提示词",
     "subscriberCount": "{count} 订阅者",
     "searchPlaceholder": "搜索提示词...",
     "sort": {
@@ -449,7 +461,8 @@
       "oldest": "最早",
       "most_upvoted": "最多投票",
       "most_contributors": "最多贡献者"
-    }
+    },
+    "resourceCount": "{count} 个提示词"
   },
   "tags": {
     "title": "标签",
@@ -460,7 +473,7 @@
     "name": "名称",
     "color": "颜色",
     "noTags": "未找到标签",
-    "prompts": "个提示词",
+    "resources": "个提示词",
     "allTags": "全部标签"
   },
   "settings": {
@@ -483,7 +496,7 @@
     "description": "管理用户、分类和标签",
     "stats": {
       "users": "用户",
-      "prompts": "提示词",
+      "resources": "提示词",
       "categories": "分类",
       "tags": "标签"
     },
@@ -492,19 +505,18 @@
       "categories": "分类",
       "tags": "标签",
       "webhooks": "Webhooks",
-      "prompts": "提示词",
+      "resources": "提示词",
       "reports": "举报"
     },
     "reports": {
       "title": "举报管理",
       "description": "审核和管理被举报的提示词",
-      "prompt": "提示词",
       "reason": "原因",
       "reportedBy": "举报人",
       "status": "状态",
       "date": "日期",
       "noReports": "暂无举报",
-      "viewPrompt": "查看提示词",
+      "viewResource": "查看提示词",
       "markReviewed": "标记为已审核",
       "dismiss": "驳回",
       "markedReviewed": "举报已标记为已审核",
@@ -515,16 +527,17 @@
         "reviewed": "已审核",
         "dismissed": "已驳回"
       },
-      "relistPrompt": "重新上架",
-      "restorePrompt": "恢复提示词",
-      "promptRelisted": "提示词已成功重新上架",
-      "promptRestored": "提示词已成功恢复",
+      "relistResource": "重新上架",
+      "restoreResource": "恢复提示词",
+      "resourceRelisted": "提示词已成功重新上架",
+      "resourceRestored": "提示词已成功恢复",
       "relistFailed": "重新上架失败",
-      "restoreFailed": "恢复失败"
+      "restoreFailed": "恢复失败",
+      "resource": "提示词"
     },
-    "prompts": {
+    "resources": {
       "title": "提示词管理",
-      "description": "从 prompts.csv 导入提示词并管理 AI 嵌入",
+      "description": "从 资源.csv 导入提示词并管理 AI 嵌入",
       "import": "导入 CSV",
       "export": "导出 CSV",
       "exportInfo": "下载提示词为 CSV 文件以上传至 GitHub/HuggingFace",
@@ -534,7 +547,7 @@
       "importResult": "已导入: {imported}, 已跳过: {skipped}",
       "deleteSuccess": "{count} 个提示词已删除",
       "importConfirmTitle": "导入提示词？",
-      "importConfirmDescription": "这将从 prompts.csv 导入提示词。已存在的提示词将被跳过。",
+      "importConfirmDescription": "这将从 资源.csv 导入提示词。已存在的提示词将被跳过。",
       "deleteConfirmTitle": "删除社区提示词？",
       "deleteConfirmDescription": "这将永久删除所有导入的提示词和未认领的贡献者。",
       "cancel": "取消",
@@ -555,10 +568,10 @@
       "relatedSuccess": "{count} 个相关提示词已生成",
       "relatedResult": "成功: {success}, 失败: {failed}"
     },
-    "promptsList": {
+    "resourcesList": {
       "title": "所有提示词",
       "description": "浏览和管理系统中的所有提示词",
-      "noPrompts": "未找到提示词",
+      "noResources": "未找到提示词",
       "private": "私密",
       "unlisted": "未列出",
       "views": "浏览",
@@ -584,7 +597,7 @@
       "user": "用户",
       "email": "邮箱",
       "role": "角色",
-      "prompts": "提示词",
+      "resources": "提示词",
       "joined": "加入时间",
       "makeAdmin": "设为管理员",
       "removeAdmin": "取消管理员",
@@ -634,7 +647,7 @@
       "descriptionLabel": "描述",
       "icon": "图标",
       "parent": "父级",
-      "prompts": "提示词",
+      "resources": "提示词",
       "add": "添加分类",
       "edit": "编辑",
       "delete": "删除",
@@ -672,7 +685,7 @@
       "name": "名称",
       "slug": "别名",
       "color": "颜色",
-      "prompts": "提示词",
+      "resources": "提示词",
       "add": "添加标签",
       "edit": "编辑",
       "delete": "删除",
@@ -723,9 +736,9 @@
     },
     "import": {
       "title": "导入社区提示词",
-      "description": "从 Awesome ChatGPT Prompts 的 prompts.csv 文件导入提示词",
-      "fileInfo": "从 Awesome ChatGPT Prompts 社区 prompts.csv 导入",
-      "csvFormat": "格式：act, prompt, for_devs, type",
+      "description": "从 Awesome ChatGPT 资源 的 资源.csv 文件导入提示词",
+      "fileInfo": "从 Awesome ChatGPT 资源 社区 资源.csv 导入",
+      "csvFormat": "格式：act, 资源, for_devs, type",
       "importButton": "导入社区提示词",
       "importing": "导入中...",
       "success": "{count} 个提示词导入成功",
@@ -736,22 +749,22 @@
       "total": "CSV 总计：{count}",
       "errors": "错误：",
       "confirmTitle": "导入提示词？",
-      "confirmDescription": "这将从 prompts.csv 导入所有提示词。已存在相同标题的提示词将被跳过。",
+      "confirmDescription": "这将从 资源.csv 导入所有提示词。已存在相同标题的提示词将被跳过。",
       "cancel": "取消",
       "confirm": "导入",
       "deleteButton": "删除",
       "deleteConfirmTitle": "删除社区提示词？",
-      "deleteConfirmDescription": "这将永久删除从 prompts.csv 导入的所有提示词和未认领的贡献者用户。此操作无法撤销。",
+      "deleteConfirmDescription": "这将永久删除从 资源.csv 导入的所有提示词和未认领的贡献者用户。此操作无法撤销。",
       "deleteSuccess": "{count} 个社区提示词已删除"
     },
     "aiSearch": {
       "title": "AI 搜索",
       "description": "使用 OpenAI 生成语义搜索的嵌入向量",
-      "promptsWithoutEmbeddings": "未生成嵌入的提示词",
       "generateButton": "生成嵌入",
       "generating": "生成中...",
       "generateSuccess": "{count} 个嵌入生成成功",
-      "generateResult": "成功：{success}，失败：{failed}"
+      "generateResult": "成功：{success}，失败：{failed}",
+      "resourcesWithoutEmbeddings": "未生成嵌入的提示词"
     }
   },
   "search": {
@@ -771,12 +784,12 @@
   },
   "user": {
     "profile": "个人资料",
-    "prompts": "提示词",
-    "allPrompts": "全部提示词",
+    "resources": "提示词",
+    "allResources": "全部提示词",
     "joined": "加入时间",
-    "noPrompts": "暂无提示词",
-    "noPromptsOwner": "您还没有创建任何提示词",
-    "createFirstPrompt": "创建您的第一个提示词",
+    "noResources": "暂无提示词",
+    "noResourcesOwner": "您还没有创建任何提示词",
+    "registerFirstResource": "创建您的第一个提示词",
     "upvotesReceived": "收到的点赞",
     "editProfile": "编辑资料",
     "unclaimedUser": "未认领",
@@ -784,7 +797,7 @@
     "contributionsCount": "贡献",
     "noContributions": "暂无贡献",
     "noContributionsOwner": "您还没有对任何提示词做出贡献",
-    "privatePromptsNote": "您有 {count} 个私有提示词。可以在支持的客户端中使用您的 API 密钥通过 MCP 访问它们。",
+    "privateResourcesNote": "您有 {count} 个私有提示词。可以在支持的客户端中使用您的 API 密钥通过 MCP 访问它们。",
     "contribution": "贡献",
     "contributionsPlural": "贡献",
     "inLastYear": "过去一年",
@@ -793,9 +806,9 @@
     "more": "多",
     "filteringByDate": "显示 {date} 的提示词",
     "clearFilter": "清除筛选",
-    "noPromptsOnDate": "此日期没有找到提示词。",
-    "noPromptsOnDateOwner": "您在此日期没有提示词。",
-    "createForToday": "为今天创建",
+    "noResourcesOnDate": "此日期没有找到提示词。",
+    "noResourcesOnDateOwner": "您在此日期没有提示词。",
+    "registerForToday": "为今天创建",
     "likes": "喜欢",
     "noLikes": "还没有喜欢的提示词",
     "noLikesOwner": "您还没有喜欢任何提示词",
@@ -823,7 +836,7 @@
     "createVersion": "创建版本",
     "createNewVersion": "创建新版本",
     "updateDescription": "更新提示词内容并添加描述您变更的备注。",
-    "promptContent": "提示词内容",
+    "resourceContent": "提示词内容",
     "changeNote": "变更备注（可选）",
     "changeNotePlaceholder": "例如：修复错别字，添加更多上下文...",
     "contentPlaceholder": "输入更新后的提示词内容...",
@@ -879,7 +892,7 @@
     "feedDescription": "来自您订阅分类的提示词",
     "browseAll": "浏览全部",
     "discover": "发现",
-    "noPromptsInFeed": "您的订阅中暂无提示词",
+    "noResourcesInFeed": "您的订阅中暂无提示词",
     "subscribeToCategories": "订阅分类以在此查看提示词",
     "viewAllCategories": "查看所有分类"
   },
@@ -888,12 +901,12 @@
     "description": "具有顺序流程和连接的提示词",
     "noWorkflows": "暂无工作流程",
     "noWorkflowsDescription": "工作流程是按顺序连接到其他提示词的提示词。创建一个提示词并添加连接以构建工作流程。",
-    "browsePrompts": "浏览提示词"
+    "browseResources": "浏览提示词"
   },
   "collection": {
     "title": "我的收藏",
     "description": "您保存的提示词",
-    "browsePrompts": "浏览提示词",
+    "browseResources": "浏览提示词",
     "discover": "发现",
     "emptyTitle": "收藏夹为空",
     "emptyDescription": "将提示词添加到收藏夹以便快速访问",
@@ -903,16 +916,16 @@
     "removed": "已从收藏中移除"
   },
   "discovery": {
-    "featuredPrompts": "精选提示词",
+    "featuredResources": "精选资源",
     "todaysMostUpvoted": "今日最热",
-    "latestPrompts": "最新提示词",
+    "latestResources": "最新资源",
     "recentlyUpdated": "最近更新",
     "mostContributed": "贡献最多"
   },
   "homepage": {
-    "heroTitle": "AI 提示词的自由",
-    "heroSubtitle": "社交平台",
-    "heroDescription": "提示词是所有生成式AI的基础。从社区分享、发现和收集它们。免费开源 — 自托管享有完全隐私。",
+    "heroTitle": "The AI-enabled Service Registry of",
+    "heroSubtitle": "(Web)MCP resources",
+    "heroDescription": "发现、注册和连接各种任务的MCP服务。免费开源 — 自托管享有完全隐私。",
     "heroFeature1": "免费 & 开源",
     "heroFeature2": "自托管保护隐私",
     "heroFeature3": "适用于团队和组织",
@@ -922,13 +935,15 @@
     "setupPrivateServer": "部署私有服务器",
     "beStargazer": "成为 GitHub 上第 {count} 位 Star 用户",
     "ourHistory": "了解更多关于我们的历史",
-    "browsePrompts": "浏览提示词",
+    "browseResources": "浏览注册中心",
     "viewFeed": "查看动态",
     "readyToStart": "准备好开始了吗？",
     "freeAndOpen": "免费且开源。",
     "createAccount": "创建账户",
-    "featuredPrompts": "精选提示词",
-    "latestPrompts": "最新提示词",
+    "login": "登录",
+    "register": "注册",
+    "featuredResources": "精选资源",
+    "latestResources": "最新资源",
     "achievements": {
       "featuredIn": "刊登于",
       "referencedBy": "被引用于",
@@ -948,7 +963,7 @@
       "sponsoredBy": "赞助商",
       "becomeSponsor": "支持社区",
       "firstEver": "世界首个提示词库",
-      "releasedOn": "发布于2022年12月5日",
+      "releasedOn": "发布于2026年2月28日",
       "lovedByPioneers": "深受AI先驱者喜爱"
     }
   },
@@ -957,7 +972,7 @@
     "pendingChangeRequests": "待处理的变更请求",
     "noNotifications": "暂无通知",
     "markAllRead": "全部标为已读",
-    "commentedOnPrompt": "评论了你的提示词",
+    "commentedOnResource": "评论了你的提示词",
     "repliedToComment": "回复了你的评论"
   },
   "comments": {
@@ -986,18 +1001,18 @@
     "showReplies": "显示 {count} 条回复",
     "hideReplies": "隐藏回复"
   },
-  "promptmasters": {
-    "title": "Promptmasters",
+  "webmasters": {
+    "title": "顶级提供者",
     "description": "根据提示词获得的赞数排名的顶级贡献者",
     "allTime": "全部时间",
     "thisMonth": "本月",
     "thisWeek": "本周",
-    "prompts": "提示词",
+    "resources": "提示词",
     "upvotes": "赞",
-    "perPrompt": "每提示词",
     "noData": "暂无数据",
     "sortByTotal": "按总票数排序",
-    "sortByRatio": "按每提示词票数排序"
+    "sortByRatio": "按每提示词票数排序",
+    "perResource": "每提示词"
   },
   "errors": {
     "notFound": "页面未找到",
@@ -1009,12 +1024,12 @@
     "tokens": "token",
     "noChanges": "无变更"
   },
-  "heroPromptInput": {
-    "placeholder": "描述你想要创建的提示词...",
-    "ariaLabel": "描述你想要创建的提示词",
-    "submit": "创建提示词",
-    "hint": "点击开始用AI创建",
-    "modelName": "提示词助手",
+  "heroSearchInput": {
+    "placeholder": "您在寻找什么MCP服务？",
+    "ariaLabel": "您在寻找什么MCP服务",
+    "submit": "搜索",
+    "hint": "点击搜索注册中心",
+    "modelName": "资源代理",
     "examples": {
       "codeReview": "创建一个能发现bug的代码审查助手",
       "emailWriter": "打造一个适用于各种场合的专业邮件撰写器",
@@ -1023,56 +1038,15 @@
       "interviewCoach": "创建一个面试准备教练"
     }
   },
-  "heroIndustries": {
-    "prefix": "或按行业探索",
-    "clickToExplore": "点击探索",
-    "searchPlaceholder": "搜索提示词...",
-    "teachers": "教师",
-    "developers": "开发者",
-    "marketers": "营销人员",
-    "designers": "设计师",
-    "writers": "作家",
-    "analysts": "分析师",
-    "entrepreneurs": "创业者",
-    "researchers": "研究员",
-    "students": "学生",
-    "consultants": "顾问",
-    "engineers": "工程师",
-    "creators": "创作者",
-    "lawyers": "律师",
-    "doctors": "医生",
-    "nurses": "护士",
-    "accountants": "会计",
-    "salespeople": "销售",
-    "recruiters": "招聘官",
-    "managers": "经理",
-    "executives": "高管",
-    "freelancers": "自由职业者",
-    "photographers": "摄影师",
-    "musicians": "音乐家",
-    "artists": "艺术家",
-    "architects": "建筑师",
-    "scientists": "科学家",
-    "journalists": "记者",
-    "editors": "编辑",
-    "translators": "翻译",
-    "coaches": "教练",
-    "therapists": "治疗师",
-    "trainers": "培训师",
-    "chefs": "厨师",
-    "realtors": "房产经纪",
-    "investors": "投资者",
-    "traders": "交易员"
-  },
   "notFound": {
     "title": "页面未找到",
     "description": "您要查找的页面不存在或已被移动。",
     "goHome": "返回首页",
     "goBack": "返回",
     "helpfulLinks": "有用的链接：",
-    "browsePrompts": "浏览提示词",
+    "browseResources": "浏览提示词",
     "categories": "分类",
-    "createPrompt": "创建提示词"
+    "registerResource": "创建提示词"
   },
   "serverError": {
     "title": "服务器错误",
@@ -1081,11 +1055,11 @@
     "goHome": "返回首页",
     "goBack": "返回上一页",
     "helpfulLinks": "以下是一些有用的链接：",
-    "browsePrompts": "浏览提示词",
+    "browseResources": "浏览提示词",
     "categories": "分类",
-    "createPrompt": "创建提示词"
+    "registerResource": "创建提示词"
   },
-  "promptBuilder": {
+  "resourceBuilder": {
     "title": "提示词构建代理",
     "openBuilder": "提示词代理",
     "welcomeTitle": "用AI创建提示词",
@@ -1098,18 +1072,18 @@
     "thinking": "思考中...",
     "errorMessage": "出了点问题。请再试一次。",
     "foundExamples": "找到{count}个相似提示词：",
-    "currentPrompt": "构建中：",
     "stateTitle": "标题",
     "stateContent": "内容",
     "stateTags": "标签",
     "editAction1": "填写缺失字段，更新标签。",
     "editAction2": "改进变量",
     "editAction3": "使用变量",
-    "editAction4": "转换为JSON提示词"
+    "editAction4": "转换为JSON提示词",
+    "currentResource": "构建中："
   },
   "report": {
     "report": "举报",
-    "reportPrompt": "举报提示词",
+    "reportResource": "举报提示词",
     "reportDescription": "通过举报不当内容，帮助我们维护社区安全。",
     "reason": "原因",
     "selectReason": "选择原因",
@@ -1174,9 +1148,9 @@
         "question": "为什么提示词很重要？我不能随便问AI任何问题吗？",
         "answer": "虽然高级AI模型可以很好地处理随意的问题，但在以下情况下提示词变得至关重要：\n\n• 在应用程序中通过API使用AI时——通常只有一次机会（\"一次性提示\"），没有来回对话\n• 使用需要更精确指令的较小、经济型模型时\n• 构建一致性和可靠性很重要的生产系统时\n\n优化的提示词帮助您获得更好的结果，节省令牌（和金钱），并创建更可靠的AI驱动应用程序。"
       },
-      "whatIsPromptschat": {
-        "question": "prompts.chat是什么？",
-        "answer": "prompts.chat是一个社区驱动的平台，人们在这里分享、发现和收集AI提示词。四年多来，用户一直在这里分享他们的提示词优化技术。社区互相帮助改进提示词，学习与AI系统协作的新方法。"
+      "whatIsWebmcpland": {
+        "question": "webmcp.land是什么？",
+        "answer": "webmcp.land是一个社区驱动的平台，人们在这里分享、发现和收集AI提示词。四年多来，用户一直在这里分享他们的提示词优化技术。社区互相帮助改进提示词，学习与AI系统协作的新方法。"
       },
       "howToUse": {
         "question": "如何使用这个平台的提示词？",
@@ -1184,11 +1158,11 @@
       },
       "license": {
         "question": "我可以商业使用这些提示词吗？",
-        "answer": "是的！prompts.chat上的所有提示词都在CC0（Creative Commons Zero）许可证下发布，这意味着它们属于公共领域。您可以自由使用、修改和分发它们用于任何目的，包括商业用途，无需注明出处。"
+        "answer": "是的！webmcp.land上的所有提示词都在Apache-2.0（Apache License 2.0）许可证下发布，这意味着它们是开源的。您可以自由使用、修改和分发它们用于任何目的，包括商业用途，无需注明出处。"
       },
       "selfHost": {
         "question": "我可以自托管这个平台吗？",
-        "answer": "当然可以！prompts.chat是完全开源的。您可以为您的团队或组织部署自己的私有实例。请查看我们的自托管文档了解设置说明。"
+        "answer": "当然可以！webmcp.land是完全开源的。您可以为您的团队或组织部署自己的私有实例。请查看我们的自托管文档了解设置说明。"
       },
       "verification": {
         "question": "如何成为认证用户？",
@@ -1235,9 +1209,9 @@
     "publicByDefaultDescription": "通过MCP保存提示词时，默认设为公开而非私有。",
     "settingUpdated": "设置已更新"
   },
-  "connectedPrompts": {
+  "connectedResources": {
     "title": "提示词流程",
-    "addPromptFlow": "此提示词有下一步",
+    "addResourceFlow": "此提示词有下一步",
     "testWorkflow": "运行工作流",
     "addPrevious": "添加上一个",
     "addNext": "添加下一个",
@@ -1249,9 +1223,9 @@
     "previousSteps": "上一步",
     "nextSteps": "下一步",
     "fullFlow": "完整流程",
-    "searchPrompt": "搜索提示词",
+    "searchResource": "搜索提示词",
     "searchPlaceholder": "按标题搜索...",
-    "selectedPrompt": "已选提示词",
+    "selectedResource": "已选提示词",
     "connectionLabel": "关联标签",
     "labelPlaceholder": "例如：第一帧、下一步、处理后...",
     "labelHint": "描述提示词之间的条件或转换",
@@ -1276,7 +1250,7 @@
     "inputVideos": "{count}个视频",
     "inputDocuments": "{count}个文档"
   },
-  "promptWritingGuide": {
+  "resourceWritingGuide": {
     "title": "如何写出优秀的提示词",
     "subtitle": "创建有效 AI 提示词的技巧、示例和最佳实践",
     "interactiveBanner": {
@@ -1360,103 +1334,23 @@
       "contentExample": "\"不包含个人观点\" / \"只关注事实信息\""
     }
   },
-  "ide": {
-    "title": "Prompt Builder",
-    "subtitle": "类型安全的结构化提示词构建",
-    "editor": "编辑器",
-    "preview": "预览",
-    "run": "运行",
-    "reset": "重置",
-    "copied": "已复制到剪贴板",
-    "runToPreview": "编写代码查看预览",
-    "cannotEvaluate": "此代码无法评估。",
-    "onlyPromptsChat": "仅支持 {library} 导入。",
-    "desktopOnly": "仅限桌面端",
-    "desktopOnlyDescription": "提示词构建器需要更大的屏幕才能正常工作。请在台式电脑或笔记本电脑上打开此页面。",
-    "browsePrompts": "浏览提示词",
-    "createPrompt": "创建提示词",
-    "random": "随机",
-    "generateRandom": "使用AI生成随机示例",
-    "loginToGenerate": "请登录以生成示例",
-    "rateLimitExceeded": "请等待{seconds}秒后再生成",
-    "generateFailed": "生成示例失败",
-    "exampleGenerated": "新示例已生成！",
-    "ignoreTypeErrors": "忽略类型错误"
-  },
-  "developers": {
-    "title": "开发者",
-    "promptBuilder": "Typed-Prompts IDE",
-    "promptEnhancer": "提示词优化器",
-    "desktopOnly": "仅限桌面端",
-    "desktopOnlyDescription": "开发者工具需要更大的屏幕。请在台式机或笔记本电脑上打开此页面。",
-    "browsePrompts": "浏览提示词",
-    "inputPrompt": "输入提示词",
-    "inputPlaceholder": "输入一个基础提示词进行优化...\n\n示例：写一篇关于人工智能的博客文章",
-    "outputType": "类型",
-    "outputFormat": "格式",
-    "enhance": "优化",
-    "enhancing": "优化中...",
-    "enhanceSuccess": "提示词优化成功！",
-    "enhanceFailed": "提示词优化失败",
-    "enterPrompt": "请输入要优化的提示词",
-    "enhancedPrompt": "优化后的提示词",
-    "copy": "复制",
-    "copied": "已复制到剪贴板",
-    "inspiredBy": "灵感来源",
-    "enhanceToSeeResult": "输入提示词并点击优化以查看结果",
-    "loginRequired": "请登录以使用提示词优化器",
-    "history": "历史记录",
-    "storedOnDevice": "存储在您的设备上",
-    "noHistory": "暂无历史记录",
-    "embedDesigner": "嵌入设计器",
-    "embedSettings": "设置",
-    "loadExample": "加载示例",
-    "chooseExample": "选择示例...",
-    "preview": "预览",
-    "openInNewTab": "打开",
-    "copyEmbedCode": "复制嵌入代码",
-    "embedCode": "嵌入代码",
-    "embedCopied": "嵌入代码已复制！",
-    "settingsCleared": "设置已清除",
-    "reset": "重置",
-    "promptTokenizer": "分词器",
-    "tokenizer": {
-      "inputText": "输入文本",
-      "placeholder": "在此粘贴您的提示词或文本以分析 token...",
-      "analysis": "Token 分析",
-      "tokens": "Token",
-      "contextUsage": "上下文窗口使用率",
-      "nearLimit": "接近上限！",
-      "estimatedCost": "预估成本",
-      "textStats": "文本统计",
-      "saved": "分析已保存到历史记录",
-      "saveToHistory": "保存",
-      "estimationNote": "Token 数量为估算值。实际数量可能因模型的分词器而异。",
-      "settings": "设置",
-      "contextWindowSize": "上下文窗口大小",
-      "inputPricePerMillion": "输入 $/百万 token",
-      "outputPricePerMillion": "输出 $/百万 token",
-      "highlightTokens": "高亮 Token"
-    }
-  },
   "appBanner": {
-    "message": "下载适用于 iPhone、iPad 和 Mac 的 prompts.chat 应用",
+    "message": "下载适用于 iPhone、iPad 和 Mac 的 webmcp.land 应用",
     "messageShort": "下载 Apple 设备应用",
     "download": "下载",
     "dismiss": "关闭"
   },
   "about": {
-    "title": "关于 prompts.chat",
-    "description": "ChatGPT发布两周后创建的首个AI提示词库的故事。",
-    "releasedOn": "2022年12月5日",
+    "title": "关于 webmcp.land",
+    "description": "史上第一个WebMCP资源库的故事，创建于WebMCP发布几周后。",
+    "releasedOn": "2026年2月28日",
     "storyTitle": "我们的故事",
     "goalTitle": "我们的目标",
-    "story1Rich": "prompts.chat是<repoLink>Awesome ChatGPT Prompts</repoLink>仓库的网页可视化版本。它始于<authorLink>@f</authorLink>的个人项目，用于整理ChatGPT提示词，当时ChatGPT初版还没有历史记录功能。",
-    "story2": "Awesome ChatGPT Prompts仓库创建于2022年12月5日，距离ChatGPT向世界宣布仅两周。最初只是一个简单的解决方案，现已成为数百万AI爱好者的首选资源。",
-    "testimonialsRich": "深受AI先驱喜爱，包括OpenAI联合创始人<gregLink>Greg Brockman</gregLink>和<wojciechLink>Wojciech Zaremba</wojciechLink>。",
+    "story1Rich": "webmcp.land 是 WebMCP 及类似 AI 资源的中央注册表。它从 <authorLink>@f</authorLink> 的 <repoLink>prompts.chat</repoLink> 系统分叉而来，转向 MCP 资源并在其基础上构建。",
+    "story2": "webmcp.land注册表创建于2026年2月28日，就在WebMCP首次向世界发布的几周后。最初作为一个简单的解决方案，如今已成为开发者发现和分享MCP服务的首选资源。",
     "openSource": "从第一天起就完全免费开源。",
     "goal1Rich": "我们相信分享的力量。我们的使命是让<bold>数百万人共享的AI上下文工程技术</bold>，从社区传递给每个人。",
-    "goal2Rich": "这里分享的每一个提示词、每一项技术、每一个见解都属于全人类。这就是我们选择<licenseLink>CC0（公共领域）</licenseLink>许可证的原因：无限制，无需署名。只有纯粹的知识给所有人。",
+    "goal2Rich": "这里分享的每一个资源、每一项技术、每一个见解都属于全人类。这就是我们选择<licenseLink>Apache-2.0</licenseLink>许可证的原因：在适当署名的前提下，自由使用、修改和分享。为所有人提供开放的知识。",
     "goal3": "无论你是学习AI的学生、正在构建下一个突破的开发者，还是对可能性充满好奇的人：这是你的图书馆。使用它，分享它，在它的基础上创造。",
     "achievementsTitle": "成就",
     "pressCategoryTitle": "媒体报道",
@@ -1468,13 +1362,13 @@
     "referencedColumbia": "被<link>哥伦比亚大学</link>引用",
     "referencedOlympic": "被<link>Olympic College</link>引用",
     "googleScholarCitations": "Google Scholar上<link>40+学术引用</link>",
-    "githubStars": "<link>141k+ GitHub星标</link>，星标最多的提示词仓库",
+    "githubStars": "<link>0k GitHub星标</link>，星标最多的提示词仓库",
     "githubStaffPick": "被选为 <link>GitHub Staff Pick</link>",
     "referencedGithubBlog": "被 <link>GitHub 博客</link>引用",
     "huggingFace": "<link>Hugging Face</link>上最受欢迎的数据集",
     "usedByDevelopers": "被全球数千名开发者使用",
     "supportUsTitle": "支持我们",
-    "supportUsIntro": "我们将此作为非商业性 CC-0 项目开发，不求任何回报。感谢我们出色的赞助者，我们才能持续运营。为了帮助我继续开发这个产品，请考虑支持我们。",
+    "supportUsIntro": "我们将此作为非商业性 Apache-2.0 项目开发，不求任何回报。感谢我们出色的赞助者，我们才能持续运营。为了帮助我继续开发这个产品，请考虑支持我们。",
     "githubSponsorsTitle": "GitHub Sponsors",
     "githubSponsorsDescription": "成为每月$800的GitHub赞助者，在首页展示您的logo。",
     "becomeSponsor": "成为赞助者",
@@ -1487,753 +1381,6 @@
     "ideationTitle": "创意",
     "communityContributorsTitle": "社区贡献者",
     "viewAllContributors": "在此查看所有贡献者"
-  },
-  "kids": {
-    "header": {
-      "title": "Promi的提示词学校",
-      "levels": "关卡",
-      "home": "首页",
-      "map": "地图",
-      "mainSite": "主站"
-    },
-    "home": {
-      "badge": "儿童学习",
-      "title": "学习与AI对话！",
-      "subtitle": "和机器人Promi一起踏上有趣的冒险，学习如何写出精彩的提示词！",
-      "promiIntro": {
-        "greeting": "你好，我是Promi！🤖",
-        "message": "我是一个需要你帮助的友好机器人！你愿意帮我更好地理解提示词吗？"
-      },
-      "features": {
-        "games": {
-          "title": "趣味游戏",
-          "description": "通过拖放游戏和测验来学习"
-        },
-        "stories": {
-          "title": "精彩故事",
-          "description": "跟随Promi经历激动人心的冒险"
-        },
-        "stars": {
-          "title": "赚取星星",
-          "description": "收集星星，解锁新关卡"
-        }
-      },
-      "startButton": "开始游戏！",
-      "ageNote": "适合8-14岁会读写的儿童",
-      "whatYouLearn": "你将学到什么",
-      "readyTitle": "准备好开始了吗？",
-      "readyMessage": "让我们踏上冒险，学习如何与AI对话！"
-    },
-    "navigation": {
-      "back": "返回",
-      "next": "下一步",
-      "completeFirst": "请先完成活动再继续"
-    },
-    "map": {
-      "title": "世界地图",
-      "subtitle": "选择一个关卡，开始你的冒险！",
-      "worldLevels": "{count}个关卡",
-      "levelNumber": "关卡{number}",
-      "locked": "完成上一关以解锁"
-    },
-    "worlds": {
-      "1": {
-        "title": "新手村"
-      },
-      "2": {
-        "title": "清晰城堡"
-      },
-      "3": {
-        "title": "上下文洞穴"
-      },
-      "4": {
-        "title": "创意峡谷"
-      },
-      "5": {
-        "title": "大师山"
-      }
-    },
-    "levels": {
-      "1_1_meet_promi": {
-        "title": "认识Promi！",
-        "description": "和你的机器人朋友打招呼，了解什么是AI"
-      },
-      "1_2_first_words": {
-        "title": "Promi的第一句话",
-        "description": "写下你的第一个提示词来帮助Promi理解"
-      },
-      "1_3_being_clear": {
-        "title": "表达清晰",
-        "description": "了解为什么清晰的指令效果更好"
-      },
-      "2_1_missing_details": {
-        "title": "缺失的细节",
-        "description": "发现为什么细节很重要"
-      },
-      "2_2_who_and_what": {
-        "title": "谁和什么",
-        "description": "添加角色和物品"
-      },
-      "2_3_when_and_where": {
-        "title": "何时何地",
-        "description": "学习添加时间和地点"
-      },
-      "2_4_detail_detective": {
-        "title": "细节侦探",
-        "description": "成为添加细节的专家"
-      },
-      "3_1_setting_the_scene": {
-        "title": "设置场景",
-        "description": "了解为什么背景信息有帮助"
-      },
-      "3_2_show_dont_tell": {
-        "title": "展示而非告诉",
-        "description": "用例子展示你想要什么"
-      },
-      "3_3_format_finder": {
-        "title": "格式发现者",
-        "description": "请求列表、故事、诗歌等！"
-      },
-      "3_4_context_champion": {
-        "title": "上下文冠军",
-        "description": "结合所有上下文技巧"
-      },
-      "4_1_pretend_time": {
-        "title": "角色扮演时间！",
-        "description": "学习角色扮演提示词"
-      },
-      "4_2_story_starters": {
-        "title": "故事开端",
-        "description": "与AI一起创作精彩故事"
-      },
-      "4_3_character_creator": {
-        "title": "角色创造者",
-        "description": "给AI一个个性"
-      },
-      "4_4_world_builder": {
-        "title": "世界建造者",
-        "description": "创造富有想象力的世界"
-      },
-      "5_1_perfect_prompt": {
-        "title": "完美提示词",
-        "description": "结合清晰度、细节和上下文"
-      },
-      "5_2_fix_it_up": {
-        "title": "修复它！",
-        "description": "找到并改进弱提示词"
-      },
-      "5_3_prompt_remix": {
-        "title": "提示词混音",
-        "description": "重写提示词以获得不同结果"
-      },
-      "5_4_graduation_day": {
-        "title": "毕业日",
-        "description": "最终挑战 - 成为大师！"
-      }
-    },
-    "level": {
-      "backToMap": "返回地图",
-      "levelLabel": "关卡{number}",
-      "comingSoon": "此关卡即将推出！",
-      "previous": "上一关",
-      "next": "下一关",
-      "map": "地图"
-    },
-    "levelComplete": {
-      "title": "关卡完成！",
-      "nextLevel": "下一关",
-      "backToMap": "返回地图",
-      "allDone": "返回地图"
-    },
-    "quiz": {
-      "goodLabel": "很棒的提示词！",
-      "badLabel": "不是最好的",
-      "correct": "答对了！",
-      "incorrect": "不错的尝试！",
-      "tryAgain": "再试一次"
-    },
-    "magicWords": {
-      "title": "拖动魔法词语！✨",
-      "dragOrTap": "🎯 拖动或点击词语：",
-      "check": "检查！",
-      "retry": "重试",
-      "correct": "正确",
-      "tryAgain": "再试一次！"
-    },
-    "dragDrop": {
-      "title": "构建提示词！",
-      "instruction": "用箭头移动或点击两个块来交换！",
-      "result": "结果",
-      "check": "检查！",
-      "retry": "重试",
-      "success": "完美！你构建了一个很棒的提示词！",
-      "almost": "差不多了！继续调整顺序。",
-      "tapToSwap": "点击另一块来交换！"
-    },
-    "promptParts": {
-      "title": "排序提示词部分！",
-      "instruction": "点击每个块，然后选择类型！",
-      "score": "分数",
-      "pickCategory": "这是什么类型？",
-      "success": "你正确排序了所有部分！",
-      "retry": "再试一次",
-      "types": {
-        "role": "角色",
-        "task": "任务",
-        "context": "上下文",
-        "constraint": "约束"
-      }
-    },
-    "exampleMatcher": {
-      "title": "模式匹配器",
-      "instruction": "看模式并选择接下来是什么！",
-      "pattern": "模式：",
-      "check": "检查！",
-      "retry": "再试一次",
-      "correct": "答对了！🎉",
-      "tryAgain": "不太对 - 再看看模式！"
-    },
-    "promptDoctor": {
-      "title": "提示词医生",
-      "health": "提示词健康",
-      "sick": "生病的提示词",
-      "healthy": "健康的提示词！",
-      "diagnose": "点击问题来修复：",
-      "success": "提示词现在好多了！",
-      "retry": "重新开始"
-    },
-    "stepByStep": {
-      "title": "逐步思考",
-      "problem": "问题：",
-      "withoutMagic": "没有魔法词语：",
-      "addMagicWords": "添加魔法词语！",
-      "magicWordsActive": "魔法词语已添加！",
-      "nextStep": "显示下一步",
-      "withMagic": "逐步思考：",
-      "retry": "再试一次"
-    },
-    "promptLab": {
-      "title": "提示词实验室",
-      "progress": "改进",
-      "yourPrompt": "你的提示词：",
-      "aiSays": "AI回应：",
-      "addDetails": "添加改进：",
-      "success": "你的提示词现在非常具体！",
-      "retry": "重新开始"
-    },
-    "wordPredictor": {
-      "title": "AI如何思考",
-      "instruction": "AI猜测最可能的下一个词。你能像AI一样思考吗？",
-      "aiThinks": "AI正在阅读：",
-      "thinkingDefault": "嗯，哪个词在这里最有意义？",
-      "check": "检查我的答案！",
-      "correct": "你像AI一样思考！",
-      "tryAgain": "不太对！AI选择最可能的词。",
-      "retry": "再试一次"
-    },
-    "settings": {
-      "title": "设置",
-      "music": "音乐",
-      "language": "语言",
-      "progress": "你的进度",
-      "stars": "星星",
-      "completed": "已完成",
-      "resetTitle": "重置进度",
-      "resetButton": "重置全部",
-      "resetWarning": "这将删除所有星星和进度。确定吗？",
-      "resetConfirm": "是的，重置全部",
-      "resetComplete": "进度已重置！正在重新加载...",
-      "cancel": "取消"
-    }
-  },
-  "book": {
-    "title": "互动提示词工程之书",
-    "donate": "支持项目",
-    "subtitle": "创建清晰有效提示词的互动指南",
-    "metaTitle": "互动提示词工程之书 | AI提示词工程免费在线指南",
-    "metaDescription": "通过这本免费互动指南掌握AI提示词工程。学习ChatGPT提示词、思维链推理、少样本学习和高级技术。25+章节配有真实示例。",
-    "interactiveGuideBy": "互动指南 by",
-    "authorIntro": "你好，我是<author>Fatih Kadir Akın</author>，GitHub上热门<repoLink>Awesome ChatGPT Prompts</repoLink>仓库和<siteName>prompts.chat</siteName>的策展人。",
-    "bookDescription": "在这本全面的互动指南中，你将发现创建引人入胜的AI提示词的专家策略，这些提示词能够产生有效的对话。从理解AI模型的工作原理到掌握提示词链和代理系统等高级技术，这本书为你提供了将AI交互提升到新水平所需的工具。",
-    "whatYouWillLearn": "你将学到：",
-    "highlights": {
-      "understanding": "理解AI模型如何思考和处理提示词",
-      "crafting": "创建清晰、具体、有效的提示词",
-      "advanced": "高级技术：思维链、少样本学习和提示词链",
-      "interactive": "可在浏览器中直接尝试的互动示例",
-      "realWorld": "写作、编程、教育和商业的实际用例",
-      "future": "提示词工程的未来：代理和代理系统"
-    },
-    "bookStructure": "书籍结构",
-    "structure": {
-      "introduction": "介绍",
-      "part1": "第1部分：基础",
-      "part2": "第2部分：技术",
-      "part3": "第3部分：高级策略",
-      "part4": "第4部分：最佳实践",
-      "part5": "第5部分：用例",
-      "part6": "第6部分：结论",
-      "chapters": "25个互动章节"
-    },
-    "startReading": "开始阅读",
-    "skipToChapter1": "跳至第1章",
-    "continuousUpdate": "随着AI的发展，本书将持续更新新技术和见解。",
-    "partOfProject": "<repoLink>Awesome ChatGPT Prompts</repoLink>项目的一部分。CC0许可。",
-    "kidsSection": {
-      "question": "你是老师或家长吗？",
-      "title": "试试我们的儿童游戏书！🎮",
-      "description": "一个基于游戏的互动冒险，通过有趣的谜题和故事教孩子（8-14岁）如何与AI交流。",
-      "startPlaying": "开始游戏"
-    },
-    "chapter": {
-      "notFound": "未找到章节",
-      "comingSoon": "此章节即将推出。",
-      "previous": "上一章",
-      "next": "下一章"
-    },
-    "tableOfContents": "目录",
-    "awesomeChatGPTPrompts": "Awesome ChatGPT Prompts",
-    "search": {
-      "placeholder": "搜索章节...",
-      "noResults": "未找到章节"
-    },
-    "bookmark": {
-      "add": "收藏此章节",
-      "remove": "移除收藏",
-      "continueReading": "继续上次阅读",
-      "continue": "继续"
-    },
-    "parts": {
-      "introduction": "介绍",
-      "foundations": "基础",
-      "techniques": "技术",
-      "advanced": "高级策略",
-      "bestPractices": "最佳实践",
-      "useCases": "用例",
-      "conclusion": "结论"
-    },
-    "chapters": {
-      "00a-preface": "前言",
-      "00b-history": "历史",
-      "00c-introduction": "介绍",
-      "01-understanding-ai-models": "理解AI模型",
-      "02-anatomy-of-effective-prompt": "有效提示词的结构",
-      "03-core-prompting-principles": "提示词核心原则",
-      "04-role-based-prompting": "基于角色的提示词",
-      "05-structured-output": "结构化输出",
-      "06-chain-of-thought": "思维链",
-      "07-few-shot-learning": "少样本学习",
-      "08-iterative-refinement": "迭代改进",
-      "09-json-yaml-prompting": "JSON和YAML提示词",
-      "10-system-prompts-personas": "系统提示词和人设",
-      "11-prompt-chaining": "提示词链",
-      "12-handling-edge-cases": "处理边界情况",
-      "13-multimodal-prompting": "多模态提示词",
-      "14-context-engineering": "上下文工程",
-      "25-agents-and-skills": "代理和技能",
-      "15-common-pitfalls": "常见陷阱",
-      "16-ethics-responsible-use": "伦理和负责任使用",
-      "17-prompt-optimization": "提示词优化",
-      "18-writing-content": "写作和内容",
-      "19-programming-development": "编程和开发",
-      "20-education-learning": "教育和学习",
-      "21-business-productivity": "商业和生产力",
-      "22-creative-arts": "创意艺术",
-      "23-research-analysis": "研究和分析",
-      "24-future-of-prompting": "提示词工程的未来"
-    },
-    "chapterDescriptions": {
-      "00a-preface": "作者的个人说明",
-      "00b-history": "Awesome ChatGPT Prompts的历史",
-      "00c-introduction": "什么是提示词工程，为什么重要",
-      "01-understanding-ai-models": "大型语言模型如何工作",
-      "02-anatomy-of-effective-prompt": "使提示词有效的组成部分",
-      "03-core-prompting-principles": "更好提示词的基本原则",
-      "04-role-based-prompting": "有效使用人设和角色",
-      "05-structured-output": "获得一致、格式化的响应",
-      "06-chain-of-thought": "复杂任务的逐步推理",
-      "07-few-shot-learning": "通过示例教学",
-      "08-iterative-refinement": "通过迭代改进提示词",
-      "09-json-yaml-prompting": "提示词中的结构化数据格式",
-      "10-system-prompts-personas": "创建一致的AI人格",
-      "11-prompt-chaining": "连接多个提示词",
-      "12-handling-edge-cases": "处理意外输入",
-      "13-multimodal-prompting": "处理图像、音频和视频",
-      "14-context-engineering": "RAG、嵌入、函数调用和MCP",
-      "25-agents-and-skills": "使用可重用技能包构建AI代理",
-      "15-common-pitfalls": "要避免的错误",
-      "16-ethics-responsible-use": "AI中的伦理考虑",
-      "17-prompt-optimization": "测试和改进提示词",
-      "18-writing-content": "内容创作和文案写作",
-      "19-programming-development": "代码生成和调试",
-      "20-education-learning": "教学和学习应用",
-      "21-business-productivity": "专业和工作应用",
-      "22-creative-arts": "艺术和创意应用",
-      "23-research-analysis": "数据分析和研究任务",
-      "24-future-of-prompting": "新兴趋势和未来展望"
-    },
-    "interactive": {
-      "tryIt": "自己试试",
-      "copy": "复制",
-      "copied": "已复制！",
-      "correct": "正确！",
-      "notQuite": "不太对。",
-      "nextTokenPrediction": "下一个Token预测",
-      "watchHowAIPredicts": "观察AI如何在每一步预测下一个token",
-      "replay": "重播",
-      "playing": "播放中...",
-      "play": "播放",
-      "pressPlayToStart": "按播放开始...",
-      "completingCurrentToken": "正在完成当前token：",
-      "top3PredictedNextTokens": "预测的前3个下一个Token：",
-      "howItWorks": "工作原理：",
-      "howItWorksExplanation": "在每一步，模型计算所有可能的下一个token（约50,000+）的概率。选择概率最高的token，然后重复此过程。",
-      "tokenizerDemo": "分词器演示",
-      "seeHowTextIsSplit": "查看文本如何分割成token",
-      "enterText": "输入文本：",
-      "tokens": "个token",
-      "tryExamples": "试试：「太棒了」、「ChatGPT很厉害」或输入自己的文本",
-      "contextWindowVisualizer": "上下文窗口可视化",
-      "understandHowContextIsConsumed": "了解上下文如何被消耗",
-      "contextWindow": "上下文窗口",
-      "remaining": "剩余",
-      "prompt": "提示词",
-      "response": "响应",
-      "yourPrompt": "你的提示词：",
-      "aiResponse": "AI响应",
-      "contextOverflow": "上下文溢出！",
-      "contextOverflowMessage": "你的提示词+响应超出了上下文窗口。模型将截断或失败。尝试缩短提示词或请求更短的响应。",
-      "tipLabel": "提示：",
-      "contextTip": "你的提示词和AI响应都必须适合上下文窗口。较长的提示词会减少响应的空间。将重要信息放在提示词的开头。",
-      "temperatureDemo": "温度演示",
-      "seeHowRandomnessAffects": "查看随机性如何影响输出",
-      "temperature": "温度",
-      "deterministic": "确定性",
-      "balanced": "平衡",
-      "creative": "创意",
-      "veryCreative": "非常创意",
-      "focused": "聚焦",
-      "random": "随机",
-      "possibleResponsesAtThisTemp": "此温度下的可能响应：",
-      "useLowTemperature": "使用低温度",
-      "useHighTemperature": "使用高温度",
-      "forFactualAnswers": "用于事实性和一致的回答。",
-      "forCreativeWriting": "用于创意写作和头脑风暴。",
-      "structuredOutputDemo": "结构化输出演示",
-      "seeTheDifferenceStructureMakes": "看看结构带来的不同",
-      "unstructured": "非结构化",
-      "output": "输出：",
-      "youCan": "你可以：",
-      "parseProgrammatically": "程序化解析",
-      "compareAcrossQueries": "跨查询比较",
-      "integrateIntoWorkflows": "集成到工作流",
-      "validateForCompleteness": "验证完整性",
-      "parseProgrammaticallyLabel": "程序化解析：",
-      "complexRegexRequired": "需要复杂正则或NLP",
-      "unreliableBreaksWithChanges": "不可靠，小改动就会崩溃",
-      "simpleAndReliable": "简单可靠",
-      "parseableWithMarkdown": "可用markdown库解析",
-      "fewShotLearningDemo": "少样本学习演示",
-      "seeHowExamplesImproveAccuracy": "看看示例如何提高准确性",
-      "numberOfExamples": "示例数量",
-      "zeroShot": "零样本",
-      "oneShot": "一样本",
-      "twoShot": "两样本",
-      "threeShot": "三样本",
-      "examplesProvided": "提供的示例：",
-      "testInput": "测试输入：",
-      "modelPrediction": "模型预测：",
-      "confidence": "置信度：",
-      "expected": "期望：",
-      "formatComparison": "格式比较",
-      "sameDataDifferentFormats": "相同数据，不同格式",
-      "defineStructureWithTypeScript": "用TypeScript接口定义结构",
-      "machineReadableStrictSyntax": "机器可读，严格语法，适合API",
-      "humanReadableSupportsComments": "人类可读，支持注释，适合配置",
-      "defineSchema": "定义模式",
-      "apisAndParsing": "API和解析",
-      "configFiles": "配置文件",
-      "iterativeRefinementDemo": "迭代改进演示",
-      "watchAPromptEvolve": "观察提示词的演变",
-      "pause": "暂停",
-      "versionXOfY": "版本 {current} / {total}",
-      "newInThisVersion": "此版本新增",
-      "quality": "质量",
-      "issue": "问题：",
-      "success": "成功",
-      "successMessage": "提示词现在产生高质量、一致的输出。",
-      "apiCostCalculator": "API成本计算器",
-      "inputTokens": "输入Token（每请求）",
-      "outputTokens": "输出Token（每请求）",
-      "inputPrice": "输入价格（$/百万token）",
-      "outputPrice": "输出价格（$/百万token）",
-      "requestsPerDay": "每日请求数",
-      "perRequest": "每请求",
-      "dailyCost": "日成本",
-      "monthlyCost": "月成本",
-      "textToImageBuildPrompt": "文生图：构建你的提示词",
-      "selectOptionsToBuiltImagePrompt": "从每个类别选择选项来构建图像提示词：",
-      "generatedPrompt": "生成的提示词",
-      "simulateDiffusionProcess": "模拟扩散过程",
-      "diffusionStep1": "从随机噪声开始",
-      "diffusionStep2": "检测大致形状",
-      "diffusionStep3": "添加基本颜色和形状",
-      "diffusionStep4": "细化细节",
-      "diffusionStep5": "最终图像",
-      "diffusionExplanation": "真正的扩散模型运行数千步，逐渐去除噪声直到出现连贯的图像。",
-      "textToVideoBuildPrompt": "文生视频：构建你的提示词",
-      "videoPromptsNeed": "视频提示词需要运动、镜头和时间：",
-      "playAnimation": "播放动画",
-      "stop": "停止",
-      "frame": "帧：",
-      "consistency": "一致性：",
-      "consistencyDesc": "主体在帧之间保持不变",
-      "motion": "运动：",
-      "motionDesc": "位置随时间平滑变化",
-      "physics": "物理：",
-      "physicsDesc": "运动遵循自然规律",
-      "simplifiedAnimationPreview": "简化动画预览",
-      "videoModelExplanation": "真正的视频模型以24-60fps生成照片级真实的细节和一致的主体。",
-      "embeddingsVisualization": "嵌入可视化",
-      "clickWordToSeeVector": "点击词语查看其向量和与其他词的相似度：",
-      "vector": "向量",
-      "similarityTo": "与...的相似度：",
-      "embeddingsExplanation": "意思相似的词（如「高兴」和「快乐」）有相似的向量，获得高相似度分数。",
-      "canDoWell": "擅长做",
-      "cannotDo": "不能做",
-      "promptBuilder": "提示词构建器",
-      "buildYourPromptStepByStep": "逐步构建你的提示词",
-      "pleaseAddTask": "请至少添加一个任务到你的提示词",
-      "rateLimitReached": "已达到请求限制。请在以下时间后重试：",
-      "orSignInForMore": "或登录获取更多。",
-      "failedToRunPrompt": "运行提示词失败",
-      "runWithAI": "用AI运行",
-      "failedToConnectApi": "连接API失败",
-      "day": "天",
-      "promptAnalyzer": "提示词分析器",
-      "getAiFeedbackOnPrompt": "获取AI对你提示词的反馈",
-      "pasteOrWritePromptHere": "在此粘贴或写入你的提示词...",
-      "analyze": "分析",
-      "pleaseEnterPromptToAnalyze": "请输入要分析的提示词",
-      "failedToAnalyzePrompt": "分析提示词失败",
-      "clarity": "清晰度",
-      "specificity": "具体性",
-      "missingElements": "缺失元素",
-      "suggestions": "建议",
-      "improvedVersion": "改进版本",
-      "summarizationStrategies": "摘要策略",
-      "originalConversation": "原始对话",
-      "after": "之后：",
-      "summary": "摘要",
-      "keptMessages": "保留的消息",
-      "saved": "节省：",
-      "part": "部分",
-      "demoExamples": {
-        "tokenPrediction": {
-          "tokens": [
-            "中国",
-            "的",
-            "首都",
-            "是",
-            "北京",
-            "。"
-          ],
-          "fullText": "中国的首都是北京。"
-        },
-        "tokenizer": {
-          "default": "example1",
-          "samples": {
-            "example1": {
-              "text": "你好，世界！",
-              "tokens": [
-                "你好",
-                "，",
-                "世界",
-                "！"
-              ]
-            },
-            "example2": {
-              "text": "北京首都",
-              "tokens": [
-                "北京",
-                "首都"
-              ]
-            },
-            "example3": {
-              "text": "人工智能",
-              "tokens": [
-                "人工",
-                "智能"
-              ]
-            },
-            "example4": {
-              "text": "故宫博物院",
-              "tokens": [
-                "故宫",
-                "博物",
-                "院"
-              ]
-            },
-            "example5": {
-              "text": "提示词工程",
-              "tokens": [
-                "提示",
-                "词",
-                "工程"
-              ]
-            }
-          },
-          "tryExamples": "试试示例或输入自己的文本"
-        },
-        "temperature": {
-          "prompt": "中国的首都是哪里？",
-          "lowTemp": [
-            "中国的首都是北京。",
-            "中国的首都是北京。",
-            "中国的首都是北京。"
-          ],
-          "mediumLowTemp": [
-            "中国的首都是北京。",
-            "北京是中国的首都。",
-            "中国的首都是北京，一座历史悠久的城市。"
-          ],
-          "mediumHighTemp": [
-            "北京作为中国的首都。",
-            "中国的首都是北京，故宫所在地。",
-            "中国的首都是历史与现代交融的北京。"
-          ],
-          "highTemp": [
-            "北京，这座光辉灿烂的城市，骄傲地矗立为中国的壮丽首都！",
-            "中国充满活力的首都正是迷人的北京城。",
-            "中国的心脏跳动在北京，这座承载着艺术与文化的挚爱首都。"
-          ]
-        },
-        "fewShot": {
-          "examples": [
-            {
-              "input": "我太喜欢这个产品了！",
-              "output": "正面"
-            },
-            {
-              "input": "糟糕的体验，浪费钱",
-              "output": "负面"
-            },
-            {
-              "input": "还行，没什么特别的",
-              "output": "中性"
-            }
-          ],
-          "testCase": {
-            "input": "质量很好但配送慢",
-            "expected": "混合"
-          },
-          "labels": {
-            "positive": "正面",
-            "negative": "负面",
-            "neutral": "中性",
-            "mixed": "混合"
-          }
-        }
-      },
-      "promptChallenge": "提示词挑战",
-      "yourTask": "你的任务：",
-      "yourPromptWillBeScoredOn": "你的提示词将在以下方面评分：",
-      "startChallenge": "开始挑战",
-      "writeYourPromptHere": "在此写下你的提示词...",
-      "points": "分",
-      "hints": "提示",
-      "hintsUsed": "已使用{used}/{total}，每个-5分",
-      "revealNextHint": "显示下一个提示（-5分）",
-      "submitForScoring": "提交评分",
-      "aiCallsRemaining": "剩余AI调用",
-      "excellent": "🎉 太棒了！",
-      "goodEffort": "👍 不错的尝试！",
-      "keepPracticing": "继续练习！",
-      "criteriaBreakdown": "标准分解：",
-      "suggestionsForImprovement": "改进建议：",
-      "exampleSolution": "示例解决方案",
-      "hide": "隐藏",
-      "show": "显示",
-      "improveThisPrompt": "改进此提示词",
-      "improveThisPromptTask": "改进此提示词以获得更好的结果",
-      "improvePromptTask": "改进此提示词以获得更好的结果",
-      "originalWeakPrompt": "原始（弱）提示词",
-      "yourImprovedVersion": "你的改进版本",
-      "compareWithAI": "与AI比较",
-      "reset": "重置",
-      "showIdealSolution": "显示理想解决方案",
-      "hideIdealSolution": "隐藏理想解决方案",
-      "idealSolution": "理想解决方案",
-      "yourVersionBetter": "🎉 你的版本更好！",
-      "yourVersionIsBetter": "🎉 你的版本更好！",
-      "keepImproving": "原版可能更好。继续改进！",
-      "originalMightBeBetter": "原版可能更好。继续改进！",
-      "keyDifferences": "主要差异：",
-      "beginner": "初学者",
-      "intermediate": "中级",
-      "advanced": "高级",
-      "youllHaveTime": "你有{time}完成这个挑战。",
-      "takeYourTime": "慢慢来，创建最佳提示词。",
-      "pleaseWritePromptBeforeSubmitting": "提交前请写下提示词",
-      "fillInTheBlanks": "填空",
-      "perfect": "🎉 完美！",
-      "ofCorrect": "{score} / {total} 正确",
-      "correctAnswer": "正确答案：",
-      "checking": "检查中...",
-      "checkAnswers": "检查答案",
-      "tryAgain": "再试一次",
-      "aiPoweredValidation": "AI驱动的语义验证",
-      "hintForBlank": "提示：",
-      "wellStructuredPrompt": "🎉 结构良好的提示词！",
-      "consistencyIssuesFound": "发现一些一致性问题",
-      "issues": "问题：",
-      "aiValidationFailed": "AI验证失败。使用本地验证。",
-      "aiCheckFailed": "AI检查失败。请重试。",
-      "checklist": "检查清单",
-      "complete": "完成",
-      "allDoneGreatWork": "🎉 全部完成！做得好！",
-      "debugThisPrompt": "调试此提示词",
-      "hideHint": "隐藏提示",
-      "showHint": "显示提示",
-      "thePrompt": "提示词：",
-      "theOutputProblematic": "输出（有问题）：",
-      "whatsWrongWithThisPrompt": "这个提示词有什么问题？",
-      "jailbreakAttackSimulator": "越狱攻击模拟器",
-      "selectAttackType": "选择攻击类型查看其工作原理并测试AI是否能防御：",
-      "systemPromptDefense": "系统提示词（防御）",
-      "attackAttempt": "攻击尝试",
-      "whatThisAttackDoes": "此攻击的作用：",
-      "testJailbreakDefense": "测试越狱防御",
-      "systemPromptLabel": "系统提示词",
-      "userAttemptsJailbreak": "用户尝试越狱",
-      "sequentialChain": "顺序链",
-      "parallelChain": "并行链",
-      "conditionalChain": "条件链",
-      "iterativeChain": "迭代链",
-      "running": "运行中...",
-      "run": "运行",
-      "outputLabel": "输出",
-      "skippedConditionNotMet": "跳过 - 条件未满足",
-      "iterationOf": "迭代 {current} / {total}",
-      "previousOutputAsInput": "上一个输出作为输入",
-      "loopUntilQualityMet": "循环直到达到质量阈值",
-      "chainErrorHandlingDemo": "链错误处理演示",
-      "attempt": "尝试",
-      "retryingWithFeedback": "使用错误反馈重试...",
-      "switchingToFallback": "切换到备用方案...",
-      "failed": "失败",
-      "retry": "重试",
-      "fallback": "备用",
-      "contextPlayground": "上下文游乐场",
-      "toggleContextBlocks": "切换上下文块查看它们如何组合。注意token计数！",
-      "overContextLimit": "超出上下文限制！部分内容将被截断。",
-      "enableContextBlocksToBuild": "启用一些上下文块来构建提示词",
-      "testContext": "测试上下文",
-      "links": "链接"
-    },
-    "printTitle": "提示词工程之书",
-    "printSubtitle": "创建清晰有效提示词的指南",
-    "downloadPdf": "下载PDF版"
   },
   "userExamples": {
     "addMyExample": "添加我的示例",
@@ -2259,5 +1406,46 @@
     "submit": "提交",
     "communityExamples": "社区示例",
     "userExample": "用户示例"
+  },
+  "heroUseCases": {
+    "searchPlaceholder": "搜索 MCP 服务...",
+    "prefix": "或按使用场景探索",
+    "clickToExplore": "点击探索",
+    "booking": "Booking",
+    "tourism": "Tourism",
+    "management": "Management",
+    "projects": "Projects",
+    "health": "Health",
+    "medical": "Medical",
+    "design": "Design",
+    "accounting": "Accounting",
+    "investing": "Investing",
+    "marketing": "Marketing",
+    "ecommerce": "E-Commerce",
+    "analytics": "Analytics",
+    "devtools": "DevTools",
+    "communication": "Communication",
+    "education": "Education",
+    "security": "Security",
+    "automation": "Automation",
+    "payments": "Payments",
+    "scheduling": "Scheduling",
+    "translation": "Translation",
+    "monitoring": "Monitoring",
+    "databases": "Databases",
+    "cloudOps": "Cloud Ops",
+    "publishing": "Publishing",
+    "logistics": "Logistics",
+    "recruitment": "Recruitment",
+    "legal": "Legal",
+    "realEstate": "Real Estate",
+    "entertainment": "Entertainment",
+    "fitness": "Fitness",
+    "cooking": "Cooking",
+    "photography": "Photography",
+    "music": "Music",
+    "research": "Research",
+    "support": "Support",
+    "crm": "CRM"
   }
 }

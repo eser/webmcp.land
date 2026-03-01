@@ -1,10 +1,10 @@
 import { getConfig } from "@/lib/config";
 
 interface StructuredDataProps {
-  type: "website" | "organization" | "breadcrumb" | "prompt" | "softwareApp" | "itemList";
+  type: "website" | "organization" | "breadcrumb" | "resource" | "softwareApp" | "itemList";
   data?: {
     breadcrumbs?: Array<{ name: string; url: string }>;
-    prompt?: {
+    resource?: {
       id: string;
       name: string;
       description: string;
@@ -28,7 +28,7 @@ interface StructuredDataProps {
 
 export async function StructuredData({ type, data }: StructuredDataProps) {
   const config = await getConfig();
-  const baseUrl = process.env.NEXTAUTH_URL || "https://prompts.chat";
+  const baseUrl = process.env.BETTER_AUTH_URL || "https://webmcp.land";
 
   const schemas: Record<string, object | null> = {
     organization: {
@@ -44,9 +44,8 @@ export async function StructuredData({ type, data }: StructuredDataProps) {
       },
       description: config.branding.description,
       sameAs: [
-        "https://github.com/f/prompts.chat",
-        "https://x.com/promptschat",
-        "https://x.com/fkadev",
+        "https://github.com/eser/webmcp.land",
+        "https://x.com/webmcp_land",
       ],
     },
     website: {
@@ -59,7 +58,7 @@ export async function StructuredData({ type, data }: StructuredDataProps) {
         "@type": "SearchAction",
         target: {
           "@type": "EntryPoint",
-          urlTemplate: `${baseUrl}/prompts?q={search_term_string}`,
+          urlTemplate: `${baseUrl}/registry?q={search_term_string}`,
         },
         "query-input": "required name=search_term_string",
       },
@@ -85,49 +84,23 @@ export async function StructuredData({ type, data }: StructuredDataProps) {
             })),
           }
         : null,
-    prompt: data?.prompt
+    resource: data?.resource
       ? {
           "@context": "https://schema.org",
-          "@type": "HowTo",
-          "@id": `${baseUrl}/prompts/${data.prompt.id}`,
-          name: data.prompt.name,
-          description: data.prompt.description || `AI prompt: ${data.prompt.name}`,
-          step: [
-            {
-              "@type": "HowToStep",
-              name: "Copy the prompt",
-              text: data.prompt.content.substring(0, 500) + (data.prompt.content.length > 500 ? "..." : ""),
-              position: 1,
-            },
-            {
-              "@type": "HowToStep",
-              name: "Paste into your AI assistant",
-              text: "Open ChatGPT, Claude, Gemini, or your preferred AI assistant and paste the prompt.",
-              position: 2,
-            },
-            {
-              "@type": "HowToStep",
-              name: "Get your response",
-              text: "The AI will respond according to the prompt instructions.",
-              position: 3,
-            },
-          ],
-          tool: [
-            {
-              "@type": "HowToTool",
-              name: "AI Assistant (ChatGPT, Claude, Gemini, etc.)",
-            },
-          ],
-          totalTime: "PT2M",
-          author: data.prompt.author
+          "@type": "SoftwareApplication",
+          "@id": `${baseUrl}/registry/${data.resource.id}`,
+          name: data.resource.name,
+          description: data.resource.description || `MCP/WebMCP service: ${data.resource.name}`,
+          applicationCategory: "DeveloperApplication",
+          author: data.resource.author
             ? {
                 "@type": "Person",
-                name: data.prompt.author,
-                url: data.prompt.authorUrl,
+                name: data.resource.author,
+                url: data.resource.authorUrl,
               }
             : undefined,
-          datePublished: data.prompt.datePublished,
-          dateModified: data.prompt.dateModified,
+          datePublished: data.resource.datePublished,
+          dateModified: data.resource.dateModified,
           publisher: {
             "@type": "Organization",
             name: config.branding.name,
@@ -138,17 +111,17 @@ export async function StructuredData({ type, data }: StructuredDataProps) {
           },
           mainEntityOfPage: {
             "@type": "WebPage",
-            "@id": `${baseUrl}/prompts/${data.prompt.id}`,
+            "@id": `${baseUrl}/registry/${data.resource.id}`,
           },
-          aggregateRating: data.prompt.voteCount && data.prompt.voteCount > 0
+          aggregateRating: data.resource.voteCount && data.resource.voteCount > 0
             ? {
                 "@type": "AggregateRating",
                 ratingValue: 5,
                 bestRating: 5,
-                ratingCount: data.prompt.voteCount,
+                ratingCount: data.resource.voteCount,
               }
             : undefined,
-          keywords: data.prompt.tags?.join(", ") || data.prompt.category,
+          keywords: data.resource.tags?.join(", ") || data.resource.category,
         }
       : null,
     softwareApp: {
@@ -167,8 +140,8 @@ export async function StructuredData({ type, data }: StructuredDataProps) {
         availability: "https://schema.org/InStock",
       },
       featureList: [
-        "AI prompt library",
-        "Prompt sharing and discovery",
+        "MCP/WebMCP service registry",
+        "Service sharing and discovery",
         "Community contributions",
         "Version history",
         "Categories and tags",
@@ -183,7 +156,7 @@ export async function StructuredData({ type, data }: StructuredDataProps) {
             "@type": "ListItem",
             position: index + 1,
             item: {
-              "@type": "HowTo",
+              "@type": "SoftwareApplication",
               name: item.name,
               description: item.description,
               url: item.url.startsWith("http") ? item.url : `${baseUrl}${item.url}`,

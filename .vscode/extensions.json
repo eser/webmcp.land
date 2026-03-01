@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "chdsbd.github-code-owners",
+    "EditorConfig.EditorConfig",
+    "github.vscode-github-actions",
+    "ryanluker.vscode-coverage-gutters",
+    "bradlc.vscode-tailwindcss",
+    "oxc.oxc-vscode"
+  ]
+}

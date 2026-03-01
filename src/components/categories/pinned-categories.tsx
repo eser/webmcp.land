@@ -1,9 +1,9 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
-import { useFilterContext } from "@/components/prompts/filter-context";
+import { useFilterContext } from "@/components/resources/filter-context";
 
 interface PinnedCategory {
   id: string;
@@ -20,7 +20,7 @@ interface PinnedCategoriesProps {
 export function PinnedCategories({ categories, currentCategoryId }: PinnedCategoriesProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const t = useTranslations("categories");
+  const { t } = useTranslation();
   const { setFilterPending } = useFilterContext();
 
   if (categories.length === 0) {
@@ -34,12 +34,12 @@ export function PinnedCategories({ categories, currentCategoryId }: PinnedCatego
     if (currentCategoryId === categoryId) {
       params.delete("category");
     } else {
-      params.set("category", categoryId);
+      params.set("categories.category", categoryId);
     }
     
     params.delete("page");
     
-    router.push(`/prompts?${params.toString()}`);
+    router.push(`/registry?${params.toString()}`);
   };
 
   const handleClearFilter = () => {
@@ -47,7 +47,7 @@ export function PinnedCategories({ categories, currentCategoryId }: PinnedCatego
     const params = new URLSearchParams(searchParams?.toString() ?? "");
     params.delete("category");
     params.delete("page");
-    router.push(`/prompts?${params.toString()}`);
+    router.push(`/registry?${params.toString()}`);
   };
 
   return (
@@ -61,7 +61,7 @@ export function PinnedCategories({ categories, currentCategoryId }: PinnedCatego
             : "bg-background hover:bg-accent border-border"
         )}
       >
-        {t("allCategories")}
+        {t("categories.allCategories")}
       </button>
       {categories.map((category) => (
         <button

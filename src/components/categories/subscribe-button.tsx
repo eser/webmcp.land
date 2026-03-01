@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 import { Bell, BellOff, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -16,8 +16,7 @@ interface SubscribeButtonProps {
 }
 
 export function SubscribeButton({ categoryId, categoryName, initialSubscribed, iconOnly = false, pill = false }: SubscribeButtonProps) {
-  const t = useTranslations("subscription");
-  const tCommon = useTranslations("common");
+  const { t } = useTranslation();
   const [isSubscribed, setIsSubscribed] = useState(initialSubscribed);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -35,20 +34,20 @@ export function SubscribeButton({ categoryId, categoryName, initialSubscribed, i
       }
 
       setIsSubscribed(!isSubscribed);
-      
+
       if (isSubscribed) {
         analyticsCategory.unsubscribe(categoryId, categoryName);
       } else {
         analyticsCategory.subscribe(categoryId, categoryName);
       }
-      
+
       toast.success(
         isSubscribed
-          ? t("unsubscribedFrom", { name: categoryName })
-          : t("subscribedTo", { name: categoryName })
+          ? t("subscription.unsubscribedFrom", { name: categoryName })
+          : t("subscription.subscribedTo", { name: categoryName })
       );
     } catch {
-      toast.error(tCommon("error"));
+      toast.error(t("common.error"));
     } finally {
       setIsLoading(false);
     }
@@ -62,7 +61,7 @@ export function SubscribeButton({ categoryId, categoryName, initialSubscribed, i
         className={`h-7 w-7 ${isSubscribed ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}
         onClick={handleToggle}
         disabled={isLoading}
-        title={isSubscribed ? t("unsubscribe") : t("subscribe")}
+        title={isSubscribed ? t("subscription.unsubscribe") : t("subscription.subscribe")}
       >
         {isLoading ? (
           <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -91,7 +90,7 @@ export function SubscribeButton({ categoryId, categoryName, initialSubscribed, i
         ) : (
           <Bell className={`h-3 w-3 ${isSubscribed ? "fill-current" : ""}`} />
         )}
-        {isSubscribed ? t("subscribed") : t("subscribe")}
+        {isSubscribed ? t("subscription.subscribed") : t("subscription.subscribe")}
       </button>
     );
   }
@@ -108,12 +107,12 @@ export function SubscribeButton({ categoryId, categoryName, initialSubscribed, i
       ) : isSubscribed ? (
         <>
           <BellOff className="h-4 w-4 mr-1.5" />
-          {t("unsubscribe")}
+          {t("subscription.unsubscribe")}
         </>
       ) : (
         <>
           <Bell className="h-4 w-4 mr-1.5" />
-          {t("subscribe")}
+          {t("subscription.subscribe")}
         </>
       )}
     </Button>

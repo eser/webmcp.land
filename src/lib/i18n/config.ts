@@ -1,7 +1,10 @@
 // Cookie name for storing locale preference
 export const LOCALE_COOKIE = "NEXT_LOCALE";
 
-// Supported locales - keep in sync with prompts.config.ts
+// Default timezone for consistent server/client rendering
+export const defaultTimeZone = "UTC";
+
+// Supported locales - keep in sync with webmcp.config.ts
 export const supportedLocales = ["en", "tr", "es", "zh", "ja", "ar", "pt", "fr", "it", "de", "nl", "ko", "ru", "he", "el", "fa", "az"];
 export const defaultLocale = "en";
 

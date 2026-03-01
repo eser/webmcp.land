@@ -17,7 +17,7 @@ function AppStoreIcon({ className }: { className?: string }) {
     </svg>
   );
 }
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { useBranding } from "@/components/providers/branding-provider";
 
@@ -39,7 +39,7 @@ function isAppleDevice(): boolean {
 }
 
 export function AppBanner() {
-  const t = useTranslations("appBanner");
+  const { t } = useTranslation();
   const branding = useBranding();
   const searchParams = useSearchParams();
   const [isVisible, setIsVisible] = useState(false);
@@ -70,20 +70,15 @@ export function AppBanner() {
         <div className="flex items-center gap-3">
           <AppStoreIcon className="h-4 w-4 shrink-0" />
           <p className="text-xs sm:text-sm">
-            <span className="hidden sm:inline">{t("message")}</span>
-            <span className="sm:hidden">{t("messageShort")}</span>
+            <span className="hidden sm:inline">{t("appBanner.message")}</span>
+            <span className="sm:hidden">{t("appBanner.messageShort")}</span>
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Button
-            asChild
-            size="sm"
+          <Button render={<Link href={branding.appStoreUrl || "#"} target="_blank" rel="noopener noreferrer" />} size="sm"
             variant="secondary"
-            className="h-7 text-xs font-medium"
-          >
-            <Link href={branding.appStoreUrl || "#"} target="_blank" rel="noopener noreferrer">
-              {t("download")}
-            </Link>
+            className="h-7 text-xs font-medium">
+              {t("appBanner.download")}
           </Button>
           <Button
             variant="ghost"
@@ -92,7 +87,7 @@ export function AppBanner() {
             onClick={handleDismiss}
           >
             <X className="h-3.5 w-3.5" />
-            <span className="sr-only">{t("dismiss")}</span>
+            <span className="sr-only">{t("appBanner.dismiss")}</span>
           </Button>
         </div>
       </div>

@@ -36,8 +36,9 @@
   "nav": {
     "collection": "האוסף שלי",
     "feed": "פיד",
-    "promptmasters": "מאסטרים",
-    "prompts": "פרומפטים",
+    "topProviders": "ספקים מובילים",
+    "resources": "רישום",
+    "registry": "Registry",
     "skills": "כישורים",
     "workflows": "תהליכי עבודה",
     "categories": "קטגוריות",
@@ -48,10 +49,7 @@
     "login": "התחברות",
     "register": "הרשמה",
     "logout": "התנתקות",
-    "ide": "Typed-Prompts IDE",
-    "developers": "מפתחים",
-    "book": "ספר",
-    "forKids": "לילדים",
+    "webmasters": "Top Providers",
     "more": "עוד"
   },
   "brand": {
@@ -78,7 +76,7 @@
     "guideline4": "אל תוסיף אפקטים כמו צללים או מעברי צבע ללוגו",
     "guideline5": "הלוגו צריך להיות נראה בבירור על הרקע",
     "license": "רישיון",
-    "licenseText": "נכסי המותג של {name} מסופקים תחת <link>CC0 1.0 Universal</link>. אתה חופשי להשתמש בנכסים אלה לכל מטרה ללא ייחוס."
+    "licenseText": "נכסי המותג של {name} מסופקים תחת <a href=\"https://www.apache.org/licenses/LICENSE-2.0\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"underline hover:text-foreground\">Apache License 2.0</a>. אתה חופשי להשתמש בנכסים אלה לכל מטרה ללא ייחוס."
   },
   "auth": {
     "login": "התחברות",
@@ -103,7 +101,7 @@
     "registrationFailed": "ההרשמה נכשלה",
     "githubAttributionHint": "התחבר עם GitHub כדי לקשר את התרומות שלך לקהילת הקוד הפתוח"
   },
-  "prompts": {
+  "resources": {
     "title": "פרומפטים",
     "create": "יצירת פרומפט",
     "createSkill": "יצירת מיומנות",
@@ -121,20 +119,20 @@
     },
     "edit": "ערוך פרומפט",
     "delete": "מחק פרומפט",
-    "noPrompts": "לא נמצאו פרומפטים",
-    "noPromptsDescription": "נסה להתאים את החיפוש או הסינון שלך.",
-    "noMorePrompts": "הגעת לסוף",
+    "noResources": "לא נמצאו פרומפטים",
+    "noResourcesDescription": "נסה להתאים את החיפוש או הסינון שלך.",
+    "noMoreResources": "הגעת לסוף",
     "loadMore": "טען עוד",
     "loading": "טוען...",
-    "promptTitle": "כותרת",
-    "promptContent": "תוכן",
-    "promptDescription": "תיאור",
-    "promptType": "סוג",
-    "promptCategory": "קטגוריה",
-    "promptTags": "תגיות",
+    "resourceTitle": "כותרת",
+    "resourceContent": "תוכן",
+    "resourceDescription": "תיאור",
+    "resourceType": "סוג",
+    "resourceCategory": "קטגוריה",
+    "resourceTags": "תגיות",
     "searchTags": "חפש תגיות...",
     "noTagsFound": "לא נמצאו תגיות",
-    "promptContributors": "תורמים",
+    "resourceContributors": "תורמים",
     "contributorsDescription": "משתמשים אחרים שעזרו לכתוב את הפרומפט הזה. משתמשים שבקשות השינוי שלהם אושרו מתווספים אוטומטית.",
     "worksBestWithModels": "עובד הכי טוב עם",
     "worksBestWithModelsDescription": "מודלי AI שהפרומפט הזה עובד איתם הכי טוב (מקסימום 3)",
@@ -153,15 +151,15 @@
     "noUsersFound": "לא נמצאו משתמשים",
     "worksBestWith": "עובד הכי טוב עם",
     "mcpTools": "כלי MCP",
-    "promptPrivate": "פרטי",
+    "resourcePrivate": "פרטי",
     "feature": "הדגש",
     "featured": "מודגש",
     "unlist": "הסר מהרשימה",
     "relist": "החזר לרשימה",
     "adminArea": "אזור ניהול",
-    "promptDeleted": "פרומפט זה נמחק",
-    "promptDeletedDescription": "פרומפט זה נמחק וגלוי רק למנהלים. הוא לא יופיע בתוצאות חיפוש או רשימות ציבוריות.",
-    "promptDelisted": "פרומפט זה הוסר מהרשימה",
+    "resourceDeleted": "פרומפט זה נמחק",
+    "resourceDeletedDescription": "פרומפט זה נמחק וגלוי רק למנהלים. הוא לא יופיע בתוצאות חיפוש או רשימות ציבוריות.",
+    "resourceDelisted": "פרומפט זה הוסר מהרשימה",
     "delistReasonTooShort": "פרומפט זה הוסר אוטומטית כי התוכן קצר מדי. הוא עדיין יופיע בפרופיל שלך, אך לא ייוצא ל-GitHub ולא יופיע בתוצאות החיפוש.",
     "delistReasonNotEnglish": "פרומפט זה הוסר אוטומטית כי הוא לא באנגלית. אנחנו מציגים רק פרומפטים באנגלית כדי שיהיו שימושיים בכל העולם. הוא עדיין יופיע בפרופיל שלך, אך לא ייוצא ל-GitHub ולא יופיע בתוצאות החיפוש.",
     "delistReasonLowQuality": "פרומפט זה הוסר אוטומטית בגלל בעיות איכות. הוא עדיין יופיע בפרופיל שלך, אך לא ייוצא ל-GitHub ולא יופיע בתוצאות החיפוש.",
@@ -174,13 +172,13 @@
     "relistRequestSent": "בקשת הרישום מחדש נשלחה. מנהל יבדוק אותה בקרוב.",
     "relistRequestAlreadySent": "כבר שלחת בקשת רישום מחדש לפרומפט זה.",
     "relistRequestError": "שליחת בקשת הרישום מחדש נכשלה. אנא נסה שוב.",
-    "relatedPrompts": "פרומפטים קשורים",
-    "deletePrompt": "מחק פרומפט",
-    "deletePromptTitle": "למחוק את הפרומפט הזה?",
-    "deletePromptDescription": "לא ניתן לבטל פעולה זו. הפרומפט יימחק לצמיתות.",
+    "relatedResources": "פרומפטים קשורים",
+    "deleteResource": "מחק פרומפט",
+    "deleteResourceTitle": "למחוק את הפרומפט הזה?",
+    "deleteResourceDescription": "לא ניתן לבטל פעולה זו. הפרומפט יימחק לצמיתות.",
     "deleteError": "מחיקת הפרומפט נכשלה",
-    "restorePrompt": "שחזר פרומפט",
-    "promptRestored": "הפרומפט שוחזר בהצלחה",
+    "restoreResource": "שחזר פרומפט",
+    "resourceRestored": "הפרומפט שוחזר בהצלחה",
     "restoreError": "השחזור נכשל",
     "types": {
       "text": "טקסט",
@@ -232,11 +230,11 @@
     "viewCount": "צפיות",
     "createdAt": "נוצר",
     "updatedAt": "עודכן",
-    "promptCreated": "הפרומפט נוצר",
-    "promptUpdated": "הפרומפט עודכן",
+    "resourceCreated": "הפרומפט נוצר",
+    "resourceUpdated": "הפרומפט עודכן",
     "rateLimitError": "אנא המתינו 30 שניות לפני יצירת פרומפט נוסף",
     "dailyLimitError": "הגעת למגבלה היומית של 5 פרומפטים",
-    "duplicatePromptError": "כבר יש לכם פרומפט עם אותו כותרת או תוכן",
+    "duplicateResourceError": "כבר יש לכם פרומפט עם אותו כותרת או תוכן",
     "contentExistsError": "כבר קיים פרומפט עם תוכן זה: \"{title}\" מאת {author}",
     "run": "הפעל",
     "downloadMarkdown": "הורד MD",
@@ -274,8 +272,8 @@
     "downloadFailed": "ההורדה נכשלה",
     "urlCopied": "הקישור הועתק",
     "failedToCopyUrl": "העתקת הקישור נכשלה",
-    "promptCopied": "הפרומפט הועתק",
-    "promptCopiedDescription": "הפרומפט הועתק ללוח שלך. הדבק אותו ב-{platform} לאחר הפתיחה.",
+    "resourceCopied": "הפרומפט הועתק",
+    "resourceCopiedDescription": "הפרומפט הועתק ללוח שלך. הדבק אותו ב-{platform} לאחר הפתיחה.",
     "openPlatform": "פתח {platform}",
     "cancel": "ביטול",
     "titleRequired": "כותרת נדרשת",
@@ -315,8 +313,8 @@
     "uploadInstead": "העלאה במקום זאת",
     "confirmGeneration": "אישור יצירה",
     "confirmGenerationDescription": "ליצור מדיה עם {provider} באמצעות מודל {model}?",
-    "promptPreview": "תצוגה מקדימה של פרומפט",
-    "noPromptProvided": "לא סופק פרומפט",
+    "resourcePreview": "תצוגה מקדימה של פרומפט",
+    "noResourceProvided": "לא סופק פרומפט",
     "inputImage": "תמונת קלט",
     "aspectRatio": "יחס גובה-רוחב",
     "startGeneration": "התחל יצירה",
@@ -324,7 +322,7 @@
     "doNotCloseWindow": "אנא אל תסגור חלון זה בזמן היצירה.",
     "generationComplete": "היצירה הושלמה",
     "generationFailed": "היצירה נכשלה",
-    "mediaAddedToPrompt": "המדיה נוספה לפרומפט שלך.",
+    "mediaAddedToResource": "המדיה נוספה לפרומפט שלך.",
     "mediaGenerated": "המדיה נוצרה בהצלחה!",
     "aiGenerationAvailable": "✨ יצירת AI זמינה",
     "generateWith": "יצירה עם AI",
@@ -367,7 +365,7 @@
     "pinned": "הוצמד לפרופיל",
     "unpinned": "הוסר מהפרופיל",
     "pinFailed": "עדכון ההצמדה נכשל",
-    "pinnedPrompts": "מוצמדים",
+    "pinnedResources": "מוצמדים",
     "previous": "הקודם",
     "next": "הבא",
     "mediaLoadError": "לא ניתן לטעון את המדיה של הפרומפט הזה. ייתכן שהכתובת לא תקינה או שהמשאב כבר לא זמין.",
@@ -384,16 +382,30 @@
     "translated": "התוכן תורגם",
     "translationFailed": "התרגום נכשל",
     "alreadyTranslated": "כבר תורגם",
-    "learnHowToWritePrompts": "למדו איך לכתוב פרומפטים יעילים ←",
     "structuredFormatDetected": "זוהה פורמט {format}",
     "structuredFormatWarningDescription": "תוכן הפרומפט שלך נראה כמו נתונים מובנים. שקול לעבור למצב מובנה להדגשת תחביר ואימות טובים יותר.",
-    "switchToStructured": "לעבור ל-{format}"
+    "switchToStructured": "לעבור ל-{format}",
+    "endpointUrl": "כתובת נקודת קצה",
+    "serverType": "סוג שרת",
+    "status": "סטטוס",
+    "capabilities": "יכולות",
+    "methods": "שיטות",
+    "tools": "כלים",
+    "useCases": "תרחישי שימוש",
+    "discover": "גלה",
+    "register": "רשום",
+    "healthStatus": "מצב בריאות",
+    "lastChecked": "בדיקה אחרונה",
+    "active": "פעיל",
+    "pending": "ממתין",
+    "unreachable": "לא נגיש",
+    "suspended": "מושעה",
+    "learnHowToWriteResources": "למדו איך לכתוב פרומפטים יעילים ←"
   },
   "changeRequests": {
     "title": "בקשות שינוי",
     "create": "צור בקשת שינוי",
     "createDescription": "הצע שיפורים או תיקונים לפרומפט זה",
-    "backToPrompt": "חזרה לפרומפט",
     "proposedTitle": "כותרת מוצעת",
     "proposedContent": "תוכן מוצע",
     "proposedContentPlaceholder": "הזן את השינויים המוצעים שלך לפרומפט...",
@@ -428,7 +440,8 @@
     "dismiss": "בטל",
     "dismissed": "בקשת השינוי בוטלה",
     "dismissConfirmTitle": "לבטל בקשת שינוי?",
-    "dismissConfirmDescription": "פעולה זו תמחק לצמיתות את בקשת השינוי שלך. לא ניתן לבטל פעולה זו."
+    "dismissConfirmDescription": "פעולה זו תמחק לצמיתות את בקשת השינוי שלך. לא ניתן לבטל פעולה זו.",
+    "backToResource": "חזרה לפרומפט"
   },
   "categories": {
     "title": "קטגוריות",
@@ -440,8 +453,7 @@
     "name": "שם",
     "parent": "קטגוריית אב",
     "noCategories": "לא נמצאו קטגוריות",
-    "prompts": "פרומפטים",
-    "promptCount": "{count} פרומפטים",
+    "resources": "פרומפטים",
     "subscriberCount": "{count} מנויים",
     "searchPlaceholder": "חיפוש פרומפטים...",
     "sort": {
@@ -449,7 +461,8 @@
       "oldest": "הישנים ביותר",
       "most_upvoted": "הכי מדורגים",
       "most_contributors": "הכי הרבה תורמים"
-    }
+    },
+    "resourceCount": "{count} פרומפטים"
   },
   "tags": {
     "title": "תגיות",
@@ -460,7 +473,7 @@
     "name": "שם",
     "color": "צבע",
     "noTags": "לא נמצאו תגיות",
-    "prompts": "פרומפטים",
+    "resources": "פרומפטים",
     "allTags": "כל התגיות"
   },
   "settings": {
@@ -483,7 +496,7 @@
     "description": "נהל משתמשים, קטגוריות ותגיות",
     "stats": {
       "users": "משתמשים",
-      "prompts": "פרומפטים",
+      "resources": "פרומפטים",
       "categories": "קטגוריות",
       "tags": "תגיות"
     },
@@ -492,19 +505,18 @@
       "categories": "קטגוריות",
       "tags": "תגיות",
       "webhooks": "Webhooks",
-      "prompts": "פרומפטים",
+      "resources": "פרומפטים",
       "reports": "דיווחים"
     },
     "reports": {
       "title": "ניהול דיווחים",
       "description": "סקור ונהל פרומפטים מדווחים",
-      "prompt": "פרומפט",
       "reason": "סיבה",
       "reportedBy": "דווח על ידי",
       "status": "סטטוס",
       "date": "תאריך",
       "noReports": "אין דיווחים עדיין",
-      "viewPrompt": "צפה בפרומפט",
+      "viewResource": "צפה בפרומפט",
       "markReviewed": "סמן כנסקר",
       "dismiss": "בטל",
       "markedReviewed": "הדיווח סומן כנסקר",
@@ -515,16 +527,17 @@
         "reviewed": "נסקר",
         "dismissed": "בוטל"
       },
-      "relistPrompt": "רשום מחדש פרומפט",
-      "restorePrompt": "שחזר פרומפט",
-      "promptRelisted": "הפרומפט נרשם מחדש בהצלחה",
-      "promptRestored": "הפרומפט שוחזר בהצלחה",
+      "relistResource": "רשום מחדש פרומפט",
+      "restoreResource": "שחזר פרומפט",
+      "resourceRelisted": "הפרומפט נרשם מחדש בהצלחה",
+      "resourceRestored": "הפרומפט שוחזר בהצלחה",
       "relistFailed": "הרישום מחדש נכשל",
-      "restoreFailed": "השחזור נכשל"
+      "restoreFailed": "השחזור נכשל",
+      "resource": "פרומפט"
     },
-    "prompts": {
+    "resources": {
       "title": "ניהול פרומפטים",
-      "description": "ייבא פרומפטים מ-prompts.csv ונהל הטמעות AI",
+      "description": "ייבא פרומפטים מ-משאבים.csv ונהל הטמעות AI",
       "import": "ייבא CSV",
       "export": "ייצא CSV",
       "exportInfo": "הורד פרומפטים כ-CSV עבור GitHub/HuggingFace",
@@ -534,7 +547,7 @@
       "importResult": "יובאו: {imported}, דולגו: {skipped}",
       "deleteSuccess": "{count} פרומפטים נמחקו",
       "importConfirmTitle": "לייבא פרומפטים?",
-      "importConfirmDescription": "פעולה זו תייבא פרומפטים מ-prompts.csv. פרומפטים קיימים ידולגו.",
+      "importConfirmDescription": "פעולה זו תייבא פרומפטים מ-משאבים.csv. פרומפטים קיימים ידולגו.",
       "deleteConfirmTitle": "למחוק פרומפטים קהילתיים?",
       "deleteConfirmDescription": "פעולה זו תמחק לצמיתות את כל הפרומפטים המיובאים ותורמים לא תבועים.",
       "cancel": "ביטול",
@@ -555,10 +568,10 @@
       "relatedSuccess": "{count} פרומפטים קשורים נוצרו",
       "relatedResult": "נוצרו: {success}, נכשלו: {failed}"
     },
-    "promptsList": {
+    "resourcesList": {
       "title": "כל הפרומפטים",
       "description": "עיין ונהל את כל הפרומפטים במערכת",
-      "noPrompts": "לא נמצאו פרומפטים",
+      "noResources": "לא נמצאו פרומפטים",
       "private": "פרטי",
       "unlisted": "לא רשום",
       "views": "צפיות",
@@ -584,7 +597,7 @@
       "user": "משתמש",
       "email": "אימייל",
       "role": "תפקיד",
-      "prompts": "פרומפטים",
+      "resources": "פרומפטים",
       "joined": "הצטרף",
       "makeAdmin": "הפוך למנהל",
       "removeAdmin": "הסר מנהל",
@@ -634,7 +647,7 @@
       "descriptionLabel": "תיאור",
       "icon": "אייקון",
       "parent": "אב",
-      "prompts": "פרומפטים",
+      "resources": "פרומפטים",
       "add": "הוסף קטגוריה",
       "edit": "ערוך",
       "delete": "מחק",
@@ -672,7 +685,7 @@
       "name": "שם",
       "slug": "Slug",
       "color": "צבע",
-      "prompts": "פרומפטים",
+      "resources": "פרומפטים",
       "add": "הוסף תגית",
       "edit": "ערוך",
       "delete": "מחק",
@@ -723,9 +736,9 @@
     },
     "import": {
       "title": "ייבא פרומפטים קהילתיים",
-      "description": "ייבא פרומפטים מקובץ prompts.csv של Awesome ChatGPT Prompts",
-      "fileInfo": "ייבא מפרומפטים קהילתיים של Awesome ChatGPT Prompts prompts.csv",
-      "csvFormat": "פורמט: act, prompt, for_devs, type",
+      "description": "ייבא פרומפטים מקובץ משאבים.csv של Awesome ChatGPT משאבים",
+      "fileInfo": "ייבא מפרומפטים קהילתיים של Awesome ChatGPT משאבים משאבים.csv",
+      "csvFormat": "פורמט: act, משאב, for_devs, type",
       "importButton": "ייבא פרומפטים קהילתיים",
       "importing": "מייבא...",
       "success": "{count} פרומפטים יובאו בהצלחה",
@@ -736,22 +749,22 @@
       "total": "סה\"כ ב-CSV: {count}",
       "errors": "שגיאות:",
       "confirmTitle": "לייבא פרומפטים?",
-      "confirmDescription": "פעולה זו תייבא את כל הפרומפטים מ-prompts.csv. פרומפטים קיימים עם אותה כותרת ידולגו.",
+      "confirmDescription": "פעולה זו תייבא את כל הפרומפטים מ-משאבים.csv. פרומפטים קיימים עם אותה כותרת ידולגו.",
       "cancel": "ביטול",
       "confirm": "ייבא",
       "deleteButton": "מחק",
       "deleteConfirmTitle": "למחוק פרומפטים קהילתיים?",
-      "deleteConfirmDescription": "פעולה זו תמחק לצמיתות את כל הפרומפטים שיובאו מ-prompts.csv ומשתמשים תורמים לא תבועים. לא ניתן לבטל פעולה זו.",
+      "deleteConfirmDescription": "פעולה זו תמחק לצמיתות את כל הפרומפטים שיובאו מ-משאבים.csv ומשתמשים תורמים לא תבועים. לא ניתן לבטל פעולה זו.",
       "deleteSuccess": "{count} פרומפטים קהילתיים נמחקו"
     },
     "aiSearch": {
       "title": "חיפוש AI",
       "description": "צור הטמעות לחיפוש סמנטי מופעל על ידי OpenAI",
-      "promptsWithoutEmbeddings": "פרומפטים ללא הטמעות",
       "generateButton": "צור הטמעות",
       "generating": "מייצר...",
       "generateSuccess": "{count} הטמעות נוצרו",
-      "generateResult": "נוצרו: {success}, נכשלו: {failed}"
+      "generateResult": "נוצרו: {success}, נכשלו: {failed}",
+      "resourcesWithoutEmbeddings": "פרומפטים ללא הטמעות"
     }
   },
   "search": {
@@ -771,12 +784,12 @@
   },
   "user": {
     "profile": "פרופיל",
-    "prompts": "פרומפטים",
-    "allPrompts": "כל הפרומפטים",
+    "resources": "פרומפטים",
+    "allResources": "כל הפרומפטים",
     "joined": "הצטרף",
-    "noPrompts": "אין פרומפטים עדיין",
-    "noPromptsOwner": "עדיין לא יצרת פרומפטים",
-    "createFirstPrompt": "צור את הפרומפט הראשון שלך",
+    "noResources": "אין פרומפטים עדיין",
+    "noResourcesOwner": "עדיין לא יצרת פרומפטים",
+    "registerFirstResource": "צור את הפרומפט הראשון שלך",
     "upvotesReceived": "דירוגים התקבלו",
     "editProfile": "ערוך פרופיל",
     "unclaimedUser": "לא נתבע",
@@ -784,7 +797,7 @@
     "contributionsCount": "תרומות",
     "noContributions": "אין תרומות עדיין",
     "noContributionsOwner": "עדיין לא תרמת לפרומפטים",
-    "privatePromptsNote": "יש לך {count} {count, plural, one {פרומפט פרטי} other {פרומפטים פרטיים}}. גש אליהם דרך MCP באמצעות מפתח ה-API שלך בלקוחות נתמכים.",
+    "privateResourcesNote": "יש לך {count} {count, plural, one {פרומפט פרטי} other {פרומפטים פרטיים}}. גש אליהם דרך MCP באמצעות מפתח ה-API שלך בלקוחות נתמכים.",
     "contribution": "תרומה",
     "contributionsPlural": "תרומות",
     "inLastYear": "בשנה האחרונה",
@@ -793,9 +806,9 @@
     "more": "יותר",
     "filteringByDate": "מציג פרומפטים מ-{date}",
     "clearFilter": "נקה מסנן",
-    "noPromptsOnDate": "לא נמצאו פרומפטים בתאריך זה.",
-    "noPromptsOnDateOwner": "אין לך פרומפטים בתאריך זה.",
-    "createForToday": "צור להיום",
+    "noResourcesOnDate": "לא נמצאו פרומפטים בתאריך זה.",
+    "noResourcesOnDateOwner": "אין לך פרומפטים בתאריך זה.",
+    "registerForToday": "צור להיום",
     "likes": "לייקים",
     "noLikes": "עדיין אין פרומפטים שאהבת",
     "noLikesOwner": "עדיין לא אהבת אף פרומפט",
@@ -823,7 +836,7 @@
     "createVersion": "צור גרסה",
     "createNewVersion": "צור גרסה חדשה",
     "updateDescription": "עדכן את תוכן הפרומפט והוסף הערה המתארת את השינויים שלך.",
-    "promptContent": "תוכן פרומפט",
+    "resourceContent": "תוכן פרומפט",
     "changeNote": "הערת שינוי (אופציונלי)",
     "changeNotePlaceholder": "לדוגמה, תוקנה שגיאת כתיב, נוסף הקשר נוסף...",
     "contentPlaceholder": "הזן את תוכן הפרומפט המעודכן...",
@@ -879,7 +892,7 @@
     "feedDescription": "פרומפטים מהקטגוריות שנרשמת אליהן",
     "browseAll": "עיין בכל",
     "discover": "גלה",
-    "noPromptsInFeed": "אין פרומפטים בפיד שלך",
+    "noResourcesInFeed": "אין פרומפטים בפיד שלך",
     "subscribeToCategories": "הירשם לקטגוריות כדי לראות פרומפטים כאן",
     "viewAllCategories": "צפה בכל הקטגוריות"
   },
@@ -888,12 +901,12 @@
     "description": "פרומפטים עם זרימות וחיבורים רציפים",
     "noWorkflows": "עדיין אין תהליכי עבודה",
     "noWorkflowsDescription": "תהליכי עבודה הם פרומפטים שמתחברים לפרומפטים אחרים ברצף. צור פרומפט והוסף חיבורים כדי לבנות תהליך עבודה.",
-    "browsePrompts": "עיין בפרומפטים"
+    "browseResources": "עיין בפרומפטים"
   },
   "collection": {
     "title": "האוסף שלי",
     "description": "פרומפטים ששמרת למועד מאוחר יותר",
-    "browsePrompts": "עיין בפרומפטים",
+    "browseResources": "עיין בפרומפטים",
     "discover": "גלה",
     "emptyTitle": "האוסף שלך ריק",
     "emptyDescription": "שמור פרומפטים לאוסף שלך לגישה מהירה",
@@ -903,16 +916,16 @@
     "removed": "הוסר מהאוסף"
   },
   "discovery": {
-    "featuredPrompts": "פרומפטים מודגשים",
+    "featuredResources": "משאבים מומלצים",
     "todaysMostUpvoted": "המדורגים ביותר היום",
-    "latestPrompts": "פרומפטים אחרונים",
+    "latestResources": "משאבים אחרונים",
     "recentlyUpdated": "עודכנו לאחרונה",
     "mostContributed": "עם הכי הרבה תרומות"
   },
   "homepage": {
-    "heroTitle": "הפלטפורמה החברתית החופשית ל",
-    "heroSubtitle": "פרומפטי AI",
-    "heroDescription": "פרומפטים הם הבסיס של כל AI גנרטיבי. שתף, גלה ואסוף אותם מהקהילה. חינם וקוד פתוח — ארח בשרתים שלך עם פרטיות מלאה.",
+    "heroTitle": "The AI-enabled Service Registry of",
+    "heroSubtitle": "(Web)MCP resources",
+    "heroDescription": "גלה, רשום וחבר שירותי MCP לכל משימה. חינמי וקוד פתוח — אירוח עצמי עם פרטיות מלאה.",
     "heroFeature1": "חינם וקוד פתוח",
     "heroFeature2": "ארח בשרתים שלך לפרטיות",
     "heroFeature3": "לצוותים וארגונים",
@@ -922,13 +935,15 @@
     "setupPrivateServer": "הקם שרת פרטי משלך",
     "beStargazer": "היה הכוכב ה-{count}{ordinal} ב-GitHub",
     "ourHistory": "קרא עוד על ההיסטוריה שלנו",
-    "browsePrompts": "עיין בפרומפטים",
+    "browseResources": "עיין ברישום",
     "viewFeed": "צפה בפיד",
     "readyToStart": "מוכן להתחיל?",
     "freeAndOpen": "חינם וקוד פתוח.",
     "createAccount": "צור חשבון",
-    "featuredPrompts": "פרומפטים מודגשים",
-    "latestPrompts": "פרומפטים אחרונים",
+    "login": "התחברות",
+    "register": "הרשמה",
+    "featuredResources": "משאבים מומלצים",
+    "latestResources": "משאבים אחרונים",
     "achievements": {
       "featuredIn": "הוצג ב",
       "referencedBy": "מצוטט על ידי",
@@ -948,7 +963,7 @@
       "sponsoredBy": "בחסות",
       "becomeSponsor": "תמוך בקהילה",
       "firstEver": "ספריית הפרומפטים הראשונה בעולם",
-      "releasedOn": "שוחררה ב-5 בדצמבר 2022",
+      "releasedOn": "שוחררה ב-28 בפברואר 2026",
       "lovedByPioneers": "אהוב על ידי חלוצי AI"
     }
   },
@@ -957,7 +972,7 @@
     "pendingChangeRequests": "בקשות שינוי ממתינות",
     "noNotifications": "אין התראות",
     "markAllRead": "סמן הכל כנקרא",
-    "commentedOnPrompt": "הגיב על הפרומפט שלך",
+    "commentedOnResource": "הגיב על הפרומפט שלך",
     "repliedToComment": "הגיב לתגובה שלך"
   },
   "comments": {
@@ -986,18 +1001,18 @@
     "showReplies": "הצג {count} תשובות",
     "hideReplies": "הסתר תשובות"
   },
-  "promptmasters": {
+  "webmasters": {
     "title": "מאסטרי פרומפטים",
     "description": "התורמים המובילים מדורגים לפי דירוגים שהתקבלו על הפרומפטים שלהם",
     "allTime": "כל הזמנים",
     "thisMonth": "החודש",
     "thisWeek": "השבוע",
-    "prompts": "פרומפטים",
+    "resources": "פרומפטים",
     "upvotes": "דירוגים",
-    "perPrompt": "לכל פרומפט",
     "noData": "אין נתונים זמינים עדיין",
     "sortByTotal": "מיון לפי סך הקולות",
-    "sortByRatio": "מיון לפי קולות לכל פרומפט"
+    "sortByRatio": "מיון לפי קולות לכל פרומפט",
+    "perResource": "לכל פרומפט"
   },
   "errors": {
     "notFound": "הדף לא נמצא",
@@ -1015,9 +1030,9 @@
     "goHome": "לדף הבית",
     "goBack": "חזרה",
     "helpfulLinks": "קישורים שימושיים:",
-    "browsePrompts": "עיין בפרומפטים",
+    "browseResources": "עיין בפרומפטים",
     "categories": "קטגוריות",
-    "createPrompt": "צור פרומפט"
+    "registerResource": "צור פרומפט"
   },
   "serverError": {
     "title": "שגיאת שרת",
@@ -1026,16 +1041,16 @@
     "goHome": "לדף הבית",
     "goBack": "חזרה",
     "helpfulLinks": "הנה כמה קישורים שימושיים:",
-    "browsePrompts": "עיין בפרומפטים",
+    "browseResources": "עיין בפרומפטים",
     "categories": "קטגוריות",
-    "createPrompt": "צור פרומפט"
+    "registerResource": "צור פרומפט"
   },
-  "heroPromptInput": {
-    "placeholder": "תאר את הפרומפט שאתה רוצה לבנות...",
-    "ariaLabel": "תאר את הפרומפט שאתה רוצה לבנות",
-    "submit": "צור פרומפט",
-    "hint": "לחץ להתחיל לבנות עם AI",
-    "modelName": "סוכן פרומפטים",
+  "heroSearchInput": {
+    "placeholder": "?איזה שירות MCP אתה מחפש",
+    "ariaLabel": "איזה שירות MCP אתה מחפש",
+    "submit": "חיפוש",
+    "hint": "לחץ לחיפוש ברישום",
+    "modelName": "סוכן משאבים",
     "examples": {
       "codeReview": "צור עוזר סקירת קוד שתופס באגים",
       "emailWriter": "בנה כותב אימיילים מקצועי לכל הזדמנות",
@@ -1044,48 +1059,7 @@
       "interviewCoach": "צור מאמן הכנה לראיונות עבודה"
     }
   },
-  "heroIndustries": {
-    "prefix": "או חקור לפי תעשייה",
-    "clickToExplore": "לחץ לחקירה",
-    "searchPlaceholder": "חפש פרומפטים...",
-    "teachers": "מורים",
-    "developers": "מפתחים",
-    "marketers": "משווקים",
-    "designers": "מעצבים",
-    "writers": "סופרים",
-    "analysts": "אנליסטים",
-    "entrepreneurs": "יזמים",
-    "researchers": "חוקרים",
-    "students": "סטודנטים",
-    "consultants": "יועצים",
-    "engineers": "מהנדסים",
-    "creators": "יוצרים",
-    "lawyers": "עורכי דין",
-    "doctors": "רופאים",
-    "nurses": "אחיות",
-    "accountants": "רואי חשבון",
-    "salespeople": "אנשי מכירות",
-    "recruiters": "מגייסים",
-    "managers": "מנהלים",
-    "executives": "בכירים",
-    "freelancers": "פרילנסרים",
-    "photographers": "צלמים",
-    "musicians": "מוזיקאים",
-    "artists": "אמנים",
-    "architects": "אדריכלים",
-    "scientists": "מדענים",
-    "journalists": "עיתונאים",
-    "editors": "עורכים",
-    "translators": "מתרגמים",
-    "coaches": "מאמנים",
-    "therapists": "מטפלים",
-    "trainers": "מדריכים",
-    "chefs": "שפים",
-    "realtors": "סוכני נדל״ן",
-    "investors": "משקיעים",
-    "traders": "סוחרים"
-  },
-  "promptBuilder": {
+  "resourceBuilder": {
     "title": "סוכן בניית פרומפטים",
     "openBuilder": "סוכן פרומפטים",
     "welcomeTitle": "בנה פרומפטים עם AI",
@@ -1098,18 +1072,18 @@
     "thinking": "חושב...",
     "errorMessage": "משהו השתבש. אנא נסה שוב.",
     "foundExamples": "נמצאו {count} פרומפטים דומים:",
-    "currentPrompt": "בונה:",
     "stateTitle": "כותרת",
     "stateContent": "תוכן",
     "stateTags": "תגיות",
     "editAction1": "מלא שדות חסרים, עדכן תגיות.",
     "editAction2": "שפר משתנים",
     "editAction3": "השתמש במשתנים",
-    "editAction4": "המר לפרומפט JSON"
+    "editAction4": "המר לפרומפט JSON",
+    "currentResource": "בונה:"
   },
   "report": {
     "report": "דווח",
-    "reportPrompt": "דווח על פרומפט",
+    "reportResource": "דווח על פרומפט",
     "reportDescription": "עזור לנו לשמור על בטיחות הקהילה על ידי דיווח על תוכן בלתי הולם.",
     "reason": "סיבה",
     "selectReason": "בחר סיבה",
@@ -1172,11 +1146,11 @@
       },
       "whyPromptsMatter": {
         "question": "למה פרומפטים חשובים? אני לא יכול פשוט לשאול את ה-AI כל דבר?",
-        "answer": "בעוד שמודלים מתקדמים של AI יכולים להתמודד היטב עם שאלות יומיומיות, פרומפטים הופכים קריטיים כאשר:\n\n• משתמשים ב-AI דרך API באפליקציות — לעתים קרובות יש רק הזדמנות אחת (\"one-shot prompting\"), ללא דו-שיח הלוך ושוב\n• עובדים עם מודלים קטנים וחסכוניים שזקוקים להוראות מדויקות יותר\n• בונים מערכות ייצור שבהן עקביות ואמינות חשובות\n\nפרומפטים מותאמים עוזרים לכם לקבל תוצאות טובות יותר, לחסוך טוקנים (וכסף), וליצור אפליקציות AI אמינות יותר."
+        "answer": "בעוד שמודלים מתקדמים של AI יכולים להתמודד היטב עם שאלות יומיומיות, פרומפטים הופכים קריטיים כאשר:\n\n• משתמשים ב-AI דרך API באפליקציות — לעתים קרובות יש רק הזדמנות אחת (\"one-shot משאבing\"), ללא דו-שיח הלוך ושוב\n• עובדים עם מודלים קטנים וחסכוניים שזקוקים להוראות מדויקות יותר\n• בונים מערכות ייצור שבהן עקביות ואמינות חשובות\n\nפרומפטים מותאמים עוזרים לכם לקבל תוצאות טובות יותר, לחסוך טוקנים (וכסף), וליצור אפליקציות AI אמינות יותר."
       },
-      "whatIsPromptschat": {
-        "question": "מהו prompts.chat?",
-        "answer": "prompts.chat היא פלטפורמה מונעת קהילה שבה אנשים משתפים, מגלים ואוספים פרומפטים ל-AI. כבר יותר מ-4 שנים משתמשים משתפים כאן את טכניקות האופטימיזציה שלהם לפרומפטים. הקהילה עוזרת אחד לשני לשפר את הפרומפטים שלהם וללמוד גישות חדשות לעבודה עם מערכות AI."
+      "whatIsWebmcpland": {
+        "question": "מהו webmcp.land?",
+        "answer": "webmcp.land היא פלטפורמה מונעת קהילה שבה אנשים משתפים, מגלים ואוספים פרומפטים ל-AI. כבר יותר מ-4 שנים משתמשים משתפים כאן את טכניקות האופטימיזציה שלהם לפרומפטים. הקהילה עוזרת אחד לשני לשפר את הפרומפטים שלהם וללמוד גישות חדשות לעבודה עם מערכות AI."
       },
       "howToUse": {
         "question": "איך אני משתמש בפרומפטים מהפלטפורמה הזו?",
@@ -1184,11 +1158,11 @@
       },
       "license": {
         "question": "האם אני יכול להשתמש בפרומפטים האלה מסחרית?",
-        "answer": "כן! כל הפרומפטים ב-prompts.chat מפורסמים תחת רישיון CC0 (Creative Commons Zero), מה שאומר שהם נחלת הכלל. אתם יכולים להשתמש בהם, לשנות אותם ולהפיץ אותם בחופשיות לכל מטרה, כולל שימוש מסחרי, ללא ייחוס."
+        "answer": "כן! כל הפרומפטים ב-webmcp.land מפורסמים תחת רישיון Apache-2.0 (Apache License 2.0), מה שאומר שהם קוד פתוח. אתם יכולים להשתמש בהם, לשנות אותם ולהפיץ אותם בחופשיות לכל מטרה, כולל שימוש מסחרי, ללא ייחוס."
       },
       "selfHost": {
         "question": "האם אני יכול לארח את הפלטפורמה הזו בעצמי?",
-        "answer": "בהחלט! prompts.chat הוא קוד פתוח לחלוטין. אתם יכולים לפרוס מופע פרטי משלכם עבור הצוות או הארגון שלכם. עיינו בתיעוד האירוח העצמי להוראות ההגדרה."
+        "answer": "בהחלט! webmcp.land הוא קוד פתוח לחלוטין. אתם יכולים לפרוס מופע פרטי משלכם עבור הצוות או הארגון שלכם. עיינו בתיעוד האירוח העצמי להוראות ההגדרה."
       },
       "verification": {
         "question": "איך אני יכול להפוך למשתמש מאומת?",
@@ -1235,9 +1209,9 @@
     "publicByDefaultDescription": "בעת שמירת פרומפטים דרך MCP, הפוך אותם לציבוריים כברירת מחדל במקום פרטיים.",
     "settingUpdated": "ההגדרה עודכנה"
   },
-  "connectedPrompts": {
+  "connectedResources": {
     "title": "זרימת פרומפטים",
-    "addPromptFlow": "לפרומפט הזה יש שלב הבא",
+    "addResourceFlow": "לפרומפט הזה יש שלב הבא",
     "testWorkflow": "הפעל תהליך עבודה",
     "addPrevious": "הוסף קודם",
     "addNext": "הוסף הבא",
@@ -1249,9 +1223,9 @@
     "previousSteps": "שלבים קודמים",
     "nextSteps": "השלבים הבאים",
     "fullFlow": "תהליך עבודה מלא",
-    "searchPrompt": "חפש פרומפט",
+    "searchResource": "חפש פרומפט",
     "searchPlaceholder": "חפש לפי כותרת...",
-    "selectedPrompt": "פרומפט נבחר",
+    "selectedResource": "פרומפט נבחר",
     "connectionLabel": "תווית קישור",
     "labelPlaceholder": "לדוגמה: פריים ראשון, שלב הבא, לאחר עיבוד...",
     "labelHint": "תאר את התנאי או המעבר בין הפרומפטים",
@@ -1276,7 +1250,7 @@
     "inputVideos": "{count} סרטונים",
     "inputDocuments": "{count} מסמכים"
   },
-  "promptWritingGuide": {
+  "resourceWritingGuide": {
     "title": "איך לכתוב פרומפטים מעולים",
     "subtitle": "טיפים, דוגמאות ושיטות עבודה מומלצות ליצירת פרומפטים יעילים לבינה מלאכותית",
     "interactiveBanner": {
@@ -1360,103 +1334,23 @@
       "contentExample": "\"אל תכלול דעות אישיות\" / \"התמקד רק במידע עובדתי\""
     }
   },
-  "ide": {
-    "title": "Prompt Builder",
-    "subtitle": "בניית פרומפטים מובנית ובטוחת טיפוסים",
-    "editor": "עורך",
-    "preview": "תצוגה מקדימה",
-    "run": "הפעל",
-    "reset": "איפוס",
-    "copied": "הועתק ללוח",
-    "runToPreview": "כתוב קוד כדי לראות תצוגה מקדימה",
-    "cannotEvaluate": "לא ניתן להעריך קוד זה.",
-    "onlyPromptsChat": "נתמכים רק ייבואים של {library}.",
-    "desktopOnly": "למחשב בלבד",
-    "desktopOnlyDescription": "בונה הפרומפטים דורש מסך גדול יותר כדי לפעול כראוי. אנא פתח דף זה במחשב שולחני או נייד.",
-    "browsePrompts": "עיין בפרומפטים",
-    "createPrompt": "צור פרומפט",
-    "random": "אקראי",
-    "generateRandom": "צור דוגמה אקראית עם AI",
-    "loginToGenerate": "התחבר כדי ליצור דוגמאות",
-    "rateLimitExceeded": "המתן {seconds} שניות לפני יצירה נוספת",
-    "generateFailed": "יצירת הדוגמה נכשלה",
-    "exampleGenerated": "דוגמה חדשה נוצרה!",
-    "ignoreTypeErrors": "התעלם משגיאות טיפוס"
-  },
-  "developers": {
-    "title": "מפתחים",
-    "promptBuilder": "Typed-Prompts IDE",
-    "promptEnhancer": "משפר הנחיות",
-    "desktopOnly": "למחשב בלבד",
-    "desktopOnlyDescription": "כלי המפתחים דורשים מסך גדול יותר. אנא פתח דף זה במחשב שולחני או נייד.",
-    "browsePrompts": "עיין בהנחיות",
-    "inputPrompt": "הנחיית קלט",
-    "inputPlaceholder": "הכנס הנחיה בסיסית לשיפור...\n\nדוגמה: כתוב פוסט בלוג על בינה מלאכותית",
-    "outputType": "סוג",
-    "outputFormat": "פורמט",
-    "enhance": "שפר",
-    "enhancing": "משפר...",
-    "enhanceSuccess": "ההנחיה שופרה בהצלחה!",
-    "enhanceFailed": "שיפור ההנחיה נכשל",
-    "enterPrompt": "אנא הכנס הנחיה לשיפור",
-    "enhancedPrompt": "הנחיה משופרת",
-    "copy": "העתק",
-    "copied": "הועתק ללוח",
-    "inspiredBy": "בהשראת",
-    "enhanceToSeeResult": "הכנס הנחיה ולחץ שפר כדי לראות את התוצאה",
-    "loginRequired": "התחבר כדי להשתמש במשפר ההנחיות",
-    "history": "היסטוריה",
-    "storedOnDevice": "מאוחסן במכשיר שלך",
-    "noHistory": "אין היסטוריה עדיין",
-    "embedDesigner": "מעצב הטמעה",
-    "embedSettings": "הגדרות",
-    "loadExample": "טען דוגמה",
-    "chooseExample": "בחר דוגמה...",
-    "preview": "תצוגה מקדימה",
-    "openInNewTab": "פתח",
-    "copyEmbedCode": "העתק קוד הטמעה",
-    "embedCode": "קוד הטמעה",
-    "embedCopied": "קוד ההטמעה הועתק!",
-    "settingsCleared": "ההגדרות נמחקו",
-    "reset": "אפס",
-    "promptTokenizer": "טוקנייזר",
-    "tokenizer": {
-      "inputText": "טקסט קלט",
-      "placeholder": "הדבק את הפרומפט או הטקסט שלך כאן לניתוח טוקנים...",
-      "analysis": "ניתוח טוקנים",
-      "tokens": "טוקנים",
-      "contextUsage": "שימוש בחלון הקשר",
-      "nearLimit": "מתקרב לגבול!",
-      "estimatedCost": "עלות משוערת",
-      "textStats": "סטטיסטיקות טקסט",
-      "saved": "הניתוח נשמר בהיסטוריה",
-      "saveToHistory": "שמור",
-      "estimationNote": "ספירות הטוקנים הן הערכות. ערכים בפועל עשויים להשתנות בהתאם לטוקנייזר של המודל.",
-      "settings": "הגדרות",
-      "contextWindowSize": "גודל חלון הקשר",
-      "inputPricePerMillion": "קלט $/מיליון טוקנים",
-      "outputPricePerMillion": "פלט $/מיליון טוקנים",
-      "highlightTokens": "הדגש טוקנים"
-    }
-  },
   "appBanner": {
-    "message": "הורד את אפליקציית prompts.chat ל-iPhone, iPad ו-Mac",
+    "message": "הורד את אפליקציית webmcp.land ל-iPhone, iPad ו-Mac",
     "messageShort": "הורד את האפליקציה למכשירי Apple",
     "download": "הורדה",
     "dismiss": "סגור"
   },
   "about": {
-    "title": "אודות prompts.chat",
-    "description": "הסיפור מאחורי ספריית פרומפטי ה-AI הראשונה, שנוצרה שבועיים אחרי הכרזת ChatGPT.",
-    "releasedOn": "5 בדצמבר 2022",
+    "title": "אודות webmcp.land",
+    "description": "הסיפור מאחורי ספריית משאבי ה-WebMCP הראשונה, שנוצרה מספר שבועות לאחר הכרזת WebMCP.",
+    "releasedOn": "28 בפברואר 2026",
     "storyTitle": "הסיפור שלנו",
     "goalTitle": "המטרה שלנו",
-    "story1Rich": "prompts.chat הוא הייצוג הוויזואלי של מאגר <repoLink>Awesome ChatGPT Prompts</repoLink>. זה התחיל כפרויקט אישי של <authorLink>@f</authorLink> לארגון פרומפטים של ChatGPT, כאשר ל-ChatGPT לא הייתה תכונת היסטוריה בגרסה הראשונית שלו.",
-    "story2": "מאגר Awesome ChatGPT Prompts נוצר ב-5 בדצמבר 2022, רק שבועיים אחרי ש-ChatGPT הוכרז לעולם. מה שהתחיל כפתרון פשוט הפך למשאב המוביל עבור מיליוני חובבי AI.",
-    "testimonialsRich": "אהוב על ידי חלוצי ה-AI, כולל מייסדי OpenAI <gregLink>Greg Brockman</gregLink> ו-<wojciechLink>Wojciech Zaremba</wojciechLink>.",
+    "story1Rich": "webmcp.land הוא רישום מרכזי למשאבי WebMCP ומשאבי AI דומים ברשת. הוא פורק ממערכת <repoLink>prompts.chat</repoLink> של <authorLink>@f</authorLink>, הוסב למשאבי MCP ובנוי על גביה.",
+    "story2": "רישום webmcp.land נוצר ב-28 בפברואר 2026, מספר שבועות בלבד לאחר שהוכרז WebMCP לעולם. מה שהתחיל כפתרון פשוט הפך למשאב המרכזי למפתחים המחפשים לגלות ולשתף שירותי MCP.",
     "openSource": "חינמי וקוד פתוח לחלוטין מהיום הראשון.",
     "goal1Rich": "אנו מאמינים בכוח השיתוף. המשימה שלנו היא להפוך את <bold>טכניקות הנדסת ההקשר של AI למשותפות על ידי מיליונים</bold>, מהקהילה לכולם.",
-    "goal2Rich": "כל פרומפט, כל טכניקה, כל תובנה שמשותפת כאן שייכת לאנושות. לכן בחרנו ברישיון <licenseLink>CC0 (נחלת הכלל)</licenseLink>: ללא הגבלות, ללא צורך בייחוס. רק ידע טהור לכולם.",
+    "goal2Rich": "כל משאב, כל טכניקה, כל תובנה שמשותפת כאן שייכת לאנושות. לכן בחרנו ברישיון <licenseLink>Apache-2.0</licenseLink>: חופשי לשימוש, שינוי ושיתוף עם ייחוס מתאים. ידע פתוח לכולם.",
     "goal3": "בין אם אתה סטודנט שלומד AI, מפתח שבונה את הפריצה הבאה, או פשוט סקרן לגבי מה שאפשרי: זו הספרייה שלך. השתמש בה, שתף אותה, בנה עליה.",
     "achievementsTitle": "הישגים",
     "pressCategoryTitle": "עיתונות ומדיה",
@@ -1468,13 +1362,13 @@
     "referencedColumbia": "צוטט על ידי <link>אוניברסיטת קולומביה</link>",
     "referencedOlympic": "צוטט על ידי <link>Olympic College</link>",
     "googleScholarCitations": "<link>מעל 40 ציטוטים אקדמיים</link> ב-Google Scholar",
-    "githubStars": "<link>141k+ כוכבי GitHub</link>, מאגר הפרומפטים עם הכי הרבה כוכבים",
+    "githubStars": "<link>0k כוכבי GitHub</link>, מאגר הפרומפטים עם הכי הרבה כוכבים",
     "githubStaffPick": "נבחר כ-<link>GitHub Staff Pick</link>",
     "referencedGithubBlog": "מוזכר ב<link>בלוג GitHub</link>",
     "huggingFace": "הדאטאסט האהוב ביותר ב-<link>Hugging Face</link>",
     "usedByDevelopers": "בשימוש על ידי אלפי מפתחים ברחבי העולם",
     "supportUsTitle": "תמכו בנו",
-    "supportUsIntro": "אנו מפתחים את זה כפרויקט לא מסחרי CC-0 ולא מבקשים דבר בתמורה. המשכנו הודות לנותני החסות המדהימים שלנו. כדי לעזור לי להמשיך לפתח את המוצר הזה, שקלו לתמוך.",
+    "supportUsIntro": "אנו מפתחים את זה כפרויקט לא מסחרי Apache-2.0 ולא מבקשים דבר בתמורה. המשכנו הודות לנותני החסות המדהימים שלנו. כדי לעזור לי להמשיך לפתח את המוצר הזה, שקלו לתמוך.",
     "githubSponsorsTitle": "GitHub Sponsors",
     "githubSponsorsDescription": "הפכו לנותן חסות של $800/חודש ב-GitHub והציגו את הלוגו שלכם בדף הבית.",
     "becomeSponsor": "הפוך לנותן חסות",
@@ -1487,749 +1381,6 @@
     "ideationTitle": "רעיונות",
     "communityContributorsTitle": "תורמי קהילה",
     "viewAllContributors": "צפה בכל התורמים ב"
-  },
-  "kids": {
-    "header": {
-      "title": "בית הספר לפרומפטים של צ'יפ",
-      "levels": "שלבים",
-      "home": "בית",
-      "map": "מפה",
-      "mainSite": "האתר הראשי"
-    },
-    "home": {
-      "badge": "למידה לילדים",
-      "title": "למד לדבר עם AI!",
-      "subtitle": "הצטרף לרובוט צ'יפ בהרפתקה מהנה ללמוד איך לכתוב פרומפטים מדהימים!",
-      "promiIntro": {
-        "greeting": "היי, אני צ'יפ! 🤖",
-        "message": "אני רובוט ידידותי שצריך את העזרה שלך! תעזור לי להבין פרומפטים טוב יותר?"
-      },
-      "features": {
-        "games": {
-          "title": "משחקים כיפיים",
-          "description": "למד על ידי משחקי גרירה ושחרור וחידונים"
-        },
-        "stories": {
-          "title": "סיפורים מגניבים",
-          "description": "עקוב אחרי צ'יפ בהרפתקאות מרגשות"
-        },
-        "stars": {
-          "title": "אסוף כוכבים",
-          "description": "אסוף כוכבים ופתח שלבים חדשים"
-        }
-      },
-      "startButton": "התחל לשחק!",
-      "ageNote": "מתאים לילדים בגילאי 8-14 שיודעים לקרוא ולכתוב",
-      "whatYouLearn": "מה תלמד",
-      "readyTitle": "מוכן להתחיל?",
-      "readyMessage": "בוא נצא להרפתקה ונלמד איך לדבר עם AI!"
-    },
-    "navigation": {
-      "back": "אחורה",
-      "next": "הבא",
-      "completeFirst": "השלם קודם את הפעילות כדי להמשיך"
-    },
-    "map": {
-      "title": "מפת העולם",
-      "subtitle": "בחר שלב והתחל את ההרפתקה שלך!",
-      "worldLevels": "{count} שלבים",
-      "levelNumber": "שלב {number}",
-      "locked": "השלם את השלב הקודם לפתיחה"
-    },
-    "worlds": {
-      "1": {
-        "title": "כפר ההתחלה"
-      },
-      "2": {
-        "title": "טירת הבהירות"
-      },
-      "3": {
-        "title": "מערות ההקשר"
-      },
-      "4": {
-        "title": "קניון היצירתיות"
-      },
-      "5": {
-        "title": "הר המומחיות"
-      }
-    },
-    "levels": {
-      "1_1_meet_promi": {
-        "title": "הכר את צ'יפ!",
-        "description": "אמור שלום לחבר הרובוט שלך ולמד מה זה AI"
-      },
-      "1_2_first_words": {
-        "title": "המילים הראשונות של צ'יפ",
-        "description": "עזור לצ'יפ להבין על ידי כתיבת הפרומפט הראשון שלך"
-      },
-      "1_3_being_clear": {
-        "title": "להיות ברור",
-        "description": "למד למה הוראות ברורות עובדות טוב יותר"
-      },
-      "2_1_missing_details": {
-        "title": "הפרטים החסרים",
-        "description": "גלה למה פרטים חשובים"
-      },
-      "2_2_who_and_what": {
-        "title": "מי ומה",
-        "description": "הוסף דמויות ואובייקטים"
-      },
-      "2_3_when_and_where": {
-        "title": "מתי ואיפה",
-        "description": "למד להוסיף זמן ומקום"
-      },
-      "2_4_detail_detective": {
-        "title": "בלש הפרטים",
-        "description": "הפוך למומחה בהוספת פרטים"
-      },
-      "3_1_setting_the_scene": {
-        "title": "הצבת הסצנה",
-        "description": "למד למה הקשר עוזר"
-      },
-      "3_2_show_dont_tell": {
-        "title": "הראה, אל תספר",
-        "description": "השתמש בדוגמאות להראות מה אתה רוצה"
-      },
-      "3_3_format_finder": {
-        "title": "מוצא הפורמט",
-        "description": "בקש רשימות, סיפורים, שירים!"
-      },
-      "3_4_context_champion": {
-        "title": "אלוף ההקשר",
-        "description": "שלב את כל טכניקות ההקשר"
-      },
-      "4_1_pretend_time": {
-        "title": "זמן משחק תפקידים!",
-        "description": "למד פרומפטים של משחק תפקידים"
-      },
-      "4_2_story_starters": {
-        "title": "התחלות סיפורים",
-        "description": "צור סיפורים מדהימים עם AI"
-      },
-      "4_3_character_creator": {
-        "title": "יוצר דמויות",
-        "description": "תן ל-AI אישיות"
-      },
-      "4_4_world_builder": {
-        "title": "בונה עולמות",
-        "description": "צור עולמות מדמיונים"
-      },
-      "5_1_perfect_prompt": {
-        "title": "הפרומפט המושלם",
-        "description": "שלב בהירות, פרטים והקשר"
-      },
-      "5_2_fix_it_up": {
-        "title": "תקן את זה!",
-        "description": "מצא ושפר פרומפטים חלשים"
-      },
-      "5_3_prompt_remix": {
-        "title": "רמיקס פרומפטים",
-        "description": "כתוב מחדש פרומפטים לתוצאות שונות"
-      },
-      "5_4_graduation_day": {
-        "title": "יום הסיום",
-        "description": "האתגר הסופי - הפוך למאסטר!"
-      }
-    },
-    "level": {
-      "backToMap": "חזרה למפה",
-      "levelLabel": "שלב {number}",
-      "comingSoon": "השלב הזה מגיע בקרוב!",
-      "previous": "קודם",
-      "next": "הבא",
-      "map": "מפה"
-    },
-    "levelComplete": {
-      "title": "שלב הושלם!",
-      "nextLevel": "השלב הבא",
-      "backToMap": "חזרה למפה",
-      "allDone": "חזרה למפה"
-    },
-    "quiz": {
-      "goodLabel": "פרומפט מעולה!",
-      "badLabel": "לא הכי טוב",
-      "correct": "נכון!",
-      "incorrect": "ניסיון טוב!",
-      "tryAgain": "נסה שוב"
-    },
-    "magicWords": {
-      "title": "גרור את מילות הקסם! ✨",
-      "dragOrTap": "🎯 גרור או הקש על מילים:",
-      "check": "בדוק!",
-      "retry": "נסה שוב",
-      "correct": "נכון",
-      "tryAgain": "נסה שוב!"
-    },
-    "dragDrop": {
-      "title": "בנה את הפרומפט!",
-      "instruction": "השתמש בחצים להזיז או הקש על שני חלקים להחלפה!",
-      "result": "תוצאה",
-      "check": "בדוק!",
-      "retry": "נסה שוב",
-      "success": "מושלם! בנית פרומפט מעולה!",
-      "almost": "כמעט! המשך לסדר.",
-      "tapToSwap": "הקש על חלק אחר להחלפה!"
-    },
-    "promptParts": {
-      "title": "מיין את חלקי הפרומפט!",
-      "instruction": "הקש על כל חלק, אז בחר את הסוג!",
-      "score": "ניקוד",
-      "pickCategory": "איזה סוג זה?",
-      "success": "מיינת את כל החלקים נכון!",
-      "retry": "נסה שוב",
-      "types": {
-        "role": "תפקיד",
-        "task": "משימה",
-        "context": "הקשר",
-        "constraint": "מגבלה"
-      }
-    },
-    "exampleMatcher": {
-      "title": "מתאם דפוסים",
-      "instruction": "הסתכל על הדפוס ובחר מה בא אחר כך!",
-      "pattern": "הדפוס:",
-      "check": "בדוק!",
-      "retry": "נסה שוב",
-      "correct": "נכון! 🎉",
-      "tryAgain": "לא בדיוק - הסתכל שוב על הדפוס!"
-    },
-    "promptDoctor": {
-      "title": "רופא הפרומפטים",
-      "health": "בריאות הפרומפט",
-      "sick": "פרומפט חולה",
-      "healthy": "פרומפט בריא!",
-      "diagnose": "לחץ על בעיה לתיקון:",
-      "success": "הפרומפט עכשיו בסדר!",
-      "retry": "התחל מחדש"
-    },
-    "stepByStep": {
-      "title": "חשוב צעד אחר צעד",
-      "problem": "הבעיה:",
-      "withoutMagic": "בלי מילות קסם:",
-      "addMagicWords": "הוסף את מילות הקסם!",
-      "magicWordsActive": "מילות הקסם נוספו!",
-      "nextStep": "גלה את הצעד הבא",
-      "withMagic": "עם חשיבה צעד אחר צעד:",
-      "retry": "נסה שוב"
-    },
-    "promptLab": {
-      "title": "מעבדת פרומפטים",
-      "progress": "שיפורים",
-      "yourPrompt": "הפרומפט שלך:",
-      "aiSays": "תשובת AI:",
-      "addDetails": "הוסף שיפורים:",
-      "success": "הפרומפט שלך עכשיו ספציפי מאוד!",
-      "retry": "התחל מחדש"
-    },
-    "wordPredictor": {
-      "title": "איך AI חושב",
-      "instruction": "AI מנחש את המילה הסבירה ביותר. אתה יכול לחשוב כמו AI?",
-      "aiThinks": "AI קורא:",
-      "thinkingDefault": "הממ, איזו מילה תהיה הגיונית כאן?",
-      "check": "בדוק את התשובה שלי!",
-      "correct": "אתה חושב כמו AI!",
-      "tryAgain": "לא בדיוק! AI בוחר את המילה הסבירה ביותר.",
-      "retry": "נסה שוב"
-    },
-    "settings": {
-      "title": "הגדרות",
-      "music": "מוזיקה",
-      "language": "שפה",
-      "progress": "ההתקדמות שלך",
-      "stars": "כוכבים",
-      "completed": "הושלם",
-      "resetTitle": "אפס התקדמות",
-      "resetButton": "אפס הכל",
-      "resetWarning": "זה ימחק את כל הכוכבים וההתקדמות. בטוח?",
-      "resetConfirm": "כן, אפס הכל",
-      "resetComplete": "התקדמות אופסה! טוען מחדש...",
-      "cancel": "ביטול"
-    }
-  },
-  "book": {
-    "title": "הספר האינטראקטיבי של Prompting",
-    "donate": "תמכו בפרויקט",
-    "subtitle": "מדריך אינטראקטיבי ליצירת פרומפטים ברורים ויעילים",
-    "metaTitle": "הספר האינטראקטיבי של Prompting | מדריך אונליין חינמי להנדסת פרומפטים של AI",
-    "metaDescription": "שלטו בהנדסת פרומפטים של AI עם המדריך האינטראקטיבי החינמי הזה. למדו פרומפטים ל-ChatGPT, שרשרת חשיבה, למידת few-shot וטכניקות מתקדמות. יותר מ-25 פרקים עם דוגמאות מהעולם האמיתי.",
-    "interactiveGuideBy": "מדריך אינטראקטיבי מאת",
-    "authorIntro": "שלום, אני <author>פאטיח קאדיר אקין</author>, אוצר המאגר הפופולרי <repoLink>Awesome ChatGPT Prompts</repoLink> ב-GitHub ו-<siteName>prompts.chat</siteName>.",
-    "bookDescription": "במדריך המקיף והאינטראקטיבי הזה, תגלו אסטרטגיות מומחה ליצירת פרומפטים משכנעים ל-AI שמייצרים שיחות מעניינות ויעילות. מהבנת אופן הפעולה של מודלי AI ועד שליטה בטכניקות מתקדמות כמו שרשור פרומפטים ומערכות סוכנים, הספר הזה נותן לכם את הכלים לשדרג את האינטראקציות שלכם עם AI.",
-    "whatYouWillLearn": "מה תלמדו:",
-    "highlights": {
-      "understanding": "הבנה איך מודלי AI חושבים ומעבדים פרומפטים",
-      "crafting": "יצירת פרומפטים ברורים, ספציפיים ויעילים",
-      "advanced": "טכניקות מתקדמות: שרשרת חשיבה, למידת few-shot ושרשור פרומפטים",
-      "interactive": "דוגמאות אינטראקטיביות שאתם יכולים לנסות ישירות בדפדפן",
-      "realWorld": "מקרי שימוש מהעולם האמיתי לכתיבה, תכנות, חינוך ועסקים",
-      "future": "עתיד ה-prompting: סוכנים ומערכות סוכנים"
-    },
-    "bookStructure": "מבנה הספר",
-    "structure": {
-      "introduction": "הקדמה",
-      "part1": "חלק 1: יסודות",
-      "part2": "חלק 2: טכניקות",
-      "part3": "חלק 3: אסטרטגיות מתקדמות",
-      "part4": "חלק 4: שיטות עבודה מומלצות",
-      "part5": "חלק 5: מקרי שימוש",
-      "part6": "חלק 6: סיכום",
-      "chapters": "25 פרקים אינטראקטיביים"
-    },
-    "startReading": "התחל לקרוא",
-    "skipToChapter1": "דלג לפרק 1",
-    "continuousUpdate": "הספר הזה מתעדכן ברציפות עם טכניקות ותובנות חדשות ככל ש-AI מתפתח.",
-    "partOfProject": "חלק מפרויקט <repoLink>Awesome ChatGPT Prompts</repoLink>. רישיון CC0.",
-    "kidsSection": {
-      "question": "אתה מורה או הורה?",
-      "title": "נסה את ספר המשחק שלנו לילדים! 🎮",
-      "description": "הרפתקה אינטראקטיבית מבוססת משחק ללמד ילדים (גילאי 8-14) איך לתקשר עם AI דרך חידות וסיפורים מהנים.",
-      "startPlaying": "התחל לשחק"
-    },
-    "chapter": {
-      "notFound": "פרק לא נמצא",
-      "comingSoon": "הפרק הזה יגיע בקרוב.",
-      "previous": "קודם",
-      "next": "הבא"
-    },
-    "tableOfContents": "תוכן עניינים",
-    "awesomeChatGPTPrompts": "Awesome ChatGPT Prompts",
-    "search": {
-      "placeholder": "חפש פרקים...",
-      "noResults": "לא נמצאו פרקים"
-    },
-    "bookmark": {
-      "add": "הוסף פרק זה לסימניות",
-      "remove": "הסר סימניה",
-      "continueReading": "המשך מאיפה שהפסקת",
-      "continue": "המשך"
-    },
-    "parts": {
-      "introduction": "הקדמה",
-      "foundations": "יסודות",
-      "techniques": "טכניקות",
-      "advanced": "אסטרטגיות מתקדמות",
-      "bestPractices": "שיטות עבודה מומלצות",
-      "useCases": "מקרי שימוש",
-      "conclusion": "סיכום"
-    },
-    "chapters": {
-      "00a-preface": "הקדמה",
-      "00b-history": "היסטוריה",
-      "00c-introduction": "מבוא",
-      "01-understanding-ai-models": "הבנת מודלי AI",
-      "02-anatomy-of-effective-prompt": "אנטומיה של פרומפט יעיל",
-      "03-core-prompting-principles": "עקרונות ליבה של prompting",
-      "04-role-based-prompting": "Prompting מבוסס תפקידים",
-      "05-structured-output": "פלט מובנה",
-      "06-chain-of-thought": "שרשרת חשיבה",
-      "07-few-shot-learning": "למידת Few-Shot",
-      "08-iterative-refinement": "שיפור איטרטיבי",
-      "09-json-yaml-prompting": "Prompting עם JSON ו-YAML",
-      "10-system-prompts-personas": "פרומפטים מערכתיים ופרסונות",
-      "11-prompt-chaining": "שרשור פרומפטים",
-      "12-handling-edge-cases": "טיפול במקרי קצה",
-      "13-multimodal-prompting": "Prompting רב-מודאלי",
-      "14-context-engineering": "הנדסת הקשר",
-      "25-agents-and-skills": "סוכנים ומיומנויות",
-      "15-common-pitfalls": "מלכודות נפוצות",
-      "16-ethics-responsible-use": "אתיקה ושימוש אחראי",
-      "17-prompt-optimization": "אופטימיזציה של פרומפטים",
-      "18-writing-content": "כתיבה ותוכן",
-      "19-programming-development": "תכנות ופיתוח",
-      "20-education-learning": "חינוך ולמידה",
-      "21-business-productivity": "עסקים ופרודוקטיביות",
-      "22-creative-arts": "אמנויות יצירתיות",
-      "23-research-analysis": "מחקר וניתוח",
-      "24-future-of-prompting": "עתיד ה-Prompting"
-    },
-    "chapterDescriptions": {
-      "00a-preface": "הערה אישית מהמחבר",
-      "00b-history": "ההיסטוריה של Awesome ChatGPT Prompts",
-      "00c-introduction": "מהי הנדסת פרומפטים ולמה זה חשוב",
-      "01-understanding-ai-models": "איך מודלי שפה גדולים עובדים",
-      "02-anatomy-of-effective-prompt": "הרכיבים שהופכים פרומפטים ליעילים",
-      "03-core-prompting-principles": "עקרונות יסוד לפרומפטים טובים יותר",
-      "04-role-based-prompting": "שימוש יעיל בפרסונות ותפקידים",
-      "05-structured-output": "קבלת תשובות עקביות ומעוצבות",
-      "06-chain-of-thought": "חשיבה צעד אחר צעד למשימות מורכבות",
-      "07-few-shot-learning": "הוראה דרך דוגמאות",
-      "08-iterative-refinement": "שיפור פרומפטים דרך איטרציה",
-      "09-json-yaml-prompting": "פורמטים מובנים של נתונים בפרומפטים",
-      "10-system-prompts-personas": "יצירת פרסונות AI עקביות",
-      "11-prompt-chaining": "חיבור מספר פרומפטים יחד",
-      "12-handling-edge-cases": "התמודדות עם קלט בלתי צפוי",
-      "13-multimodal-prompting": "עבודה עם תמונות, אודיו ווידאו",
-      "14-context-engineering": "RAG, embeddings, קריאות פונקציות ו-MCP",
-      "25-agents-and-skills": "בניית סוכני AI עם חבילות מיומנות לשימוש חוזר",
-      "15-common-pitfalls": "טעויות שיש להימנע מהן",
-      "16-ethics-responsible-use": "שיקולים אתיים ב-AI",
-      "17-prompt-optimization": "בדיקה ושיפור פרומפטים",
-      "18-writing-content": "יצירת תוכן וקופירייטינג",
-      "19-programming-development": "יצירת קוד ודיבוג",
-      "20-education-learning": "יישומים חינוכיים",
-      "21-business-productivity": "יישומים מקצועיים",
-      "22-creative-arts": "יישומים אמנותיים ויצירתיים",
-      "23-research-analysis": "ניתוח נתונים ומשימות מחקר",
-      "24-future-of-prompting": "מגמות מתפתחות ופרספקטיבות עתידיות"
-    },
-    "interactive": {
-      "tryIt": "נסה בעצמך",
-      "copy": "העתק",
-      "copied": "הועתק!",
-      "correct": "נכון!",
-      "notQuite": "לא בדיוק.",
-      "nextTokenPrediction": "ניבוי הטוקן הבא",
-      "watchHowAIPredicts": "צפה איך AI מנבא את הטוקן הבא בכל שלב",
-      "replay": "הפעל מחדש",
-      "playing": "מופעל...",
-      "play": "הפעל",
-      "pressPlayToStart": "לחץ הפעל להתחלה...",
-      "completingCurrentToken": "משלים טוקן נוכחי:",
-      "top3PredictedNextTokens": "3 הטוקנים הבאים המנובאים המובילים:",
-      "howItWorks": "איך זה עובד:",
-      "howItWorksExplanation": "בכל שלב, המודל מחשב הסתברויות לכל הטוקנים האפשריים הבאים (~50,000+). הטוקן עם ההסתברות הגבוהה ביותר נבחר, ואז התהליך חוזר.",
-      "tokenizerDemo": "דמו Tokenizer",
-      "seeHowTextIsSplit": "ראה איך טקסט מתחלק לטוקנים",
-      "enterText": "הכנס טקסט:",
-      "tokens": "טוקנים",
-      "tryExamples": "נסה: «מדהים», «AI זה מדהים» או הקלד טקסט משלך",
-      "contextWindowVisualizer": "ויזואליזציה של חלון ההקשר",
-      "understandHowContextIsConsumed": "הבן איך הקשר נצרך",
-      "contextWindow": "חלון הקשר",
-      "remaining": "נותר",
-      "prompt": "פרומפט",
-      "response": "תשובה",
-      "yourPrompt": "הפרומפט שלך:",
-      "aiResponse": "תשובת AI",
-      "contextOverflow": "גלישת הקשר!",
-      "contextOverflowMessage": "הפרומפט + תשובה שלך חורגים מחלון ההקשר. המודל יחתוך או יכשל. נסה להקטין את אורך הפרומפט או לבקש תשובות קצרות יותר.",
-      "tipLabel": "טיפ:",
-      "contextTip": "גם הפרומפט וגם תשובת ה-AI צריכים להיכנס לחלון ההקשר. פרומפטים ארוכים יותר משאירים פחות מקום לתשובות. מקם מידע חשוב בתחילת הפרומפט.",
-      "temperatureDemo": "דמו טמפרטורה",
-      "seeHowRandomnessAffects": "ראה איך אקראיות משפיעה על הפלט",
-      "temperature": "טמפרטורה",
-      "deterministic": "דטרמיניסטי",
-      "balanced": "מאוזן",
-      "creative": "יצירתי",
-      "veryCreative": "מאוד יצירתי",
-      "focused": "ממוקד",
-      "random": "אקראי",
-      "possibleResponsesAtThisTemp": "תשובות אפשריות בטמפרטורה זו:",
-      "useLowTemperature": "השתמש בטמפרטורה נמוכה",
-      "useHighTemperature": "השתמש בטמפרטורה גבוהה",
-      "forFactualAnswers": "לתשובות עובדתיות ועקביות.",
-      "forCreativeWriting": "לכתיבה יצירתית וסיעור מוחות.",
-      "structuredOutputDemo": "דמו פלט מובנה",
-      "seeTheDifferenceStructureMakes": "ראה את ההבדל שמבנה עושה",
-      "unstructured": "לא מובנה",
-      "output": "פלט:",
-      "youCan": "אתה יכול:",
-      "parseProgrammatically": "לנתח תכנותית",
-      "compareAcrossQueries": "להשוות בין שאילתות",
-      "integrateIntoWorkflows": "לשלב בזרימות עבודה",
-      "validateForCompleteness": "לאמת לשלמות",
-      "parseProgrammaticallyLabel": "ניתוח תכנותי:",
-      "complexRegexRequired": "דורש regex מורכב או NLP",
-      "unreliableBreaksWithChanges": "לא אמין, נשבר עם שינויים",
-      "simpleAndReliable": "פשוט ואמין",
-      "parseableWithMarkdown": "ניתן לניתוח עם ספריית markdown",
-      "fewShotLearningDemo": "דמו למידת Few-Shot",
-      "seeHowExamplesImproveAccuracy": "ראה איך דוגמאות משפרות דיוק",
-      "numberOfExamples": "מספר דוגמאות",
-      "zeroShot": "אפס-שוט",
-      "oneShot": "אחד-שוט",
-      "twoShot": "שניים-שוט",
-      "threeShot": "שלושה-שוט",
-      "examplesProvided": "דוגמאות שסופקו:",
-      "testInput": "קלט בדיקה:",
-      "modelPrediction": "ניבוי המודל:",
-      "confidence": "ביטחון:",
-      "expected": "צפוי:",
-      "formatComparison": "השוואת פורמטים",
-      "sameDataDifferentFormats": "אותם נתונים, פורמטים שונים",
-      "defineStructureWithTypeScript": "הגדר מבנה עם ממשקי TypeScript",
-      "machineReadableStrictSyntax": "קריא למכונה, תחביר קפדני, מצוין ל-APIs",
-      "humanReadableSupportsComments": "קריא לאדם, תומך בהערות, מצוין להגדרות",
-      "defineSchema": "הגדר סכמה",
-      "apisAndParsing": "APIs וניתוח",
-      "configFiles": "קבצי הגדרות",
-      "iterativeRefinementDemo": "דמו שיפור איטרטיבי",
-      "watchAPromptEvolve": "צפה בפרומפט מתפתח",
-      "pause": "השהה",
-      "versionXOfY": "גרסה {current} מתוך {total}",
-      "newInThisVersion": "חדש בגרסה זו",
-      "quality": "איכות",
-      "issue": "בעיה:",
-      "success": "הצלחה",
-      "successMessage": "הפרומפט מייצר כעת פלט באיכות גבוהה ועקבי.",
-      "apiCostCalculator": "מחשבון עלות API",
-      "inputTokens": "טוקנים נכנסים (לבקשה)",
-      "outputTokens": "טוקנים יוצאים (לבקשה)",
-      "inputPrice": "מחיר קלט ($ למיליון טוקנים)",
-      "outputPrice": "מחיר פלט ($ למיליון טוקנים)",
-      "requestsPerDay": "בקשות ליום",
-      "perRequest": "לבקשה",
-      "dailyCost": "עלות יומית",
-      "monthlyCost": "עלות חודשית",
-      "textToImageBuildPrompt": "טקסט לתמונה: בנה את הפרומפט שלך",
-      "selectOptionsToBuiltImagePrompt": "בחר אפשרויות מכל קטגוריה לבניית פרומפט תמונה:",
-      "generatedPrompt": "פרומפט שנוצר",
-      "simulateDiffusionProcess": "סימולציה של תהליך דיפוזיה",
-      "diffusionStep1": "התחל עם רעש אקראי",
-      "diffusionStep2": "זהה צורות גסות",
-      "diffusionStep3": "הוסף צבעים וצורות בסיסיים",
-      "diffusionStep4": "שפר פרטים",
-      "diffusionStep5": "תמונה סופית",
-      "diffusionExplanation": "מודלי דיפוזיה אמיתיים מבצעים אלפי צעדים, מסירים רעש בהדרגה עד שתמונה קוהרנטית מופיעה.",
-      "textToVideoBuildPrompt": "טקסט לוידאו: בנה את הפרומפט שלך",
-      "videoPromptsNeed": "פרומפטים לוידאו צריכים תנועה, עבודת מצלמה ותזמון:",
-      "playAnimation": "הפעל אנימציה",
-      "stop": "עצור",
-      "frame": "פריים:",
-      "consistency": "עקביות:",
-      "consistencyDesc": "הנושא נשאר זהה בין פריימים",
-      "motion": "תנועה:",
-      "motionDesc": "המיקום משתנה בהדרגה לאורך זמן",
-      "physics": "פיזיקה:",
-      "physicsDesc": "התנועה עוקבת אחר חוקי הטבע",
-      "simplifiedAnimationPreview": "תצוגה מקדימה של אנימציה מפושטת",
-      "videoModelExplanation": "מודלי וידאו אמיתיים מייצרים 24-60 פריימים בשנייה עם פרטים פוטוריאליסטיים ונושאים עקביים.",
-      "embeddingsVisualization": "ויזואליזציה של Embeddings",
-      "clickWordToSeeVector": "לחץ על מילה כדי לראות את הווקטור שלה ודמיון למילים אחרות:",
-      "vector": "וקטור",
-      "similarityTo": "דמיון ל:",
-      "embeddingsExplanation": "מילים עם משמעויות דומות (כמו «שמח» ו«מאושר») יש להן וקטורים דומים ומקבלות ציוני דמיון גבוהים.",
-      "canDoWell": "יכול לעשות טוב",
-      "cannotDo": "לא יכול לעשות",
-      "promptBuilder": "בונה פרומפטים",
-      "buildYourPromptStepByStep": "בנה את הפרומפט שלך צעד אחר צעד",
-      "pleaseAddTask": "אנא הוסף לפחות משימה אחת לפרומפט שלך",
-      "rateLimitReached": "הגעת למגבלה. נסה שוב בעוד:",
-      "orSignInForMore": "או התחבר לעוד.",
-      "failedToRunPrompt": "הרצת הפרומפט נכשלה",
-      "runWithAI": "הרץ עם AI",
-      "failedToConnectApi": "החיבור ל-API נכשל",
-      "day": "יום",
-      "promptAnalyzer": "מנתח פרומפטים",
-      "getAiFeedbackOnPrompt": "קבל משוב AI על הפרומפט שלך",
-      "pasteOrWritePromptHere": "הדבק או כתוב את הפרומפט שלך כאן...",
-      "analyze": "נתח",
-      "pleaseEnterPromptToAnalyze": "אנא הכנס פרומפט לניתוח",
-      "failedToAnalyzePrompt": "ניתוח הפרומפט נכשל",
-      "clarity": "בהירות",
-      "specificity": "ספציפיות",
-      "missingElements": "אלמנטים חסרים",
-      "suggestions": "הצעות",
-      "improvedVersion": "גרסה משופרת",
-      "summarizationStrategies": "אסטרטגיות סיכום",
-      "originalConversation": "שיחה מקורית",
-      "after": "אחרי:",
-      "summary": "סיכום",
-      "keptMessages": "הודעות שנשמרו",
-      "saved": "נחסך:",
-      "part": "חלק",
-      "demoExamples": {
-        "tokenPrediction": {
-          "tokens": [
-            "בירת",
-            " ישראל",
-            " היא",
-            " ירושלים",
-            "."
-          ],
-          "fullText": "בירת ישראל היא ירושלים."
-        },
-        "tokenizer": {
-          "default": "example1",
-          "samples": {
-            "example1": {
-              "text": "שלום עולם!",
-              "tokens": [
-                "שלום",
-                " עולם",
-                "!"
-              ]
-            },
-            "example2": {
-              "text": "ירושלים בירה",
-              "tokens": [
-                "ירושלים",
-                " בירה"
-              ]
-            },
-            "example3": {
-              "text": "בינה מלאכותית",
-              "tokens": [
-                "בינה",
-                " מלאכותית"
-              ]
-            },
-            "example4": {
-              "text": "הכותל המערבי",
-              "tokens": [
-                "הכותל",
-                " המערבי"
-              ]
-            },
-            "example5": {
-              "text": "הנדסת פרומפטים",
-              "tokens": [
-                "הנדסת",
-                " פרומפטים"
-              ]
-            }
-          },
-          "tryExamples": "נסה את הדוגמאות או הקלד טקסט משלך"
-        },
-        "temperature": {
-          "prompt": "מהי בירת ישראל?",
-          "lowTemp": [
-            "בירת ישראל היא ירושלים.",
-            "בירת ישראל היא ירושלים.",
-            "בירת ישראל היא ירושלים."
-          ],
-          "mediumLowTemp": [
-            "בירת ישראל היא ירושלים.",
-            "ירושלים היא בירת ישראל.",
-            "בירת ישראל היא ירושלים, עיר קדושה."
-          ],
-          "mediumHighTemp": [
-            "ירושלים משמשת כבירת ישראל.",
-            "בירת ישראל היא ירושלים, בית הכותל המערבי.",
-            "בירת ישראל היא העיר ההיסטורית והתוססת ירושלים."
-          ],
-          "highTemp": [
-            "ירושלים, עיר הקודש, ניצבת בגאון כבירתה המפוארת של ישראל!",
-            "הבירה התוססת של ישראל אינה אחרת מאשר העיר הקסומה ירושלים.",
-            "ליבה של ישראל פועמת בירושלים, בירתה האהובה לאמנות ותרבות."
-          ]
-        },
-        "fewShot": {
-          "examples": [
-            {
-              "input": "אני אוהב את המוצר הזה!",
-              "output": "חיובי"
-            },
-            {
-              "input": "חוויה נוראית, בזבוז כסף",
-              "output": "שלילי"
-            },
-            {
-              "input": "זה בסדר, שום דבר מיוחד",
-              "output": "ניטרלי"
-            }
-          ],
-          "testCase": {
-            "input": "איכות טובה אבל משלוח איטי",
-            "expected": "מעורב"
-          },
-          "labels": {
-            "positive": "חיובי",
-            "negative": "שלילי",
-            "neutral": "ניטרלי",
-            "mixed": "מעורב"
-          }
-        }
-      },
-      "promptChallenge": "אתגר פרומפט",
-      "yourTask": "המשימה שלך:",
-      "yourPromptWillBeScoredOn": "הפרומפט שלך יקבל ציון על:",
-      "startChallenge": "התחל אתגר",
-      "writeYourPromptHere": "כתוב את הפרומפט שלך כאן...",
-      "points": "נקודות",
-      "hints": "רמזים",
-      "hintsUsed": "{used}/{total} נעשה שימוש, כל אחד -5 נקודות",
-      "revealNextHint": "גלה רמז הבא (-5 נקודות)",
-      "submitForScoring": "שלח לציון",
-      "aiCallsRemaining": "קריאות AI שנותרו",
-      "excellent": "🎉 מצוין!",
-      "goodEffort": "👍 מאמץ טוב!",
-      "keepPracticing": "המשך להתאמן!",
-      "criteriaBreakdown": "פירוט קריטריונים:",
-      "suggestionsForImprovement": "הצעות לשיפור:",
-      "exampleSolution": "פתרון לדוגמה",
-      "hide": "הסתר",
-      "show": "הצג",
-      "improveThisPrompt": "שפר את הפרומפט הזה",
-      "improveThisPromptTask": "שפר את הפרומפט הזה לתוצאות טובות יותר",
-      "improvePromptTask": "שפר את הפרומפט הזה לתוצאות טובות יותר",
-      "originalWeakPrompt": "פרומפט מקורי (חלש)",
-      "yourImprovedVersion": "הגרסה המשופרת שלך",
-      "compareWithAI": "השווה עם AI",
-      "reset": "אפס",
-      "showIdealSolution": "הצג פתרון אידיאלי",
-      "hideIdealSolution": "הסתר פתרון אידיאלי",
-      "idealSolution": "פתרון אידיאלי",
-      "yourVersionBetter": "🎉 הגרסה שלך טובה יותר!",
-      "yourVersionIsBetter": "🎉 הגרסה שלך טובה יותר!",
-      "keepImproving": "המקורי אולי טוב יותר. המשך לשפר!",
-      "originalMightBeBetter": "המקורי אולי טוב יותר. המשך לשפר!",
-      "keyDifferences": "הבדלים עיקריים:",
-      "beginner": "מתחיל",
-      "intermediate": "בינוני",
-      "advanced": "מתקדם",
-      "youllHaveTime": "יש לך {time} להשלים את האתגר הזה.",
-      "takeYourTime": "קח את הזמן שלך ובנה את הפרומפט הטוב ביותר.",
-      "pleaseWritePromptBeforeSubmitting": "אנא כתוב פרומפט לפני השליחה",
-      "fillInTheBlanks": "מלא את החסר",
-      "perfect": "🎉 מושלם!",
-      "ofCorrect": "{score} מתוך {total} נכון",
-      "correctAnswer": "תשובה נכונה:",
-      "checking": "בודק...",
-      "checkAnswers": "בדוק תשובות",
-      "tryAgain": "נסה שוב",
-      "aiPoweredValidation": "אימות סמנטי מונע AI",
-      "hintForBlank": "רמז:",
-      "wellStructuredPrompt": "🎉 פרומפט מובנה היטב!",
-      "consistencyIssuesFound": "נמצאו כמה בעיות עקביות",
-      "issues": "בעיות:",
-      "aiValidationFailed": "אימות AI נכשל. משתמש באימות מקומי.",
-      "aiCheckFailed": "בדיקת AI נכשלה. נסה שוב.",
-      "checklist": "רשימת ביקורת",
-      "complete": "הושלם",
-      "allDoneGreatWork": "🎉 הכל נעשה! עבודה מעולה!",
-      "debugThisPrompt": "דבג את הפרומפט הזה",
-      "hideHint": "הסתר רמז",
-      "showHint": "הצג רמז",
-      "thePrompt": "הפרומפט:",
-      "theOutputProblematic": "הפלט (בעייתי):",
-      "whatsWrongWithThisPrompt": "מה הבעיה בפרומפט הזה?",
-      "jailbreakAttackSimulator": "סימולטור התקפת Jailbreak",
-      "selectAttackType": "בחר סוג התקפה כדי לראות איך היא עובדת ובדוק אם AI מגן:",
-      "systemPromptDefense": "פרומפט מערכת (הגנה)",
-      "attackAttempt": "ניסיון התקפה",
-      "whatThisAttackDoes": "מה ההתקפה הזו עושה:",
-      "testJailbreakDefense": "בדוק הגנת Jailbreak",
-      "systemPromptLabel": "פרומפט מערכת",
-      "userAttemptsJailbreak": "משתמש מנסה jailbreak",
-      "sequentialChain": "שרשרת רציפה",
-      "parallelChain": "שרשרת מקבילית",
-      "conditionalChain": "שרשרת מותנית",
-      "iterativeChain": "שרשרת איטרטיבית",
-      "running": "רץ...",
-      "run": "הרץ",
-      "outputLabel": "פלט",
-      "skippedConditionNotMet": "דילג - התנאי לא התקיים",
-      "iterationOf": "איטרציה {current} מתוך {total}",
-      "previousOutputAsInput": "פלט קודם כקלט",
-      "loopUntilQualityMet": "לולאה עד שסף האיכות מתקיים",
-      "chainErrorHandlingDemo": "דמו טיפול בשגיאות שרשרת",
-      "attempt": "ניסיון",
-      "retryingWithFeedback": "מנסה שוב עם משוב שגיאה...",
-      "switchingToFallback": "עובר לגישה חלופית...",
-      "failed": "נכשל",
-      "retry": "נסה שוב",
-      "fallback": "חלופה",
-      "contextPlayground": "מגרש משחקים להקשר",
-      "toggleContextBlocks": "החלף בלוקי הקשר כדי לראות איך הם משתלבים. עקוב אחרי ספירת הטוקנים!",
-      "overContextLimit": "חריגה ממגבלת ההקשר! חלק מהתוכן ייחתך.",
-      "enableContextBlocksToBuild": "הפעל בלוקי הקשר כדי לבנות פרומפט",
-      "testContext": "בדוק הקשר",
-      "links": "קישורים"
-    },
-    "printTitle": "ספר הפרומפטינג",
-    "printSubtitle": "מדריך ליצירת פרומפטים ברורים ויעילים",
-    "downloadPdf": "הורד כ-PDF"
   },
   "userExamples": {
     "addMyExample": "הוסף את הדוגמה שלי",
@@ -2255,5 +1406,46 @@
     "submit": "שלח",
     "communityExamples": "דוגמאות קהילה",
     "userExample": "דוגמת משתמש"
+  },
+  "heroUseCases": {
+    "searchPlaceholder": "חפש שירותי MCP...",
+    "prefix": "או חקור לפי תרחיש שימוש",
+    "clickToExplore": "לחץ לחקירה",
+    "booking": "Booking",
+    "tourism": "Tourism",
+    "management": "Management",
+    "projects": "Projects",
+    "health": "Health",
+    "medical": "Medical",
+    "design": "Design",
+    "accounting": "Accounting",
+    "investing": "Investing",
+    "marketing": "Marketing",
+    "ecommerce": "E-Commerce",
+    "analytics": "Analytics",
+    "devtools": "DevTools",
+    "communication": "Communication",
+    "education": "Education",
+    "security": "Security",
+    "automation": "Automation",
+    "payments": "Payments",
+    "scheduling": "Scheduling",
+    "translation": "Translation",
+    "monitoring": "Monitoring",
+    "databases": "Databases",
+    "cloudOps": "Cloud Ops",
+    "publishing": "Publishing",
+    "logistics": "Logistics",
+    "recruitment": "Recruitment",
+    "legal": "Legal",
+    "realEstate": "Real Estate",
+    "entertainment": "Entertainment",
+    "fitness": "Fitness",
+    "cooking": "Cooking",
+    "photography": "Photography",
+    "music": "Music",
+    "research": "Research",
+    "support": "Support",
+    "crm": "CRM"
   }
 }

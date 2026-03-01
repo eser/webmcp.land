@@ -1,31 +1,35 @@
-import { DiscoveryPrompts } from "@/components/prompts/discovery-prompts";
+import { and, count, desc, eq, isNull } from "drizzle-orm";
+import { DiscoveryResources } from "@/components/resources/discovery-resources";
 import { StructuredData } from "@/components/seo/structured-data";
 import { db } from "@/lib/db";
+import { resources, resourceVotes } from "@/lib/schema";
 
 export default async function DiscoverPage() {
-  // Fetch top prompts for structured data
-  const topPrompts = await db.prompt.findMany({
-    where: {
-      isPrivate: false,
-      isUnlisted: false,
-      deletedAt: null,
-    },
-    orderBy: {
-      votes: { _count: "desc" },
-    },
-    take: 10,
-    select: {
-      id: true,
-      title: true,
-      description: true,
-      slug: true,
-    },
-  });
+  // Fetch top resources for structured data (ordered by vote count)
+  const topResources = await db
+    .select({
+      id: resources.id,
+      title: resources.title,
+      description: resources.description,
+      slug: resources.slug,
+      voteCount: count(resourceVotes.resourceId),
+    })
+    .from(resources)
+    .leftJoin(resourceVotes, eq(resources.id, resourceVotes.resourceId))
+    .where(
+      and(
+        eq(resources.isPrivate, false),
+        isNull(resources.deletedAt),
+      )
+    )
+    .groupBy(resources.id)
+    .orderBy(desc(count(resourceVotes.resourceId)))
+    .limit(10);
 
-  const itemListData = topPrompts.map((prompt) => ({
-    name: prompt.title,
-    url: `/prompts/${prompt.id}${prompt.slug ? `_${prompt.slug}` : ""}`,
-    description: prompt.description || undefined,
+  const itemListData = topResources.map((resource) => ({
+    name: resource.title,
+    url: `/registry/${resource.id}${resource.slug ? `_${resource.slug}` : ""}`,
+    description: resource.description || undefined,
   }));
 
   return (
@@ -44,7 +48,7 @@ export default async function DiscoverPage() {
         }}
       />
       <div className="flex flex-col">
-        <DiscoveryPrompts />
+        <DiscoveryResources />
       </div>
     </>
   );

@@ -1,5 +1,7 @@
 import { ImageResponse } from "next/og";
+import { and, count, eq, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
+import { users, resources, resourceVotes } from "@/lib/schema";
 import { getConfig } from "@/lib/config";
 
 export const alt = "User Profile";
@@ -47,22 +49,22 @@ export default async function OGImage({ params }: { params: Promise<{ username: 
   }
   const username = decodedUsername.slice(1);
 
-  const user = await db.user.findFirst({
-    where: { username: { equals: username, mode: "insensitive" } },
-    select: {
+  const userRow = await db.query.users.findFirst({
+    where: sql`lower(${users.username}) = lower(${username})`,
+    columns: {
       id: true,
       name: true,
       username: true,
       avatar: true,
       role: true,
       createdAt: true,
-      _count: {
-        select: {
-          prompts: true,
-        },
-      },
+    },
+    with: {
+      resources: true,
     },
   });
+  // Add _count compatibility
+  const user = userRow ? { ...userRow, _count: { resources: userRow.resources.length } } : null;
 
   if (!user) {
     return new ImageResponse(
@@ -88,13 +90,11 @@ export default async function OGImage({ params }: { params: Promise<{ username: 
   }
 
   // Get total upvotes received
-  const totalUpvotes = await db.promptVote.count({
-    where: {
-      prompt: {
-        authorId: user.id,
-      },
-    },
-  });
+  const [{ value: totalUpvotes }] = await db
+    .select({ value: count() })
+    .from(resourceVotes)
+    .innerJoin(resources, eq(resourceVotes.resourceId, resources.id))
+    .where(eq(resources.authorId, user.id));
 
   // Format join date
   const joinDate = new Intl.DateTimeFormat("en-US", {
@@ -228,7 +228,7 @@ export default async function OGImage({ params }: { params: Promise<{ username: 
                 gap: 40,
               }}
             >
-              {/* Prompts */}
+              {/* Resources */}
               <div
                 style={{
                   display: "flex",
@@ -244,10 +244,10 @@ export default async function OGImage({ params }: { params: Promise<{ username: 
                   <path d="M14 2v4a2 2 0 0 0 2 2h4" />
                 </svg>
                 <span style={{ fontSize: 26, fontWeight: 600, color: "#18181b" }}>
-                  {user._count.prompts}
+                  {user._count.resources}
                 </span>
                 <span style={{ fontSize: 22, color: "#71717a" }}>
-                  prompts
+                  resources
                 </span>
               </div>
 

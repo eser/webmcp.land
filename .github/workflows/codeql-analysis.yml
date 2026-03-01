@@ -1,0 +1,100 @@
+name: CodeQL
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  schedule:
+    - cron: "0 0 * * 0" # Weekly on Sunday
+  workflow_dispatch:
+
+jobs:
+  create-matrix:
+    name: Detect Languages
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+      has-languages: ${{ steps.check.outputs.has-languages }}
+
+    steps:
+      - name: Get languages from repo
+        id: set-matrix
+        uses: advanced-security/set-codeql-language-matrix@v1
+        with:
+          access-token: ${{ secrets.GITHUB_TOKEN }}
+          endpoint: ${{ github.event.repository.languages_url }}
+
+      - name: Check if languages found
+        id: check
+        run: |
+          if [[ '${{ steps.set-matrix.outputs.matrix }}' == '[]' || -z '${{ steps.set-matrix.outputs.matrix }}' ]]; then
+            echo "has-languages=false" >> $GITHUB_OUTPUT
+          else
+            echo "has-languages=true" >> $GITHUB_OUTPUT
+          fi
+
+  analyze:
+    name: Analyze
+    needs: create-matrix
+    if: ${{ needs.create-matrix.outputs.has-languages == 'true' }}
+    runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }}
+
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.create-matrix.outputs.matrix) }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: ${{ matrix.language }}
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v4
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v4
+
+  # This job ensures the workflow reports success even when analyze is skipped
+  status:
+    name: CodeQL Status
+    needs: [create-matrix, analyze]
+    if: always()
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Check status
+        run: |
+          if [[ "${{ needs.create-matrix.result }}" == "failure" ]]; then
+            echo "Language detection failed"
+            exit 1
+          fi
+          # If no languages were found, skip is expected
+          if [[ "${{ needs.create-matrix.outputs.has-languages }}" == "false" ]]; then
+            echo "No supported languages found - skipping analysis"
+            exit 0
+          fi
+          # If languages were found, analyze must succeed
+          if [[ "${{ needs.analyze.result }}" != "success" ]]; then
+            echo "Analysis failed: ${{ needs.analyze.result }}"
+            exit 1
+          fi
+          echo "CodeQL analysis completed successfully"

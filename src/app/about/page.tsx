@@ -1,12 +1,61 @@
 import { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { getTranslations } from "@/i18n/request";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { ExternalLink, Heart } from "lucide-react";
+import { Heart } from "lucide-react";
+import { and, notInArray, isNotNull, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
+import { users } from "@/lib/schema";
 import { ContributorAvatar } from "./contributor-avatar";
-import config from "@/../prompts.config";
+import config from "@/../webmcp.config";
+import React, { type ReactNode } from "react";
+
+/**
+ * Parse a translation string containing XML-like tags and replace them with
+ * React elements supplied via the `components` map.
+ *
+ * Example:
+ *   richText("Hello <link>world</link>!", { link: (children) => <a>{children}</a> })
+ *   => ["Hello ", <a>world</a>, "!"]
+ */
+function richText(
+  raw: string,
+  components: Record<string, (children: string) => ReactNode>,
+): ReactNode {
+  // Build a regex that matches any of the provided tag names
+  const tagNames = Object.keys(components);
+  if (tagNames.length === 0) return raw;
+
+  const pattern = new RegExp(
+    `<(${tagNames.join("|")})>(.*?)</\\1>`,
+    "gs",
+  );
+
+  const parts: ReactNode[] = [];
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+  let key = 0;
+
+  while ((match = pattern.exec(raw)) !== null) {
+    // Text before the match
+    if (match.index > lastIndex) {
+      parts.push(raw.slice(lastIndex, match.index));
+    }
+    const tagName = match[1];
+    const innerText = match[2];
+    const component = components[tagName];
+    parts.push(<React.Fragment key={key++}>{component(innerText)}</React.Fragment>);
+    lastIndex = match.index + match[0].length;
+  }
+
+  // Remaining text after last match
+  if (lastIndex < raw.length) {
+    parts.push(raw.slice(lastIndex));
+  }
+
+  return parts.length === 1 ? parts[0] : <>{parts}</>;
+}
 
 // Revalidate the page once per day (86400 seconds)
 export const revalidate = 86400;
@@ -20,179 +69,102 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 async function getContributors() {
-  // Get unclaimed users (original GitHub contributors from CSV import)
-  const unclaimedUsers = await db.user.findMany({
-    where: {
-      email: { endsWith: "@unclaimed.prompts.chat" },
-      username: { notIn: excludedFromCommunity },
-    },
-    select: {
-      id: true,
-      username: true,
-      githubUsername: true,
-      _count: {
-        select: {
-          prompts: true,
-          contributions: true,
-        },
-      },
-    },
-  });
+  // Get unclaimed users (original contributors from CSV import)
+  const unclaimedUsers = await db
+    .select({
+      id: users.id,
+      username: users.username,
+      githubUsername: users.githubUsername,
+      resourceCount: sql<number>`(SELECT count(*) FROM resources WHERE resources."authorId" = users.id)`.as("resourceCount"),
+    })
+    .from(users)
+    .where(
+      and(
+        sql`${users.email} LIKE '%@unclaimed.webmcp.land'`,
+        excludedFromCommunity.length > 0
+          ? notInArray(users.username, excludedFromCommunity)
+          : undefined,
+      ),
+    );
 
-  // Get GitHub-authenticated users with contributions
-  const githubUsers = await db.user.findMany({
-    where: {
-      githubUsername: { not: null, notIn: excludedFromCommunity },
-      email: { not: { endsWith: "@unclaimed.prompts.chat" } },
-      OR: [
-        { prompts: { some: {} } },
-        { contributions: { some: {} } },
-      ],
-    },
-    select: {
-      id: true,
-      username: true,
-      githubUsername: true,
-      _count: {
-        select: {
-          prompts: true,
-          contributions: true,
-        },
-      },
-    },
-  });
+  // Get GitHub-authenticated users with resources
+  const githubUsers = await db
+    .select({
+      id: users.id,
+      username: users.username,
+      githubUsername: users.githubUsername,
+      resourceCount: sql<number>`(SELECT count(*) FROM resources WHERE resources."authorId" = users.id)`.as("resourceCount"),
+    })
+    .from(users)
+    .where(
+      and(
+        isNotNull(users.githubUsername),
+        excludedFromCommunity.length > 0
+          ? notInArray(users.githubUsername, excludedFromCommunity)
+          : undefined,
+        sql`${users.email} NOT LIKE '%@unclaimed.webmcp.land'`,
+        sql`EXISTS (SELECT 1 FROM resources WHERE resources."authorId" = users.id)`,
+      ),
+    );
 
-  const allUsers = [...unclaimedUsers, ...githubUsers];
-  
-  return allUsers.sort((a, b) => {
-    const aTotal = a._count.prompts + a._count.contributions;
-    const bTotal = b._count.prompts + b._count.contributions;
-    return bTotal - aTotal;
-  });
+  const allUsers = [...unclaimedUsers, ...githubUsers].map((u) => ({
+    ...u,
+    resourceCount: Number(u.resourceCount),
+  }));
+
+  return allUsers.sort((a, b) => b.resourceCount - a.resourceCount);
 }
 
 const techStack = [
   {
-    era: "2022",
+    era: "2026",
     title: "The Beginning",
-    description: "HTML, CSS, and GitHub Pages. README.md parsed as HTML.",
+    description: "Built with Claude Opus 4.6.",
     tools: [
-      { name: "GitHub Pages", icon: "github" },
-    ],
-  },
-  {
-    era: "2024",
-    title: "UI Renewal",
-    description: "Fancier HTML/CSS UI built with Cursor and Claude Sonnet 3.5.",
-    tools: [
-      { name: "Cursor", icon: "cursor" },
-      { name: "Claude Sonnet 3.5", icon: "anthropic" },
-    ],
-  },
-  {
-    era: "2025",
-    title: "Current Version",
-    description: "Built with Windsurf and Claude Opus 4.5. Next.js hosted on Vercel.",
-    tools: [
-      { name: "Windsurf", icon: "windsurf" },
-      { name: "Claude Opus 4.5", icon: "anthropic" },
-      { name: "Next.js", icon: "nextjs" },
-      { name: "Vercel", icon: "vercel" },
-    ],
-  },
-  {
-    era: "iOS",
-    title: "Native App",
-    description: "Native iOS app built with Windsurf, Claude Opus 4.5 and SwiftUI.",
-    tools: [
-      { name: "Windsurf", icon: "windsurf" },
-      { name: "Claude Opus 4.5", icon: "anthropic" },
-      { name: "SwiftUI", icon: "swift" },
+      { name: "Claude Opus 4.6", icon: "anthropic" },
     ],
   },
 ];
 
-const coreContributors = [
+interface Contributor {
+  username: string;
+  displayName?: string;
+  role: string;
+  x?: string;
+  hf?: string;
+  isAI?: boolean;
+  icon?: string;
+}
+
+const coreContributors: Contributor[] = [
   {
-    username: "f",
+    username: "eser",
     role: "Founder, Core Maintainer, iOS & npm Package",
-    x: "fkadev",
-    hf: "fka",
+    x: "eserozvataf",
+    hf: "eserozvataf",
   },
   {
-    username: "fatihsolhan",
-    role: "Chrome Extension Maintainer",
-    x: "fatihsolhann",
-  },
-  {
-    username: "claude-opus-4.5",
-    displayName: "Claude Opus 4.5",
+    username: "claude-opus-4.6",
+    displayName: "Claude Opus 4.6",
     role: "Core Coder, DevOps, Frontend, Backend, DB",
     isAI: true,
     icon: "anthropic",
   },
-  {
-    username: "devin-ai",
-    displayName: "Devin AI",
-    role: "Feature Development",
-    isAI: true,
-    icon: "cognition",
-  },
-  {
-    username: "github-copilot",
-    displayName: "GitHub Copilot",
-    role: "PR checks, Feature Development",
-    isAI: true,
-    icon: "github-copilot",
-  },
 ];
 
-const designCredits = [
+const designCredits: Contributor[] = [
   {
-    username: "iuzn",
-    role: "Logo Animation",
-    x: "ibrahimuzn",
-  },
-  {
-    username: "gemini-nano-banana",
-    displayName: "Gemini Nano Banana",
-    role: "Logo Design",
-    isAI: true,
-    icon: "gemini",
-  },
-  {
-    username: "claude-opus-4.5-design",
-    displayName: "Claude Opus 4.5",
+    username: "claude-opus-4.6-design",
+    displayName: "Claude Opus 4.6",
     role: "App Design and Layout, Colors",
     isAI: true,
     icon: "anthropic",
   },
 ];
 
-const ideationCredits = [
-  {
-    username: "semihkislar",
-    role: "Product Ideas, Feedbacks",
-    x: "semihdev",
-  },
-  {
-    username: "merveenoyan",
-    displayName: "Merve Noyan",
-    role: "Hugging Face Dataset Support",
-    x: "mervenoyann",
-    hf: "merve",
-  },
-  {
-    username: "chatgpt",
-    displayName: "ChatGPT",
-    role: "The core idea of the app",
-    isAI: true,
-    icon: "openai",
-  },
-];
+const ideationCredits: Contributor[] = [];
 
-
-const excludedFromCommunity = ["f", "fatihsolhan", "iuzn", "semihkislar"];
+const excludedFromCommunity: string[] = [];
 
 function BrandIcon({ name }: { name: string }) {
   switch (name) {
@@ -214,10 +186,10 @@ function BrandIcon({ name }: { name: string }) {
           <path d="M18.665 21.978C16.758 23.255 14.465 24 12 24 5.377 24 0 18.623 0 12S5.377 0 12 0s12 5.377 12 12c0 3.583-1.574 6.801-4.067 9.001L9.219 7.2H7.2v9.596h1.615V9.251l9.85 12.727Zm-3.332-8.533 1.6 2.061V7.2h-1.6v6.245Z" />
         </svg>
       );
-    case "vercel":
+    case "coolify":
       return (
         <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-          <path d="m12 1.608 12 20.784H0Z" />
+          <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0Zm5.894 14.98a1.5 1.5 0 0 1-2.058.548l-3.336-1.926v3.898a1.5 1.5 0 1 1-3 0v-3.898l-3.336 1.926a1.5 1.5 0 1 1-1.51-2.594L8.018 11 4.654 9.066a1.5 1.5 0 0 1 1.51-2.594L9.5 8.398V4.5a1.5 1.5 0 1 1 3 0v3.898l3.336-1.926a1.5 1.5 0 1 1 1.51 2.594L13.982 11l3.364 1.934a1.5 1.5 0 0 1 .548 2.046Z" />
         </svg>
       );
     case "swift":
@@ -300,34 +272,20 @@ export default async function AboutPage() {
       <section className="mb-10 space-y-3">
         <h2 className="text-lg font-semibold">{t("storyTitle")}</h2>
         <p className="text-muted-foreground">
-          {t.rich("story1Rich", {
-            repoLink: (chunks) => (
-              <Link href="https://github.com/f/prompts.chat" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">
-                {chunks}
+          {richText(t("story1Rich"), {
+            repoLink: (children) => (
+              <Link href="https://github.com/f/awesome-chatgpt-prompts" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">
+                {children}
               </Link>
             ),
-            authorLink: (chunks) => (
+            authorLink: (children) => (
               <Link href="https://github.com/f" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">
-                {chunks}
+                {children}
               </Link>
             ),
           })}
         </p>
         <p className="text-muted-foreground">{t("story2")}</p>
-        <p className="text-muted-foreground">
-          {t.rich("testimonialsRich", {
-            gregLink: (chunks) => (
-              <Link href="https://x.com/gdb/status/1602072566671110144" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">
-                {chunks}
-              </Link>
-            ),
-            wojciechLink: (chunks) => (
-              <Link href="https://x.com/wojaborza/status/1601656950281605120" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">
-                {chunks}
-              </Link>
-            ),
-          })}
-        </p>
         <p className="text-muted-foreground font-medium">{t("openSource")}</p>
       </section>
 
@@ -335,15 +293,15 @@ export default async function AboutPage() {
       <section className="mb-10 space-y-3">
         <h2 className="text-lg font-semibold">{t("goalTitle")}</h2>
         <p className="text-muted-foreground">
-          {t.rich("goal1Rich", {
-            bold: (chunks) => <strong className="text-foreground">{chunks}</strong>,
+          {richText(t("goal1Rich"), {
+            bold: (children) => <strong className="text-foreground">{children}</strong>,
           })}
         </p>
         <p className="text-muted-foreground">
-          {t.rich("goal2Rich", {
-            licenseLink: (chunks) => (
-              <Link href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">
-                {chunks}
+          {richText(t("goal2Rich"), {
+            licenseLink: (children) => (
+              <Link href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">
+                {children}
               </Link>
             ),
           })}
@@ -355,115 +313,19 @@ export default async function AboutPage() {
       <section className="mb-10">
         <h2 className="text-lg font-semibold mb-4">{t("achievementsTitle")}</h2>
         <div className="space-y-6">
-          {/* Press & Media */}
-          <div>
-            <h3 className="text-sm font-medium mb-2">{t("pressCategoryTitle")}</h3>
-            <ul className="space-y-1.5 text-sm text-muted-foreground">
-              <li>
-                {t.rich("featuredForbes", {
-                  link: (chunks) => (
-                    <Link href="https://www.forbes.com/sites/bernardmarr/2023/05/17/the-best-prompts-for-chatgpt-a-complete-guide/" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">
-                      {chunks}
-                    </Link>
-                  ),
-                })}
-              </li>
-              <li>
-                {t.rich("featuredTagesspiegel", {
-                  link: (chunks) => (
-                    <Link href="https://www.linkedin.com/posts/fatihkadirakin_i-was-on-german-der-tagesspiegel-newspaper-activity-7061622588774432769-o6Bc/" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">
-                      {chunks}
-                    </Link>
-                  ),
-                })}
-              </li>
-            </ul>
-          </div>
-
-          {/* Academic Recognition */}
-          <div>
-            <h3 className="text-sm font-medium mb-2">{t("academicCategoryTitle")}</h3>
-            <ul className="space-y-1.5 text-sm text-muted-foreground">
-              <li>
-                {t.rich("referencedHarvard", {
-                  link: (chunks) => (
-                    <Link href="https://www.huit.harvard.edu/news/ai-prompts" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">
-                      {chunks}
-                    </Link>
-                  ),
-                })}
-              </li>
-              <li>
-                {t.rich("referencedColumbia", {
-                  link: (chunks) => (
-                    <Link href="https://etc.cuit.columbia.edu/news/columbia-prompt-library-effective-academic-ai-use" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">
-                      {chunks}
-                    </Link>
-                  ),
-                })}
-              </li>
-              <li>
-                {t.rich("referencedOlympic", {
-                  link: (chunks) => (
-                    <Link href="https://libguides.olympic.edu/UsingAI/Prompts" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">
-                      {chunks}
-                    </Link>
-                  ),
-                })}
-              </li>
-              <li>
-                {t.rich("googleScholarCitations", {
-                  link: (chunks) => (
-                    <Link href="https://scholar.google.com/citations?user=AZ0Dg8YAAAAJ&hl=en" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">
-                      {chunks}
-                    </Link>
-                  ),
-                })}
-              </li>
-            </ul>
-          </div>
-
           {/* Community & GitHub */}
           <div>
             <h3 className="text-sm font-medium mb-2">{t("communityCategoryTitle")}</h3>
             <ul className="space-y-1.5 text-sm text-muted-foreground">
               <li>
-                {t.rich("githubStars", {
-                  link: (chunks) => (
-                    <Link href="https://github.com/f/prompts.chat" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">
-                      {chunks}
+                {richText(t("githubStars"), {
+                  link: (children) => (
+                    <Link href="https://github.com/eser/webmcp.land" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">
+                      {children}
                     </Link>
                   ),
                 })}
               </li>
-              <li>
-                {t.rich("githubStaffPick", {
-                  link: (chunks) => (
-                    <Link href="https://spotlights-feed.github.com/spotlights/prompts-chat/index/" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">
-                      {chunks}
-                    </Link>
-                  ),
-                })}
-              </li>
-              <li>
-                {t.rich("referencedGithubBlog", {
-                  link: (chunks) => (
-                    <Link href="https://github.blog/changelog/2025-02-14-personal-custom-instructions-bing-web-search-and-more-in-copilot-on-github-com/" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">
-                      {chunks}
-                    </Link>
-                  ),
-                })}
-              </li>
-              <li>
-                {t.rich("huggingFace", {
-                  link: (chunks) => (
-                    <Link href="https://huggingface.co/datasets/fka/prompts.chat" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">
-                      {chunks}
-                    </Link>
-                  ),
-                })}
-              </li>
-              <li>{t("usedByDevelopers")}</li>
             </ul>
           </div>
         </div>
@@ -511,7 +373,7 @@ export default async function AboutPage() {
             >
               {contributor.isAI ? (
                 <div className="flex items-center justify-center w-10 h-10 rounded-full bg-muted shrink-0">
-                  <BrandIcon name={contributor.icon} />
+                  <BrandIcon name={contributor.icon ?? ""} />
                 </div>
               ) : (
                 <Image
@@ -577,7 +439,7 @@ export default async function AboutPage() {
             >
               {contributor.isAI ? (
                 <div className="flex items-center justify-center w-10 h-10 rounded-full bg-muted shrink-0">
-                  <BrandIcon name={contributor.icon} />
+                  <BrandIcon name={contributor.icon ?? ""} />
                 </div>
               ) : (
                 <Image
@@ -632,7 +494,7 @@ export default async function AboutPage() {
             >
               {contributor.isAI ? (
                 <div className="flex items-center justify-center w-10 h-10 rounded-full bg-muted shrink-0">
-                  <BrandIcon name={contributor.icon} />
+                  <BrandIcon name={contributor.icon ?? ""} />
                 </div>
               ) : (
                 <Image
@@ -681,13 +543,13 @@ export default async function AboutPage() {
         <h2 className="text-lg font-semibold mb-4">{t("communityContributorsTitle")}</h2>
         <div className="flex flex-wrap gap-1.5">
           {contributors.map((user) => (
-            <ContributorAvatar 
-              key={user.id} 
-              username={user.githubUsername || user.username} 
+            <ContributorAvatar
+              key={user.id}
+              username={user.githubUsername || user.username}
             />
           ))}
           <Link
-            href="https://github.com/f/prompts.chat/graphs/contributors"
+            href="https://github.com/eser/webmcp.land/graphs/contributors"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center w-8 h-8 rounded-full border border-dashed text-muted-foreground hover:text-primary hover:border-primary transition-colors text-xs"
@@ -698,7 +560,7 @@ export default async function AboutPage() {
         <p className="text-sm text-muted-foreground mt-3">
           {t("viewAllContributors")}{" "}
           <Link
-            href="https://github.com/f/prompts.chat/graphs/contributors"
+            href="https://github.com/eser/webmcp.land/graphs/contributors"
             target="_blank"
             rel="noopener noreferrer"
             className="underline hover:text-foreground"
@@ -720,7 +582,7 @@ export default async function AboutPage() {
             </div>
             <p className="text-sm text-muted-foreground mb-3 flex-1">{t("githubSponsorsDescription")}</p>
             <Link
-              href="https://github.com/sponsors/f/sponsorships?tier_id=558224"
+              href="https://github.com/sponsors/eser/sponsorships?tier_id=558224"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"

@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { and, count, eq, isNull } from "drizzle-orm";
+import { getSession } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { generatePromptSlug } from "@/lib/slug";
+import { resources } from "@/lib/schema";
+import { generateResourceSlug } from "@/lib/slug";
 
 export async function POST(request: Request) {
   try {
-    const session = await auth();
+    const session = await getSession();
 
     if (!session?.user || session.user.role !== "ADMIN") {
       return NextResponse.json(
@@ -17,21 +19,22 @@ export async function POST(request: Request) {
     const { searchParams } = new URL(request.url);
     const regenerateAll = searchParams.get("regenerate") === "true";
 
-    // Get prompts that need slug generation
-    const whereClause = regenerateAll
-      ? { deletedAt: null }
-      : { slug: null, deletedAt: null };
+    // Get resources that need slug generation
+    const conditions = [isNull(resources.deletedAt)];
+    if (!regenerateAll) {
+      conditions.push(isNull(resources.slug));
+    }
 
-    const prompts = await db.prompt.findMany({
-      where: whereClause,
-      select: { id: true, title: true },
-    });
+    const resourceRows = await db
+      .select({ id: resources.id, title: resources.title })
+      .from(resources)
+      .where(and(...conditions));
 
-    if (prompts.length === 0) {
+    if (resourceRows.length === 0) {
       return NextResponse.json({
         success: true,
         updated: 0,
-        message: "No prompts to update",
+        message: "No resources to update",
       });
     }
 
@@ -42,27 +45,27 @@ export async function POST(request: Request) {
         let success = 0;
         let failed = 0;
 
-        for (let i = 0; i < prompts.length; i++) {
-          const prompt = prompts[i];
-          
+        for (let i = 0; i < resourceRows.length; i++) {
+          const resource = resourceRows[i];
+
           try {
-            const slug = await generatePromptSlug(prompt.title);
-            
-            await db.prompt.update({
-              where: { id: prompt.id },
-              data: { slug },
-            });
-            
+            const slug = await generateResourceSlug(resource.title);
+
+            await db
+              .update(resources)
+              .set({ slug })
+              .where(eq(resources.id, resource.id));
+
             success++;
           } catch (error) {
-            console.error(`Failed to generate slug for prompt ${prompt.id}:`, error);
+            console.error(`Failed to generate slug for resource ${resource.id}:`, error);
             failed++;
           }
 
           // Send progress update
           const progress = {
             current: i + 1,
-            total: prompts.length,
+            total: resourceRows.length,
             success,
             failed,
             done: false,
@@ -72,8 +75,8 @@ export async function POST(request: Request) {
 
         // Send final result
         const finalResult = {
-          current: prompts.length,
-          total: prompts.length,
+          current: resourceRows.length,
+          total: resourceRows.length,
           success,
           failed,
           done: true,
@@ -102,7 +105,7 @@ export async function POST(request: Request) {
 // GET endpoint to check slug status
 export async function GET() {
   try {
-    const session = await auth();
+    const session = await getSession();
 
     if (!session?.user || session.user.role !== "ADMIN") {
       return NextResponse.json(
@@ -111,23 +114,25 @@ export async function GET() {
       );
     }
 
-    const [promptsWithoutSlugs, totalPrompts] = await Promise.all([
-      db.prompt.count({
-        where: {
-          slug: null,
-          deletedAt: null,
-        },
-      }),
-      db.prompt.count({
-        where: {
-          deletedAt: null,
-        },
-      }),
+    const [[{ resourcesWithoutSlugs }], [{ totalResources }]] = await Promise.all([
+      db
+        .select({ resourcesWithoutSlugs: count() })
+        .from(resources)
+        .where(
+          and(
+            isNull(resources.slug),
+            isNull(resources.deletedAt),
+          )
+        ),
+      db
+        .select({ totalResources: count() })
+        .from(resources)
+        .where(isNull(resources.deletedAt)),
     ]);
 
     return NextResponse.json({
-      promptsWithoutSlugs,
-      totalPrompts,
+      resourcesWithoutSlugs,
+      totalResources,
     });
   } catch (error) {
     console.error("Get slug status error:", error);

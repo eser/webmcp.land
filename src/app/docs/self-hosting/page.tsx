@@ -1,8 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Server, Database, Key, Palette, Globe, Settings, Cpu } from "lucide-react";
-import DeepWikiIcon from "@/../public/deepwiki.svg";
-import Context7Icon from "@/../public/context7.svg";
 import {
   Table,
   TableBody,
@@ -13,8 +11,8 @@ import {
 } from "@/components/ui/table";
 
 export const metadata = {
-  title: "Self-Hosting Guide - prompts.chat",
-  description: "Deploy your own prompts.chat instance with customizable branding, themes, and authentication",
+  title: "Self-Hosting Guide - webmcp.land",
+  description: "Deploy your own webmcp.land instance with customizable branding, themes, and authentication",
 };
 
 export default function SelfHostingPage() {
@@ -22,7 +20,7 @@ export default function SelfHostingPage() {
     <div className="container max-w-4xl py-10">
       <h1 className="text-2xl font-bold mb-2">Self-Hosting Guide</h1>
       <p className="text-muted-foreground mb-8">
-        Deploy your own prompts.chat instance with customizable branding, themes, and authentication.
+        Deploy your own webmcp.land instance with customizable branding, themes, and authentication.
       </p>
 
       <div className="prose prose-neutral dark:prose-invert max-w-none space-y-10">
@@ -33,31 +31,31 @@ export default function SelfHostingPage() {
             What You Get
           </h2>
           <ul className="list-disc list-inside text-muted-foreground space-y-1">
-            <li>Curated prompt library with 100+ community-tested prompts</li>
+            <li>Curated resource library with 100+ community-tested resources</li>
             <li>Custom branding, logos, and themes</li>
             <li>Multiple auth providers (GitHub, Google, Azure, credentials)</li>
             <li>AI-powered semantic search and generation (optional)</li>
             <li>Multi-language support (11 locales)</li>
-            <li>CC0 licensed - use freely for any purpose</li>
+            <li>Apache-2.0 licensed - use freely for any purpose</li>
           </ul>
         </section>
 
         {/* Using Documentation AI-Agents */}
         <section className="space-y-6">
           <h2 className="text-xl font-bold">Using Documentation AI-Agents</h2>
-          
+
           <div className="grid md:grid-cols-2 gap-6">
             {/* DeepWiki */}
             <div className="space-y-4">
               <h3 className="text-lg font-semibold flex items-center gap-2">
-                <Image src={DeepWikiIcon} alt="" width={20} height={20} />
+                <Image src="/deepwiki.svg" alt="" width={20} height={20} />
                 DeepWiki
               </h3>
               <p className="text-muted-foreground">
-                <Link 
-                  href="https://deepwiki.com/f/prompts.chat" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
+                <Link
+                  href="https://deepwiki.com/eser/webmcp.land"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="underline hover:text-foreground"
                 >
                   DeepWiki
@@ -75,14 +73,14 @@ export default function SelfHostingPage() {
             {/* Context7 */}
             <div className="space-y-4">
               <h3 className="text-lg font-semibold flex items-center gap-2">
-                <Image src={Context7Icon} alt="" width={20} height={20} className="rounded" />
+                <Image src="/context7.svg" alt="" width={20} height={20} className="rounded" />
                 Context7
               </h3>
               <p className="text-muted-foreground">
-                <Link 
-                  href="https://context7.com/f/prompts.chat?tab=chat" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
+                <Link
+                  href="https://context7.com/eser/webmcp.land?tab=chat"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="underline hover:text-foreground"
                 >
                   Context7
@@ -121,8 +119,8 @@ export default function SelfHostingPage() {
             <h3 className="text-lg font-semibold">Quick Start</h3>
           <div className="bg-muted rounded-lg p-4 font-mono text-sm space-y-1 overflow-x-auto">
             <p className="text-muted-foreground"># Clone the repository</p>
-            <p>git clone https://github.com/f/prompts.chat.git</p>
-            <p>cd prompts.chat</p>
+            <p>git clone https://github.com/eser/webmcp.land.git</p>
+            <p>cd webmcp.land</p>
             <p className="text-muted-foreground mt-3"># Install dependencies</p>
             <p>npm install</p>
             <p className="text-muted-foreground mt-3"># Configure environment</p>
@@ -162,12 +160,12 @@ export default function SelfHostingPage() {
                     <TableCell className="text-muted-foreground text-sm">PostgreSQL connection string. Add <code className="text-xs">?connection_limit=5&pool_timeout=10</code> for serverless.</TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell className="font-mono text-xs">NEXTAUTH_URL</TableCell>
+                    <TableCell className="font-mono text-xs">BETTER_AUTH_URL</TableCell>
                     <TableCell className="text-muted-foreground text-sm">Your app URL (e.g., <code className="text-xs">http://localhost:3000</code>)</TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell className="font-mono text-xs">NEXTAUTH_SECRET</TableCell>
-                    <TableCell className="text-muted-foreground text-sm">Random secret for NextAuth session encryption</TableCell>
+                    <TableCell className="font-mono text-xs">BETTER_AUTH_SECRET</TableCell>
+                    <TableCell className="text-muted-foreground text-sm">Random secret for session encryption</TableCell>
                   </TableRow>
                 </TableBody>
               </Table>
@@ -323,10 +321,10 @@ export default function SelfHostingPage() {
           <div className="space-y-6">
             <h3 className="text-lg font-semibold flex items-center gap-2">
               <Palette className="h-5 w-5" />
-              Configuration (prompts.config.ts)
+              Configuration (webmcp.config.ts)
             </h3>
           <p className="text-muted-foreground">
-            Customize your instance by editing <code className="bg-muted px-1.5 py-0.5 rounded text-sm">prompts.config.ts</code>:
+            Customize your instance by editing <code className="bg-muted px-1.5 py-0.5 rounded text-sm">webmcp.config.ts</code>:
           </p>
 
           {/* Branding */}
@@ -486,9 +484,9 @@ export default function SelfHostingPage() {
                 </TableHeader>
                 <TableBody>
                   <TableRow>
-                    <TableCell className="font-mono text-xs">privatePrompts</TableCell>
+                    <TableCell className="font-mono text-xs">privateResources</TableCell>
                     <TableCell className="text-muted-foreground text-xs">true</TableCell>
-                    <TableCell className="text-muted-foreground text-sm">Allow users to create private prompts</TableCell>
+                    <TableCell className="text-muted-foreground text-sm">Allow users to create private resources</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell className="font-mono text-xs">changeRequests</TableCell>
@@ -498,12 +496,12 @@ export default function SelfHostingPage() {
                   <TableRow>
                     <TableCell className="font-mono text-xs">categories</TableCell>
                     <TableCell className="text-muted-foreground text-xs">true</TableCell>
-                    <TableCell className="text-muted-foreground text-sm">Enable prompt categories</TableCell>
+                    <TableCell className="text-muted-foreground text-sm">Enable resource categories</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell className="font-mono text-xs">tags</TableCell>
                     <TableCell className="text-muted-foreground text-xs">true</TableCell>
-                    <TableCell className="text-muted-foreground text-sm">Enable prompt tags</TableCell>
+                    <TableCell className="text-muted-foreground text-sm">Enable resource tags</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell className="font-mono text-xs">aiSearch</TableCell>
@@ -533,12 +531,12 @@ export default function SelfHostingPage() {
           <ul className="list-disc list-inside text-muted-foreground space-y-1">
             <li>Display your branding name and description on the homepage</li>
             <li>Use your logo as the hero background watermark</li>
-            <li>Hide prompts.chat achievements (GitHub stars, Forbes, etc.)</li>
+            <li>Hide webmcp.land achievements (GitHub stars, Forbes, etc.)</li>
             <li>Hide sponsor section and &quot;Become a Sponsor&quot; CTA</li>
             <li>Hide &quot;Clone on GitHub&quot; button</li>
           </ul>
           <div className="bg-muted rounded-lg p-4 font-mono text-sm">
-            <p className="text-muted-foreground">{"// prompts.config.ts"}</p>
+            <p className="text-muted-foreground">{"// webmcp.config.ts"}</p>
             <p>const useCloneBranding = true;</p>
           </div>
           </div>
@@ -554,7 +552,7 @@ export default function SelfHostingPage() {
             <p>npm run start</p>
           </div>
           <p className="text-muted-foreground">
-            Deploy to Vercel, Railway, Render, or any Node.js hosting platform. Make sure to set all environment variables in your hosting provider&apos;s dashboard.
+            Deploy to Coolify, Railway, Render, or any Node.js hosting platform. Make sure to set all environment variables in your hosting provider&apos;s dashboard.
           </p>
           </div>
 
@@ -563,19 +561,19 @@ export default function SelfHostingPage() {
             <h3 className="text-lg font-semibold">Support</h3>
           <p className="text-muted-foreground">
             For issues and questions, please open a{" "}
-            <Link 
-              href="https://github.com/f/prompts.chat/issues" 
-              target="_blank" 
-              rel="noopener noreferrer" 
+            <Link
+              href="https://github.com/eser/webmcp.land/issues"
+              target="_blank"
+              rel="noopener noreferrer"
               className="underline hover:text-foreground"
             >
               GitHub Issue
             </Link>
             . For the complete documentation, see the{" "}
-            <Link 
-              href="https://github.com/f/prompts.chat/blob/main/SELF-HOSTING.md" 
-              target="_blank" 
-              rel="noopener noreferrer" 
+            <Link
+              href="https://github.com/eser/webmcp.land/blob/main/SELF-HOSTING.md"
+              target="_blank"
+              rel="noopener noreferrer"
               className="underline hover:text-foreground"
             >
               SELF-HOSTING.md

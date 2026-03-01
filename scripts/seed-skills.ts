@@ -1,19 +1,25 @@
 /**
  * Seed script to import skills from Anthropic's skills repository
- * 
+ *
  * Usage:
  *   npx tsx scripts/seed-skills.ts [skill-name]
- * 
+ *
  * Examples:
  *   npx tsx scripts/seed-skills.ts pdf
  *   npx tsx scripts/seed-skills.ts --all
  */
 
-import { PrismaClient } from "@prisma/client";
+import { drizzle } from "drizzle-orm/node-postgres";
+import { eq, and } from "drizzle-orm";
+import { Pool } from "pg";
 import * as fs from "fs";
 import * as path from "path";
+import * as schema from "../src/lib/schema.js";
 
-const prisma = new PrismaClient();
+const { users, prompts } = schema;
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+const db = drizzle({ client: pool, schema });
 
 // File separator uses ASCII control characters (injection-proof):
 // \x1F (Unit Separator, ASCII 31) marks start
@@ -31,7 +37,7 @@ interface SkillMetadata {
  */
 function parseFrontmatter(content: string): { metadata: SkillMetadata; body: string } {
   const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
-  
+
   if (!frontmatterMatch) {
     return {
       metadata: { name: "Unknown", description: "" },
@@ -72,7 +78,7 @@ function readSkillFiles(skillDir: string, basePath: string = ""): Array<{ path: 
     } else if (entry.isFile()) {
       // Skip binary files and hidden files
       if (entry.name.startsWith(".")) continue;
-      
+
       try {
         const content = fs.readFileSync(fullPath, "utf-8");
         files.push({ path: relativePath, content });
@@ -132,34 +138,35 @@ async function importSkill(skillDir: string, authorId: string): Promise<void> {
   const content = serializeSkillFiles(files);
 
   // Check if skill already exists
-  const existing = await prisma.prompt.findFirst({
-    where: {
-      title: metadata.name,
-      type: "SKILL",
-      authorId,
-    },
-  });
+  const [existing] = await db
+    .select({ id: prompts.id })
+    .from(prompts)
+    .where(
+      and(
+        eq(prompts.title, metadata.name),
+        eq(prompts.type, "SKILL"),
+        eq(prompts.authorId, authorId),
+      ),
+    );
 
   if (existing) {
     console.log(`  Skill "${metadata.name}" already exists, updating...`);
-    await prisma.prompt.update({
-      where: { id: existing.id },
-      data: {
+    await db
+      .update(prompts)
+      .set({
         content,
         description: metadata.description,
-      },
-    });
+      })
+      .where(eq(prompts.id, existing.id));
   } else {
     // Create new skill
-    await prisma.prompt.create({
-      data: {
-        title: metadata.name,
-        description: metadata.description,
-        content,
-        type: "SKILL",
-        authorId,
-        isPrivate: false,
-      },
+    await db.insert(prompts).values({
+      title: metadata.name,
+      description: metadata.description,
+      content,
+      type: "SKILL",
+      authorId,
+      isPrivate: false,
     });
     console.log(`  Created skill: ${metadata.name}`);
   }
@@ -170,14 +177,14 @@ async function importSkill(skillDir: string, authorId: string): Promise<void> {
  */
 async function main() {
   const args = process.argv.slice(2);
-  
+
   if (args.length === 0) {
     console.log("Usage:");
     console.log("  npx tsx scripts/seed-skills.ts <skill-name>  - Import a specific skill");
     console.log("  npx tsx scripts/seed-skills.ts --all         - Import all skills");
     console.log("  npx tsx scripts/seed-skills.ts --list        - List available skills");
     console.log("\nAvailable skills:");
-    
+
     const skillsDir = "/tmp/anthropic-skills/skills";
     if (fs.existsSync(skillsDir)) {
       const skills = fs.readdirSync(skillsDir, { withFileTypes: true })
@@ -191,23 +198,31 @@ async function main() {
   }
 
   // Find or create admin user for importing
-  let author = await prisma.user.findFirst({
-    where: { role: "ADMIN" },
-  });
+  const [author] = await db
+    .select()
+    .from(users)
+    .where(eq(users.role, "ADMIN"))
+    .limit(1);
+
+  let authorId: string;
 
   if (!author) {
     console.log("No admin user found. Creating system user...");
-    author = await prisma.user.create({
-      data: {
-        email: "system@prompts.chat",
+    const [newAuthor] = await db
+      .insert(users)
+      .values({
+        email: "system@webmcp.land",
         username: "system",
         name: "System",
         role: "ADMIN",
-      },
-    });
+      })
+      .returning();
+    authorId = newAuthor.id;
+    console.log(`Using author: system (${authorId})`);
+  } else {
+    authorId = author.id;
+    console.log(`Using author: ${author.username} (${authorId})`);
   }
-
-  console.log(`Using author: ${author.username} (${author.id})`);
 
   const skillsBaseDir = "/tmp/anthropic-skills/skills";
 
@@ -227,7 +242,7 @@ async function main() {
 
     for (const skillDir of skillDirs) {
       try {
-        await importSkill(skillDir, author.id);
+        await importSkill(skillDir, authorId);
       } catch (e) {
         console.error(`  ERROR importing ${path.basename(skillDir)}:`, e);
       }
@@ -237,13 +252,13 @@ async function main() {
     const skills = fs.readdirSync(skillsBaseDir, { withFileTypes: true })
       .filter((d) => d.isDirectory())
       .map((d) => d.name);
-    
+
     console.log("Available skills:");
     skills.forEach((s) => console.log(`  - ${s}`));
   } else {
     // Import specific skill
     const skillDir = path.join(skillsBaseDir, args[0]);
-    
+
     if (!fs.existsSync(skillDir)) {
       console.error(`Skill not found: ${args[0]}`);
       console.log("\nAvailable skills:");
@@ -254,7 +269,7 @@ async function main() {
       return;
     }
 
-    await importSkill(skillDir, author.id);
+    await importSkill(skillDir, authorId);
   }
 
   console.log("\nDone!");
@@ -266,5 +281,5 @@ main()
     process.exit(1);
   })
   .finally(async () => {
-    await prisma.$disconnect();
+    await pool.end();
   });

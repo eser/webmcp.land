@@ -17,8 +17,8 @@ afterAll(() => {
 });
 
 // Mock environment variables
-process.env.NEXTAUTH_SECRET = "test-secret";
-process.env.NEXTAUTH_URL = "http://localhost:3000";
+process.env.BETTER_AUTH_SECRET = "test-secret";
+process.env.BETTER_AUTH_URL = "http://localhost:3000";
 process.env.DATABASE_URL = "postgresql://test:test@localhost:5432/test";
 
 // Mock next/navigation
@@ -63,7 +63,7 @@ vi.mock("next-intl", () => ({
   getTranslations: () => Promise.resolve((key: string) => key),
 }));
 
-// Mock Prisma client
+// Mock database client
 vi.mock("@/lib/db", () => ({
   db: {
     user: {

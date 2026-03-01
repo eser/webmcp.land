@@ -1,13 +1,14 @@
+import { and, eq, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
-import { WebhookEvent } from "@prisma/client";
+import { webhookConfigs } from "@/lib/schema";
+import type { WebhookEvent } from "@/lib/schema";
 
-interface PromptData {
+interface ResourceData {
   id: string;
   title: string;
   description: string | null;
-  content: string;
-  type: string;
-  mediaUrl: string | null;
+  endpointUrl: string;
+  serverType: string;
   isPrivate: boolean;
   author: {
     username: string;
@@ -23,13 +24,12 @@ interface PromptData {
 
 // Available placeholders for webhook payloads
 export const WEBHOOK_PLACEHOLDERS = {
-  PROMPT_ID: "{{PROMPT_ID}}",
-  PROMPT_TITLE: "{{PROMPT_TITLE}}",
-  PROMPT_DESCRIPTION: "{{PROMPT_DESCRIPTION}}",
-  PROMPT_CONTENT: "{{PROMPT_CONTENT}}",
-  PROMPT_TYPE: "{{PROMPT_TYPE}}",
-  PROMPT_URL: "{{PROMPT_URL}}",
-  PROMPT_MEDIA_URL: "{{PROMPT_MEDIA_URL}}",
+  RESOURCE_ID: "{{RESOURCE_ID}}",
+  RESOURCE_TITLE: "{{RESOURCE_TITLE}}",
+  RESOURCE_DESCRIPTION: "{{RESOURCE_DESCRIPTION}}",
+  RESOURCE_ENDPOINT_URL: "{{RESOURCE_ENDPOINT_URL}}",
+  RESOURCE_TYPE: "{{RESOURCE_TYPE}}",
+  RESOURCE_URL: "{{RESOURCE_URL}}",
   AUTHOR_USERNAME: "{{AUTHOR_USERNAME}}",
   AUTHOR_NAME: "{{AUTHOR_NAME}}",
   AUTHOR_AVATAR: "{{AUTHOR_AVATAR}}",
@@ -37,17 +37,16 @@ export const WEBHOOK_PLACEHOLDERS = {
   TAGS: "{{TAGS}}",
   TIMESTAMP: "{{TIMESTAMP}}",
   SITE_URL: "{{SITE_URL}}",
-  CHATGPT_URL: "{{CHATGPT_URL}}",
 } as const;
 
-// Slack Block Kit preset for new prompts
+// Slack Block Kit preset for new resources
 export const SLACK_PRESET_PAYLOAD = `{
   "blocks": [
     {
       "type": "header",
       "text": {
         "type": "plain_text",
-        "text": "{{PROMPT_TITLE}}",
+        "text": "{{RESOURCE_TITLE}}",
         "emoji": true
       }
     },
@@ -58,28 +57,18 @@ export const SLACK_PRESET_PAYLOAD = `{
           "type": "button",
           "text": {
             "type": "plain_text",
-            "text": "View Prompt",
+            "text": "View Resource",
             "emoji": true
           },
-          "url": "{{PROMPT_URL}}",
+          "url": "{{RESOURCE_URL}}",
           "style": "primary",
-          "action_id": "view_prompt"
+          "action_id": "view_resource"
         },
         {
           "type": "button",
           "text": {
             "type": "plain_text",
-            "text": "Run in ChatGPT",
-            "emoji": true
-          },
-          "url": "{{CHATGPT_URL}}",
-          "action_id": "run_chatgpt"
-        },
-        {
-          "type": "button",
-          "text": {
-            "type": "plain_text",
-            "text": "{{PROMPT_TYPE}}",
+            "text": "{{RESOURCE_TYPE}}",
             "emoji": true
           },
           "action_id": "type_badge"
@@ -90,14 +79,14 @@ export const SLACK_PRESET_PAYLOAD = `{
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "\`\`\`{{PROMPT_CONTENT}}\`\`\`"
+        "text": "{{RESOURCE_DESCRIPTION}}"
       }
     },
     {
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "{{PROMPT_DESCRIPTION}}"
+        "text": "Endpoint: \`{{RESOURCE_ENDPOINT_URL}}\`"
       }
     },
     {
@@ -127,7 +116,7 @@ export const SLACK_PRESET_PAYLOAD = `{
         },
         {
           "type": "mrkdwn",
-          "text": "Created by *{{AUTHOR_NAME}}* on {{TIMESTAMP}}"
+          "text": "Registered by *{{AUTHOR_NAME}}* on {{TIMESTAMP}}"
         }
       ]
     },
@@ -160,49 +149,49 @@ function isPrivateUrl(urlString: string): boolean {
   try {
     const url = new URL(urlString);
     const hostname = url.hostname.toLowerCase();
-    
+
     // Block localhost variations
     if (hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '::1') {
       return true;
     }
-    
+
     // Block common internal hostnames
     if (hostname.endsWith('.local') || hostname.endsWith('.internal') || hostname.endsWith('.localhost')) {
       return true;
     }
-    
+
     // Check for IP addresses in private ranges
     const ipv4Regex = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/;
     const match = hostname.match(ipv4Regex);
-    
+
     if (match) {
       const [, a, b, c] = match.map(Number);
-      
+
       // 127.0.0.0/8 - Loopback
       if (a === 127) return true;
-      
+
       // 10.0.0.0/8 - Private
       if (a === 10) return true;
-      
+
       // 172.16.0.0/12 - Private (172.16.0.0 - 172.31.255.255)
       if (a === 172 && b >= 16 && b <= 31) return true;
-      
+
       // 192.168.0.0/16 - Private
       if (a === 192 && b === 168) return true;
-      
+
       // 169.254.0.0/16 - Link-local
       if (a === 169 && b === 254) return true;
-      
+
       // 0.0.0.0/8 - Current network
       if (a === 0) return true;
-      
+
       // 224.0.0.0/4 - Multicast
       if (a >= 224 && a <= 239) return true;
-      
+
       // 240.0.0.0/4 - Reserved
       if (a >= 240) return true;
     }
-    
+
     // Block IPv6 loopback and link-local
     if (hostname.startsWith('[')) {
       const ipv6 = hostname.slice(1, -1).toLowerCase();
@@ -210,7 +199,7 @@ function isPrivateUrl(urlString: string): boolean {
         return true;
       }
     }
-    
+
     return false;
   } catch {
     // Invalid URL - treat as potentially dangerous
@@ -220,25 +209,23 @@ function isPrivateUrl(urlString: string): boolean {
 
 export { isPrivateUrl };
 
-function replacePlaceholders(template: string, prompt: PromptData): string {
-  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://prompts.chat";
-  const promptUrl = `${siteUrl}/prompts/${prompt.id}`;
+function replacePlaceholders(template: string, resource: ResourceData): string {
+  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://webmcp.land";
+  const resourceUrl = `${siteUrl}/resources/${resource.id}`;
   const defaultAvatar = `${siteUrl}/default-avatar.png`;
-  const chatgptUrl = `https://chat.openai.com/?prompt=${encodeURIComponent(prompt.content)}`;
 
   const replacements: Record<string, string> = {
-    [WEBHOOK_PLACEHOLDERS.PROMPT_ID]: prompt.id,
-    [WEBHOOK_PLACEHOLDERS.PROMPT_TITLE]: escapeJsonString(prompt.title),
-    [WEBHOOK_PLACEHOLDERS.PROMPT_DESCRIPTION]: escapeJsonString(prompt.description || "No description"),
-    [WEBHOOK_PLACEHOLDERS.PROMPT_CONTENT]: escapeJsonString(truncate(prompt.content, 2000)),
-    [WEBHOOK_PLACEHOLDERS.PROMPT_TYPE]: prompt.type,
-    [WEBHOOK_PLACEHOLDERS.PROMPT_URL]: promptUrl,
-    [WEBHOOK_PLACEHOLDERS.PROMPT_MEDIA_URL]: prompt.mediaUrl || "",
-    [WEBHOOK_PLACEHOLDERS.AUTHOR_USERNAME]: prompt.author.username,
-    [WEBHOOK_PLACEHOLDERS.AUTHOR_NAME]: escapeJsonString(prompt.author.name || prompt.author.username),
-    [WEBHOOK_PLACEHOLDERS.AUTHOR_AVATAR]: prompt.author.avatar || defaultAvatar,
-    [WEBHOOK_PLACEHOLDERS.CATEGORY_NAME]: prompt.category?.name || "Uncategorized",
-    [WEBHOOK_PLACEHOLDERS.TAGS]: prompt.tags.map((t) => t.tag.name).join(", ") || "None",
+    [WEBHOOK_PLACEHOLDERS.RESOURCE_ID]: resource.id,
+    [WEBHOOK_PLACEHOLDERS.RESOURCE_TITLE]: escapeJsonString(resource.title),
+    [WEBHOOK_PLACEHOLDERS.RESOURCE_DESCRIPTION]: escapeJsonString(resource.description || "No description"),
+    [WEBHOOK_PLACEHOLDERS.RESOURCE_ENDPOINT_URL]: escapeJsonString(truncate(resource.endpointUrl, 2000)),
+    [WEBHOOK_PLACEHOLDERS.RESOURCE_TYPE]: resource.serverType,
+    [WEBHOOK_PLACEHOLDERS.RESOURCE_URL]: resourceUrl,
+    [WEBHOOK_PLACEHOLDERS.AUTHOR_USERNAME]: resource.author.username,
+    [WEBHOOK_PLACEHOLDERS.AUTHOR_NAME]: escapeJsonString(resource.author.name || resource.author.username),
+    [WEBHOOK_PLACEHOLDERS.AUTHOR_AVATAR]: resource.author.avatar || defaultAvatar,
+    [WEBHOOK_PLACEHOLDERS.CATEGORY_NAME]: resource.category?.name || "Uncategorized",
+    [WEBHOOK_PLACEHOLDERS.TAGS]: resource.tags.map((t) => t.tag.name).join(", ") || "None",
     [WEBHOOK_PLACEHOLDERS.TIMESTAMP]: new Date().toLocaleDateString("en-US", {
       weekday: "short",
       year: "numeric",
@@ -248,7 +235,6 @@ function replacePlaceholders(template: string, prompt: PromptData): string {
       minute: "2-digit",
     }),
     [WEBHOOK_PLACEHOLDERS.SITE_URL]: siteUrl,
-    [WEBHOOK_PLACEHOLDERS.CHATGPT_URL]: chatgptUrl,
   };
 
   let result = template;
@@ -259,17 +245,15 @@ function replacePlaceholders(template: string, prompt: PromptData): string {
   return result;
 }
 
-export async function triggerWebhooks(event: WebhookEvent, prompt: PromptData): Promise<void> {
+export async function triggerWebhooks(event: WebhookEvent, resource: ResourceData): Promise<void> {
   try {
     // Get all enabled webhooks for this event
-    const webhooks = await db.webhookConfig.findMany({
-      where: {
-        isEnabled: true,
-        events: {
-          has: event,
-        },
-      },
-    });
+    const webhooks = await db.select().from(webhookConfigs).where(
+      and(
+        eq(webhookConfigs.isEnabled, true),
+        sql`${event} = ANY(${webhookConfigs.events})`
+      )
+    );
 
     if (webhooks.length === 0) {
       return;
@@ -283,8 +267,8 @@ export async function triggerWebhooks(event: WebhookEvent, prompt: PromptData): 
           console.error(`Webhook ${webhook.name} blocked: URL targets private/internal network`);
           return;
         }
-        
-        const payload = replacePlaceholders(webhook.payload, prompt);
+
+        const payload = replacePlaceholders(webhook.payload, resource);
         const headers: Record<string, string> = {
           "Content-Type": "application/json",
           ...(webhook.headers as Record<string, string> || {}),

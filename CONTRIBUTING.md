@@ -4,9 +4,9 @@ Thank you for your interest in contributing to Awesome ChatGPT Prompts!
 
 ## How to Contribute
 
-The easiest way to contribute is through **[prompts.chat](https://prompts.chat)**:
+The easiest way to contribute is through **[webmcp.land](https://webmcp.land)**:
 
-1. Visit [prompts.chat](https://prompts.chat)
+1. Visit [webmcp.land](https://webmcp.land)
 2. Sign in with your GitHub account
 3. Create and submit your prompt
 4. Your contribution will automatically sync to this repository
@@ -34,6 +34,6 @@ For bug fixes, documentation improvements, or other non-prompt contributions:
 
 Open an issue if you have questions about contributing. 
 
-**Important:** This repository is strictly for AI prompts. 
+**Important:** This repository is strictly for MCP resources. 
 - Do **not** post advertisements.
 - Any off-topic issues will be closed immediately, and the posting user will be reported to GitHub for spam and malicious activity.

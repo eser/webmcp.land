@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 export const metadata = {
-  title: "Why prompts.chat? | Presentation",
+  title: "Why webmcp.land? | Presentation",
   description: "Discover why prompts are more important than ever in the agentic era.",
 };
 
@@ -16,7 +16,7 @@ export default function PresentationPage() {
         <div className="w-24 h-24 bg-primary/10 rounded-3xl flex items-center justify-center mb-8 rotate-12 transition-transform hover:rotate-0 duration-500">
           <Sparkles className="w-12 h-12 text-primary" />
         </div>
-        <SlideTitle className="mb-6">Why prompts.chat?</SlideTitle>
+        <SlideTitle className="mb-6">Why webmcp.land?</SlideTitle>
         <SlideContent className="max-w-3xl mb-12">Discover why prompts are more important than ever in the agentic era.</SlideContent>
         <p className="text-sm text-muted-foreground animate-pulse mt-8">
           Use arrow keys <MoveRight className="inline w-4 h-4 mx-1" /> or swipe to navigate
@@ -26,13 +26,13 @@ export default function PresentationPage() {
       {/* 2. The Genesis */}
       <div className="flex flex-col justify-center h-full">
         <Star className="w-12 h-12 text-yellow-500 mb-6" />
-        <SlideTitle>The History of prompts.chat</SlideTitle>
+        <SlideTitle>The History of webmcp.land</SlideTitle>
         <SlideContent>
           From a simple repository to a full-fledged platform. We started as Awesome ChatGPT Prompts, and evolved to support the entire AI community with typed prompts, workflows, and skills.
         </SlideContent>
         <div className="mt-12 p-6 bg-muted/50 rounded-2xl border border-border max-w-2xl">
           <p className="text-lg text-foreground font-mono">
-            Awesome ChatGPT Prompts → <SlideHighlight>prompts.chat</SlideHighlight>
+            Awesome ChatGPT Prompts → <SlideHighlight>webmcp.land</SlideHighlight>
           </p>
         </div>
       </div>
@@ -176,7 +176,7 @@ export default function PresentationPage() {
       <div className="flex flex-col justify-center h-full">
         <SlideTitle>For Developers</SlideTitle>
         <SlideContent>
-          prompts.chat isn't just for end-users. With features like Agent Skills, Typed Prompts, and API integrations, it's a vital tool for developers building the next generation of AI apps.
+          webmcp.land isn't just for end-users. With features like Agent Skills, Typed Prompts, and API integrations, it's a vital tool for developers building the next generation of AI apps.
         </SlideContent>
       </div>
 
@@ -185,7 +185,7 @@ export default function PresentationPage() {
         <MessageSquare className="w-12 h-12 text-pink-500 mb-6" />
         <SlideTitle>For Everyone</SlideTitle>
         <SlideContent>
-          Discover, collect, and learn from <SlideHighlight>Promptmasters</SlideHighlight>.
+          Discover, collect, and learn from <SlideHighlight>Webmasters</SlideHighlight>.
           <br /><br />
           A beautifully designed, accessible platform to find exactly what you need to make AI work for you.
         </SlideContent>
@@ -198,7 +198,7 @@ export default function PresentationPage() {
         <SlideContent>
           Your data, your platform.
           <br /><br />
-          prompts.chat is <SlideHighlight>100% open-source</SlideHighlight> and deployable to any server or cloud provider. Own your organization's prompt library securely.
+          webmcp.land is <SlideHighlight>100% open-source</SlideHighlight> and deployable to any server or cloud provider. Own your organization's prompt library securely.
         </SlideContent>
       </div>
 
@@ -225,7 +225,7 @@ export default function PresentationPage() {
           <Link href="/discover">
             <Button size="lg" className="text-lg px-8 py-6 rounded-xl">Explore Prompts</Button>
           </Link>
-          <Link href="https://github.com/fka/awesome-chatgpt-prompts" target="_blank">
+          <Link href="https://github.com/eserozvataf/awesome-chatgpt-prompts" target="_blank">
             <Button size="lg" variant="outline" className="text-lg px-8 py-6 rounded-xl">Star on GitHub</Button>
           </Link>
         </div>

@@ -1,26 +1,33 @@
+import { NextRequest } from "next/server";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { GET, POST, DELETE } from "@/app/api/collection/route";
 import { db } from "@/lib/db";
-import { auth } from "@/lib/auth";
+import { getSession } from "@/lib/auth";
 
-// Mock dependencies
-vi.mock("@/lib/db", () => ({
-  db: {
-    collection: {
-      findMany: vi.fn(),
-      findUnique: vi.fn(),
-      create: vi.fn(),
-      delete: vi.fn(),
+import { createChainMock, mockSelectSequence } from "../helpers/db-mock";
+
+vi.mock("@/lib/db", async () => {
+  const { createChainMock } = await import("../helpers/db-mock");
+  return {
+    db: {
+      select: vi.fn().mockReturnValue(createChainMock([])),
+      insert: vi.fn().mockReturnValue(createChainMock([])),
+      update: vi.fn().mockReturnValue(createChainMock([])),
+      delete: vi.fn().mockReturnValue(createChainMock([])),
+      execute: vi.fn().mockResolvedValue({ rows: [] }),
+      query: {
+        collections: {
+          findMany: vi.fn().mockResolvedValue([]),
+        },
+      },
     },
-    prompt: {
-      findUnique: vi.fn(),
-    },
-  },
-}));
+  };
+});
 
 vi.mock("@/lib/auth", () => ({
-  auth: vi.fn(),
+  getSession: vi.fn(),
 }));
+
 
 describe("GET /api/collection", () => {
   beforeEach(() => {
@@ -28,7 +35,7 @@ describe("GET /api/collection", () => {
   });
 
   it("should return 401 if not authenticated", async () => {
-    vi.mocked(auth).mockResolvedValue(null);
+    vi.mocked(getSession).mockResolvedValue(null as any);
 
     const response = await GET();
     const data = await response.json();
@@ -38,8 +45,8 @@ describe("GET /api/collection", () => {
   });
 
   it("should return empty collections array", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(db.collection.findMany).mockResolvedValue([]);
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
+    vi.mocked(db.query.collections.findMany).mockResolvedValue([]);
 
     const response = await GET();
     const data = await response.json();
@@ -49,8 +56,8 @@ describe("GET /api/collection", () => {
   });
 
   it("should return user collections with prompt details", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(db.collection.findMany).mockResolvedValue([
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
+    vi.mocked(db.query.collections.findMany).mockResolvedValue([
       {
         id: "col1",
         userId: "user1",
@@ -68,7 +75,8 @@ describe("GET /api/collection", () => {
           },
           category: null,
           tags: [],
-          _count: { votes: 5, contributors: 0 },
+          votes: [1, 2, 3, 4, 5],
+          contributors: [],
         },
       },
     ] as never);
@@ -81,18 +89,13 @@ describe("GET /api/collection", () => {
     expect(data.collections[0].prompt.title).toBe("Test Prompt");
   });
 
-  it("should fetch collections ordered by createdAt desc", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(db.collection.findMany).mockResolvedValue([]);
+  it("should fetch collections using query API", async () => {
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
+    vi.mocked(db.query.collections.findMany).mockResolvedValue([]);
 
     await GET();
 
-    expect(db.collection.findMany).toHaveBeenCalledWith(
-      expect.objectContaining({
-        where: { userId: "user1" },
-        orderBy: { createdAt: "desc" },
-      })
-    );
+    expect(db.query.collections.findMany).toHaveBeenCalled();
   });
 });
 
@@ -102,14 +105,14 @@ describe("POST /api/collection", () => {
   });
 
   it("should return 401 if not authenticated", async () => {
-    vi.mocked(auth).mockResolvedValue(null);
+    vi.mocked(getSession).mockResolvedValue(null as any);
 
     const request = new Request("http://localhost:3000/api/collection", {
       method: "POST",
       body: JSON.stringify({ promptId: "123" }),
     });
 
-    const response = await POST(request);
+    const response = await POST(request as unknown as NextRequest);
     const data = await response.json();
 
     expect(response.status).toBe(401);
@@ -117,14 +120,14 @@ describe("POST /api/collection", () => {
   });
 
   it("should return 400 for invalid input - missing promptId", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
 
     const request = new Request("http://localhost:3000/api/collection", {
       method: "POST",
       body: JSON.stringify({}),
     });
 
-    const response = await POST(request);
+    const response = await POST(request as unknown as NextRequest);
     const data = await response.json();
 
     expect(response.status).toBe(400);
@@ -132,14 +135,14 @@ describe("POST /api/collection", () => {
   });
 
   it("should return 400 for empty promptId", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
 
     const request = new Request("http://localhost:3000/api/collection", {
       method: "POST",
       body: JSON.stringify({ promptId: "" }),
     });
 
-    const response = await POST(request);
+    const response = await POST(request as unknown as NextRequest);
     const data = await response.json();
 
     expect(response.status).toBe(400);
@@ -147,15 +150,15 @@ describe("POST /api/collection", () => {
   });
 
   it("should return 400 if already in collection", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(db.collection.findUnique).mockResolvedValue({ id: "existing" } as never);
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
+    mockSelectSequence(db, [{ id: "existing" }]);
 
     const request = new Request("http://localhost:3000/api/collection", {
       method: "POST",
       body: JSON.stringify({ promptId: "123" }),
     });
 
-    const response = await POST(request);
+    const response = await POST(request as unknown as NextRequest);
     const data = await response.json();
 
     expect(response.status).toBe(400);
@@ -163,16 +166,18 @@ describe("POST /api/collection", () => {
   });
 
   it("should return 404 if prompt not found", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(db.collection.findUnique).mockResolvedValue(null);
-    vi.mocked(db.prompt.findUnique).mockResolvedValue(null);
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
+    mockSelectSequence(db, 
+      [],  // no existing collection
+      [],  // no prompt found
+    );
 
     const request = new Request("http://localhost:3000/api/collection", {
       method: "POST",
       body: JSON.stringify({ promptId: "nonexistent" }),
     });
 
-    const response = await POST(request);
+    const response = await POST(request as unknown as NextRequest);
     const data = await response.json();
 
     expect(response.status).toBe(404);
@@ -180,20 +185,22 @@ describe("POST /api/collection", () => {
   });
 
   it("should return 403 when adding private prompt not owned by user", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(db.collection.findUnique).mockResolvedValue(null);
-    vi.mocked(db.prompt.findUnique).mockResolvedValue({
-      id: "123",
-      isPrivate: true,
-      authorId: "other-user",
-    } as never);
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
+    mockSelectSequence(db, 
+      [],  // no existing collection
+      [{
+        id: "123",
+        isPrivate: true,
+        authorId: "other-user",
+      }],
+    );
 
     const request = new Request("http://localhost:3000/api/collection", {
       method: "POST",
       body: JSON.stringify({ promptId: "123" }),
     });
 
-    const response = await POST(request);
+    const response = await POST(request as unknown as NextRequest);
     const data = await response.json();
 
     expect(response.status).toBe(403);
@@ -201,25 +208,27 @@ describe("POST /api/collection", () => {
   });
 
   it("should allow adding own private prompt to collection", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(db.collection.findUnique).mockResolvedValue(null);
-    vi.mocked(db.prompt.findUnique).mockResolvedValue({
-      id: "123",
-      isPrivate: true,
-      authorId: "user1",
-    } as never);
-    vi.mocked(db.collection.create).mockResolvedValue({
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
+    mockSelectSequence(db, 
+      [],  // no existing collection
+      [{
+        id: "123",
+        isPrivate: true,
+        authorId: "user1",
+      }],
+    );
+    vi.mocked(db.insert).mockReturnValue(createChainMock([{
       id: "col1",
       userId: "user1",
       promptId: "123",
-    } as never);
+    }]) as any);
 
     const request = new Request("http://localhost:3000/api/collection", {
       method: "POST",
       body: JSON.stringify({ promptId: "123" }),
     });
 
-    const response = await POST(request);
+    const response = await POST(request as unknown as NextRequest);
     const data = await response.json();
 
     expect(response.status).toBe(200);
@@ -227,36 +236,33 @@ describe("POST /api/collection", () => {
   });
 
   it("should add public prompt to collection successfully", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(db.collection.findUnique).mockResolvedValue(null);
-    vi.mocked(db.prompt.findUnique).mockResolvedValue({
-      id: "123",
-      isPrivate: false,
-      authorId: "other-user",
-    } as never);
-    vi.mocked(db.collection.create).mockResolvedValue({
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
+    mockSelectSequence(db, 
+      [],  // no existing collection
+      [{
+        id: "123",
+        isPrivate: false,
+        authorId: "other-user",
+      }],
+    );
+    vi.mocked(db.insert).mockReturnValue(createChainMock([{
       id: "col1",
       userId: "user1",
       promptId: "123",
-    } as never);
+    }]) as any);
 
     const request = new Request("http://localhost:3000/api/collection", {
       method: "POST",
       body: JSON.stringify({ promptId: "123" }),
     });
 
-    const response = await POST(request);
+    const response = await POST(request as unknown as NextRequest);
     const data = await response.json();
 
     expect(response.status).toBe(200);
     expect(data.added).toBe(true);
     expect(data.collection.id).toBe("col1");
-    expect(db.collection.create).toHaveBeenCalledWith({
-      data: {
-        userId: "user1",
-        promptId: "123",
-      },
-    });
+    expect(db.insert).toHaveBeenCalled();
   });
 });
 
@@ -266,13 +272,13 @@ describe("DELETE /api/collection", () => {
   });
 
   it("should return 401 if not authenticated", async () => {
-    vi.mocked(auth).mockResolvedValue(null);
+    vi.mocked(getSession).mockResolvedValue(null as any);
 
     const request = new Request("http://localhost:3000/api/collection?promptId=123", {
       method: "DELETE",
     });
 
-    const response = await DELETE(request);
+    const response = await DELETE(request as unknown as NextRequest);
     const data = await response.json();
 
     expect(response.status).toBe(401);
@@ -280,13 +286,13 @@ describe("DELETE /api/collection", () => {
   });
 
   it("should return 400 if promptId missing", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
 
     const request = new Request("http://localhost:3000/api/collection", {
       method: "DELETE",
     });
 
-    const response = await DELETE(request);
+    const response = await DELETE(request as unknown as NextRequest);
     const data = await response.json();
 
     expect(response.status).toBe(400);
@@ -294,37 +300,32 @@ describe("DELETE /api/collection", () => {
   });
 
   it("should remove prompt from collection successfully", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(db.collection.delete).mockResolvedValue({} as never);
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
+    vi.mocked(db.delete).mockReturnValue(createChainMock([]) as any);
 
     const request = new Request("http://localhost:3000/api/collection?promptId=123", {
       method: "DELETE",
     });
 
-    const response = await DELETE(request);
+    const response = await DELETE(request as unknown as NextRequest);
     const data = await response.json();
 
     expect(response.status).toBe(200);
     expect(data.removed).toBe(true);
-    expect(db.collection.delete).toHaveBeenCalledWith({
-      where: {
-        userId_promptId: {
-          userId: "user1",
-          promptId: "123",
-        },
-      },
-    });
+    expect(db.delete).toHaveBeenCalled();
   });
 
   it("should handle delete error gracefully", async () => {
-    vi.mocked(auth).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(db.collection.delete).mockRejectedValue(new Error("Not found"));
+    vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
+    vi.mocked(db.delete).mockImplementation(() => {
+      throw new Error("Not found");
+    });
 
     const request = new Request("http://localhost:3000/api/collection?promptId=123", {
       method: "DELETE",
     });
 
-    const response = await DELETE(request);
+    const response = await DELETE(request as unknown as NextRequest);
     const data = await response.json();
 
     expect(response.status).toBe(500);

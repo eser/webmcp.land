@@ -1,25 +1,25 @@
 {
-  "name": "prompts.chat",
+  "name": "webmcp.land",
   "owner": {
-    "name": "Fatih Kadir Akın",
-    "email": "fatihkadirakin@gmail.com"
+    "name": "Eser Ozvataf",
+    "email": "eser@acikyazilim.com"
   },
   "metadata": {
-    "description": "Official prompts.chat marketplace - AI prompts, skills, and tools for Claude Code",
+    "description": "Official webmcp.land marketplace - MCP resources for Claude Code",
     "version": "1.0.0"
   },
   "plugins": [
     {
-      "name": "prompts.chat",
-      "source": "./plugins/claude/prompts.chat",
-      "description": "Access thousands of AI prompts and skills directly in your AI coding assistant. Search prompts, discover skills, save your own, and improve prompts with AI.",
+      "name": "webmcp.land",
+      "source": "./plugins/claude/webmcp.land",
+      "description": "Access thousands of MCP resources directly in your AI coding assistant. Search prompts, discover skills, save your own, and improve prompts with AI.",
       "version": "1.0.0",
       "author": {
-        "name": "Fatih Kadir Akın",
-        "email": "fatihkadirakin@gmail.com"
+        "name": "Eser Ozvataf",
+        "email": "eser@acikyazilim.com"
       },
-      "homepage": "https://prompts.chat",
-      "repository": "https://github.com/f/prompts.chat",
+      "homepage": "https://webmcp.land",
+      "repository": "https://github.com/eser/webmcp.land",
       "license": "MIT",
       "keywords": ["prompts", "ai", "skills", "chatgpt", "claude", "llm"],
       "category": "ai",

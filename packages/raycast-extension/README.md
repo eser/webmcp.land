@@ -1,10 +1,10 @@
 # Prompts.chat
 
-Search, browse, and run AI prompts from [prompts.chat](https://prompts.chat) — the open-source community platform for ChatGPT and AI prompts.
+Search, browse, and run AI prompts from [webmcp.land](https://webmcp.land) — the open-source community platform for ChatGPT and AI prompts.
 
-![Search Prompts](metadata/prompts-chat-1.png)
-![Browse Prompts](metadata/prompts-chat-2.png)
-![Run Prompt](metadata/prompts-chat-3.png)
+![Search Prompts](metadata/webmcp-land-1.png)
+![Browse Prompts](metadata/webmcp-land-2.png)
+![Run Prompt](metadata/webmcp-land-3.png)
 
 ## Features
 
@@ -46,11 +46,11 @@ If a prompt contains variables (e.g., `${topic}`), you'll be prompted to fill th
 
 | Preference | Description | Default |
 |------------|-------------|---------|
-| Base URL | The base URL of the prompts.chat instance | `https://prompts.chat` |
+| Base URL | The base URL of the webmcp.land instance | `https://webmcp.land` |
 
-You can use this extension with self-hosted instances of prompts.chat by changing the Base URL.
+You can use this extension with self-hosted instances of webmcp.land by changing the Base URL.
 
 ## Links
 
-- [prompts.chat](https://prompts.chat) — Browse prompts on the web
-- [GitHub Repository](https://github.com/f/prompts.chat) — Source code and contributions
+- [webmcp.land](https://webmcp.land) — Browse prompts on the web
+- [GitHub Repository](https://github.com/eser/webmcp.land) — Source code and contributions

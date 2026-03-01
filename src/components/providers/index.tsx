@@ -1,9 +1,9 @@
 "use client";
 
 import { ThemeProvider } from "next-themes";
-import { SessionProvider } from "next-auth/react";
+import { I18nextProvider } from "react-i18next";
 import { Toaster } from "@/components/ui/sonner";
-import { NextIntlClientProvider, AbstractIntlMessages } from "next-intl";
+import i18n from "@/i18n/i18n";
 import { ThemeStyles } from "./theme-styles";
 import { BrandingProvider } from "./branding-provider";
 
@@ -26,33 +26,34 @@ interface BrandingConfig {
 interface ProvidersProps {
   children: React.ReactNode;
   locale: string;
-  messages: AbstractIntlMessages;
   theme: ThemeConfig;
   branding: BrandingConfig;
 }
 
-export function Providers({ children, locale, messages, theme, branding }: ProvidersProps) {
+export function Providers({ children, locale, theme, branding }: ProvidersProps) {
+  if (i18n.language !== locale) {
+    i18n.changeLanguage(locale);
+  }
+
   return (
-    <SessionProvider>
-      <NextIntlClientProvider locale={locale} messages={messages}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <ThemeStyles 
-            radius={theme.radius} 
-            variant={theme.variant}
-            density={theme.density}
-            primaryColor={theme.colors.primary} 
-          />
-          <BrandingProvider branding={branding}>
-            {children}
-          </BrandingProvider>
-          <Toaster position="bottom-right" />
-        </ThemeProvider>
-      </NextIntlClientProvider>
-    </SessionProvider>
+    <I18nextProvider i18n={i18n}>
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
+      >
+        <ThemeStyles
+          radius={theme.radius}
+          variant={theme.variant}
+          density={theme.density}
+          primaryColor={theme.colors.primary}
+        />
+        <BrandingProvider branding={branding}>
+          {children}
+        </BrandingProvider>
+        <Toaster position="bottom-right" />
+      </ThemeProvider>
+    </I18nextProvider>
   );
 }

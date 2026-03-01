@@ -1,18 +1,3 @@
-import type { NextAuthConfig } from "next-auth";
-
-// ============================================
-// Auth Plugin Types
-// ============================================
-
-export interface AuthPlugin {
-  id: string;
-  name: string;
-  /**
-   * Returns the NextAuth provider configuration
-   */
-  getProvider: () => NextAuthConfig["providers"][number];
-}
-
 // ============================================
 // Storage Plugin Types
 // ============================================
@@ -52,6 +37,5 @@ export interface UploadOptions {
 // ============================================
 
 export interface PluginRegistry {
-  auth: Map<string, AuthPlugin>;
   storage: Map<string, StoragePlugin>;
 }

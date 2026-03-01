@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Script to generate contributor commits from prompts.csv
-# Fetches latest prompts from prompts.chat/prompts.csv
+# Fetches latest prompts from webmcp.land/prompts.csv
 # Compares with existing prompts.csv and creates commits only for new prompts
 
 set -e
@@ -10,13 +10,13 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 CSV_FILE="$PROJECT_DIR/prompts.csv"
 REMOTE_CSV="$PROJECT_DIR/prompts.csv.remote"
-REMOTE_CSV_URL="https://prompts.chat/prompts.csv"
+REMOTE_CSV_URL="https://webmcp.land/prompts.csv"
 
-# Fetch latest prompts.csv from prompts.chat
+# Fetch latest prompts.csv from webmcp.land
 echo "Fetching latest prompts.csv from $REMOTE_CSV_URL..."
 if ! curl -fsSL "$REMOTE_CSV_URL" -o "$REMOTE_CSV"; then
     echo "Error: Failed to fetch prompts.csv from $REMOTE_CSV_URL"
-    echo "Make sure prompts.chat is running and the endpoint is available."
+    echo "Make sure webmcp.land is running and the endpoint is available."
     exit 1
 fi
 echo "Successfully fetched remote prompts.csv"
@@ -201,7 +201,7 @@ def init_prompts_md(prompts_md_path):
     """Initialize PROMPTS.md with header if it doesn't exist"""
     if not os.path.exists(prompts_md_path):
         with open(prompts_md_path, 'w', encoding='utf-8') as f:
-            f.write('# prompts.chat\n\n')
+            f.write('# webmcp.land\n\n')
             f.write('> A curated list of prompts for ChatGPT and other AI models.\n\n')
             f.write('---\n\n')
 

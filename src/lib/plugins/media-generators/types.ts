@@ -64,7 +64,7 @@ export interface WebSocketCallbacks {
 
 /**
  * Static generation status keys used across all providers.
- * These map to translation keys in messages/*.json under prompts.mediaGeneration.*
+ * These map to translation keys in messages/*.json under resources.mediaGeneration.*
  */
 export type GenerationStatusKey =
   | "connecting"

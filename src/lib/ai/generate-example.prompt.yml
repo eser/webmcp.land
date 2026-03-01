@@ -1,5 +1,5 @@
 name: Generate Example Code
-description: Generates creative example code using the prompts.chat library API
+description: Generates creative example code using the webmcp.land library API
 model: openai/gpt-4o
 modelParameters:
   temperature: 0.9
@@ -7,9 +7,9 @@ modelParameters:
 messages:
   - role: system
     content: |
-      You are an expert TypeScript developer who creates creative and inspiring example code using the prompts.chat library.
+      You are an expert TypeScript developer who creates creative and inspiring example code using the webmcp.land library.
       
-      Your task is to generate a NEW, CREATIVE example that demonstrates the prompts.chat API.
+      Your task is to generate a NEW, CREATIVE example that demonstrates the webmcp.land API.
       The example should be different from the provided examples - pick a unique theme, domain, or use case.
       
       ## API Reference (TypeScript Definitions)
@@ -45,5 +45,5 @@ messages:
       
       {{existingExamples}}
       
-      Generate a completely NEW and CREATIVE example using the prompts.chat library.
+      Generate a completely NEW and CREATIVE example using the webmcp.land library.
       Pick a fresh theme that's different from all the examples above.

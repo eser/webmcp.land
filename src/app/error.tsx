@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 import { ServerCrash, Home, ArrowLeft, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -13,7 +13,7 @@ interface ErrorProps {
 
 export default function Error({ reset }: ErrorProps) {
   const router = useRouter();
-  const t = useTranslations("serverError");
+  const { t } = useTranslation();
 
   return (
     <div className="container flex flex-col items-center justify-center min-h-[60vh] py-12">
@@ -26,9 +26,9 @@ export default function Error({ reset }: ErrorProps) {
         {/* Error Code */}
         <div className="space-y-2">
           <h1 className="text-7xl font-bold text-primary">500</h1>
-          <h2 className="text-xl font-semibold">{t("title")}</h2>
+          <h2 className="text-xl font-semibold">{t("serverError.title")}</h2>
           <p className="text-sm text-muted-foreground">
-            {t("description")}
+            {t("serverError.description")}
           </p>
         </div>
 
@@ -36,34 +36,32 @@ export default function Error({ reset }: ErrorProps) {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
           <Button onClick={() => reset()}>
             <RefreshCw className="mr-2 h-4 w-4" />
-            {t("tryAgain")}
+            {t("serverError.tryAgain")}
           </Button>
-          <Button variant="outline" asChild>
-            <Link href="/">
+          <Button render={<Link href="/" />} variant="outline">
               <Home className="mr-2 h-4 w-4" />
-              {t("goHome")}
-            </Link>
+              {t("serverError.goHome")}
           </Button>
           <Button variant="ghost" onClick={() => router.back()}>
             <ArrowLeft className="mr-2 h-4 w-4" />
-            {t("goBack")}
+            {t("serverError.goBack")}
           </Button>
         </div>
 
         {/* Helpful Links */}
         <div className="pt-8 border-t">
           <p className="text-xs text-muted-foreground mb-3">
-            {t("helpfulLinks")}
+            {t("serverError.helpfulLinks")}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4 text-sm">
-            <Link href="/prompts" className="text-primary hover:underline">
-              {t("browsePrompts")}
+            <Link href="/registry" className="text-primary hover:underline">
+              {t("serverError.browseResources")}
             </Link>
             <Link href="/categories" className="text-primary hover:underline">
-              {t("categories")}
+              {t("serverError.categories")}
             </Link>
-            <Link href="/prompts/new" className="text-primary hover:underline">
-              {t("createPrompt")}
+            <Link href="/registry/new" className="text-primary hover:underline">
+              {t("serverError.registerResource")}
             </Link>
           </div>
         </div>

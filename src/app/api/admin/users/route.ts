@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { and, asc, count, desc, eq, ilike, or, sql } from "drizzle-orm";
+import { getSession } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { users, resources } from "@/lib/schema";
 
 // GET - List all users for admin with pagination and search
 export async function GET(request: NextRequest) {
   try {
-    const session = await auth();
+    const session = await getSession();
 
     // Check if user is authenticated
     if (!session?.user) {
@@ -37,86 +39,94 @@ export async function GET(request: NextRequest) {
     const skip = (validPage - 1) * validLimit;
 
     // Build filter conditions
-    type WhereCondition = {
-      OR?: Array<{ email?: { contains: string; mode: "insensitive" }; username?: { contains: string; mode: "insensitive" }; name?: { contains: string; mode: "insensitive" } }>;
-      role?: "ADMIN" | "USER";
-      verified?: boolean;
-      flagged?: boolean;
-    };
+    const conditions = [];
 
-    const filterConditions: WhereCondition = {};
-    
     switch (filter) {
       case "admin":
-        filterConditions.role = "ADMIN";
+        conditions.push(eq(users.role, "ADMIN"));
         break;
       case "user":
-        filterConditions.role = "USER";
+        conditions.push(eq(users.role, "USER"));
         break;
       case "verified":
-        filterConditions.verified = true;
+        conditions.push(eq(users.verified, true));
         break;
       case "unverified":
-        filterConditions.verified = false;
+        conditions.push(eq(users.verified, false));
         break;
       case "flagged":
-        filterConditions.flagged = true;
+        conditions.push(eq(users.flagged, true));
         break;
       default:
         // "all" - no filter
         break;
     }
 
-    // Build where clause combining search and filters
-    const where: WhereCondition = {
-      ...filterConditions,
-      ...(search && {
-        OR: [
-          { email: { contains: search, mode: "insensitive" as const } },
-          { username: { contains: search, mode: "insensitive" as const } },
-          { name: { contains: search, mode: "insensitive" as const } },
-        ],
-      }),
-    };
+    // Add search condition
+    if (search) {
+      conditions.push(
+        or(
+          ilike(users.email, `%${search}%`),
+          ilike(users.username, `%${search}%`),
+          ilike(sql`COALESCE(${users.name}, '')`, `%${search}%`),
+        )!
+      );
+    }
+
+    const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
 
     // Build orderBy
-    const validSortFields = ["createdAt", "email", "username", "name"];
-    const orderByField = validSortFields.includes(sortBy) ? sortBy : "createdAt";
-    const orderByDirection = sortOrder === "asc" ? "asc" : "desc";
+    const validSortFields = ["createdAt", "email", "username", "name"] as const;
+    const orderByField = validSortFields.includes(sortBy as typeof validSortFields[number])
+      ? sortBy
+      : "createdAt";
+    const sortFn = sortOrder === "asc" ? asc : desc;
+
+    const orderByColumn = {
+      createdAt: users.createdAt,
+      email: users.email,
+      username: users.username,
+      name: users.name,
+    }[orderByField] ?? users.createdAt;
+
+    // Subquery for resource count
+    const resourcesCountSq = db
+      .select({ value: count() })
+      .from(resources)
+      .where(eq(resources.authorId, users.id));
 
     // Fetch users and total count
-    const [users, total] = await Promise.all([
-      db.user.findMany({
-        where,
-        skip,
-        take: validLimit,
-        orderBy: { [orderByField]: orderByDirection },
-        select: {
-          id: true,
-          email: true,
-          username: true,
-          name: true,
-          avatar: true,
-          role: true,
-          verified: true,
-          flagged: true,
-          flaggedAt: true,
-          flaggedReason: true,
-          dailyGenerationLimit: true,
-          generationCreditsRemaining: true,
-          createdAt: true,
+    const [userRows, [{ total }]] = await Promise.all([
+      db
+        .select({
+          id: users.id,
+          email: users.email,
+          username: users.username,
+          name: users.name,
+          avatar: users.avatar,
+          role: users.role,
+          verified: users.verified,
+          flagged: users.flagged,
+          flaggedAt: users.flaggedAt,
+          flaggedReason: users.flaggedReason,
+          createdAt: users.createdAt,
           _count: {
-            select: {
-              prompts: true,
-            },
+            resources: resourcesCountSq.as("resources_count"),
           },
-        },
-      }),
-      db.user.count({ where }),
+        })
+        .from(users)
+        .where(whereClause)
+        .orderBy(sortFn(orderByColumn))
+        .limit(validLimit)
+        .offset(skip),
+      db
+        .select({ total: count() })
+        .from(users)
+        .where(whereClause),
     ]);
 
     return NextResponse.json({
-      users,
+      users: userRows,
       pagination: {
         page: validPage,
         limit: validLimit,

@@ -1,6 +1,6 @@
 # Docker Deployment Guide
 
-Run your own prompts.chat instance with a single command.
+Run your own webmcp.land instance with a single command.
 
 ## Quick Start
 
@@ -9,7 +9,7 @@ docker run -d \
   --name prompts \
   -p 4444:3000 \
   -v prompts-data:/data \
-  ghcr.io/f/prompts.chat
+  ghcr.io/eser/webmcp.land
 ```
 
 **First run:** The container will clone the repository and build the app (~3-5 minutes).  
@@ -31,7 +31,7 @@ docker run -d \
   -e PCHAT_COLOR="#ff6600" \
   -e PCHAT_AUTH_PROVIDERS="github,google" \
   -e PCHAT_LOCALES="en,es,fr" \
-  ghcr.io/f/prompts.chat
+  ghcr.io/eser/webmcp.land
 ```
 
 > **Note:** Branding is applied during the first build. To change branding later, delete the volume and re-run:
@@ -110,7 +110,7 @@ docker run -d \
   -v prompts-data:/data \
   -e AUTH_SECRET="$(openssl rand -base64 32)" \
   -e PCHAT_NAME="My Company Prompts" \
-  ghcr.io/f/prompts.chat
+  ghcr.io/eser/webmcp.land
 ```
 
 ### With OAuth Providers
@@ -126,7 +126,7 @@ docker run -d \
   -e AUTH_GITHUB_SECRET="your-github-client-secret" \
   -e AUTH_GOOGLE_ID="your-google-client-id" \
   -e AUTH_GOOGLE_SECRET="your-google-client-secret" \
-  ghcr.io/f/prompts.chat
+  ghcr.io/eser/webmcp.land
 ```
 
 ### With AI Features (OpenAI)
@@ -138,7 +138,7 @@ docker run -d \
   -v prompts-data:/data \
   -e PCHAT_FEATURE_AI_SEARCH="true" \
   -e OPENAI_API_KEY="sk-..." \
-  ghcr.io/f/prompts.chat
+  ghcr.io/eser/webmcp.land
 ```
 
 ## Custom Logo
@@ -152,7 +152,7 @@ docker run -d \
   -v prompts-data:/data \
   -v ./my-logo.svg:/data/app/public/logo.svg \
   -e PCHAT_NAME="My App" \
-  ghcr.io/f/prompts.chat
+  ghcr.io/eser/webmcp.land
 ```
 
 ## Data Persistence
@@ -167,7 +167,7 @@ Mount a volume to persist data:
 ```bash
 docker run -d \
   -v prompts-data:/data \
-  ghcr.io/f/prompts.chat
+  ghcr.io/eser/webmcp.land
 ```
 
 ### Backup
@@ -185,8 +185,8 @@ docker exec -i prompts psql -U prompts prompts < backup.sql
 Build and run locally:
 
 ```bash
-docker build -f docker/Dockerfile -t prompts.chat .
-docker run -p 4444:3000 -v prompts-data:/data prompts.chat
+docker build -f docker/Dockerfile -t webmcp.land .
+docker run -p 4444:3000 -v prompts-data:/data webmcp.land
 ```
 
 ## Health Check
@@ -270,7 +270,7 @@ Recommended:
 
 ```bash
 # Pull latest image
-docker pull ghcr.io/f/prompts.chat
+docker pull ghcr.io/eser/webmcp.land
 
 # Stop and remove old container
 docker stop prompts && docker rm prompts
@@ -281,7 +281,7 @@ docker run -d \
   -p 4444:3000 \
   -v prompts-data:/data \
   -e AUTH_SECRET="your-secret-key" \
-  ghcr.io/f/prompts.chat
+  ghcr.io/eser/webmcp.land
 ```
 
 ## Security Considerations

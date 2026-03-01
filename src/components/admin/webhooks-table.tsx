@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,7 +16,7 @@ import { Plus, MoreHorizontal, Pencil, Trash2, Slack, X, Play } from "lucide-rea
 import { SLACK_PRESET_PAYLOAD, WEBHOOK_PLACEHOLDERS } from "@/lib/webhook";
 import { CodeEditor } from "@/components/ui/code-editor";
 
-import type { JsonValue } from "@prisma/client/runtime/library";
+type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue };
 
 interface WebhookConfig {
   id: string;
@@ -40,9 +40,9 @@ interface HeaderEntry {
 }
 
 const EVENTS = [
-  { value: "PROMPT_CREATED", label: "Prompt Created" },
-  { value: "PROMPT_UPDATED", label: "Prompt Updated" },
-  { value: "PROMPT_DELETED", label: "Prompt Deleted" },
+  { value: "RESOURCE_CREATED", label: "Resource Created" },
+  { value: "RESOURCE_UPDATED", label: "Resource Updated" },
+  { value: "RESOURCE_DELETED", label: "Resource Deleted" },
 ];
 
 const PLACEHOLDER_LIST = Object.values(WEBHOOK_PLACEHOLDERS);
@@ -111,7 +111,7 @@ function HeadersEditor({
 }
 
 export function WebhooksTable({ webhooks: initialWebhooks }: WebhooksTableProps) {
-  const t = useTranslations("admin.webhooks");
+  const { t } = useTranslation();
   const router = useRouter();
   const [webhooks, setWebhooks] = useState(initialWebhooks);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -125,7 +125,7 @@ export function WebhooksTable({ webhooks: initialWebhooks }: WebhooksTableProps)
     method: "POST",
     headers: [] as HeaderEntry[],
     payload: "",
-    events: ["PROMPT_CREATED"] as string[],
+    events: ["RESOURCE_CREATED"] as string[],
     isEnabled: true,
   });
 
@@ -136,7 +136,7 @@ export function WebhooksTable({ webhooks: initialWebhooks }: WebhooksTableProps)
       method: "POST",
       headers: [],
       payload: "",
-      events: ["PROMPT_CREATED"],
+      events: ["RESOURCE_CREATED"],
       isEnabled: true,
     });
   };
@@ -219,7 +219,7 @@ export function WebhooksTable({ webhooks: initialWebhooks }: WebhooksTableProps)
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm(t("deleteConfirm"))) return;
+    if (!confirm(t("admin.webhooks.deleteConfirm"))) return;
     try {
       const response = await fetch(`/api/admin/webhooks/${id}`, {
         method: "DELETE",
@@ -261,14 +261,14 @@ export function WebhooksTable({ webhooks: initialWebhooks }: WebhooksTableProps)
       });
 
       if (response.ok) {
-        alert(t("testSuccess"));
+        alert(t("admin.webhooks.testSuccess"));
       } else {
         const data = await response.json();
-        alert(t("testFailed") + ": " + (data.error || "Unknown error"));
+        alert(t("admin.webhooks.testFailed") + ": " + (data.error || "Unknown error"));
       }
     } catch (error) {
       console.error("Failed to test webhook:", error);
-      alert(t("testFailed"));
+      alert(t("admin.webhooks.testFailed"));
     }
   };
 
@@ -297,13 +297,13 @@ export function WebhooksTable({ webhooks: initialWebhooks }: WebhooksTableProps)
           className="gap-2"
         >
           <Slack className="h-4 w-4" />
-          {t("useSlackPreset")}
+          {t("admin.webhooks.useSlackPreset")}
         </Button>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div className="grid gap-2">
-          <Label htmlFor="name">{t("name")}</Label>
+          <Label htmlFor="name">{t("admin.webhooks.name")}</Label>
           <Input
             id="name"
             value={formData.name}
@@ -313,10 +313,10 @@ export function WebhooksTable({ webhooks: initialWebhooks }: WebhooksTableProps)
         </div>
 
         <div className="grid gap-2">
-          <Label htmlFor="method">{t("method")}</Label>
+          <Label htmlFor="method">{t("admin.webhooks.method")}</Label>
           <Select
             value={formData.method}
-            onValueChange={(value) => setFormData((prev) => ({ ...prev, method: value }))}
+            onValueChange={(value) => value && setFormData((prev) => ({ ...prev, method: value }))}
           >
             <SelectTrigger>
               <SelectValue />
@@ -332,7 +332,7 @@ export function WebhooksTable({ webhooks: initialWebhooks }: WebhooksTableProps)
       </div>
 
       <div className="grid gap-2">
-        <Label htmlFor="url">{t("url")}</Label>
+        <Label htmlFor="url">{t("admin.webhooks.url")}</Label>
         <Input
           id="url"
           type="url"
@@ -343,7 +343,7 @@ export function WebhooksTable({ webhooks: initialWebhooks }: WebhooksTableProps)
       </div>
 
       <div className="grid gap-2">
-        <Label>{t("events")}</Label>
+        <Label>{t("admin.webhooks.events")}</Label>
         <div className="flex flex-wrap gap-3">
           {EVENTS.map((event) => (
             <label
@@ -375,7 +375,7 @@ export function WebhooksTable({ webhooks: initialWebhooks }: WebhooksTableProps)
       </div>
 
       <div className="grid gap-2">
-        <Label>{t("headers")}</Label>
+        <Label>{t("admin.webhooks.headers")}</Label>
         <HeadersEditor
           headers={formData.headers}
           onChange={(headers) => setFormData((prev) => ({ ...prev, headers }))}
@@ -383,7 +383,7 @@ export function WebhooksTable({ webhooks: initialWebhooks }: WebhooksTableProps)
       </div>
 
       <div className="grid gap-2">
-        <Label>{t("payload")}</Label>
+        <Label>{t("admin.webhooks.payload")}</Label>
         <CodeEditor
           value={formData.payload}
           onChange={(payload: string) => setFormData((prev) => ({ ...prev, payload }))}
@@ -392,7 +392,7 @@ export function WebhooksTable({ webhooks: initialWebhooks }: WebhooksTableProps)
           debounceMs={300}
         />
         <div className="space-y-2">
-          <p className="text-xs text-muted-foreground">{t("placeholders")}:</p>
+          <p className="text-xs text-muted-foreground">{t("admin.webhooks.placeholders")}:</p>
           <div className="flex flex-wrap gap-1">
             {PLACEHOLDER_LIST.map((placeholder) => (
               <Badge
@@ -419,7 +419,7 @@ export function WebhooksTable({ webhooks: initialWebhooks }: WebhooksTableProps)
             setFormData((prev) => ({ ...prev, isEnabled: checked }))
           }
         />
-        <Label htmlFor="isEnabled">{t("enabled")}</Label>
+        <Label htmlFor="isEnabled">{t("admin.webhooks.enabled")}</Label>
       </div>
     </div>
   );
@@ -428,28 +428,26 @@ export function WebhooksTable({ webhooks: initialWebhooks }: WebhooksTableProps)
     <>
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-lg font-semibold">{t("title")}</h3>
-          <p className="text-sm text-muted-foreground">{t("description")}</p>
+          <h3 className="text-lg font-semibold">{t("admin.webhooks.title")}</h3>
+          <p className="text-sm text-muted-foreground">{t("admin.webhooks.description")}</p>
         </div>
         <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
-          <DialogTrigger asChild>
-            <Button onClick={() => { resetForm(); setIsCreateOpen(true); }}>
+          <DialogTrigger render={<Button onClick={() => { resetForm(); setIsCreateOpen(true); }} />}>
               <Plus className="h-4 w-4 mr-2" />
-              {t("add")}
-            </Button>
+              {t("admin.webhooks.add")}
           </DialogTrigger>
             <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
-                <DialogTitle>{t("addTitle")}</DialogTitle>
-                <DialogDescription>{t("addDescription")}</DialogDescription>
+                <DialogTitle>{t("admin.webhooks.addTitle")}</DialogTitle>
+                <DialogDescription>{t("admin.webhooks.addDescription")}</DialogDescription>
               </DialogHeader>
               <WebhookForm />
               <DialogFooter>
                 <Button variant="outline" onClick={() => setIsCreateOpen(false)}>
-                  {t("cancel")}
+                  {t("admin.webhooks.cancel")}
                 </Button>
                 <Button onClick={handleCreate} disabled={isLoading}>
-                  {t("create")}
+                  {t("admin.webhooks.create")}
                 </Button>
               </DialogFooter>
             </DialogContent>
@@ -459,16 +457,16 @@ export function WebhooksTable({ webhooks: initialWebhooks }: WebhooksTableProps)
       <div className="rounded-md border">
         {webhooks.length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">
-            {t("empty")}
+            {t("admin.webhooks.empty")}
           </div>
         ) : (
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>{t("name")}</TableHead>
-                <TableHead>{t("url")}</TableHead>
-                <TableHead>{t("events")}</TableHead>
-                <TableHead>{t("status")}</TableHead>
+                <TableHead>{t("admin.webhooks.name")}</TableHead>
+                <TableHead>{t("admin.webhooks.url")}</TableHead>
+                <TableHead>{t("admin.webhooks.events")}</TableHead>
+                <TableHead>{t("admin.webhooks.status")}</TableHead>
                 <TableHead className="w-[70px]"></TableHead>
               </TableRow>
             </TableHeader>
@@ -483,7 +481,7 @@ export function WebhooksTable({ webhooks: initialWebhooks }: WebhooksTableProps)
                     <div className="flex flex-wrap gap-1">
                       {webhook.events.map((event) => (
                         <Badge key={event} variant="secondary" className="text-xs">
-                          {event.replace("PROMPT_", "")}
+                          {event.replace("RESOURCE_", "")}
                         </Badge>
                       ))}
                     </div>
@@ -496,26 +494,24 @@ export function WebhooksTable({ webhooks: initialWebhooks }: WebhooksTableProps)
                   </TableCell>
                   <TableCell>
                     <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon">
+                      <DropdownMenuTrigger render={<Button variant="ghost" size="icon" />}>
                           <MoreHorizontal className="h-4 w-4" />
-                        </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem onClick={() => handleTest(webhook)}>
                           <Play className="h-4 w-4 mr-2" />
-                          {t("test")}
+                          {t("admin.webhooks.test")}
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => openEditDialog(webhook)}>
                           <Pencil className="h-4 w-4 mr-2" />
-                          {t("edit")}
+                          {t("admin.webhooks.edit")}
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           onClick={() => handleDelete(webhook.id)}
                           className="text-destructive"
                         >
                           <Trash2 className="h-4 w-4 mr-2" />
-                          {t("delete")}
+                          {t("admin.webhooks.delete")}
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -531,16 +527,16 @@ export function WebhooksTable({ webhooks: initialWebhooks }: WebhooksTableProps)
       <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
         <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{t("editTitle")}</DialogTitle>
-            <DialogDescription>{t("editDescription")}</DialogDescription>
+            <DialogTitle>{t("admin.webhooks.editTitle")}</DialogTitle>
+            <DialogDescription>{t("admin.webhooks.editDescription")}</DialogDescription>
           </DialogHeader>
           <WebhookForm />
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsEditOpen(false)}>
-              {t("cancel")}
+              {t("admin.webhooks.cancel")}
             </Button>
             <Button onClick={handleEdit} disabled={isLoading}>
-              {t("save")}
+              {t("admin.webhooks.save")}
             </Button>
           </DialogFooter>
         </DialogContent>

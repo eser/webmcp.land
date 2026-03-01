@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { eq } from "drizzle-orm";
+import { getSession } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { Prisma } from "@prisma/client";
+import { webhookConfigs } from "@/lib/schema";
+import type { WebhookEvent } from "@/lib/schema";
 import { isPrivateUrl } from "@/lib/webhook";
 
 const VALID_METHODS = ["GET", "POST", "PUT", "PATCH"];
-const VALID_EVENTS = ["PROMPT_CREATED", "PROMPT_UPDATED", "PROMPT_DELETED"];
+const VALID_EVENTS = ["RESOURCE_CREATED", "RESOURCE_UPDATED", "RESOURCE_DELETED"];
 
 interface UpdateWebhookData {
   name?: string;
@@ -92,15 +94,16 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await auth();
+    const session = await getSession();
     if (!session?.user || session.user.role !== "ADMIN") {
       return NextResponse.json({ error: "unauthorized" }, { status: 401 });
     }
 
     const { id } = await params;
-    const webhook = await db.webhookConfig.findUnique({
-      where: { id },
-    });
+    const [webhook] = await db
+      .select()
+      .from(webhookConfigs)
+      .where(eq(webhookConfigs.id, id));
 
     if (!webhook) {
       return NextResponse.json({ error: "not_found" }, { status: 404 });
@@ -119,7 +122,7 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await auth();
+    const session = await getSession();
     if (!session?.user || session.user.role !== "ADMIN") {
       return NextResponse.json({ error: "unauthorized" }, { status: 401 });
     }
@@ -135,17 +138,19 @@ export async function PATCH(
       );
     }
 
-    // Build update data with proper Prisma types
+    // Build update data
     const updateData: Record<string, unknown> = { ...validation.data };
-    
-    if (validation.data.headers === null) {
-      updateData.headers = Prisma.JsonNull;
+
+    // Cast events to proper type if present
+    if (validation.data.events) {
+      updateData.events = validation.data.events as WebhookEvent[];
     }
 
-    const webhook = await db.webhookConfig.update({
-      where: { id },
-      data: updateData as Prisma.WebhookConfigUpdateInput,
-    });
+    const [webhook] = await db
+      .update(webhookConfigs)
+      .set(updateData)
+      .where(eq(webhookConfigs.id, id))
+      .returning();
 
     return NextResponse.json(webhook);
   } catch (error) {
@@ -160,15 +165,13 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await auth();
+    const session = await getSession();
     if (!session?.user || session.user.role !== "ADMIN") {
       return NextResponse.json({ error: "unauthorized" }, { status: 401 });
     }
 
     const { id } = await params;
-    await db.webhookConfig.delete({
-      where: { id },
-    });
+    await db.delete(webhookConfigs).where(eq(webhookConfigs.id, id));
 
     return NextResponse.json({ success: true });
   } catch (error) {

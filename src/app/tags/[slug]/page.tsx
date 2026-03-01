@@ -1,12 +1,14 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "@/i18n/request";
 import { ArrowLeft, Tag } from "lucide-react";
+import { and, count, desc, eq, isNull, ne, or } from "drizzle-orm";
 import { db } from "@/lib/db";
-import { auth } from "@/lib/auth";
-import config from "@/../prompts.config";
+import { tags, resources, resourceTags, resourceConnections } from "@/lib/schema";
+import { getSession } from "@/lib/auth";
+import config from "@/../webmcp.config";
 import { Button } from "@/components/ui/button";
-import { PromptCard } from "@/components/prompts/prompt-card";
+import { ResourceCard } from "@/components/resources/resource-card";
 import { McpServerPopup } from "@/components/mcp/mcp-server-popup";
 
 interface TagPageProps {
@@ -16,29 +18,23 @@ interface TagPageProps {
 
 export async function generateMetadata({ params }: TagPageProps) {
   const { slug } = await params;
-  const tag = await db.tag.findUnique({
-    where: { slug },
-    select: { name: true },
-  });
+  const [tag] = await db.select({ name: tags.name }).from(tags).where(eq(tags.slug, slug));
 
   if (!tag) return { title: "Tag Not Found" };
 
   return {
     title: `${tag.name} - Tags`,
-    description: `Browse prompts tagged with ${tag.name}`,
+    description: `Browse resources tagged with ${tag.name}`,
   };
 }
 
 export default async function TagPage({ params, searchParams }: TagPageProps) {
   const { slug } = await params;
   const { page: pageParam } = await searchParams;
-  const session = await auth();
+  const session = await getSession();
   const t = await getTranslations("tags");
-  const tPrompts = await getTranslations("prompts");
 
-  const tag = await db.tag.findUnique({
-    where: { slug },
-  });
+  const [tag] = await db.select().from(tags).where(eq(tags.slug, slug));
 
   if (!tag) {
     notFound();
@@ -47,64 +43,68 @@ export default async function TagPage({ params, searchParams }: TagPageProps) {
   const page = Math.max(1, parseInt(pageParam || "1") || 1);
   const perPage = 24;
 
-  // Build where clause
-  const where = {
-    tags: {
-      some: { tagId: tag.id },
-    },
-    isUnlisted: false,
-    deletedAt: null,
-    OR: session?.user
-      ? [{ isPrivate: false }, { authorId: session.user.id }]
-      : [{ isPrivate: false }],
-  };
+  // Build where conditions: resources with this tag, not unlisted, not deleted, and visible
+  const visibilityCondition = session?.user
+    ? or(eq(resources.isPrivate, false), eq(resources.authorId, session.user.id))
+    : eq(resources.isPrivate, false);
 
-  // Fetch prompts with this tag
-  const [promptsRaw, total] = await Promise.all([
-    db.prompt.findMany({
-      where,
-      orderBy: { createdAt: "desc" },
-      skip: (page - 1) * perPage,
-      take: perPage,
-      include: {
-        author: {
-          select: {
-            id: true,
-            name: true,
-            username: true,
-            avatar: true,
-            verified: true,
-          },
+  // Get resource IDs that have this tag
+  const taggedResourceIds = db
+    .select({ resourceId: resourceTags.resourceId })
+    .from(resourceTags)
+    .where(eq(resourceTags.tagId, tag.id));
+
+  // Fetch resources with this tag using relational query
+  const resourcesWithTag = await db.query.resources.findMany({
+    where: and(
+      isNull(resources.deletedAt),
+      visibilityCondition,
+      // Filter to only resources with this tag using exists-like pattern
+    ),
+    orderBy: desc(resources.createdAt),
+    with: {
+      author: {
+        columns: {
+          id: true,
+          name: true,
+          username: true,
+          avatar: true,
+          verified: true,
         },
-        category: {
-          include: {
-            parent: {
-              select: { id: true, name: true, slug: true },
-            },
-          },
-        },
-        tags: {
-          include: {
-            tag: true,
-          },
-        },
-        _count: {
-          select: {
-            votes: true,
-            contributors: true,
-            outgoingConnections: { where: { label: { not: "related" } } },
-            incomingConnections: { where: { label: { not: "related" } } },
+      },
+      category: {
+        with: {
+          parent: {
+            columns: { id: true, name: true, slug: true },
           },
         },
       },
-    }),
-    db.prompt.count({ where }),
-  ]);
+      tags: {
+        with: {
+          tag: true,
+        },
+      },
+      votes: true,
+      outgoingConnections: {
+        where: ne(resourceConnections.label, "related"),
+      },
+      incomingConnections: {
+        where: ne(resourceConnections.label, "related"),
+      },
+    },
+  });
 
-  const prompts = promptsRaw.map((p) => ({
+  // Filter to only resources that have this specific tag
+  const filteredResources = resourcesWithTag.filter((p) =>
+    p.tags.some((pt) => pt.tagId === tag.id)
+  );
+
+  const total = filteredResources.length;
+  const paginatedResources = filteredResources.slice((page - 1) * perPage, page * perPage);
+
+  const resourcesList = paginatedResources.map((p) => ({
     ...p,
-    voteCount: p._count.votes,
-    contributorCount: p._count.contributors,
+    voteCount: p.votes.length,
   }));
 
   const totalPages = Math.ceil(total / perPage);
@@ -113,11 +113,9 @@ export default async function TagPage({ params, searchParams }: TagPageProps) {
     <div className="container py-6">
       {/* Header */}
       <div className="mb-6">
-        <Button variant="ghost" size="sm" asChild className="mb-4 -ml-2">
-          <Link href="/tags">
+        <Button render={<Link href="/tags" />} variant="ghost" size="sm" className="mb-4 -ml-2">
             <ArrowLeft className="h-4 w-4 mr-1.5" />
             {t("allTags")}
-          </Link>
         </Button>
 
         <div className="flex items-center justify-between gap-4">
@@ -128,65 +126,73 @@ export default async function TagPage({ params, searchParams }: TagPageProps) {
             />
             <h1 className="text-xl font-semibold">{tag.name}</h1>
             <span className="text-sm text-muted-foreground">
-              {total} {t("prompts")}
+              {total} {t("resources")}
             </span>
           </div>
           {config.features.mcp !== false && <McpServerPopup initialTags={[slug]} showOfficialBranding={!config.homepage?.useCloneBranding} />}
         </div>
       </div>
 
-      {/* Prompts Grid */}
-      {prompts.length === 0 ? (
+      {/* Resources Grid */}
+      {resourcesList.length === 0 ? (
         <div className="text-center py-12 border rounded-lg bg-muted/30">
           <Tag className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
           <p className="text-sm text-muted-foreground">
-            {tPrompts("noPrompts")}
+            {t("noResources")}
           </p>
         </div>
       ) : (
         <div className="space-y-4">
           <div className="columns-1 md:columns-2 lg:columns-3 gap-4">
-            {prompts.map((prompt) => (
-              <PromptCard key={prompt.id} prompt={prompt} />
+            {resourcesList.map((resource) => (
+              <ResourceCard key={resource.id} resource={resource as any} />
             ))}
           </div>
 
           {/* Pagination */}
           {totalPages > 1 && (
             <div className="flex items-center justify-center gap-2 pt-4">
-              <Button
-                variant="outline"
-                size="sm"
-                className="h-7 text-xs"
-                disabled={page <= 1}
-                asChild={page > 1}
-              >
-                {page > 1 ? (
-                  <Link href={`/tags/${slug}?page=${page - 1}`}>
-                    {tPrompts("previous")}
-                  </Link>
-                ) : (
-                  <span>{tPrompts("previous")}</span>
-                )}
-              </Button>
+              {page > 1 ? (
+                <Button
+                  render={<Link href={`/tags/${slug}?page=${page - 1}`} />}
+                  variant="outline"
+                  size="sm"
+                  className="h-7 text-xs"
+                >
+                  {t("previous")}
+                </Button>
+              ) : (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-7 text-xs"
+                  disabled
+                >
+                  {t("previous")}
+                </Button>
+              )}
               <span className="text-xs text-muted-foreground">
                 {page} / {totalPages}
               </span>
-              <Button
-                variant="outline"
-                size="sm"
-                className="h-7 text-xs"
-                disabled={page >= totalPages}
-                asChild={page < totalPages}
-              >
-                {page < totalPages ? (
-                  <Link href={`/tags/${slug}?page=${page + 1}`}>
-                    {tPrompts("next")}
-                  </Link>
-                ) : (
-                  <span>{tPrompts("next")}</span>
-                )}
-              </Button>
+              {page < totalPages ? (
+                <Button
+                  render={<Link href={`/tags/${slug}?page=${page + 1}`} />}
+                  variant="outline"
+                  size="sm"
+                  className="h-7 text-xs"
+                >
+                  {t("next")}
+                </Button>
+              ) : (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-7 text-xs"
+                  disabled
+                >
+                  {t("next")}
+                </Button>
+              )}
             </div>
           )}
         </div>

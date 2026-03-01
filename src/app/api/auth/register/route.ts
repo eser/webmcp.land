@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
+import { hashPassword } from "@/lib/crypto";
 import { z } from "zod";
+import { eq, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
+import { users } from "@/lib/schema";
 import { getConfig } from "@/lib/config";
 
 const registerSchema = z.object({
@@ -35,9 +37,10 @@ export async function POST(request: Request) {
     const { name, username, email, password } = parsed.data;
 
     // Check if email already exists
-    const existingEmail = await db.user.findUnique({
-      where: { email },
-    });
+    const [existingEmail] = await db
+      .select({ id: users.id })
+      .from(users)
+      .where(eq(users.email, email));
 
     if (existingEmail) {
       return NextResponse.json(
@@ -47,9 +50,10 @@ export async function POST(request: Request) {
     }
 
     // Check if username already exists (case-insensitive)
-    const existingUsername = await db.user.findFirst({
-      where: { username: { equals: username, mode: "insensitive" } },
-    });
+    const [existingUsername] = await db
+      .select({ id: users.id })
+      .from(users)
+      .where(sql`lower(${users.username}) = ${username.toLowerCase()}`);
 
     if (existingUsername) {
       return NextResponse.json(
@@ -59,17 +63,18 @@ export async function POST(request: Request) {
     }
 
     // Hash password
-    const hashedPassword = await bcrypt.hash(password, 12);
+    const hashedPassword = await hashPassword(password);
 
     // Create user
-    const user = await db.user.create({
-      data: {
+    const [user] = await db
+      .insert(users)
+      .values({
         name,
         username,
         email,
         password: hashedPassword,
-      },
-    });
+      })
+      .returning();
 
     return NextResponse.json({
       id: user.id,

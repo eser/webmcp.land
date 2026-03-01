@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 import { MoreHorizontal, Plus, Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -57,7 +57,7 @@ interface TagsTableProps {
 
 export function TagsTable({ tags }: TagsTableProps) {
   const router = useRouter();
-  const t = useTranslations("admin.tags");
+  const { t } = useTranslation();
   const [editTag, setEditTag] = useState<Tag | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [isCreating, setIsCreating] = useState(false);
@@ -92,12 +92,12 @@ export function TagsTable({ tags }: TagsTableProps) {
 
       if (!res.ok) throw new Error("Failed to save");
 
-      toast.success(editTag ? t("updated") : t("created"));
+      toast.success(editTag ? t("admin.tags.updated") : t("admin.tags.created"));
       router.refresh();
       setEditTag(null);
       setIsCreating(false);
     } catch {
-      toast.error(t("saveFailed"));
+      toast.error(t("admin.tags.saveFailed"));
     } finally {
       setLoading(false);
     }
@@ -114,10 +114,10 @@ export function TagsTable({ tags }: TagsTableProps) {
 
       if (!res.ok) throw new Error("Failed to delete");
 
-      toast.success(t("deleted"));
+      toast.success(t("admin.tags.deleted"));
       router.refresh();
     } catch {
-      toast.error(t("deleteFailed"));
+      toast.error(t("admin.tags.deleteFailed"));
     } finally {
       setLoading(false);
       setDeleteId(null);
@@ -128,12 +128,12 @@ export function TagsTable({ tags }: TagsTableProps) {
     <>
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-lg font-semibold">{t("title")}</h3>
-          <p className="text-sm text-muted-foreground">{t("description")}</p>
+          <h3 className="text-lg font-semibold">{t("admin.tags.title")}</h3>
+          <p className="text-sm text-muted-foreground">{t("admin.tags.description")}</p>
         </div>
         <Button size="sm" onClick={openCreateDialog}>
           <Plus className="h-4 w-4 mr-2" />
-          {t("add")}
+          {t("admin.tags.add")}
         </Button>
       </div>
 
@@ -141,10 +141,10 @@ export function TagsTable({ tags }: TagsTableProps) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>{t("name")}</TableHead>
-              <TableHead>{t("slug")}</TableHead>
-              <TableHead>{t("color")}</TableHead>
-              <TableHead className="text-center">{t("prompts")}</TableHead>
+              <TableHead>{t("admin.tags.name")}</TableHead>
+              <TableHead>{t("admin.tags.slug")}</TableHead>
+              <TableHead>{t("admin.tags.color")}</TableHead>
+              <TableHead className="text-center">{t("admin.tags.prompts")}</TableHead>
               <TableHead className="w-[50px]"></TableHead>
             </TableRow>
           </TableHeader>
@@ -152,7 +152,7 @@ export function TagsTable({ tags }: TagsTableProps) {
             {tags.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
-                  {t("noTags")}
+                  {t("admin.tags.noTags")}
                 </TableCell>
               </TableRow>
             ) : (
@@ -179,22 +179,20 @@ export function TagsTable({ tags }: TagsTableProps) {
                   <TableCell className="text-center">{tag._count.prompts}</TableCell>
                   <TableCell>
                     <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                      <DropdownMenuTrigger render={<Button variant="ghost" size="icon" className="h-8 w-8" />}>
                           <MoreHorizontal className="h-4 w-4" />
-                        </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem onClick={() => openEditDialog(tag)}>
                           <Pencil className="h-4 w-4 mr-2" />
-                          {t("edit")}
+                          {t("admin.tags.edit")}
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className="text-destructive"
                           onClick={() => setDeleteId(tag.id)}
                         >
                           <Trash2 className="h-4 w-4 mr-2" />
-                          {t("delete")}
+                          {t("admin.tags.delete")}
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -210,12 +208,12 @@ export function TagsTable({ tags }: TagsTableProps) {
       <Dialog open={isCreating || !!editTag} onOpenChange={() => { setIsCreating(false); setEditTag(null); }}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{editTag ? t("editTitle") : t("createTitle")}</DialogTitle>
-            <DialogDescription>{editTag ? t("editDescription") : t("createDescription")}</DialogDescription>
+            <DialogTitle>{editTag ? t("admin.tags.editTitle") : t("admin.tags.createTitle")}</DialogTitle>
+            <DialogDescription>{editTag ? t("admin.tags.editDescription") : t("admin.tags.createDescription")}</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
-              <Label htmlFor="name">{t("name")}</Label>
+              <Label htmlFor="name">{t("admin.tags.name")}</Label>
               <Input
                 id="name"
                 value={formData.name}
@@ -223,7 +221,7 @@ export function TagsTable({ tags }: TagsTableProps) {
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="slug">{t("slug")}</Label>
+              <Label htmlFor="slug">{t("admin.tags.slug")}</Label>
               <Input
                 id="slug"
                 value={formData.slug}
@@ -231,7 +229,7 @@ export function TagsTable({ tags }: TagsTableProps) {
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="color">{t("color")}</Label>
+              <Label htmlFor="color">{t("admin.tags.color")}</Label>
               <div className="flex gap-2">
                 <Input
                   id="color"
@@ -251,10 +249,10 @@ export function TagsTable({ tags }: TagsTableProps) {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => { setIsCreating(false); setEditTag(null); }}>
-              {t("cancel")}
+              {t("admin.tags.cancel")}
             </Button>
             <Button onClick={handleSubmit} disabled={loading || !formData.name || !formData.slug}>
-              {editTag ? t("save") : t("create")}
+              {editTag ? t("admin.tags.save") : t("admin.tags.create")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -264,17 +262,17 @@ export function TagsTable({ tags }: TagsTableProps) {
       <AlertDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>{t("deleteConfirmTitle")}</AlertDialogTitle>
-            <AlertDialogDescription>{t("deleteConfirmDescription")}</AlertDialogDescription>
+            <AlertDialogTitle>{t("admin.tags.deleteConfirmTitle")}</AlertDialogTitle>
+            <AlertDialogDescription>{t("admin.tags.deleteConfirmDescription")}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+            <AlertDialogCancel>{t("admin.tags.cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
               disabled={loading}
               className="bg-destructive text-white hover:bg-destructive/90"
             >
-              {t("delete")}
+              {t("admin.tags.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

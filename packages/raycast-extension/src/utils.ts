@@ -258,10 +258,10 @@ export function buildUrl(
         title: promptTitle || "Prompt",
         description: promptDescription || "",
         instructions:
-          "This is a prompt imported from prompts.chat. Follow the instructions below to complete the task.",
+          "This is a prompt imported from webmcp.land. Follow the instructions below to complete the task.",
         prompt: promptText,
         activities: [
-          "message:This prompt was imported from prompts.chat. Follow the instructions below to complete the task.",
+          "message:This prompt was imported from webmcp.land. Follow the instructions below to complete the task.",
           "Do it now",
           "Learn more about the instructions",
         ],
