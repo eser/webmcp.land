@@ -54,6 +54,9 @@ COPY --from=builder --chown=appuser:nodejs /app/server.js ./server.js
 COPY --from=builder /app/src/lib/schema.ts ./src/lib/schema.ts
 COPY --from=builder /app/drizzle.config.ts ./drizzle.config.ts
 
+# Copy AI prompt YAML files (read at runtime via fs.readFileSync)
+COPY --from=builder /app/src/lib/ai/*.yml ./src/lib/ai/
+
 # Copy entrypoint
 COPY docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
