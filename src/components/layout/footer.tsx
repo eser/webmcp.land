@@ -28,6 +28,7 @@ export function Footer() {
               <Link href="/how_to_write_effective_prompts" className="hover:text-foreground">{t("footer.howTo")}</Link>
               <Link href="/docs/self-hosting" className="hover:text-foreground">{t("footer.docs")}</Link>
               <Link href="/docs/api" className="hover:text-foreground">{t("footer.api")}</Link>
+              <Link href="/whats-webmcp" className="hover:text-foreground">{t("footer.whatsWebmcp")}</Link>
               <Link href="/privacy" className="hover:text-foreground">{t("footer.privacy")}</Link>
               <Link href="/terms" className="hover:text-foreground">{t("footer.terms")}</Link>
               <Link href="/support" className="hover:text-foreground">{t("footer.support")}</Link>
