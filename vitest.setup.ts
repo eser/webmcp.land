@@ -24,8 +24,8 @@ process.env.DATABASE_URL = "postgresql://test:test@localhost:5432/test";
 // Mock next/server
 vi.mock("next/server", () => {
   class MockNextRequest extends Request {
-    nextUrl;
-    constructor(input, init) {
+    nextUrl: URL;
+    constructor(input: string | URL | Request, init?: RequestInit) {
       const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
       super(url, init);
       this.nextUrl = new URL(url);
@@ -36,7 +36,7 @@ vi.mock("next/server", () => {
   }
 
   class MockNextResponse extends Response {
-    static json(body, init) {
+    static json(body: unknown, init?: ResponseInit) {
       return new Response(JSON.stringify(body), {
         ...init,
         headers: {
@@ -45,8 +45,8 @@ vi.mock("next/server", () => {
         },
       });
     }
-    static redirect(url, init) {
-      const status = typeof init === "number" ? init : init?.status ?? 307;
+    static redirect(url: string | URL, init?: number | ResponseInit) {
+      const status = typeof init === "number" ? init : (init as ResponseInit)?.status ?? 307;
       return new Response(null, {
         status,
         headers: { Location: url.toString() },
@@ -64,7 +64,7 @@ vi.mock("next/server", () => {
 vi.mock("next/cache", () => ({
   revalidateTag: vi.fn(),
   revalidatePath: vi.fn(),
-  unstable_cache: vi.fn((fn) => fn),
+  unstable_cache: vi.fn((fn: unknown) => fn),
 }));
 
 // Mock next/navigation
