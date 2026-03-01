@@ -7,8 +7,8 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "webmcp-land": "./bin/cli.js",
-    "webmcp.land": "./bin/cli.js"
+    "webmcp-land": "bin/cli.js",
+    "webmcp.land": "bin/cli.js"
   },
   "exports": {
     ".": {
@@ -63,7 +63,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/eser/webmcp.land"
+    "url": "git+https://github.com/eser/webmcp.land.git"
   },
   "homepage": "https://webmcp.land",
   "author": "Eser Ozvataf <eser@acikyazilim.com>",
