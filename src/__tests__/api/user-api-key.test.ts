@@ -74,7 +74,7 @@ describe("GET /api/user/api-key", () => {
   it("should return hasApiKey: true and key when exists", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
     vi.mocked(db.select).mockReturnValue(createChainMock([{
-      apiKey: "pchat_abc123def456",
+      apiKey: "wmcp_abc123def456",
       mcpPromptsPublicByDefault: true,
     }]) as any);
 
@@ -83,13 +83,13 @@ describe("GET /api/user/api-key", () => {
 
     expect(response.status).toBe(200);
     expect(data.hasApiKey).toBe(true);
-    expect(data.apiKey).toBe("pchat_abc123def456");
+    expect(data.apiKey).toBe("wmcp_abc123def456");
   });
 
   it("should return mcpPromptsPublicByDefault setting", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
     vi.mocked(db.select).mockReturnValue(createChainMock([{
-      apiKey: "pchat_abc123",
+      apiKey: "wmcp_abc123",
       mcpPromptsPublicByDefault: false,
     }]) as any);
 
@@ -118,19 +118,19 @@ describe("POST /api/user/api-key", () => {
 
   it("should generate and return new API key", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(generateApiKey).mockReturnValue("pchat_newkey123");
+    vi.mocked(generateApiKey).mockReturnValue("wmcp_newkey123");
     vi.mocked(db.update).mockReturnValue(createChainMock([]) as any);
 
     const response = await POST();
     const data = await response.json();
 
     expect(response.status).toBe(200);
-    expect(data.apiKey).toBe("pchat_newkey123");
+    expect(data.apiKey).toBe("wmcp_newkey123");
   });
 
   it("should update user with new key", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(generateApiKey).mockReturnValue("pchat_newkey123");
+    vi.mocked(generateApiKey).mockReturnValue("wmcp_newkey123");
     vi.mocked(db.update).mockReturnValue(createChainMock([]) as any);
 
     await POST();
@@ -140,7 +140,7 @@ describe("POST /api/user/api-key", () => {
 
   it("should call generateApiKey function", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    vi.mocked(generateApiKey).mockReturnValue("pchat_test");
+    vi.mocked(generateApiKey).mockReturnValue("wmcp_test");
     vi.mocked(db.update).mockReturnValue(createChainMock([]) as any);
 
     await POST();

@@ -21,6 +21,52 @@ process.env.BETTER_AUTH_SECRET = "test-secret";
 process.env.BETTER_AUTH_URL = "http://localhost:3000";
 process.env.DATABASE_URL = "postgresql://test:test@localhost:5432/test";
 
+// Mock next/server
+vi.mock("next/server", () => {
+  class MockNextRequest extends Request {
+    nextUrl;
+    constructor(input, init) {
+      const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
+      super(url, init);
+      this.nextUrl = new URL(url);
+    }
+    get cookies() {
+      return { get: () => undefined, getAll: () => [], has: () => false };
+    }
+  }
+
+  class MockNextResponse extends Response {
+    static json(body, init) {
+      return new Response(JSON.stringify(body), {
+        ...init,
+        headers: {
+          "Content-Type": "application/json",
+          ...(init?.headers || {}),
+        },
+      });
+    }
+    static redirect(url, init) {
+      const status = typeof init === "number" ? init : init?.status ?? 307;
+      return new Response(null, {
+        status,
+        headers: { Location: url.toString() },
+      });
+    }
+    static next() {
+      return new Response(null);
+    }
+  }
+
+  return { NextRequest: MockNextRequest, NextResponse: MockNextResponse };
+});
+
+// Mock next/cache
+vi.mock("next/cache", () => ({
+  revalidateTag: vi.fn(),
+  revalidatePath: vi.fn(),
+  unstable_cache: vi.fn((fn) => fn),
+}));
+
 // Mock next/navigation
 vi.mock("next/navigation", () => ({
   useRouter: () => ({

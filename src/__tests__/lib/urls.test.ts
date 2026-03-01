@@ -32,7 +32,7 @@ describe("getResourceUrl", () => {
 
   it("should handle UUID-style ID", () => {
     const uuid = "550e8400-e29b-41d4-a716-446655440000";
-    expect(getResourceUrl(uuid, "slug")).toBe(`/resources/${uuid}_slug`);
+    expect(getResourceUrl(uuid, "slug")).toBe(`/registry/${uuid}_slug`);
   });
 
   it("should handle slug with numbers", () => {
