@@ -1,30 +1,28 @@
 # Contribution Guidelines
 
-Thank you for your interest in contributing to Awesome ChatGPT Prompts! 
+Thank you for your interest in contributing to **webmcp.land**!
 
 ## How to Contribute
 
 The easiest way to contribute is through **[webmcp.land](https://webmcp.land)**:
 
 1. Visit [webmcp.land](https://webmcp.land)
-2. Sign in with your GitHub account
-3. Create and submit your prompt
-4. Your contribution will automatically sync to this repository
+2. Sign in with your account
+3. Register your MCP or WebMCP service endpoint
+4. Your contribution will be visible in the registry
 
-Your GitHub username will be credited as the contributor, and you'll appear in the repository's contributors list.
+## Resource Guidelines
 
-## Prompt Guidelines
+When registering a new MCP/WebMCP resource:
 
-When creating a new prompt:
-
-- **Test your prompt** - Ensure it generates intended results and can be used by others
-- **Be descriptive** - Give your prompt a clear, concise title
-- **Be original** - Don't submit duplicates of existing prompts
-- **Be appropriate** - Keep content suitable for all audiences
+- **Provide a valid endpoint** — Ensure your MCP/WebMCP service URL is reachable
+- **Be descriptive** — Give your resource a clear title and description of its capabilities
+- **Be original** — Don't submit duplicates of existing resources
+- **Be appropriate** — Keep content suitable for all audiences
 
 ## Direct Contributions
 
-For bug fixes, documentation improvements, or other non-prompt contributions:
+For bug fixes, documentation improvements, or platform enhancements:
 
 1. Fork the repository
 2. Create a branch for your changes
@@ -32,8 +30,8 @@ For bug fixes, documentation improvements, or other non-prompt contributions:
 
 ## Questions & Issue Policy
 
-Open an issue if you have questions about contributing. 
+Open an issue if you have questions about contributing.
 
-**Important:** This repository is strictly for MCP resources. 
+**Important:** This repository is for MCP/WebMCP resources and the webmcp.land platform.
 - Do **not** post advertisements.
-- Any off-topic issues will be closed immediately, and the posting user will be reported to GitHub for spam and malicious activity.
+- Any off-topic issues will be closed immediately.

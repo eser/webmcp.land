@@ -11,13 +11,12 @@
 </h1>
 
 <p align="center">
-  <strong>Discover and connect MCP services for any task</strong><br>
-  <sub>The open registry for MCP and WebMCP service endpoints</sub>
+  <strong>The AI-enabled Service Registry of MCP & WebMCP resources</strong><br>
+  <sub>Discover, register, and connect MCP services for any task. Free and open source.</sub>
 </p>
 
 <p align="center">
   <a href="https://webmcp.land"><img src="https://img.shields.io/badge/Website-webmcp.land-blue?style=flat-square" alt="Website"></a>
-  <a href="https://github.com/sindresorhus/awesome"><img src="https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg" alt="Awesome"></a>
   <a href="https://deepwiki.com/eser/webmcp.land"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki"></a>
 </p>
 
@@ -31,7 +30,9 @@
 
 ## What is this?
 
-**webmcp.land** is a discovery platform for [MCP](https://modelcontextprotocol.io/) (Model Context Protocol) and WebMCP services. Organizations register their MCP/WebMCP endpoints, and the platform automatically discovers their tools, methods, and capabilities — making them searchable by use case.
+**webmcp.land** is a discovery platform for [MCP](https://modelcontextprotocol.io/) (Model Context Protocol) and WebMCP services. Organizations and developers register their MCP/WebMCP endpoints, and the platform discovers their tools, methods, and capabilities — making them searchable by use case.
+
+It is forked from [@f](https://github.com/f)'s [prompts.chat](https://github.com/f/awesome-chatgpt-prompts) and pivoted for MCP resources, building on top of that foundation.
 
 **Example:** An airline registers their WebMCP endpoint. When a user searches for "reserving a flight ticket", webmcp.land surfaces the airline's booking tools and capabilities.
 
@@ -60,6 +61,16 @@ git clone https://github.com/eser/webmcp.land.git
 cd webmcp.land
 pnpm install && pnpm run setup
 ```
+
+After setup, push the database schema and seed with demo data:
+
+```bash
+pnpm run db:push        # Create tables
+pnpm run db:seed         # Seed with demo data (50 sample resources)
+pnpm run dev             # Start dev server at localhost:3000
+```
+
+**Default admin credentials:** `admin@webmcp.land` / `password123`
 
 The setup wizard configures branding, theme, authentication (GitHub/Google/Azure AD), and features.
 
@@ -111,67 +122,14 @@ Use webmcp.land as an MCP server in your AI tools.
 
 ---
 
-## Sponsors
+## Tech Stack
 
-<p align="center">
-  <!-- Clemta -->
-  <a href="https://clemta.com/?utm_source=webmcp.land">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/eser/webmcp.land/main/public/sponsors/clemta-dark.webp">
-      <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/eser/webmcp.land/main/public/sponsors/clemta.webp">
-      <img height="35" alt="Clemta" src="https://raw.githubusercontent.com/eser/webmcp.land/main/public/sponsors/clemta.webp">
-    </picture>
-  </a>&nbsp;&nbsp;
-  <!-- Wiro -->
-  <a href="https://wiro.ai/?utm_source=webmcp.land">
-    <img height="30" alt="Wiro" src="https://raw.githubusercontent.com/eser/webmcp.land/main/public/sponsors/wiro.png">
-  </a>&nbsp;&nbsp;
-  <!-- Cognition -->
-  <a href="https://wind.surf/webmcp-land">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/eser/webmcp.land/main/public/sponsors/cognition-dark.svg">
-      <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/eser/webmcp.land/main/public/sponsors/cognition.svg">
-      <img height="35" alt="Cognition" src="https://raw.githubusercontent.com/eser/webmcp.land/main/public/sponsors/cognition.svg">
-    </picture>
-  </a>&nbsp;&nbsp;
-  <!-- Sentry -->
-  <a href="https://sentry.io/?utm_source=webmcp.land">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/eser/webmcp.land/main/public/sponsors/sentry-dark.svg">
-      <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/eser/webmcp.land/main/public/sponsors/sentry.svg">
-      <img height="30" alt="Sentry" src="https://raw.githubusercontent.com/eser/webmcp.land/main/public/sponsors/sentry.svg">
-    </picture>
-  </a>&nbsp;&nbsp;
-  <!-- MitteAI -->
-  <a href="https://mitte.ai/?utm_source=webmcp.land">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/eser/webmcp.land/main/public/sponsors/mitte-dark.svg">
-      <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/eser/webmcp.land/main/public/sponsors/mitte.svg">
-      <img height="35" alt="MitteAI" src="https://raw.githubusercontent.com/eser/webmcp.land/main/public/sponsors/mitte.svg">
-    </picture>
-  </a>&nbsp;&nbsp;
-  <!-- Each Labs -->
-  <a href="https://www.eachlabs.ai/?utm_source=webmcp.land&utm_medium=referral">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/eser/webmcp.land/main/public/sponsors/eachlabs-dark.png">
-      <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/eser/webmcp.land/main/public/sponsors/eachlabs.png">
-      <img height="28" alt="Each Labs" src="https://raw.githubusercontent.com/eser/webmcp.land/main/public/sponsors/eachlabs.png">
-    </picture>
-  </a>&nbsp;&nbsp;
-  <!-- Warp -->
-  <a href="https://warp.dev/?utm_source=webmcp.land">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/eser/webmcp.land/main/public/sponsors/warp-dark.svg">
-      <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/eser/webmcp.land/main/public/sponsors/warp.svg">
-      <img height="25" alt="Warp" src="https://raw.githubusercontent.com/eser/webmcp.land/main/public/sponsors/warp.svg">
-    </picture>
-  </a>
-</p>
-
-<p align="center">
-  <sub>Built with <a href="https://wind.surf/webmcp-land">Windsurf</a> and <a href="https://devin.ai">Devin</a></sub><br>
-  <a href="https://github.com/sponsors/eser/sponsorships?sponsor=eser&tier_id=558224&preview=false"><strong>Become a Sponsor</strong></a>
-</p>
+- **Framework:** [vinext](https://github.com/nicepkg/vinext) (Vite-based App Router) + React 19
+- **Database:** PostgreSQL + [Drizzle ORM](https://orm.drizzle.team/)
+- **Auth:** [Better Auth](https://www.better-auth.com/)
+- **Styling:** Tailwind CSS v4 + shadcn/ui
+- **Language:** TypeScript
+- **i18n:** 17 languages via i18next
 
 ---
 
@@ -185,4 +143,4 @@ Use webmcp.land as an MCP server in your AI tools.
 
 ## License
 
-**[Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)** — Copy, modify, distribute, and use freely. See [LICENSE](LICENSE) for details.
+**[Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)** — Free to use, modify, and share with proper attribution. See [LICENSE](LICENSE) for details.

@@ -1,6 +1,6 @@
 # Claude Code Plugin
 
-Access webmcp.land directly in [Claude Code](https://code.claude.com) with our official plugin. Search prompts, discover skills, and improve your prompts without leaving your IDE.
+Access webmcp.land directly in [Claude Code](https://code.claude.com) with our official plugin. Search MCP resources, discover skills, and manage your registry without leaving your IDE.
 
 ## Installation
 
@@ -20,28 +20,26 @@ Then install the plugin:
 
 | Feature | Description |
 |---------|-------------|
-| **MCP Server** | Connect to webmcp.land API for real-time prompt access |
+| **MCP Server** | Connect to webmcp.land API for real-time resource access |
 | **Commands** | `/webmcp.land:prompts` and `/webmcp.land:skills` slash commands |
-| **Agents** | Prompt Manager and Skill Manager agents for complex workflows |
-| **Skills** | Auto-activating skills for prompt and skill discovery |
+| **Agents** | Resource Manager and Skill Manager agents for complex workflows |
+| **Skills** | Auto-activating skills for resource and skill discovery |
 
 ## Commands
 
-### Search Prompts
+### Search Resources
 
 ```
 /webmcp.land:prompts <query>
-/webmcp.land:prompts <query> --type IMAGE
-/webmcp.land:prompts <query> --category coding
-/webmcp.land:prompts <query> --tag productivity
+/webmcp.land:prompts <query> --category devtools
+/webmcp.land:prompts <query> --tag automation
 ```
 
 **Examples:**
 ```
 /webmcp.land:prompts code review
-/webmcp.land:prompts writing assistant --category writing
-/webmcp.land:prompts midjourney --type IMAGE
-/webmcp.land:prompts react developer --tag coding
+/webmcp.land:prompts payment gateway --category finance
+/webmcp.land:prompts docker management --tag devops
 ```
 
 ### Search Skills
@@ -63,14 +61,13 @@ Then install the plugin:
 
 The plugin provides these tools via the webmcp.land MCP server:
 
-### Prompt Tools
+### Resource Tools
 
 | Tool | Description |
 |------|-------------|
-| `search_prompts` | Search prompts by keyword, category, tag, or type |
-| `get_prompt` | Retrieve a prompt with variable substitution |
-| `save_prompt` | Save a new prompt (requires API key) |
-| `improve_prompt` | Enhance prompts using AI |
+| `search_resources` | Search resources by keyword, category, or tag |
+| `get_resource` | Retrieve a resource's details and capabilities |
+| `save_resource` | Register a new resource (requires API key) |
 
 ### Skill Tools
 
@@ -85,13 +82,12 @@ The plugin provides these tools via the webmcp.land MCP server:
 
 ## Agents
 
-### Prompt Manager
+### Resource Manager
 
 The `prompt-manager` agent helps you:
-- Search for prompts across webmcp.land
-- Get and fill prompt variables
-- Save new prompts to your account
-- Improve prompts using AI
+- Search for MCP/WebMCP resources across webmcp.land
+- Get resource details and capabilities
+- Register new resources to your account
 
 ### Skill Manager
 
@@ -103,12 +99,12 @@ The `skill-manager` agent helps you:
 
 ## Skills (Auto-Activating)
 
-### Prompt Lookup
+### Resource Lookup
 
 Automatically activates when you:
-- Ask for prompt templates
-- Want to search for prompts
-- Need to improve a prompt
+- Ask for MCP service templates
+- Want to search for resources
+- Need to discover MCP capabilities
 - Mention webmcp.land
 
 ### Skill Lookup
@@ -121,14 +117,14 @@ Automatically activates when you:
 
 ## Authentication
 
-To save prompts and skills, you need an API key from [webmcp.land/settings](https://webmcp.land/settings).
+To register resources and skills, you need an API key from [webmcp.land/settings](https://webmcp.land/settings).
 
 ### Option 1: Environment Variable
 
-Set the `PROMPTS_API_KEY` environment variable:
+Set the `WEBMCP_API_KEY` environment variable:
 
 ```bash
-export PROMPTS_API_KEY=your_api_key_here
+export WEBMCP_API_KEY=your_api_key_here
 ```
 
 ### Option 2: MCP Header
@@ -136,7 +132,7 @@ export PROMPTS_API_KEY=your_api_key_here
 Add the header when connecting to the MCP server:
 
 ```
-PROMPTS_API_KEY: your_api_key_here
+WEBMCP_API_KEY: your_api_key_here
 ```
 
 ## Plugin Structure
@@ -150,17 +146,17 @@ plugins/claude/webmcp.land/
 │   ├── prompts.md           # /webmcp.land:prompts command
 │   └── skills.md            # /webmcp.land:skills command
 ├── agents/
-│   ├── prompt-manager.md    # Prompt management agent
+│   ├── prompt-manager.md    # Resource management agent
 │   └── skill-manager.md     # Skill management agent
 └── skills/
     ├── prompt-lookup/
-    │   └── SKILL.md         # Prompt discovery skill
+    │   └── SKILL.md         # Resource discovery skill
     └── skill-lookup/
         └── SKILL.md         # Skill discovery skill
 ```
 
 ## Links
 
-- **[webmcp.land](https://webmcp.land)** - Browse all prompts and skills
-- **[API Documentation](https://webmcp.land/api/mcp)** - MCP server endpoint
+- **[webmcp.land](https://webmcp.land)** - Browse all resources and skills
+- **[API Documentation](https://webmcp.land/docs/api)** - API and MCP server docs
 - **[Settings](https://webmcp.land/settings)** - Get your API key
