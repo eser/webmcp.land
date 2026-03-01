@@ -92,7 +92,7 @@ describe("POST /api/resources/[id]/comments/[commentId]/flag", () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "admin1", role: "ADMIN" } } as never);
     mockSelectSequence(db, [{
       id: "456",
-      promptId: "different-prompt",
+      resourceId: "different-prompt",
       flagged: false,
     }]);
 
@@ -112,7 +112,7 @@ describe("POST /api/resources/[id]/comments/[commentId]/flag", () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "admin1", role: "ADMIN" } } as never);
     mockSelectSequence(db, [{
       id: "456",
-      promptId: "123",
+      resourceId: "123",
       flagged: false,
     }]);
     vi.mocked(db.update).mockReturnValue(createChainMock([{ flagged: true }]) as any);
@@ -134,7 +134,7 @@ describe("POST /api/resources/[id]/comments/[commentId]/flag", () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "admin1", role: "ADMIN" } } as never);
     mockSelectSequence(db, [{
       id: "456",
-      promptId: "123",
+      resourceId: "123",
       flagged: true,
     }]);
     vi.mocked(db.update).mockReturnValue(createChainMock([{ flagged: false }]) as any);
@@ -156,7 +156,7 @@ describe("POST /api/resources/[id]/comments/[commentId]/flag", () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "admin1", role: "ADMIN" } } as never);
     mockSelectSequence(db, [{
       id: "456",
-      promptId: "123",
+      resourceId: "123",
       flagged: false,
     }]);
     vi.mocked(db.update).mockReturnValue(createChainMock([{ flagged: true }]) as any);
@@ -175,7 +175,7 @@ describe("POST /api/resources/[id]/comments/[commentId]/flag", () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "admin1", role: "ADMIN" } } as never);
     mockSelectSequence(db, [{
       id: "456",
-      promptId: "123",
+      resourceId: "123",
       flagged: true,
     }]);
     vi.mocked(db.update).mockReturnValue(createChainMock([{ flagged: false }]) as any);

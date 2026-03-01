@@ -58,7 +58,7 @@ describe("GET /api/user/notifications", () => {
         id: "notif1",
         type: "COMMENT",
         createdAt: new Date(),
-        promptId: "prompt1",
+        resourceId: "prompt1",
         actorId: "user2",
         actorName: "Commenter",
         actorUsername: "commenter",
@@ -74,7 +74,7 @@ describe("GET /api/user/notifications", () => {
     expect(data.pendingChangeRequests).toBe(3);
     expect(data.unreadComments).toBe(1);
     expect(data.commentNotifications).toHaveLength(1);
-    expect(data.commentNotifications[0].promptTitle).toBe("Test Prompt");
+    expect(data.commentNotifications[0].resourceTitle).toBe("Test Prompt");
   });
 
   it("should include actor info in notifications", async () => {
@@ -85,7 +85,7 @@ describe("GET /api/user/notifications", () => {
         id: "notif1",
         type: "REPLY",
         createdAt: new Date(),
-        promptId: "prompt1",
+        resourceId: "prompt1",
         actorId: "user2",
         actorName: "Reply User",
         actorUsername: "replyuser",

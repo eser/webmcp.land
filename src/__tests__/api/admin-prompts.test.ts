@@ -75,7 +75,7 @@ describe("GET /api/admin/prompts", () => {
     const data = await response.json();
 
     expect(response.status).toBe(200);
-    expect(data.prompts).toHaveLength(1);
+    expect(data.resources).toHaveLength(1);
     expect(data.pagination.total).toBe(1);
   });
 

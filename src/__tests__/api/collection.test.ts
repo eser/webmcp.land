@@ -61,9 +61,9 @@ describe("GET /api/collection", () => {
       {
         id: "col1",
         userId: "user1",
-        promptId: "prompt1",
+        resourceId: "prompt1",
         createdAt: new Date(),
-        prompt: {
+        resource: {
           id: "prompt1",
           title: "Test Prompt",
           author: {
@@ -86,7 +86,7 @@ describe("GET /api/collection", () => {
 
     expect(response.status).toBe(200);
     expect(data.collections).toHaveLength(1);
-    expect(data.collections[0].prompt.title).toBe("Test Prompt");
+    expect(data.collections[0].resource.title).toBe("Test Prompt");
   });
 
   it("should fetch collections using query API", async () => {
@@ -109,7 +109,7 @@ describe("POST /api/collection", () => {
 
     const request = new Request("http://localhost:3000/api/collection", {
       method: "POST",
-      body: JSON.stringify({ promptId: "123" }),
+      body: JSON.stringify({ resourceId: "123" }),
     });
 
     const response = await POST(request as unknown as NextRequest);
@@ -119,7 +119,7 @@ describe("POST /api/collection", () => {
     expect(data.error).toBe("Unauthorized");
   });
 
-  it("should return 400 for invalid input - missing promptId", async () => {
+  it("should return 400 for invalid input - missing resourceId", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
 
     const request = new Request("http://localhost:3000/api/collection", {
@@ -134,12 +134,12 @@ describe("POST /api/collection", () => {
     expect(data.error).toBe("Invalid input");
   });
 
-  it("should return 400 for empty promptId", async () => {
+  it("should return 400 for empty resourceId", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
 
     const request = new Request("http://localhost:3000/api/collection", {
       method: "POST",
-      body: JSON.stringify({ promptId: "" }),
+      body: JSON.stringify({ resourceId: "" }),
     });
 
     const response = await POST(request as unknown as NextRequest);
@@ -155,7 +155,7 @@ describe("POST /api/collection", () => {
 
     const request = new Request("http://localhost:3000/api/collection", {
       method: "POST",
-      body: JSON.stringify({ promptId: "123" }),
+      body: JSON.stringify({ resourceId: "123" }),
     });
 
     const response = await POST(request as unknown as NextRequest);
@@ -174,14 +174,14 @@ describe("POST /api/collection", () => {
 
     const request = new Request("http://localhost:3000/api/collection", {
       method: "POST",
-      body: JSON.stringify({ promptId: "nonexistent" }),
+      body: JSON.stringify({ resourceId: "nonexistent" }),
     });
 
     const response = await POST(request as unknown as NextRequest);
     const data = await response.json();
 
     expect(response.status).toBe(404);
-    expect(data.error).toBe("Prompt not found");
+    expect(data.error).toBe("Resource not found");
   });
 
   it("should return 403 when adding private prompt not owned by user", async () => {
@@ -197,14 +197,14 @@ describe("POST /api/collection", () => {
 
     const request = new Request("http://localhost:3000/api/collection", {
       method: "POST",
-      body: JSON.stringify({ promptId: "123" }),
+      body: JSON.stringify({ resourceId: "123" }),
     });
 
     const response = await POST(request as unknown as NextRequest);
     const data = await response.json();
 
     expect(response.status).toBe(403);
-    expect(data.error).toBe("Cannot add private prompt");
+    expect(data.error).toBe("Cannot add private resource");
   });
 
   it("should allow adding own private prompt to collection", async () => {
@@ -220,12 +220,12 @@ describe("POST /api/collection", () => {
     vi.mocked(db.insert).mockReturnValue(createChainMock([{
       id: "col1",
       userId: "user1",
-      promptId: "123",
+      resourceId: "123",
     }]) as any);
 
     const request = new Request("http://localhost:3000/api/collection", {
       method: "POST",
-      body: JSON.stringify({ promptId: "123" }),
+      body: JSON.stringify({ resourceId: "123" }),
     });
 
     const response = await POST(request as unknown as NextRequest);
@@ -248,12 +248,12 @@ describe("POST /api/collection", () => {
     vi.mocked(db.insert).mockReturnValue(createChainMock([{
       id: "col1",
       userId: "user1",
-      promptId: "123",
+      resourceId: "123",
     }]) as any);
 
     const request = new Request("http://localhost:3000/api/collection", {
       method: "POST",
-      body: JSON.stringify({ promptId: "123" }),
+      body: JSON.stringify({ resourceId: "123" }),
     });
 
     const response = await POST(request as unknown as NextRequest);
@@ -274,7 +274,7 @@ describe("DELETE /api/collection", () => {
   it("should return 401 if not authenticated", async () => {
     vi.mocked(getSession).mockResolvedValue(null as any);
 
-    const request = new Request("http://localhost:3000/api/collection?promptId=123", {
+    const request = new Request("http://localhost:3000/api/collection?resourceId=123", {
       method: "DELETE",
     });
 
@@ -285,7 +285,7 @@ describe("DELETE /api/collection", () => {
     expect(data.error).toBe("Unauthorized");
   });
 
-  it("should return 400 if promptId missing", async () => {
+  it("should return 400 if resourceId missing", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
 
     const request = new Request("http://localhost:3000/api/collection", {
@@ -296,14 +296,14 @@ describe("DELETE /api/collection", () => {
     const data = await response.json();
 
     expect(response.status).toBe(400);
-    expect(data.error).toBe("promptId required");
+    expect(data.error).toBe("resourceId required");
   });
 
   it("should remove prompt from collection successfully", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
     vi.mocked(db.delete).mockReturnValue(createChainMock([]) as any);
 
-    const request = new Request("http://localhost:3000/api/collection?promptId=123", {
+    const request = new Request("http://localhost:3000/api/collection?resourceId=123", {
       method: "DELETE",
     });
 
@@ -321,7 +321,7 @@ describe("DELETE /api/collection", () => {
       throw new Error("Not found");
     });
 
-    const request = new Request("http://localhost:3000/api/collection?promptId=123", {
+    const request = new Request("http://localhost:3000/api/collection?resourceId=123", {
       method: "DELETE",
     });
 

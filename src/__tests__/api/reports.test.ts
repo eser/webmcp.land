@@ -26,7 +26,7 @@ describe("POST /api/reports", () => {
 
     const request = new Request("http://localhost:3000/api/reports", {
       method: "POST",
-      body: JSON.stringify({ promptId: "123", reason: "SPAM" }),
+      body: JSON.stringify({ resourceId: "123", reason: "SPAM" }),
     });
 
     const response = await POST(request as unknown as NextRequest);
@@ -41,7 +41,7 @@ describe("POST /api/reports", () => {
 
     const request = new Request("http://localhost:3000/api/reports", {
       method: "POST",
-      body: JSON.stringify({ promptId: "123", reason: "INVALID_REASON" }),
+      body: JSON.stringify({ resourceId: "123", reason: "INVALID_REASON" }),
     });
 
     const response = await POST(request as unknown as NextRequest);
@@ -51,7 +51,7 @@ describe("POST /api/reports", () => {
     expect(data.error).toBe("Invalid request data");
   });
 
-  it("should return 400 for missing promptId", async () => {
+  it("should return 400 for missing resourceId", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
 
     const request = new Request("http://localhost:3000/api/reports", {
@@ -72,14 +72,14 @@ describe("POST /api/reports", () => {
 
     const request = new Request("http://localhost:3000/api/reports", {
       method: "POST",
-      body: JSON.stringify({ promptId: "nonexistent", reason: "SPAM" }),
+      body: JSON.stringify({ resourceId: "nonexistent", reason: "SPAM" }),
     });
 
     const response = await POST(request as unknown as NextRequest);
     const data = await response.json();
 
     expect(response.status).toBe(404);
-    expect(data.error).toBe("Prompt not found");
+    expect(data.error).toBe("Resource not found");
   });
 
   it("should return 400 when reporting own prompt (non-relist)", async () => {
@@ -91,14 +91,14 @@ describe("POST /api/reports", () => {
 
     const request = new Request("http://localhost:3000/api/reports", {
       method: "POST",
-      body: JSON.stringify({ promptId: "123", reason: "SPAM" }),
+      body: JSON.stringify({ resourceId: "123", reason: "SPAM" }),
     });
 
     const response = await POST(request as unknown as NextRequest);
     const data = await response.json();
 
     expect(response.status).toBe(400);
-    expect(data.error).toBe("You cannot report your own prompt");
+    expect(data.error).toBe("You cannot report your own resource");
   });
 
   it("should allow relist request on own prompt", async () => {
@@ -111,7 +111,7 @@ describe("POST /api/reports", () => {
 
     const request = new Request("http://localhost:3000/api/reports", {
       method: "POST",
-      body: JSON.stringify({ promptId: "123", reason: "RELIST_REQUEST" }),
+      body: JSON.stringify({ resourceId: "123", reason: "RELIST_REQUEST" }),
     });
 
     const response = await POST(request as unknown as NextRequest);
@@ -130,14 +130,14 @@ describe("POST /api/reports", () => {
 
     const request = new Request("http://localhost:3000/api/reports", {
       method: "POST",
-      body: JSON.stringify({ promptId: "123", reason: "SPAM" }),
+      body: JSON.stringify({ resourceId: "123", reason: "SPAM" }),
     });
 
     const response = await POST(request as unknown as NextRequest);
     const data = await response.json();
 
     expect(response.status).toBe(400);
-    expect(data.error).toBe("You have already reported this prompt");
+    expect(data.error).toBe("You have already reported this resource");
   });
 
   it("should create report successfully", async () => {
@@ -151,7 +151,7 @@ describe("POST /api/reports", () => {
     const request = new Request("http://localhost:3000/api/reports", {
       method: "POST",
       body: JSON.stringify({
-        promptId: "123",
+        resourceId: "123",
         reason: "SPAM",
         details: "This is spam content",
       }),
@@ -182,7 +182,7 @@ describe("POST /api/reports", () => {
 
       const request = new Request("http://localhost:3000/api/reports", {
         method: "POST",
-        body: JSON.stringify({ promptId: "123", reason }),
+        body: JSON.stringify({ resourceId: "123", reason }),
       });
 
       const response = await POST(request as unknown as NextRequest);
@@ -201,7 +201,7 @@ describe("POST /api/reports", () => {
 
     const request = new Request("http://localhost:3000/api/reports", {
       method: "POST",
-      body: JSON.stringify({ promptId: "123", reason: "SPAM" }),
+      body: JSON.stringify({ resourceId: "123", reason: "SPAM" }),
     });
 
     await POST(request as unknown as NextRequest);
@@ -219,7 +219,7 @@ describe("POST /api/reports", () => {
 
     const request = new Request("http://localhost:3000/api/reports", {
       method: "POST",
-      body: JSON.stringify({ promptId: "123", reason: "SPAM" }),
+      body: JSON.stringify({ resourceId: "123", reason: "SPAM" }),
     });
 
     await POST(request as unknown as NextRequest);
@@ -236,7 +236,7 @@ describe("POST /api/reports", () => {
 
     const request = new Request("http://localhost:3000/api/reports", {
       method: "POST",
-      body: JSON.stringify({ promptId: "123", reason: "SPAM" }),
+      body: JSON.stringify({ resourceId: "123", reason: "SPAM" }),
     });
 
     const response = await POST(request as unknown as NextRequest);

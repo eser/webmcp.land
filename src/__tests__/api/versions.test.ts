@@ -183,32 +183,30 @@ describe("POST /api/resources/[id]/versions", () => {
     expect(data.error).toBe("forbidden");
   });
 
-  it("should return 400 for empty content", async () => {
+  it("should create version with empty description", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    mockSelectSequence(db, [{
-      authorId: "user1",
-      content: "Original content",
-    }]);
+    mockSelectSequence(db,
+      [{ authorId: "user1", description: "Original" }],
+      [],  // no previous versions
+    );
 
     const request = new Request("http://localhost:3000/api/resources/123/versions", {
       method: "POST",
-      body: JSON.stringify({ content: "" }),
+      body: JSON.stringify({ description: "" }),
     });
     const response = await POST(request as unknown as NextRequest, {
       params: Promise.resolve({ id: "123" }),
     });
-    const data = await response.json();
 
-    expect(response.status).toBe(400);
-    expect(data.error).toBe("validation_error");
+    expect(response.status).toBe(201);
   });
 
-  it("should return 400 for missing content", async () => {
+  it("should create version with no fields", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    mockSelectSequence(db, [{
-      authorId: "user1",
-      content: "Original content",
-    }]);
+    mockSelectSequence(db,
+      [{ authorId: "user1", description: "Original" }],
+      [],  // no previous versions
+    );
 
     const request = new Request("http://localhost:3000/api/resources/123/versions", {
       method: "POST",
@@ -217,30 +215,26 @@ describe("POST /api/resources/[id]/versions", () => {
     const response = await POST(request as unknown as NextRequest, {
       params: Promise.resolve({ id: "123" }),
     });
-    const data = await response.json();
 
-    expect(response.status).toBe(400);
-    expect(data.error).toBe("validation_error");
+    expect(response.status).toBe(201);
   });
 
-  it("should return 400 when content is same as current version", async () => {
+  it("should create version even with same description", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    mockSelectSequence(db, [{
-      authorId: "user1",
-      content: "Same content",
-    }]);
+    mockSelectSequence(db,
+      [{ authorId: "user1", description: "Same content" }],
+      [],  // no previous versions
+    );
 
     const request = new Request("http://localhost:3000/api/resources/123/versions", {
       method: "POST",
-      body: JSON.stringify({ content: "Same content" }),
+      body: JSON.stringify({ description: "Same content" }),
     });
     const response = await POST(request as unknown as NextRequest, {
       params: Promise.resolve({ id: "123" }),
     });
-    const data = await response.json();
 
-    expect(response.status).toBe(400);
-    expect(data.error).toBe("no_change");
+    expect(response.status).toBe(201);
   });
 
   it("should create version with incrementing version number", async () => {

@@ -126,7 +126,7 @@ describe("POST /api/resources/[id]/comments/[commentId]/vote", () => {
 
   it("should return 404 if comment belongs to different resource", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    mockSelectSequence(db, [{ id: "456", promptId: "different-prompt" }]);
+    mockSelectSequence(db, [{ id: "456", resourceId: "different-prompt" }]);
 
     const request = new Request("http://localhost:3000/api/resources/123/comments/456/vote", {
       method: "POST",
@@ -144,7 +144,7 @@ describe("POST /api/resources/[id]/comments/[commentId]/vote", () => {
   it("should create new upvote when no existing vote", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
     mockSelectSequence(db,
-      [{ id: "456", promptId: "123" }],  // comment exists
+      [{ id: "456", resourceId: "123" }],  // comment exists
       [],                                  // no existing vote
     );
     vi.mocked(db.insert).mockReturnValue(createChainMock([]) as any);
@@ -166,7 +166,7 @@ describe("POST /api/resources/[id]/comments/[commentId]/vote", () => {
   it("should create new downvote when no existing vote", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
     mockSelectSequence(db,
-      [{ id: "456", promptId: "123" }],
+      [{ id: "456", resourceId: "123" }],
       [],
     );
     vi.mocked(db.insert).mockReturnValue(createChainMock([]) as any);
@@ -188,7 +188,7 @@ describe("POST /api/resources/[id]/comments/[commentId]/vote", () => {
   it("should toggle off when voting same value twice", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
     mockSelectSequence(db,
-      [{ id: "456", promptId: "123" }],
+      [{ id: "456", resourceId: "123" }],
       [{ userId: "user1", commentId: "456", value: 1 }],  // existing upvote
     );
     vi.mocked(db.delete).mockReturnValue(createChainMock([]) as any);
@@ -210,7 +210,7 @@ describe("POST /api/resources/[id]/comments/[commentId]/vote", () => {
   it("should switch vote when voting opposite value", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
     mockSelectSequence(db,
-      [{ id: "456", promptId: "123" }],
+      [{ id: "456", resourceId: "123" }],
       [{ userId: "user1", commentId: "456", value: 1 }],  // existing upvote
     );
     vi.mocked(db.update).mockReturnValue(createChainMock([{ score: -1 }]) as any);
@@ -308,7 +308,7 @@ describe("DELETE /api/resources/[id]/comments/[commentId]/vote", () => {
   it("should delete vote successfully", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
     mockSelectSequence(db,
-      [{ id: "456", promptId: "123" }],
+      [{ id: "456", resourceId: "123" }],
       [{ userId: "user1", commentId: "456", value: 1 }],
     );
     vi.mocked(db.delete).mockReturnValue(createChainMock([]) as any);
@@ -329,7 +329,7 @@ describe("DELETE /api/resources/[id]/comments/[commentId]/vote", () => {
   it("should handle removing non-existent vote gracefully", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
     mockSelectSequence(db,
-      [{ id: "456", promptId: "123" }],
+      [{ id: "456", resourceId: "123" }],
       [],  // no existing vote
     );
     vi.mocked(db.update).mockReturnValue(createChainMock([{ score: 0 }]) as any);

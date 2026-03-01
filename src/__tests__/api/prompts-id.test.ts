@@ -260,14 +260,13 @@ describe("PATCH /api/resources/[id]", () => {
     const updatedResource = {
       id: "123",
       title: "Updated Title",
-      content: "Updated content",
+      description: "Updated description",
       isPrivate: false,
-      isUnlisted: false,
       authorId: "user1",
       categoryId: null,
     };
     mockSelectSequence(db,
-      [{ authorId: "user1", content: "original" }],
+      [{ authorId: "user1", description: "original" }],
     );
     vi.mocked(db.update).mockReturnValue(createChainMock([updatedResource]) as any);
     vi.mocked(db.insert).mockReturnValue(createChainMock([]) as any);
@@ -275,7 +274,7 @@ describe("PATCH /api/resources/[id]", () => {
 
     const request = new Request("http://localhost:3000/api/resources/123", {
       method: "PATCH",
-      body: JSON.stringify({ title: "Updated Title", content: "Updated content" }),
+      body: JSON.stringify({ title: "Updated Title", description: "Updated description" }),
     });
 
     const response = await PATCH(request as unknown as NextRequest, { params: Promise.resolve({ id: "123" }) });
@@ -344,10 +343,8 @@ describe("DELETE /api/resources/[id]", () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1", role: "USER" } } as never);
     mockSelectSequence(db, [{
       id: "123",
-      authorId: "user1",
+      authorId: "other-user",
       deletedAt: null,
-      isUnlisted: false,
-      delistReason: null,
     }]);
 
     const request = new Request("http://localhost:3000/api/resources/123", {

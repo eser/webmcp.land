@@ -199,8 +199,8 @@ describe("POST /api/resources", () => {
   const validResourceData = {
     title: "Test Resource",
     description: "A test resource",
-    content: "This is test content",
-    type: "TEXT",
+    endpointUrl: "https://example.com/mcp",
+    serverType: "MCP",
     tagIds: [],
     isPrivate: false,
   };

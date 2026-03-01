@@ -77,7 +77,7 @@ describe("DELETE /api/resources/[id]/comments/[commentId]", () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1", role: "USER" } } as never);
     mockSelectSequence(db, [{
       id: "456",
-      promptId: "different-prompt",
+      resourceId: "different-prompt",
       authorId: "user1",
     }]);
 
@@ -97,7 +97,7 @@ describe("DELETE /api/resources/[id]/comments/[commentId]", () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1", role: "USER" } } as never);
     mockSelectSequence(db, [{
       id: "456",
-      promptId: "123",
+      resourceId: "123",
       authorId: "other-user",
     }]);
 
@@ -117,7 +117,7 @@ describe("DELETE /api/resources/[id]/comments/[commentId]", () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1", role: "USER" } } as never);
     mockSelectSequence(db, [{
       id: "456",
-      promptId: "123",
+      resourceId: "123",
       authorId: "user1",
     }]);
     vi.mocked(db.update).mockReturnValue(createChainMock([{}]) as any);
@@ -139,7 +139,7 @@ describe("DELETE /api/resources/[id]/comments/[commentId]", () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "admin1", role: "ADMIN" } } as never);
     mockSelectSequence(db, [{
       id: "456",
-      promptId: "123",
+      resourceId: "123",
       authorId: "other-user",
     }]);
     vi.mocked(db.update).mockReturnValue(createChainMock([{}]) as any);
@@ -160,7 +160,7 @@ describe("DELETE /api/resources/[id]/comments/[commentId]", () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1", role: "USER" } } as never);
     mockSelectSequence(db, [{
       id: "456",
-      promptId: "123",
+      resourceId: "123",
       authorId: "user1",
     }]);
     vi.mocked(db.update).mockReturnValue(createChainMock([{}]) as any);
