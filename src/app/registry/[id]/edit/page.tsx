@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { AuthRedirect } from "@/components/auth/auth-redirect";
 import { getLocale, getTranslations } from "@/i18n/request";
 import { asc, eq } from "drizzle-orm";
@@ -7,7 +7,7 @@ import { getSession } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { resources, categories, tags } from "@/lib/schema";
 import { ResourceForm } from "@/components/resources/resource-form";
-import { isAIGenerationEnabled, getAIModelName } from "@/lib/ai/generation";
+
 
 interface EditResourcePageProps {
   params: Promise<{ id: string }>;
@@ -69,6 +69,7 @@ export default async function EditResourcePage({ params }: EditResourcePageProps
       id: categories.id,
       name: categories.name,
       slug: categories.slug,
+      icon: categories.icon,
       parentId: categories.parentId,
     }).from(categories).orderBy(asc(categories.order), asc(categories.name)),
     db.select().from(tags).orderBy(asc(tags.name)),
@@ -85,10 +86,6 @@ export default async function EditResourcePage({ params }: EditResourcePageProps
     isPrivate: resource.isPrivate,
   };
 
-  // Check if AI generation is enabled
-  const aiGenerationEnabled = await isAIGenerationEnabled();
-  const aiModelName = getAIModelName();
-
   return (
     <div className="container max-w-3xl py-8">
       <ResourceForm
@@ -97,8 +94,6 @@ export default async function EditResourcePage({ params }: EditResourcePageProps
         initialData={initialData}
         resourceId={id}
         mode="edit"
-        aiGenerationEnabled={aiGenerationEnabled}
-        aiModelName={aiModelName}
       />
     </div>
   );

@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { GET } from "@/app/api/admin/prompts/route";
+import { GET } from "@/app/api/admin/resources/route";
 import { db } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 

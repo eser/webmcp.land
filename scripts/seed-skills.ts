@@ -16,7 +16,7 @@ import * as fs from "fs";
 import * as path from "path";
 import * as schema from "../src/lib/schema.js";
 
-const { users, prompts } = schema;
+const { users, resources } = schema;
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const db = drizzle({ client: pool, schema });
@@ -139,32 +139,30 @@ async function importSkill(skillDir: string, authorId: string): Promise<void> {
 
   // Check if skill already exists
   const [existing] = await db
-    .select({ id: prompts.id })
-    .from(prompts)
+    .select({ id: resources.id })
+    .from(resources)
     .where(
       and(
-        eq(prompts.title, metadata.name),
-        eq(prompts.type, "SKILL"),
-        eq(prompts.authorId, authorId),
+        eq(resources.title, metadata.name),
+        eq(resources.authorId, authorId),
       ),
     );
 
   if (existing) {
     console.log(`  Skill "${metadata.name}" already exists, updating...`);
     await db
-      .update(prompts)
+      .update(resources)
       .set({
-        content,
         description: metadata.description,
       })
-      .where(eq(prompts.id, existing.id));
+      .where(eq(resources.id, existing.id));
   } else {
     // Create new skill
-    await db.insert(prompts).values({
+    await db.insert(resources).values({
       title: metadata.name,
       description: metadata.description,
-      content,
-      type: "SKILL",
+      endpointUrl: `skill://${metadata.name}`,
+      serverType: "WEBMCP",
       authorId,
       isPrivate: false,
     });

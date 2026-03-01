@@ -8,6 +8,12 @@ import { cn } from "@/lib/utils"
 // Format: { THEME_NAME: CSS_SELECTOR }
 const THEMES = { light: "", dark: ".dark" } as const
 
+// Recharts value/name types for tooltip payload entries
+type TooltipValueType = number | string | ReadonlyArray<number | string>
+type TooltipNameType = number | string
+type TooltipEntry = RechartsPrimitive.TooltipPayloadEntry<TooltipValueType, TooltipNameType>
+
+
 export type ChartConfig = {
   [k in string]: {
     label?: React.ReactNode
@@ -125,6 +131,8 @@ function ChartTooltipContent({
     indicator?: "line" | "dot" | "dashed"
     nameKey?: string
     labelKey?: string
+    payload?: TooltipEntry[]
+    label?: string
   }) {
   const { config } = useChart()
 
@@ -180,15 +188,15 @@ function ChartTooltipContent({
       {!nestLabel ? tooltipLabel : null}
       <div className="grid gap-1.5">
         {payload
-          .filter((item) => item.type !== "none")
-          .map((item, index) => {
+          .filter((item: TooltipEntry) => item.type !== "none")
+          .map((item: TooltipEntry, index: number) => {
             const key = `${nameKey || item.name || item.dataKey || "value"}`
             const itemConfig = getPayloadConfigFromPayload(config, item, key)
-            const indicatorColor = color || item.payload.fill || item.color
+            const indicatorColor = color || item.payload?.fill || item.color
 
             return (
               <div
-                key={item.dataKey}
+                key={typeof item.dataKey === "function" ? index : (item.dataKey ?? index)}
                 className={cn(
                   "[&>svg]:text-muted-foreground flex w-full flex-wrap items-stretch gap-2 [&>svg]:h-2.5 [&>svg]:w-2.5",
                   indicator === "dot" && "items-center"
@@ -258,10 +266,11 @@ function ChartLegendContent({
   payload,
   verticalAlign = "bottom",
   nameKey,
-}: React.ComponentProps<"div"> &
-  Pick<RechartsPrimitive.LegendProps, "payload" | "verticalAlign"> & {
+}: React.ComponentProps<"div"> & {
     hideIcon?: boolean
     nameKey?: string
+    payload?: RechartsPrimitive.LegendPayload[]
+    verticalAlign?: "top" | "bottom" | "middle"
   }) {
   const { config } = useChart()
 
@@ -278,8 +287,8 @@ function ChartLegendContent({
       )}
     >
       {payload
-        .filter((item) => item.type !== "none")
-        .map((item) => {
+        .filter((item: RechartsPrimitive.LegendPayload) => item.type !== "none")
+        .map((item: RechartsPrimitive.LegendPayload) => {
           const key = `${nameKey || item.dataKey || "value"}`
           const itemConfig = getPayloadConfigFromPayload(config, item, key)
 

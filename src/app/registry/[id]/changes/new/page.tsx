@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { AuthRedirect } from "@/components/auth/auth-redirect";
 import Link from "next/link";
 import { getLocale, getTranslations } from "@/i18n/request";

@@ -27,6 +27,7 @@ export default async function NewResourcePage() {
     id: categories.id,
     name: categories.name,
     slug: categories.slug,
+    icon: categories.icon,
     parentId: categories.parentId,
   }).from(categories).orderBy(asc(categories.order), asc(categories.name));
 

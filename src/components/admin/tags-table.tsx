@@ -46,8 +46,9 @@ interface Tag {
   name: string;
   slug: string;
   color: string;
+  resources: unknown[];
   _count: {
-    prompts: number;
+    resources: number;
   };
 }
 
@@ -176,7 +177,7 @@ export function TagsTable({ tags }: TagsTableProps) {
                       <span className="text-sm text-muted-foreground">{tag.color}</span>
                     </div>
                   </TableCell>
-                  <TableCell className="text-center">{tag._count.prompts}</TableCell>
+                  <TableCell className="text-center">{tag._count.resources}</TableCell>
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger render={<Button variant="ghost" size="icon" className="h-8 w-8" />}>

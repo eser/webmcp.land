@@ -238,6 +238,23 @@ export const analyticsResource = {
       resource_id: resourceId,
     });
   },
+
+  run: (resourceId: string | undefined, platformName: string) => {
+    trackEvent({
+      action: "run_resource",
+      category: "resource",
+      label: platformName,
+      resource_id: resourceId,
+    });
+  },
+
+  fillVariables: (resourceId?: string) => {
+    trackEvent({
+      action: "fill_variables",
+      category: "resource",
+      resource_id: resourceId,
+    });
+  },
 };
 
 // ============================================================================

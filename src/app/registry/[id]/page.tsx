@@ -258,9 +258,9 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
     <>
       {/* Structured Data for Rich Results */}
       <StructuredData
-        type="prompt"
+        type="resource"
         data={{
-          prompt: {
+          resource: {
             id: resource.id,
             name: resource.title,
             description: resource.description || `MCP resource: ${resource.title}`,
@@ -464,14 +464,14 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
           {/* Description */}
           {resource.description && (
             <InteractiveResourceContent
-              content={resource.description}
+              description={resource.description}
+              endpointUrl={resource.endpointUrl}
+              serverType={resource.serverType}
+              status={resource.status}
               title={t("promptContent")}
               isLoggedIn={!!session?.user}
-              categoryName={resource.category?.name}
-              parentCategoryName={resource.category?.parent?.name}
               resourceId={resource.id}
               resourceSlug={resource.slug ?? resource.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}
-              resourceType={resource.serverType}
               shareTitle={resource.title}
               resourceTitle={resource.title}
               resourceDescription={resource.description ?? undefined}
@@ -569,11 +569,10 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
               <div className="flex items-center gap-2">
                 <VersionCompareModal
                   versions={resource.versions}
-                  currentContent={resource.description || ""}
-                  resourceType={resource.serverType}
+                  currentDescription={resource.description || ""}
                 />
                 {canEdit && (
-                  <AddVersionForm resourceId={resource.id} currentContent={resource.description || ""} />
+                  <AddVersionForm resourceId={resource.id} currentDescription={resource.description || ""} />
                 )}
               </div>
             </div>
@@ -612,10 +611,9 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
                       <div className="flex items-center gap-1 shrink-0">
                         {!isLatestVersion && (
                           <VersionCompareButton
-                            versionContent={version.content}
+                            versionContent={version.description || ""}
                             versionNumber={version.version}
                             currentContent={resource.description || ""}
-                            resourceType={resource.serverType}
                           />
                         )}
                         {canEdit && !isLatestVersion && (

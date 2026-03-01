@@ -100,7 +100,7 @@ export function HeroResourceInput() {
     e?.preventDefault();
     const value = inputValue.trim();
     if (value) {
-      analyticsHero.submitResourceIdea(value);
+      analyticsHero.submitSearch(value);
       router.push(`/registry/new?resource=${encodeURIComponent(value)}`);
     }
   };

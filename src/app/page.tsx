@@ -30,7 +30,7 @@ export default async function HomePage() {
   const showRegisterButton = !session && (isOAuth || (config.auth.provider === "credentials" && config.auth.allowRegistration));
 
   const useCloneBranding = config.homepage?.useCloneBranding ?? false;
-  const aiGenerationEnabled = config.features?.aiGeneration ?? false;
+  const aiGenerationEnabled = false;
 
   // Fetch GitHub stars dynamically (with caching) - only if not using clone branding
   let githubStars = 139000; // fallback

@@ -1631,9 +1631,9 @@ export function ResourceConnections({
                 inputImage: t("connectedResources.inputImage"),
                 inputVideo: t("connectedResources.inputVideo"),
                 inputDocument: t("connectedResources.inputDocument"),
-                inputImages: t("connectedResources.inputImages", { count: "{count}" }),
-                inputVideos: t("connectedResources.inputVideos", { count: "{count}" }),
-                inputDocuments: t("connectedResources.inputDocuments", { count: "{count}" }),
+                inputImages: t("connectedResources.inputImages", { count: 0 }),
+                inputVideos: t("connectedResources.inputVideos", { count: 0 }),
+                inputDocuments: t("connectedResources.inputDocuments", { count: 0 }),
               }}
             />
           </div>
@@ -1745,9 +1745,9 @@ export function ResourceConnections({
                   inputImage: t("connectedResources.inputImage"),
                   inputVideo: t("connectedResources.inputVideo"),
                   inputDocument: t("connectedResources.inputDocument"),
-                  inputImages: t("connectedResources.inputImages", { count: "{count}" }),
-                  inputVideos: t("connectedResources.inputVideos", { count: "{count}" }),
-                  inputDocuments: t("connectedResources.inputDocuments", { count: "{count}" }),
+                  inputImages: t("connectedResources.inputImages", { count: 0 }),
+                  inputVideos: t("connectedResources.inputVideos", { count: 0 }),
+                  inputDocuments: t("connectedResources.inputDocuments", { count: 0 }),
                 }}
               />
             </div>

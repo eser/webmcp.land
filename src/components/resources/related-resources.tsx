@@ -12,7 +12,7 @@ interface RelatedResource {
   title: string;
   slug: string | null;
   description: string | null;
-  type: string;
+  serverType: string;
   author: {
     id: string;
     name: string | null;

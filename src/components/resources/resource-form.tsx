@@ -131,7 +131,7 @@ export function ResourceForm({
         toast.success(t("resources.updateSuccess"));
         router.push(getResourceUrl(resourceId!, result.slug));
       } else {
-        analyticsResource.create(result.id, data.serverType);
+        analyticsResource.register(data.serverType);
         toast.success(t("resources.createSuccess"));
         router.push(getResourceUrl(result.id, result.slug));
       }

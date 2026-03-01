@@ -87,10 +87,8 @@ export function InteractiveResourceContent({
             {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
           </Button>
           {endpointUrl && (
-            <Button variant="ghost" size="icon" className="h-7 w-7 shrink-0" asChild>
-              <a href={endpointUrl} target="_blank" rel="noopener noreferrer">
-                <ExternalLink className="h-3.5 w-3.5" />
-              </a>
+            <Button variant="ghost" size="icon" className="h-7 w-7 shrink-0" render={<a href={endpointUrl} target="_blank" rel="noopener noreferrer" />}>
+              <ExternalLink className="h-3.5 w-3.5" />
             </Button>
           )}
         </div>
@@ -149,7 +147,6 @@ export function InteractiveResourceContent({
           <ShareDropdown
             title={shareTitle}
             resourceId={resourceId}
-            resourceSlug={resourceSlug}
           />
         )}
       </div>

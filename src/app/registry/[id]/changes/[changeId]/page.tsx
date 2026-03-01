@@ -53,9 +53,7 @@ export default async function ChangeRequestPage({ params }: ChangeRequestPagePro
         columns: {
           id: true,
           title: true,
-          content: true,
           authorId: true,
-          type: true,
         },
       },
     },

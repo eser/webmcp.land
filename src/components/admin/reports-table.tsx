@@ -33,12 +33,14 @@ interface Report {
   details: string | null;
   status: "PENDING" | "REVIEWED" | "DISMISSED";
   createdAt: Date;
+  updatedAt: Date;
+  resourceId: string;
+  reporterId: string;
   resource: {
     id: string;
-    slug?: string | null;
+    slug: string | null;
     title: string;
-    isUnlisted?: boolean;
-    deletedAt?: Date | null;
+    deletedAt: Date | null;
   };
   reporter: {
     id: string;
@@ -236,7 +238,7 @@ export function ReportsTable({ reports }: ReportsTableProps) {
                             {t("admin.reports.markReviewed")}
                           </DropdownMenuItem>
                         )}
-                        {report.reason === "RELIST_REQUEST" && report.resource.isUnlisted && (
+                        {report.reason === "RELIST_REQUEST" && (
                           <>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem onClick={() => handleRelistPrompt(report.resource.id)}>
