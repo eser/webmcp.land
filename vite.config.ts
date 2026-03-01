@@ -19,11 +19,9 @@ function serverOnlyDeps(): Plugin {
     name: "server-only-deps",
     enforce: "pre",
     resolveId(id) {
-      // Only stub in the client environment
-      const envName =
-        this.environment?.name ?? (this as any).ssr === false
-          ? "client"
-          : undefined;
+      // Only stub in the client environment — server environments (rsc, ssr)
+      // need the real packages at Node runtime.
+      const envName = this.environment?.name;
       if (envName === "client" && SERVER_PACKAGES.includes(id)) {
         return STUB + id;
       }
@@ -34,9 +32,8 @@ function serverOnlyDeps(): Plugin {
       }
     },
     config() {
-      // Also externalize from RSC and SSR environments so they resolve at
-      // Node runtime instead of being bundled (prevents heavy native code
-      // from inflating the server bundle).
+      // Externalize from SSR so Node resolves them at runtime instead of
+      // bundling. The RSC environment also needs these externalized.
       return {
         ssr: {
           external: SERVER_PACKAGES,
