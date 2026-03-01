@@ -26,7 +26,7 @@ COPY . .
 EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
-CMD ["sh", "-c", "pnpm run db:migrate && pnpm run dev"]
+CMD ["sh", "-c", "pnpm run db:push && pnpm run dev"]
 
 # ── Stage 3: Build for production ──────────────────────────────────────────
 FROM base AS builder
@@ -50,8 +50,8 @@ COPY --from=builder --chown=appuser:nodejs /app/node_modules ./node_modules
 COPY --from=builder --chown=appuser:nodejs /app/package.json ./package.json
 COPY --from=builder --chown=appuser:nodejs /app/server.js ./server.js
 
-# Copy Drizzle migrations for runtime migration support
-COPY --from=builder /app/drizzle ./drizzle
+# Copy Drizzle schema & config for runtime db:push
+COPY --from=builder /app/src/lib/schema.ts ./src/lib/schema.ts
 COPY --from=builder /app/drizzle.config.ts ./drizzle.config.ts
 
 # Copy entrypoint

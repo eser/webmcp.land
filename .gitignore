@@ -32,8 +32,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# drizzle migration metadata
-/drizzle/meta
+# drizzle migration metadata (tracked for deployment)
+# /drizzle/meta
 /src/app/sponsors
 
 # Sentry Config File
