@@ -1,7 +1,7 @@
 {
   "name": "webmcp.land",
   "version": "0.1.1",
-  "description": "Developer toolkit for AI prompts - build, validate, parse, and connect to webmcp.land",
+  "description": "Developer toolkit for MCP/WebMCP resources - build, validate, parse, and connect to webmcp.land",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -48,16 +48,17 @@
     "README.md"
   ],
   "keywords": [
-    "prompts",
-    "chatgpt",
+    "mcp",
+    "webmcp",
+    "model-context-protocol",
     "ai",
     "llm",
+    "ai-agents",
     "openai",
     "anthropic",
     "claude",
-    "prompt-engineering",
-    "prompt-templates",
-    "prompt-builder",
+    "mcp-server",
+    "mcp-client",
     "cli"
   ],
   "repository": {
