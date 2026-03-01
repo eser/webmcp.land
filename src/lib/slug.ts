@@ -8,7 +8,7 @@ function getOpenAIClient(): OpenAI | null {
     if (!apiKey) {
       return null;
     }
-    openai = new OpenAI({ 
+    openai = new OpenAI({
       apiKey,
       baseURL: process.env.OPENAI_BASE_URL || undefined,
     });
@@ -46,7 +46,7 @@ function isLikelyNonEnglish(text: string): boolean {
  */
 export async function translateToEnglish(text: string): Promise<string> {
   const client = getOpenAIClient();
-  
+
   if (!client) {
     // No OpenAI key, return original text
     return text;
@@ -56,16 +56,16 @@ export async function translateToEnglish(text: string): Promise<string> {
     const response = await client.chat.completions.create({
       model: GENERATIVE_MODEL,
       messages: [
-        { 
-          role: "system", 
-          content: "Translate the following text to English. Return ONLY the translated text, nothing else. If the text is already in English, return it as-is." 
+        {
+          role: "system",
+          content: "Translate the following text to English. Return ONLY the translated text, nothing else. If the text is already in English, return it as-is."
         },
         { role: "user", content: text }
       ],
       temperature: 0.1,
       max_tokens: 200,
     });
-    
+
     return response.choices[0]?.message?.content?.trim() || text;
   } catch (error) {
     console.error("Translation error:", error);
@@ -79,12 +79,12 @@ export async function translateToEnglish(text: string): Promise<string> {
  */
 export async function generateSlug(title: string): Promise<string> {
   let textToSlugify = title;
-  
+
   // If text contains non-English characters, translate it first
   if (isLikelyNonEnglish(title)) {
     textToSlugify = await translateToEnglish(title);
   }
-  
+
   return slugify(textToSlugify);
 }
 

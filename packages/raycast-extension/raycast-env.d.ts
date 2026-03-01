@@ -40,4 +40,3 @@ declare namespace Arguments {
   /** Arguments passed to the `browse-categories` command */
   export type BrowseCategories = {}
 }
-

@@ -23,7 +23,7 @@ function computeWordDiff(original: string, modified: string): WordDiff[] {
   const tokenize = (str: string): string[] => {
     const tokens: string[] = [];
     let current = "";
-    
+
     for (const char of str) {
       if (/\s/.test(char)) {
         if (current) {
@@ -124,7 +124,7 @@ export function DiffView({ original, modified, className, mode = "word", languag
           )}
         </div>
       </div>
-      
+
       {/* Diff content - inline word diff */}
       {isCode ? (
         <CodeDiffContent wordDiff={wordDiff} language={language} />
@@ -153,24 +153,24 @@ function CodeDiffContent({ wordDiff, language }: { wordDiff: WordDiff[]; languag
   const lines = useMemo(() => {
     const combined = wordDiff.map(d => d.text).join("");
     const lineTexts = combined.split("diff.\n");
-    
+
     // Track which lines have changes
     let charIndex = 0;
     const lineInfo: Array<{ text: string; hasAddition: boolean; hasDeletion: boolean }> = [];
-    
+
     for (const lineText of lineTexts) {
       let hasAddition = false;
       let hasDeletion = false;
-      
+
       // Check what diffs overlap with this line
       const lineStart = charIndex;
       const lineEnd = charIndex + lineText.length;
-      
+
       let pos = 0;
       for (const diff of wordDiff) {
         const diffStart = pos;
         const diffEnd = pos + diff.text.length;
-        
+
         // Check if diff overlaps with this line
         if (diffEnd > lineStart && diffStart < lineEnd + 1) {
           if (diff.type === "added") hasAddition = true;
@@ -178,19 +178,19 @@ function CodeDiffContent({ wordDiff, language }: { wordDiff: WordDiff[]; languag
         }
         pos = diffEnd;
       }
-      
+
       lineInfo.push({ text: lineText, hasAddition, hasDeletion });
       charIndex = lineEnd + 1; // +1 for newline
     }
-    
+
     return lineInfo;
   }, [wordDiff]);
 
   return (
     <div className="overflow-auto max-h-[calc(100vh-300px)] text-xs font-mono">
       {lines.map((line, i) => (
-        <div 
-          key={i} 
+        <div
+          key={i}
           className={cn(
             "flex",
             line.hasAddition && !line.hasDeletion && "bg-green-500/10",

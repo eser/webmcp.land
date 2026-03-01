@@ -143,7 +143,7 @@ describe("POST /api/resources/[id]/comments/[commentId]/vote", () => {
 
   it("should create new upvote when no existing vote", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ id: "456", promptId: "123" }],  // comment exists
       [],                                  // no existing vote
     );
@@ -165,7 +165,7 @@ describe("POST /api/resources/[id]/comments/[commentId]/vote", () => {
 
   it("should create new downvote when no existing vote", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ id: "456", promptId: "123" }],
       [],
     );
@@ -187,7 +187,7 @@ describe("POST /api/resources/[id]/comments/[commentId]/vote", () => {
 
   it("should toggle off when voting same value twice", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ id: "456", promptId: "123" }],
       [{ userId: "user1", commentId: "456", value: 1 }],  // existing upvote
     );
@@ -209,7 +209,7 @@ describe("POST /api/resources/[id]/comments/[commentId]/vote", () => {
 
   it("should switch vote when voting opposite value", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ id: "456", promptId: "123" }],
       [{ userId: "user1", commentId: "456", value: 1 }],  // existing upvote
     );
@@ -307,7 +307,7 @@ describe("DELETE /api/resources/[id]/comments/[commentId]/vote", () => {
 
   it("should delete vote successfully", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ id: "456", promptId: "123" }],
       [{ userId: "user1", commentId: "456", value: 1 }],
     );
@@ -328,7 +328,7 @@ describe("DELETE /api/resources/[id]/comments/[commentId]/vote", () => {
 
   it("should handle removing non-existent vote gracefully", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ id: "456", promptId: "123" }],
       [],  // no existing vote
     );

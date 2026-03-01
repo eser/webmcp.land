@@ -80,15 +80,15 @@ export function CategoriesTable({ categories }: CategoriesTableProps) {
   const [formData, setFormData] = useState({ name: "", slug: "", description: "", icon: "", parentId: "", pinned: false });
 
   // Get only root categories (no parent) for parent selection
-  const rootCategories = useMemo(() => 
-    categories.filter(c => !c.parentId), 
+  const rootCategories = useMemo(() =>
+    categories.filter(c => !c.parentId),
     [categories]
   );
 
   // Build hierarchical list for display (parents first, then children indented)
   const hierarchicalCategories = useMemo(() => {
     const result: (Category & { level: number })[] = [];
-    
+
     // Add root categories and their children
     rootCategories.forEach(parent => {
       result.push({ ...parent, level: 0 });
@@ -97,7 +97,7 @@ export function CategoriesTable({ categories }: CategoriesTableProps) {
         result.push({ ...child, level: 1 });
       });
     });
-    
+
     return result;
   }, [categories, rootCategories]);
 
@@ -142,7 +142,7 @@ export function CategoriesTable({ categories }: CategoriesTableProps) {
   const getValidParentOptions = () => {
     if (!editCategory) return rootCategories;
     // When editing, exclude self and any category that has this as parent
-    return rootCategories.filter(c => 
+    return rootCategories.filter(c =>
       c.id !== editCategory.id && c.parentId !== editCategory.id
     );
   };

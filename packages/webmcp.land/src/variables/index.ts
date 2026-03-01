@@ -13,7 +13,7 @@ export interface DetectedVariable {
   endIndex: number;
 }
 
-export type VariablePattern = 
+export type VariablePattern =
   | "double_bracket"      // [[name]] or [[ name ]]
   | "double_curly"        // {{name}} or {{ name }}
   | "single_bracket"      // [NAME] or [name]
@@ -116,50 +116,50 @@ function isInsideJsonString(text: string, index: number): boolean {
 export function detectVariables(text: string): DetectedVariable[] {
   const detected: DetectedVariable[] = [];
   const seenRanges: Array<[number, number]> = [];
-  
+
   // Track our supported format positions to exclude them
   const supportedVars = new Set<string>();
   const dollarCurlyPattern = /\$\{([a-zA-Z_][a-zA-Z0-9_\s]*?)(?::([^}]*))?\}/g;
   let match: RegExpExecArray | null;
-  
+
   while ((match = dollarCurlyPattern.exec(text)) !== null) {
     seenRanges.push([match.index, match.index + match[0].length]);
     supportedVars.add(match[0]);
   }
-  
+
   // Check each pattern
   for (const config of PATTERNS) {
     // Skip our supported format pattern for detection
     if (config.pattern === "dollar_curly") continue;
-    
+
     const regex = new RegExp(config.regex.source, config.regex.flags);
-    
+
     while ((match = regex.exec(text)) !== null) {
       const startIndex = match.index;
       const endIndex = startIndex + match[0].length;
-      
+
       // Check if this range overlaps with any already detected range
       const overlaps = seenRanges.some(
-        ([start, end]) => 
+        ([start, end]) =>
           (startIndex >= start && startIndex < end) ||
           (endIndex > start && endIndex <= end)
       );
-      
+
       if (overlaps) continue;
-      
+
       const name = config.extractName(match);
-      
+
       // Skip false positives
       if (FALSE_POSITIVES.has(name.toLowerCase())) continue;
-      
+
       // Skip very short names (likely not variables)
       if (name.length < 2) continue;
-      
+
       // For angle brackets, be more strict
       if (config.pattern === "angle_bracket") {
         if (!/^[A-Z]/.test(name) && !name.includes(" ")) continue;
       }
-      
+
       // For single curly/bracket in JSON context, be more careful
       if (
         (config.pattern === "single_curly" || config.pattern === "single_bracket") &&
@@ -167,9 +167,9 @@ export function detectVariables(text: string): DetectedVariable[] {
       ) {
         if (!/^[A-Z]/.test(name) && !name.includes(" ")) continue;
       }
-      
+
       const defaultValue = config.extractDefault?.(match);
-      
+
       detected.push({
         original: match[0],
         name,
@@ -178,15 +178,15 @@ export function detectVariables(text: string): DetectedVariable[] {
         startIndex,
         endIndex,
       });
-      
+
       seenRanges.push([startIndex, endIndex]);
     }
   }
-  
+
   // Sort by position and remove duplicates
   return detected
     .sort((a, b) => a.startIndex - b.startIndex)
-    .filter((v, i, arr) => 
+    .filter((v, i, arr) =>
       i === 0 || v.original !== arr[i - 1].original || v.startIndex !== arr[i - 1].startIndex
     );
 }
@@ -200,11 +200,11 @@ export function convertToSupportedFormat(variable: DetectedVariable): string {
     .toLowerCase()
     .replace(/\s+/g, "_")
     .replace(/[^a-z0-9_]/g, "");
-  
+
   if (variable.defaultValue) {
     return `\${${normalizedName}:${variable.defaultValue}}`;
   }
-  
+
   return `\${${normalizedName}}`;
 }
 
@@ -213,18 +213,18 @@ export function convertToSupportedFormat(variable: DetectedVariable): string {
  */
 export function convertAllVariables(text: string): string {
   const detected = detectVariables(text);
-  
+
   if (detected.length === 0) return text;
-  
+
   // Sort by position descending to replace from end to start
   const sorted = [...detected].sort((a, b) => b.startIndex - a.startIndex);
-  
+
   let result = text;
   for (const variable of sorted) {
     const converted = convertToSupportedFormat(variable);
     result = result.slice(0, variable.startIndex) + converted + result.slice(variable.endIndex);
   }
-  
+
   return result;
 }
 
@@ -260,14 +260,14 @@ export function extractVariables(text: string): Array<{ name: string; defaultVal
   const regex = /\$\{([a-zA-Z_][a-zA-Z0-9_\s]*?)(?::([^}]*))?\}/g;
   const variables: Array<{ name: string; defaultValue?: string }> = [];
   let match: RegExpExecArray | null;
-  
+
   while ((match = regex.exec(text)) !== null) {
     variables.push({
       name: match[1].trim(),
       defaultValue: match[2]?.trim(),
     });
   }
-  
+
   return variables;
 }
 
@@ -275,12 +275,12 @@ export function extractVariables(text: string): Array<{ name: string; defaultVal
  * Compile a prompt template with variable values
  */
 export function compile(
-  template: string, 
+  template: string,
   values: Record<string, string>,
   options: { useDefaults?: boolean } = {}
 ): string {
   const { useDefaults = true } = options;
-  
+
   return template.replace(
     /\$\{([a-zA-Z_][a-zA-Z0-9_\s]*?)(?::([^}]*))?\}/g,
     (match, name, defaultValue) => {

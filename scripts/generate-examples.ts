@@ -26,7 +26,7 @@ for (const { file, export: exportName } of examples) {
     .replace(/\\/g, '\\\\')
     .replace(/`/g, '\\`')
     .replace(/\$\{/g, '\\${');
-  
+
   lines.push(`export const ${exportName} = \`${escaped}\`;`);
   lines.push('');
 }

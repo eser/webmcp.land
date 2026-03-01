@@ -18,7 +18,7 @@ interface InfiniteResourceListProps {
     type?: string;
     category?: string;
     categorySlug?: string;
-    tag?: string; 
+    tag?: string;
     sort?: string;
   };
 }
@@ -45,10 +45,10 @@ function ResourceCardSkeleton() {
   );
 }
 
-export function InfiniteResourceList({ 
-  initialResources, 
+export function InfiniteResourceList({
+  initialResources,
   initialTotal,
-  filters 
+  filters
 }: InfiniteResourceListProps) {
   const { t } = useTranslation();
   const _searchParams = useSearchParams();
@@ -82,7 +82,7 @@ export function InfiniteResourceList({
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
-    
+
     const controller = new AbortController();
     abortControllerRef.current = controller;
 
@@ -104,7 +104,7 @@ export function InfiniteResourceList({
       if (!response.ok) throw new Error("Failed to fetch");
 
       const data = await response.json();
-      
+
       // Deduplicate by ID to prevent duplicate key errors
       setResources((prev) => {
         const existingIds = new Set(prev.map((p) => p.id));

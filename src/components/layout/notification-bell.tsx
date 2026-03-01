@@ -41,7 +41,7 @@ export function NotificationBell() {
   const { data: session } = useSession();
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
-  const [notifications, setNotifications] = useState<Notifications>({ 
+  const [notifications, setNotifications] = useState<Notifications>({
     pendingChangeRequests: 0,
     unreadComments: 0,
     commentNotifications: [],

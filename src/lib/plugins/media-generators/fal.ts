@@ -1,9 +1,9 @@
 /**
  * Fal.ai Media Generator Plugin
- * 
+ *
  * Generates images and videos using Fal.ai API.
  * Uses Fal.ai's queue API for async generation with polling-based status updates.
- * 
+ *
  * Required env vars:
  * - FAL_API_KEY
  * - FAL_VIDEO_MODELS (comma-separated, e.g., "fal-ai/veo3,fal-ai/kling-video/v2/master/image-to-video")
@@ -88,7 +88,7 @@ async function submitToFalQueue(
   if (!apiKey) throw new Error("FAL_API_KEY is not configured");
 
   const url = `${FAL_QUEUE_BASE}/${modelId}`;
-  
+
   const response = await fetch(url, {
     method: "POST",
     headers: {
@@ -266,16 +266,16 @@ export const falGeneratorPlugin: MediaGeneratorPlugin = {
   async checkStatus(socketAccessToken: string): Promise<PollStatusResult> {
     // Parse statusUrl|responseUrl from socketAccessToken
     const [statusUrl, responseUrl] = socketAccessToken.split("|");
-    
+
     if (!statusUrl || !responseUrl) {
       throw new Error("Invalid token format");
     }
 
     const status = await getFalRequestStatus(statusUrl);
-    
+
     // Map status to our format
     const statusKey = falStatusMap[status.status] || "generating";
-    
+
     // Calculate progress based on status
     let progress = 0;
     switch (status.status) {

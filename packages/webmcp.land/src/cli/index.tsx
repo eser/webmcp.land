@@ -160,11 +160,11 @@ async function main() {
 
   // Default: Launch interactive TUI
   console.clear();
-  
+
   const { waitUntilExit } = render(<App />, {
     exitOnCtrlC: true,
   });
-  
+
   waitUntilExit().then(() => {
     console.clear();
   });

@@ -1,16 +1,16 @@
 /**
  * Prompt Parser - Parse and load prompt files in various formats
- * 
+ *
  * Supports:
  * - .prompt.yml / .prompt.yaml (YAML format)
  * - .prompt.json (JSON format)
  * - .prompt.md (Markdown with frontmatter)
  * - .txt (Plain text)
- * 
+ *
  * @example
  * ```ts
  * import { parser } from 'webmcp.land';
- * 
+ *
  * const prompt = parser.parse(`
  * name: Code Review
  * messages:
@@ -53,7 +53,7 @@ export interface ParsedPrompt {
 function parseSimpleYaml(content: string): Record<string, unknown> {
   const result: Record<string, unknown> = {};
   const lines = content.split('\n');
-  
+
   let currentKey: string | null = null;
   const _currentValue: unknown = null; // Placeholder for future use
   let inArray = false;
@@ -61,11 +61,11 @@ function parseSimpleYaml(content: string): Record<string, unknown> {
   let multilineContent = '';
   let arrayItems: unknown[] = [];
   let indent = 0;
-  
+
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     const trimmed = line.trim();
-    
+
     // Skip empty lines and comments
     if (!trimmed || trimmed.startsWith('#')) {
       if (inMultiline) {
@@ -73,7 +73,7 @@ function parseSimpleYaml(content: string): Record<string, unknown> {
       }
       continue;
     }
-    
+
     // Handle multiline content (|)
     if (inMultiline) {
       const lineIndent = line.search(/\S/);
@@ -96,44 +96,44 @@ function parseSimpleYaml(content: string): Record<string, unknown> {
         multilineContent = '';
       }
     }
-    
+
     // Handle array items
     if (trimmed.startsWith('- ')) {
       if (!inArray && currentKey) {
         inArray = true;
         arrayItems = [];
       }
-      
+
       const itemContent = trimmed.slice(2);
-      
+
       // Check if it's a key-value pair
       const kvMatch = itemContent.match(/^(\w+):\s*(.*)$/);
       if (kvMatch) {
         const obj: Record<string, unknown> = {};
         obj[kvMatch[1]] = kvMatch[2] === '|' ? '' : (kvMatch[2] || '');
-        
+
         if (kvMatch[2] === '|') {
           inMultiline = true;
           indent = line.search(/\S/);
           multilineContent = '';
         }
-        
+
         arrayItems.push(obj);
       } else {
         arrayItems.push(itemContent);
       }
       continue;
     }
-    
+
     // Handle nested object properties in arrays
     if (inArray && line.startsWith('    ')) {
       const propMatch = trimmed.match(/^(\w+):\s*(.*)$/);
       if (propMatch && arrayItems.length > 0) {
         const lastItem = arrayItems[arrayItems.length - 1];
         if (typeof lastItem === 'object' && lastItem !== null) {
-          (lastItem as Record<string, unknown>)[propMatch[1]] = 
+          (lastItem as Record<string, unknown>)[propMatch[1]] =
             propMatch[2] === '|' ? '' : (propMatch[2] || '');
-          
+
           if (propMatch[2] === '|') {
             inMultiline = true;
             indent = line.search(/\S/);
@@ -143,7 +143,7 @@ function parseSimpleYaml(content: string): Record<string, unknown> {
       }
       continue;
     }
-    
+
     // End array if we're back to root level
     if (inArray && !line.startsWith(' ') && !line.startsWith('\t')) {
       if (currentKey) {
@@ -152,13 +152,13 @@ function parseSimpleYaml(content: string): Record<string, unknown> {
       inArray = false;
       arrayItems = [];
     }
-    
+
     // Handle key-value pairs
     const match = trimmed.match(/^(\w+):\s*(.*)$/);
     if (match) {
       currentKey = match[1];
       const value = match[2];
-      
+
       if (value === '' || value === '|' || value === '>') {
         // Multiline or nested content
         if (value === '|' || value === '>') {
@@ -181,17 +181,17 @@ function parseSimpleYaml(content: string): Record<string, unknown> {
       }
     }
   }
-  
+
   // Handle remaining array
   if (inArray && currentKey) {
     result[currentKey] = arrayItems;
   }
-  
+
   // Handle remaining multiline
   if (inMultiline && currentKey) {
     result[currentKey] = multilineContent.trim();
   }
-  
+
   return result;
 }
 
@@ -207,17 +207,17 @@ function parseJson(content: string): Record<string, unknown> {
  */
 function parseMarkdown(content: string): Record<string, unknown> {
   const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
-  
+
   if (frontmatterMatch) {
     const frontmatter = parseSimpleYaml(frontmatterMatch[1]);
     const body = frontmatterMatch[2].trim();
-    
+
     return {
       ...frontmatter,
       messages: [{ role: 'system', content: body }],
     };
   }
-  
+
   // No frontmatter, treat entire content as system message
   return {
     messages: [{ role: 'system', content: content.trim() }],
@@ -229,7 +229,7 @@ function parseMarkdown(content: string): Record<string, unknown> {
  */
 function normalize(data: Record<string, unknown>): ParsedPrompt {
   const messages: PromptMessage[] = [];
-  
+
   // Handle messages array
   if (Array.isArray(data.messages)) {
     for (const msg of data.messages) {
@@ -242,17 +242,17 @@ function normalize(data: Record<string, unknown>): ParsedPrompt {
       }
     }
   }
-  
+
   // Handle single content field
   if (messages.length === 0 && typeof data.content === 'string') {
     messages.push({ role: 'system', content: data.content });
   }
-  
+
   // Handle prompt field (alias for content)
   if (messages.length === 0 && typeof data.prompt === 'string') {
     messages.push({ role: 'system', content: data.prompt });
   }
-  
+
   return {
     name: data.name as string | undefined,
     description: data.description as string | undefined,
@@ -269,7 +269,7 @@ function normalize(data: Record<string, unknown>): ParsedPrompt {
  */
 export function parse(content: string, format?: 'yaml' | 'json' | 'markdown' | 'text'): ParsedPrompt {
   const trimmed = content.trim();
-  
+
   // Auto-detect format if not specified
   if (!format) {
     if (trimmed.startsWith('{')) {
@@ -282,9 +282,9 @@ export function parse(content: string, format?: 'yaml' | 'json' | 'markdown' | '
       format = 'text';
     }
   }
-  
+
   let data: Record<string, unknown>;
-  
+
   switch (format) {
     case 'json':
       data = parseJson(trimmed);
@@ -300,7 +300,7 @@ export function parse(content: string, format?: 'yaml' | 'json' | 'markdown' | '
       data = { messages: [{ role: 'system', content: trimmed }] };
       break;
   }
-  
+
   return normalize(data);
 }
 
@@ -309,19 +309,19 @@ export function parse(content: string, format?: 'yaml' | 'json' | 'markdown' | '
  */
 export function toYaml(prompt: ParsedPrompt): string {
   const lines: string[] = [];
-  
+
   if (prompt.name) {
     lines.push(`name: ${prompt.name}`);
   }
-  
+
   if (prompt.description) {
     lines.push(`description: ${prompt.description}`);
   }
-  
+
   if (prompt.model) {
     lines.push(`model: ${prompt.model}`);
   }
-  
+
   if (prompt.modelParameters) {
     lines.push('modelParameters:');
     for (const [key, value] of Object.entries(prompt.modelParameters)) {
@@ -330,7 +330,7 @@ export function toYaml(prompt: ParsedPrompt): string {
       }
     }
   }
-  
+
   if (prompt.messages.length > 0) {
     lines.push('messages:');
     for (const msg of prompt.messages) {
@@ -345,7 +345,7 @@ export function toYaml(prompt: ParsedPrompt): string {
       }
     }
   }
-  
+
   return lines.join('\n');
 }
 
@@ -378,7 +378,7 @@ export function interpolate(
       return match;
     });
   };
-  
+
   return {
     ...prompt,
     messages: prompt.messages.map(msg => ({

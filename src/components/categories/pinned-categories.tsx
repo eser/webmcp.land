@@ -30,15 +30,15 @@ export function PinnedCategories({ categories, currentCategoryId }: PinnedCatego
   const handleCategoryClick = (categoryId: string) => {
     setFilterPending(true);
     const params = new URLSearchParams(searchParams?.toString() ?? "");
-    
+
     if (currentCategoryId === categoryId) {
       params.delete("category");
     } else {
       params.set("categories.category", categoryId);
     }
-    
+
     params.delete("page");
-    
+
     router.push(`/registry?${params.toString()}`);
   };
 

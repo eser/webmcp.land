@@ -40,10 +40,10 @@ files.forEach(file => {
   const filePath = path.join(messagesDir, file);
   const translations = JSON.parse(fs.readFileSync(filePath, 'utf8'));
   const langKeys = flattenKeys(translations);
-  
+
   const missing = enKeys.filter(key => !langKeys.includes(key));
   const extra = langKeys.filter(key => !enKeys.includes(key));
-  
+
   if (missing.length > 0 || extra.length > 0) {
     missingByLang[lang] = { missing, extra };
     totalMissing += missing.length;
@@ -54,7 +54,7 @@ if (totalMissing === 0) {
   console.log('✅ All translation files are complete!\n');
 } else {
   console.log('❌ Missing translations found:\n');
-  
+
   Object.entries(missingByLang).forEach(([lang, { missing, extra }]) => {
     if (missing.length > 0) {
       console.log(`\n🌐 ${lang.toUpperCase()} - Missing ${missing.length} keys:`);
@@ -68,6 +68,6 @@ if (totalMissing === 0) {
       extra.forEach(key => console.log(`   ${key}`));
     }
   });
-  
+
   console.log(`\n📊 Summary: ${totalMissing} missing translations across ${Object.keys(missingByLang).length} files\n`);
 }

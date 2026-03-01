@@ -48,19 +48,19 @@ export function AISearchSettings({ enabled, resourcesWithoutEmbeddings, totalPro
       if (!reader) throw new Error("No response body");
 
       const decoder = new TextDecoder();
-      
+
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
-        
+
         const text = decoder.decode(value);
         const lines = text.split("admin.\n\n").filter(line => line.startsWith("data: "));
-        
+
         for (const line of lines) {
           const jsonStr = line.replace("data: ", "");
           try {
             const data = JSON.parse(jsonStr);
-            
+
             if (data.done) {
               setResult({ success: data.success, failed: data.failed });
               toast.success(t("admin.aiSearch.generateSuccess", { count: data.success }));
@@ -159,7 +159,7 @@ export function AISearchSettings({ enabled, resourcesWithoutEmbeddings, totalPro
               </>
             )}
           </Button>
-          
+
           <Button
             variant="outline"
             onClick={() => handleGenerateEmbeddings(true)}

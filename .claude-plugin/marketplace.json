@@ -21,9 +21,21 @@
       "homepage": "https://webmcp.land",
       "repository": "https://github.com/eser/webmcp.land",
       "license": "MIT",
-      "keywords": ["prompts", "ai", "skills", "chatgpt", "claude", "llm"],
+      "keywords": [
+        "prompts",
+        "ai",
+        "skills",
+        "chatgpt",
+        "claude",
+        "llm"
+      ],
       "category": "ai",
-      "tags": ["prompts", "ai-tools", "productivity", "skills"]
+      "tags": [
+        "prompts",
+        "ai-tools",
+        "productivity",
+        "skills"
+      ]
     }
   ]
 }

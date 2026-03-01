@@ -167,7 +167,7 @@ describe("POST /api/collection", () => {
 
   it("should return 404 if prompt not found", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [],  // no existing collection
       [],  // no prompt found
     );
@@ -186,7 +186,7 @@ describe("POST /api/collection", () => {
 
   it("should return 403 when adding private prompt not owned by user", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [],  // no existing collection
       [{
         id: "123",
@@ -209,7 +209,7 @@ describe("POST /api/collection", () => {
 
   it("should allow adding own private prompt to collection", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [],  // no existing collection
       [{
         id: "123",
@@ -237,7 +237,7 @@ describe("POST /api/collection", () => {
 
   it("should add public prompt to collection successfully", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [],  // no existing collection
       [{
         id: "123",

@@ -63,13 +63,13 @@ messages:
       - Output ONLY the improved prompt content
       - No explanations, meta-commentary, or markdown code fences
       - For structured formats, output raw JSON or YAML directly
-      
+
   - role: user
     content: |
       Improve this prompt.
-      
+
       Output Type: {{outputType}}
       Output Format: {{outputFormat}}
-      
+
       Original Prompt:
       {{originalPrompt}}

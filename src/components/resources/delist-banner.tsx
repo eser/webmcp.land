@@ -127,11 +127,11 @@ export function DelistBanner({ resourceId, delistReason, isOwner, isDeleted = fa
           )}
         </div>
       </div>
-      
+
       {isOwner && delistReason && delistReason !== "MANUAL" && !isDeleted && (
         <div className="flex justify-end gap-2 mt-4">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             size="sm"
             disabled={isRequestingRelist || hasRequestedRelist}
             onClick={handleRequestRelist}
@@ -144,8 +144,8 @@ export function DelistBanner({ resourceId, delistReason, isOwner, isDeleted = fa
             {hasRequestedRelist ? t("resources.relistRequested") : t("resources.requestListing")}
           </Button>
           <AlertDialog>
-            <AlertDialogTrigger render={<Button 
-                variant="destructive" 
+            <AlertDialogTrigger render={<Button
+                variant="destructive"
                 size="sm"
                 disabled={isDeleting}
                />}>
@@ -176,7 +176,7 @@ export function DelistBanner({ resourceId, delistReason, isOwner, isDeleted = fa
           </AlertDialog>
         </div>
       )}
-      
+
       {error && (
         <p className="text-sm text-red-500 mt-2">{error}</p>
       )}

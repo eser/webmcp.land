@@ -19,7 +19,7 @@ export function VariableHint({ content, onContentChange }: VariableHintProps) {
   const variables = useMemo(() => {
     const vars: Array<{ name: string; defaultValue?: string }> = [];
     const matches = content.matchAll(SUPPORTED_VAR_REGEX);
-    
+
     for (const match of matches) {
       const name = match[1].trim();
       const defaultValue = match[2]?.trim();
@@ -28,7 +28,7 @@ export function VariableHint({ content, onContentChange }: VariableHintProps) {
         vars.push({ name, defaultValue });
       }
     }
-    
+
     return vars;
   }, [content]);
 
@@ -43,7 +43,7 @@ export function VariableHint({ content, onContentChange }: VariableHintProps) {
   ) => {
     const newValue = e.currentTarget.textContent?.trim() || "";
     const original = originalRef.current;
-    
+
     if (!original) return;
 
     if (field === 'name') {
@@ -75,7 +75,7 @@ export function VariableHint({ content, onContentChange }: VariableHintProps) {
         onContentChange(newContent);
       }
     }
-    
+
     originalRef.current = null;
   }, [content, onContentChange]);
 

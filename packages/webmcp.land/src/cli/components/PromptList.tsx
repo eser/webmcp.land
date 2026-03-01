@@ -19,14 +19,14 @@ interface PromptListProps {
 
 type ViewMode = 'list' | 'categories';
 
-export function PromptList({ 
-  onSelect, 
-  onQuit, 
-  searchQuery, 
-  onSearchChange, 
-  page, 
-  onPageChange, 
-  selectedCategory, 
+export function PromptList({
+  onSelect,
+  onQuit,
+  searchQuery,
+  onSearchChange,
+  page,
+  onPageChange,
+  selectedCategory,
   onCategoryChange,
   selectedIndex,
   onIndexChange
@@ -125,7 +125,7 @@ export function PromptList({
         return;
       }
       if (key.downArrow || input === 'j') {
-        const filteredCats = categorySearchQuery 
+        const filteredCats = categorySearchQuery
           ? categories.filter(c => c.name.toLowerCase().includes(categorySearchQuery.toLowerCase()))
           : categories;
         const maxIndex = categorySearchQuery ? filteredCats.length - 1 : filteredCats.length;
@@ -133,7 +133,7 @@ export function PromptList({
         return;
       }
       if (key.return) {
-        const filteredCats = categorySearchQuery 
+        const filteredCats = categorySearchQuery
           ? categories.filter(c => c.name.toLowerCase().includes(categorySearchQuery.toLowerCase()))
           : categories;
         if (categorySearchQuery) {
@@ -210,7 +210,7 @@ export function PromptList({
     setIsSearchingCategories(false);
   };
 
-  const filteredCategories = categorySearchQuery 
+  const filteredCategories = categorySearchQuery
     ? categories.filter(c => c.name.toLowerCase().includes(categorySearchQuery.toLowerCase()))
     : categories;
 

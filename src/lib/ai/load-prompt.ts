@@ -36,10 +36,10 @@ export function loadPrompt(relativePath: string): PromptFile {
   const absolutePath = join(process.cwd(), relativePath);
   const content = readFileSync(absolutePath, "utf-8");
   const prompt = parse(content) as PromptFile;
-  
+
   // Cache the result
   promptCache.set(relativePath, prompt);
-  
+
   return prompt;
 }
 

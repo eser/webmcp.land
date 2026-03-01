@@ -36,9 +36,9 @@ export function ResourceList({ resources, currentPage, totalPages, pinnedIds, sh
     <div className="space-y-4">
       <Masonry columnCount={{ default: 1, md: 2, lg: 3 }} gap={16}>
         {resources.map((resource) => (
-          <ResourceCard 
-            key={resource.id} 
-            resource={resource} 
+          <ResourceCard
+            key={resource.id}
+            resource={resource}
             showPinButton={showPinButton}
             isPinned={pinnedIds?.has(resource.id) ?? false}
           />

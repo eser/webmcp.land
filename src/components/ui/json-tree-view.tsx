@@ -165,7 +165,7 @@ function JsonTreeView({ data, className, fontSize = "xs", maxDepth = 10, onExpan
             </button>
           )}
           {!canExpand && <span className="w-4 shrink-0" />}
-          
+
           {key !== null && (
             <>
               <span className="text-blue-600 dark:text-blue-400 font-medium group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors">{key}</span>
@@ -174,13 +174,13 @@ function JsonTreeView({ data, className, fontSize = "xs", maxDepth = 10, onExpan
               )}
             </>
           )}
-          
+
           {!isExpanded && !isEmpty && (
             <span className="text-muted-foreground/50 text-xs group-hover:text-muted-foreground/70 transition-colors">
               {itemCount} {itemCount === 1 ? "item" : "items"}
             </span>
           )}
-          
+
           {isEmpty && (
             <span className="text-muted-foreground/50 text-xs italic group-hover:text-muted-foreground/70 transition-colors">
               empty
@@ -198,23 +198,23 @@ function JsonTreeView({ data, className, fontSize = "xs", maxDepth = 10, onExpan
                   {/* Tree connector line */}
                   <div className="absolute left-0 top-0 bottom-0 w-px bg-border/30" style={{ marginLeft: '-1.25rem' }} />
                   {!isLastEntry && (
-                    <div 
-                      className="absolute left-0 w-px bg-border/30" 
-                      style={{ 
+                    <div
+                      className="absolute left-0 w-px bg-border/30"
+                      style={{
                         marginLeft: '-1.25rem',
                         top: '1.5rem',
                         bottom: '-0.5rem'
-                      }} 
+                      }}
                     />
                   )}
-                  
+
                   <div className="flex items-start">
                     {/* Horizontal connector */}
-                    <div 
-                      className="absolute left-0 top-3 w-3 h-px bg-border/30" 
-                      style={{ marginLeft: '-1.25rem' }} 
+                    <div
+                      className="absolute left-0 top-3 w-3 h-px bg-border/30"
+                      style={{ marginLeft: '-1.25rem' }}
                     />
-                    
+
                     <div className="flex-1">
                       {renderNode(entry, depth + 1, isLastEntry)}
                     </div>

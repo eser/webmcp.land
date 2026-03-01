@@ -52,12 +52,3 @@ repos:
           "revert",
           "test",
         ]
-
-  - repo: https://github.com/crate-ci/typos
-    rev: v1.44.0
-    hooks:
-      - id: typos
-        verbose: true
-        args:
-          - "--config"
-          - ".github/typos.toml"

@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
         { status: 401 }
       );
     }
-    
+
     const enabled = await isDiscoveryEnabled();
     if (!enabled) {
       return NextResponse.json(

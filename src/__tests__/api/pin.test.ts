@@ -85,7 +85,7 @@ describe("POST /api/resources/[id]/pin", () => {
 
   it("should return 400 if resource already pinned", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ authorId: "user1", isPrivate: false }],    // resource exists
       [{ userId: "user1", promptId: "123" }],        // already pinned
     );
@@ -104,7 +104,7 @@ describe("POST /api/resources/[id]/pin", () => {
 
   it("should return 400 if pin limit (3) reached", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ authorId: "user1", isPrivate: false }],  // resource exists
       [],                                           // not already pinned
       [{ value: 3 }],                              // pin count = 3 (max)
@@ -148,7 +148,7 @@ describe("POST /api/resources/[id]/pin", () => {
 
   it("should increment order for subsequent pins", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ authorId: "user1", isPrivate: false }],
       [],
       [{ value: 2 }],                              // 2 existing pins
@@ -168,7 +168,7 @@ describe("POST /api/resources/[id]/pin", () => {
 
   it("should return success: true, pinned: true on successful pin", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ authorId: "user1", isPrivate: false }],
       [],
       [{ value: 0 }],

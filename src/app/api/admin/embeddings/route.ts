@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
             },
             regenerate
           );
-          
+
           const final = JSON.stringify({ ...result, done: true });
           controller.enqueue(encoder.encode(`data: ${final}\n\n`));
           controller.close();

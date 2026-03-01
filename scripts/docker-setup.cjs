@@ -4,9 +4,9 @@
 /**
  * Non-interactive setup script for Docker builds.
  * Generates prompts.config.ts from environment variables.
- * 
+ *
  * Usage: BRAND_NAME="My App" node scripts/docker-setup.js
- * 
+ *
  * Environment Variables:
  *   BRAND_NAME        - App name (default: "My Prompt Library")
  *   BRAND_DESCRIPTION - App description

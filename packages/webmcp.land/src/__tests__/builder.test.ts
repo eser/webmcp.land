@@ -75,7 +75,7 @@ describe('builder module', () => {
         .task('answer')
         .constraint('be nice')
         .build();
-      
+
       expect(result.metadata.role).toBe('assistant');
       expect(result.metadata.context).toBe('helping');
       expect(result.metadata.task).toBe('answer');
@@ -203,7 +203,7 @@ describe('builder module', () => {
         .detailed()
         .user('What is this?')
         .build();
-      
+
       expect(result.systemPrompt).toContain('developer');
       expect(result.messages.length).toBeGreaterThan(1);
     });

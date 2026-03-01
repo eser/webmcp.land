@@ -16,19 +16,19 @@ export function ActivityChartWrapper({ data, locale }: ActivityChartWrapperProps
 
   const handleDateClick = useCallback((date: string | null) => {
     const params = new URLSearchParams(searchParams?.toString() || "");
-    
+
     if (date) {
       params.set("date", date);
       params.delete("page"); // Reset to page 1 when filtering
     } else {
       params.delete("date");
     }
-    
+
     // Always switch to resources tab when filtering by date
     if (date) {
       params.set("tab", "resources");
     }
-    
+
     const newUrl = `?${params.toString()}`;
     router.push(newUrl, { scroll: false });
   }, [router, searchParams]);

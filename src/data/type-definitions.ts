@@ -60,7 +60,7 @@ declare module 'webmcp.land' {
   | 'teaching' | 'counseling' | 'creative' | 'legal' | 'medical'
   | 'financial' | 'scientific' | 'engineering' | 'design' | 'marketing'
   | 'business' | 'philosophy' | 'history' | 'languages' | 'mathematics';
-  export type ReasoningStyle = | 'step-by-step' | 'chain-of-thought' | 'tree-of-thought' 
+  export type ReasoningStyle = | 'step-by-step' | 'chain-of-thought' | 'tree-of-thought'
   | 'direct' | 'analytical' | 'comparative' | 'deductive' | 'inductive'
   | 'first-principles' | 'analogical' | 'devil-advocate';
   export type OutputLength = 'brief' | 'moderate' | 'detailed' | 'comprehensive' | 'exhaustive';
@@ -250,9 +250,9 @@ declare module 'webmcp.land' {
   | 'instrumental';
   export type TempoMarking = | 'largo' | 'adagio' | 'andante' | 'moderato' | 'allegro' | 'vivace' | 'presto';
   export type TimeSignature = '4/4' | '3/4' | '6/8' | '2/4' | '5/4' | '7/8' | '12/8';
-  export type MusicalKey = | 'C' | 'C#' | 'Db' | 'D' | 'D#' | 'Eb' | 'E' | 'F' | 'F#' | 'Gb' 
+  export type MusicalKey = | 'C' | 'C#' | 'Db' | 'D' | 'D#' | 'Eb' | 'E' | 'F' | 'F#' | 'Gb'
   | 'G' | 'G#' | 'Ab' | 'A' | 'A#' | 'Bb' | 'B'
-  | 'Cm' | 'C#m' | 'Dm' | 'D#m' | 'Ebm' | 'Em' | 'Fm' | 'F#m' 
+  | 'Cm' | 'C#m' | 'Dm' | 'D#m' | 'Ebm' | 'Em' | 'Fm' | 'F#m'
   | 'Gm' | 'G#m' | 'Am' | 'A#m' | 'Bbm' | 'Bm';
   export type SongSection = | 'intro' | 'verse' | 'pre-chorus' | 'chorus' | 'bridge' | 'breakdown'
   | 'drop' | 'build-up' | 'outro' | 'solo' | 'interlude' | 'hook';
@@ -620,7 +620,7 @@ declare module 'webmcp.land' {
   | 'super-35' | 'vista-vision' | 'imax' | '65mm' | '35mm-film' | '16mm-film' | '8mm-film';
   export type FilmFormat = | '35mm' | '120-medium-format' | '4x5-large-format' | '8x10-large-format'
   | '110-film' | 'instant-film' | 'super-8' | '16mm' | '65mm-imax';
-  export type CameraAngle = | 'eye-level' | 'low-angle' | 'high-angle' | 'dutch-angle' | 'birds-eye' 
+  export type CameraAngle = | 'eye-level' | 'low-angle' | 'high-angle' | 'dutch-angle' | 'birds-eye'
   | 'worms-eye' | 'over-the-shoulder' | 'point-of-view' | 'aerial' | 'drone'
   | 'canted' | 'oblique' | 'hip-level' | 'knee-level' | 'ground-level';
   export type ShotType = | 'extreme-close-up' | 'close-up' | 'medium-close-up' | 'medium' | 'medium-wide'
@@ -651,7 +651,7 @@ declare module 'webmcp.land' {
   export type FilterType = | 'uv' | 'polarizer' | 'nd' | 'nd-graduated' | 'black-pro-mist' | 'white-pro-mist'
   | 'glimmer-glass' | 'classic-soft' | 'streak' | 'starburst' | 'diffusion'
   | 'infrared' | 'color-gel' | 'warming' | 'cooling' | 'vintage-look';
-  export type CameraMovement = | 'static' | 'pan' | 'tilt' | 'dolly' | 'truck' | 'pedestal' | 'zoom' 
+  export type CameraMovement = | 'static' | 'pan' | 'tilt' | 'dolly' | 'truck' | 'pedestal' | 'zoom'
   | 'handheld' | 'steadicam' | 'crane' | 'drone' | 'tracking' | 'arc' | 'whip-pan'
   | 'roll' | 'boom' | 'jib' | 'cable-cam' | 'motion-control' | 'snorricam'
   | 'dutch-roll' | 'vertigo-effect' | 'crash-zoom' | 'slow-push' | 'slow-pull';
@@ -666,7 +666,7 @@ declare module 'webmcp.land' {
   | 'high-key' | 'low-key' | 'three-point' | 'practical' | 'motivated';
   export type TimeOfDay = | 'dawn' | 'sunrise' | 'golden-hour' | 'morning' | 'midday' | 'afternoon'
   | 'blue-hour' | 'sunset' | 'dusk' | 'twilight' | 'night' | 'midnight';
-  export type WeatherLighting = | 'sunny' | 'cloudy' | 'overcast' | 'foggy' | 'misty' | 'rainy' 
+  export type WeatherLighting = | 'sunny' | 'cloudy' | 'overcast' | 'foggy' | 'misty' | 'rainy'
   | 'stormy' | 'snowy' | 'hazy';
   export type ArtStyle = | 'photorealistic' | 'hyperrealistic' | 'cinematic' | 'documentary'
   | 'editorial' | 'fashion' | 'portrait' | 'landscape' | 'street'
@@ -676,7 +676,7 @@ declare module 'webmcp.land' {
   | 'cyberpunk' | 'steampunk' | 'fantasy' | 'sci-fi' | 'anime' | 'manga'
   | 'comic-book' | 'illustration' | 'digital-art' | 'oil-painting' | 'watercolor'
   | 'sketch' | 'pencil-drawing' | 'charcoal' | 'pastel' | '3d-render';
-  export type FilmStock = | 'kodak-portra-160' | 'kodak-portra-400' | 'kodak-portra-800' 
+  export type FilmStock = | 'kodak-portra-160' | 'kodak-portra-400' | 'kodak-portra-800'
   | 'kodak-ektar-100' | 'kodak-gold-200' | 'kodak-ultramax-400' | 'kodak-colorplus-200'
   // Kodak Black & White
   | 'kodak-tri-x-400' | 'kodak-tmax-100' | 'kodak-tmax-400' | 'kodak-tmax-3200'

@@ -60,10 +60,10 @@ function getUniqueVariables(variables: Variable[]): { name: string; defaultValue
   return Array.from(seen.entries()).map(([name, defaultValue]) => ({ name, defaultValue }));
 }
 
-export function VariableFillModal({ 
-  content, 
-  open, 
-  onOpenChange, 
+export function VariableFillModal({
+  content,
+  open,
+  onOpenChange,
   mode,
   resourceId,
   categoryName,

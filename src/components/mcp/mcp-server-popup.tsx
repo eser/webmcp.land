@@ -87,7 +87,7 @@ export function McpServerPopup({
   // Build query params for MCP URL
   const queryParams = useMemo(() => {
     const params = new URLSearchParams();
-    
+
     if (users.length > 0) {
       params.set("mcp.users", users.join(","));
     }
@@ -182,8 +182,8 @@ export function McpServerPopup({
 
           {/* API Key Link */}
           {session?.user && !apiKey && (
-            <Link 
-              href="/settings" 
+            <Link
+              href="/settings"
               className="flex items-center gap-1.5 text-[11px] text-primary hover:underline"
             >
               <Key className="h-3 w-3" />
@@ -200,7 +200,7 @@ export function McpServerPopup({
               <span>{t("mcp.customizeFilters")}</span>
               <ChevronDown className={cn("h-3 w-3 transition-transform", filtersOpen && "rotate-180")} />
             </button>
-            
+
             {filtersOpen && (
               <div className="space-y-2 mt-2">
                 {/* Users */}

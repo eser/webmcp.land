@@ -57,7 +57,7 @@ export function SlideDeck({ children }: SlideDeckProps) {
         {children.map((child, index) => {
           // Calculate the relative position (-1 is left, 0 is active, 1 is right)
           const offset = index - currentSlide;
-          
+
           let translateX = "translate-x-full";
           if (offset === 0) translateX = "translate-x-0";
           else if (offset < 0) translateX = "-translate-x-full";
@@ -91,7 +91,7 @@ export function SlideDeck({ children }: SlideDeckProps) {
           <ChevronLeft className="w-6 h-6" />
           <span className="sr-only">Previous</span>
         </Button>
-        
+
         {/* Progress Dots */}
         <div className="flex gap-2">
           {Array.from({ length: totalSlides }).map((_, i) => (
@@ -100,8 +100,8 @@ export function SlideDeck({ children }: SlideDeckProps) {
               onClick={() => setCurrentSlide(i)}
               className={cn(
                 "w-2.5 h-2.5 rounded-full transition-all duration-300",
-                i === currentSlide 
-                  ? "bg-primary w-8" 
+                i === currentSlide
+                  ? "bg-primary w-8"
                   : "bg-muted-foreground/30 hover:bg-muted-foreground/50"
               )}
               aria-label={`Go to slide ${i + 1}`}
@@ -123,7 +123,7 @@ export function SlideDeck({ children }: SlideDeckProps) {
 
       {/* Progress Bar */}
       <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-muted">
-        <div 
+        <div
           className="h-full bg-primary transition-all duration-500 ease-out"
           style={{ width: `${((currentSlide + 1) / totalSlides) * 100}%` }}
         />

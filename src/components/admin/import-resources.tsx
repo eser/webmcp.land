@@ -58,7 +58,7 @@ export function ImportResources() {
       }
 
       setResult(data);
-      
+
       if (data.imported > 0) {
         toast.success(t("admin.import.success", { count: data.imported }));
         router.refresh();

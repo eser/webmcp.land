@@ -59,14 +59,14 @@ export const chatPlatforms: Platform[] = [
 ];
 
 export function buildUrl(
-  platformId: string, 
-  baseUrl: string, 
-  promptText: string, 
-  promptTitle?: string, 
+  platformId: string,
+  baseUrl: string,
+  promptText: string,
+  promptTitle?: string,
   promptDescription?: string
 ): string {
   const encoded = encodeURIComponent(promptText);
-  
+
   switch (platformId) {
     case "cursor":
       return `${baseUrl}?text=${encoded}`;

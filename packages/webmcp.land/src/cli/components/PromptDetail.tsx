@@ -17,7 +17,7 @@ type ViewMode = 'detail' | 'variables' | 'copied' | 'run' | 'run-variables' | 'p
 function HighlightedLine({ text }: { text: string }) {
   // Split by variable pattern ${...}
   const parts = text.split(/(\$\{[^}]+\})/g);
-  
+
   return (
     <Text>
       {parts.map((part, i) => {
@@ -33,7 +33,7 @@ function HighlightedLine({ text }: { text: string }) {
 function wrapText(text: string, width: number): string[] {
   const lines: string[] = [];
   const rawLines = text.split('\n');
-  
+
   for (const rawLine of rawLines) {
     if (rawLine.length <= width) {
       lines.push(rawLine);
@@ -79,7 +79,7 @@ export function PromptDetail({ prompt, onBack, onCopy }: PromptDetailProps) {
   useEffect(() => {
     const vars = extractVariables(prompt.content);
     setVariables(vars);
-    
+
     const defaults: Record<string, string> = {};
     vars.forEach(v => {
       if (v.defaultValue) defaults[v.name] = v.defaultValue;
@@ -106,10 +106,10 @@ export function PromptDetail({ prompt, onBack, onCopy }: PromptDetailProps) {
       const terminalImage = await import('terminal-image');
       const response = await fetch(prompt.mediaUrl);
       const buffer = Buffer.from(await response.arrayBuffer());
-      const image = await terminalImage.default.buffer(buffer, { 
+      const image = await terminalImage.default.buffer(buffer, {
         width: terminalWidth - 4,
         height: terminalHeight - 4,
-        preserveAspectRatio: true 
+        preserveAspectRatio: true
       });
       setImagePreview(image);
       setViewMode('preview');
@@ -276,7 +276,7 @@ export function PromptDetail({ prompt, onBack, onCopy }: PromptDetailProps) {
       setCurrentInput(newValues[variables[currentVarIndex + 1].name] || '');
     } else {
       const compiled = compile(prompt!.content, newValues, { useDefaults: true });
-      
+
       if (viewMode === 'run-variables' && pendingPlatform) {
         if (runAction === 'copy') {
           onCopy(compiled);
@@ -393,10 +393,10 @@ export function PromptDetail({ prompt, onBack, onCopy }: PromptDetailProps) {
       </Box>
 
       {/* Scrollable Content */}
-      <Box 
-        flexDirection="column" 
-        borderStyle="round" 
-        borderColor="gray" 
+      <Box
+        flexDirection="column"
+        borderStyle="round"
+        borderColor="gray"
         paddingX={1}
         flexGrow={1}
         marginX={1}

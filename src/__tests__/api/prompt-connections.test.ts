@@ -39,7 +39,7 @@ describe("GET /api/resources/[id]/connections", () => {
   });
 
   it("should return empty connections for resource with none", async () => {
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ id: "123", isPrivate: false, authorId: "user1" }],
       [],  // outgoing
       [],  // incoming
@@ -58,7 +58,7 @@ describe("GET /api/resources/[id]/connections", () => {
   });
 
   it("should return outgoing and incoming connections", async () => {
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ id: "123", isPrivate: false, authorId: "user1" }],
       [{
         id: "conn1",
@@ -87,7 +87,7 @@ describe("GET /api/resources/[id]/connections", () => {
   });
 
   it("should filter out private resources the user cannot see", async () => {
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ id: "123", isPrivate: false, authorId: "user1" }],
       [{
         id: "conn1",
@@ -108,7 +108,7 @@ describe("GET /api/resources/[id]/connections", () => {
   });
 
   it("should show private resources owned by the user", async () => {
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ id: "123", isPrivate: false, authorId: "user1" }],
       [{
         id: "conn1",
@@ -186,7 +186,7 @@ describe("POST /api/resources/[id]/connections", () => {
 
   it("should return 404 if target resource not found", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1", role: "USER" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ authorId: "user1" }],  // Source
       [],                         // Target not found
     );
@@ -206,7 +206,7 @@ describe("POST /api/resources/[id]/connections", () => {
 
   it("should return 403 if user does not own target resource", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1", role: "USER" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ authorId: "user1" }],                    // Source
       [{ id: "456", title: "T", authorId: "other-user" }],  // Target
     );
@@ -226,7 +226,7 @@ describe("POST /api/resources/[id]/connections", () => {
 
   it("should return 400 for self-connection", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ authorId: "user1" }],
       [{ id: "123", title: "T", authorId: "user1" }],
     );
@@ -246,7 +246,7 @@ describe("POST /api/resources/[id]/connections", () => {
 
   it("should return 400 if connection already exists", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ authorId: "user1" }],
       [{ id: "456", title: "T", authorId: "user1" }],
       [{ id: "existing" }],  // existing connection
@@ -267,7 +267,7 @@ describe("POST /api/resources/[id]/connections", () => {
 
   it("should create connection successfully", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ authorId: "user1" }],                      // source resource
       [{ id: "456", title: "Target", authorId: "user1" }],  // target resource
       [],                                              // no existing connection
@@ -311,7 +311,7 @@ describe("POST /api/resources/[id]/connections", () => {
 
   it("should allow admin to create connections for any resource", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "admin1", role: "ADMIN" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ authorId: "other-user" }],
       [{ id: "456", title: "T", authorId: "another-user" }],
       [],  // no existing connection

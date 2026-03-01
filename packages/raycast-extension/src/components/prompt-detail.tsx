@@ -31,9 +31,9 @@ ${prompt.content}
 
 ---
 
-**Author:** ${prompt.author.name || prompt.author.username} (@${prompt.author.username})  
-**Type:** ${prompt.type}  
-**Votes:** ${prompt.voteCount}  
+**Author:** ${prompt.author.name || prompt.author.username} (@${prompt.author.username})
+**Type:** ${prompt.type}
+**Votes:** ${prompt.voteCount}
 ${prompt.category ? `**Category:** ${prompt.category.name}  \n` : ""}
 ${prompt.tags.length > 0 ? `**Tags:** ${prompt.tags.map((t) => t.tag.name).join(", ")}` : ""}
 `;

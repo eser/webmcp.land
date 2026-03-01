@@ -25,7 +25,7 @@ export function RunPrompt({ content, title, description, promptType, mediaUrl, o
   // Get platforms based on tab, include media platforms for image/video prompts
   const basePlatforms = tab === 'chat' ? chatPlatforms : codePlatforms;
   const mediaPlatforms = promptType === 'IMAGE' ? imagePlatforms : promptType === 'VIDEO' ? videoPlatforms : [];
-  
+
   // Sort: sponsors first, then alphabetically
   const platforms = [...mediaPlatforms, ...basePlatforms].sort((a, b) => {
     if (a.sponsor && !b.sponsor) return -1;
@@ -85,16 +85,16 @@ export function RunPrompt({ content, title, description, promptType, mediaUrl, o
 
       {/* Tabs */}
       <Box paddingX={1} marginBottom={1}>
-        <Text 
-          color={tab === 'chat' ? 'cyan' : 'gray'} 
+        <Text
+          color={tab === 'chat' ? 'cyan' : 'gray'}
           bold={tab === 'chat'}
           underline={tab === 'chat'}
         >
           Chat
         </Text>
         <Text dimColor>  </Text>
-        <Text 
-          color={tab === 'code' ? 'cyan' : 'gray'} 
+        <Text
+          color={tab === 'code' ? 'cyan' : 'gray'}
           bold={tab === 'code'}
           underline={tab === 'code'}
         >

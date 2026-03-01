@@ -1,10 +1,10 @@
 /**
  * Prompt Quality Checker - Local validation for prompt quality
- * 
+ *
  * @example
  * ```ts
  * import { quality } from 'webmcp.land';
- * 
+ *
  * const result = quality.check("Act as a developer...");
  * console.log(result.score); // 0.85
  * console.log(result.issues); // []
@@ -46,18 +46,18 @@ const OPTIMAL_MAX_WORDS = 2000;
 function isGibberish(text: string): boolean {
   // Check for repeated characters
   if (/(.)\1{4,}/.test(text)) return true;
-  
+
   // Check for keyboard patterns
   const keyboardPatterns = ['qwerty', 'asdfgh', 'zxcvbn', 'qwertz', 'azerty'];
   const lower = text.toLowerCase();
   if (keyboardPatterns.some(p => lower.includes(p))) return true;
-  
+
   // Check consonant/vowel ratio (gibberish often has unusual ratios)
   const vowels = (text.match(/[aeiouAEIOU]/g) || []).length;
   const consonants = (text.match(/[bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ]/g) || []).length;
-  
+
   if (consonants > 0 && vowels / consonants < 0.1) return true;
-  
+
   return false;
 }
 
@@ -71,7 +71,7 @@ function detectPatterns(text: string): {
   hasExamples: boolean;
 } {
   const lower = text.toLowerCase();
-  
+
   return {
     hasRole: /\b(act as|you are|imagine you|pretend to be|role:|persona:)\b/i.test(text),
     hasTask: /\b(your task|you (will|should|must)|please|help me|i need|i want you to)\b/i.test(text),
@@ -93,13 +93,13 @@ function countVariables(text: string): number {
     /\[\[[^\]]+\]\]/g,        // [[var]]
     /\[[A-Z][A-Z0-9_\s]*\]/g, // [VAR]
   ];
-  
+
   let count = 0;
   for (const pattern of patterns) {
     const matches = text.match(pattern);
     if (matches) count += matches.length;
   }
-  
+
   return count;
 }
 
@@ -111,35 +111,35 @@ function calculateScore(
   issues: QualityIssue[]
 ): number {
   let score = 1.0;
-  
+
   // Deduct for errors
   const errors = issues.filter(i => i.type === 'error').length;
   const warnings = issues.filter(i => i.type === 'warning').length;
-  
+
   score -= errors * 0.2;
   score -= warnings * 0.05;
-  
+
   // Bonus for good structure
   if (stats.hasRole) score += 0.05;
   if (stats.hasTask) score += 0.05;
   if (stats.hasConstraints) score += 0.03;
   if (stats.hasExamples) score += 0.05;
-  
+
   // Penalty for being too short
   if (stats.wordCount < OPTIMAL_MIN_WORDS) {
     score -= 0.1 * (1 - stats.wordCount / OPTIMAL_MIN_WORDS);
   }
-  
+
   // Slight penalty for being very long
   if (stats.wordCount > OPTIMAL_MAX_WORDS) {
     score -= 0.05;
   }
-  
+
   // Bonus for having variables (indicates reusability)
   if (stats.variableCount > 0) {
     score += 0.05;
   }
-  
+
   return Math.max(0, Math.min(1, score));
 }
 
@@ -149,7 +149,7 @@ function calculateScore(
 export function check(prompt: string): QualityResult {
   const issues: QualityIssue[] = [];
   const trimmed = prompt.trim();
-  
+
   // Basic stats
   const characterCount = trimmed.length;
   const words = trimmed.split(/\s+/).filter(w => w.length > 0);
@@ -157,7 +157,7 @@ export function check(prompt: string): QualityResult {
   const sentenceCount = (trimmed.match(/[.!?]+/g) || []).length || 1;
   const variableCount = countVariables(trimmed);
   const patterns = detectPatterns(trimmed);
-  
+
   // Check for empty or too short
   if (characterCount === 0) {
     issues.push({
@@ -172,7 +172,7 @@ export function check(prompt: string): QualityResult {
       message: `Prompt is too short (${characterCount} chars, minimum ${MIN_CHAR_COUNT})`,
     });
   }
-  
+
   if (wordCount > 0 && wordCount < MIN_WORD_COUNT) {
     issues.push({
       type: 'warning',
@@ -180,7 +180,7 @@ export function check(prompt: string): QualityResult {
       message: `Prompt has very few words (${wordCount} words, recommended ${OPTIMAL_MIN_WORDS}+)`,
     });
   }
-  
+
   // Check for gibberish
   if (isGibberish(trimmed)) {
     issues.push({
@@ -189,7 +189,7 @@ export function check(prompt: string): QualityResult {
       message: 'Prompt appears to contain gibberish or random characters',
     });
   }
-  
+
   // Check for common issues
   if (!patterns.hasTask && !patterns.hasRole) {
     issues.push({
@@ -198,18 +198,18 @@ export function check(prompt: string): QualityResult {
       message: 'Consider adding a clear task or role definition',
     });
   }
-  
+
   // Check for unbalanced brackets/quotes
   const brackets = [
     { open: '{', close: '}' },
     { open: '[', close: ']' },
     { open: '(', close: ')' },
   ];
-  
+
   for (const { open, close } of brackets) {
     const openCount = (trimmed.match(new RegExp(`\\${open}`, 'g')) || []).length;
     const closeCount = (trimmed.match(new RegExp(`\\${close}`, 'g')) || []).length;
-    
+
     if (openCount !== closeCount) {
       issues.push({
         type: 'warning',
@@ -218,7 +218,7 @@ export function check(prompt: string): QualityResult {
       });
     }
   }
-  
+
   // Check for very long lines (readability)
   const lines = trimmed.split('\n');
   const longLines = lines.filter(l => l.length > 500);
@@ -229,7 +229,7 @@ export function check(prompt: string): QualityResult {
       message: 'Some lines are very long. Consider breaking them up for readability.',
     });
   }
-  
+
   const stats = {
     characterCount,
     wordCount,
@@ -237,10 +237,10 @@ export function check(prompt: string): QualityResult {
     variableCount,
     ...patterns,
   };
-  
+
   const score = calculateScore(stats, issues);
   const hasErrors = issues.some(i => i.type === 'error');
-  
+
   return {
     valid: !hasErrors,
     score,
@@ -254,13 +254,13 @@ export function check(prompt: string): QualityResult {
  */
 export function validate(prompt: string): void {
   const result = check(prompt);
-  
+
   if (!result.valid) {
     const errors = result.issues
       .filter(i => i.type === 'error')
       .map(i => i.message)
       .join('; ');
-    
+
     throw new Error(`Invalid prompt: ${errors}`);
   }
 }
@@ -278,30 +278,30 @@ export function isValid(prompt: string): boolean {
 export function getSuggestions(prompt: string): string[] {
   const result = check(prompt);
   const suggestions: string[] = [];
-  
+
   // From issues
   suggestions.push(
     ...result.issues
       .filter(i => i.type === 'suggestion' || i.type === 'warning')
       .map(i => i.message)
   );
-  
+
   // Additional suggestions based on stats
   if (!result.stats.hasRole) {
     suggestions.push('Add a role definition (e.g., "Act as a...")');
   }
-  
+
   if (!result.stats.hasConstraints && result.stats.wordCount > 50) {
     suggestions.push('Consider adding constraints or rules for better control');
   }
-  
+
   if (!result.stats.hasExamples && result.stats.wordCount > 100) {
     suggestions.push('Adding examples can improve output quality');
   }
-  
+
   if (result.stats.variableCount === 0 && result.stats.wordCount > 30) {
     suggestions.push('Consider adding variables (${var}) to make the prompt reusable');
   }
-  
+
   return suggestions;
 }

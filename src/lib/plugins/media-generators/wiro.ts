@@ -1,8 +1,8 @@
 /**
  * Wiro.ai Media Generator Plugin
- * 
+ *
  * Generates images and videos using Wiro.ai API.
- * 
+ *
  * Required env vars:
  * - WIRO_API_KEY
  * - WIRO_VIDEO_MODELS (comma-separated, e.g., "google/veo3.1-fast")
@@ -162,7 +162,7 @@ export const wiroGeneratorPlugin: MediaGeneratorPlugin = {
 
     const formData = new FormData();
     formData.append("prompt", request.prompt);
-    
+
     if (request.type === "video") {
       // Video-specific parameters
       formData.append("resolution", "720p");

@@ -41,7 +41,7 @@ export function ActivityChart({ data, locale = "en", selectedDate, onDateClick }
 
     // 26 weeks (~6 months) for mobile, 52 weeks (~12 months) for desktop
     const daysBack = isMobile ? 182 : 364;
-    
+
     const startDate = new Date(today);
     startDate.setDate(startDate.getDate() - daysBack);
     // Align to Sunday
@@ -93,7 +93,7 @@ export function ActivityChart({ data, locale = "en", selectedDate, onDateClick }
     for (let i = 0; i < allMonths.length; i++) {
       const current = allMonths[i];
       const next = allMonths[i + 1];
-      
+
       // If next month is too close (< 4 columns), skip current and show next instead
       if (next && next.colStart - current.colStart < 4) {
         continue;

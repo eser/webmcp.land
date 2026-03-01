@@ -14,8 +14,8 @@ interface MasonryProps {
   className?: string;
 }
 
-export function Masonry({ 
-  children, 
+export function Masonry({
+  children,
   columnCount = { default: 1, md: 2, lg: 3 },
   gap = 16,
   className = ""
@@ -34,7 +34,7 @@ export function Masonry({
       setIsRTL(document.documentElement.dir === "rtl");
     };
     checkRTL();
-    
+
     // Watch for dir attribute changes
     const observer = new MutationObserver(checkRTL);
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ["dir"] });
@@ -67,7 +67,7 @@ export function Masonry({
 
     const width = containerRef.current.offsetWidth;
     setContainerWidth(width);
-    
+
     const columnWidth = (width - gap * (columns - 1)) / columns;
     const columnHeights = new Array(columns).fill(0);
     const newPositions = new Map<number, { x: number; y: number }>();
@@ -120,7 +120,7 @@ export function Masonry({
   // Use ResizeObserver on container for layout changes
   useEffect(() => {
     if (!containerRef.current) return;
-    
+
     const observer = new ResizeObserver(() => {
       calculatePositions();
     });
@@ -142,13 +142,13 @@ export function Masonry({
     return () => observer.disconnect();
   }, [calculatePositions, children.length]);
 
-  const columnWidth = containerWidth > 0 
-    ? (containerWidth - gap * (columns - 1)) / columns 
+  const columnWidth = containerWidth > 0
+    ? (containerWidth - gap * (columns - 1)) / columns
     : 0;
 
   return (
-    <div 
-      ref={containerRef} 
+    <div
+      ref={containerRef}
       className={`relative ${className}`}
       style={{ height: containerHeight > 0 ? containerHeight : "auto" }}
     >
@@ -168,8 +168,8 @@ export function Masonry({
             className="absolute"
             style={{
               width: columnWidth > 0 ? columnWidth : "100%",
-              transform: hasPosition 
-                ? `translate3d(${isRTL ? -position.x : position.x}px, ${position.y}px, 0)` 
+              transform: hasPosition
+                ? `translate3d(${isRTL ? -position.x : position.x}px, ${position.y}px, 0)`
                 : "translate3d(-9999px, 0, 0)",
               visibility: hasPosition ? "visible" : "hidden",
               ...(isRTL ? { right: 0 } : { left: 0 }),

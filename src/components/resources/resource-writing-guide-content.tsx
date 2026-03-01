@@ -147,7 +147,7 @@ export function ResourceWritingGuideContent() {
         title={t("resourceWritingGuide.rolePlaying.title")}
       >
         <p className="text-muted-foreground mb-4">{t("resourceWritingGuide.rolePlaying.description")}</p>
-        
+
         <div className="space-y-6">
           <div>
             <h4 className="font-medium text-sm uppercase text-muted-foreground mb-2">{t("resourceWritingGuide.rolePlaying.basicPattern")}</h4>
@@ -360,7 +360,7 @@ The email should:
     "provide_solution": false,
     "evaluation_criteria": [
       "Correctness",
-      "Efficiency", 
+      "Efficiency",
       "Code readability"
     ]
   },
@@ -385,7 +385,7 @@ task:
   type: \${content_type:blog post}
   topic: "\${topic}"
   target_audience: \${audience:general}
-  
+
 requirements:
   word_count: \${word_count:1000}
   keywords:

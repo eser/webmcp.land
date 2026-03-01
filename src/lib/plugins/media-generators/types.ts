@@ -1,6 +1,6 @@
 /**
  * Media Generator Plugin Types
- * 
+ *
  * Interface definitions for AI-powered media generation plugins.
  */
 

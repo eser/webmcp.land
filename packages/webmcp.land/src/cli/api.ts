@@ -109,7 +109,7 @@ export async function loadPrompts(): Promise<Prompt[]> {
 
 export function getCategories(prompts: Prompt[]): Category[] {
   const categoryMap = new Map<string, Category>();
-  
+
   for (const prompt of prompts) {
     if (prompt.category) {
       const existing = categoryMap.get(prompt.category.slug);
@@ -125,7 +125,7 @@ export function getCategories(prompts: Prompt[]): Category[] {
       }
     }
   }
-  
+
   return Array.from(categoryMap.values()).sort((a, b) => a.name.localeCompare(b.name));
 }
 
@@ -136,11 +136,11 @@ export function filterPrompts(prompts: Prompt[], options: {
   perPage?: number;
 }): { prompts: Prompt[]; total: number; page: number; perPage: number; totalPages: number } {
   let filtered = prompts;
-  
+
   // Filter by search query
   if (options.q) {
     const query = options.q.toLowerCase();
-    filtered = filtered.filter(p => 
+    filtered = filtered.filter(p =>
       p.title.toLowerCase().includes(query) ||
       p.content.toLowerCase().includes(query) ||
       p.description?.toLowerCase().includes(query) ||
@@ -149,21 +149,21 @@ export function filterPrompts(prompts: Prompt[], options: {
       p.tags.some(t => t.name.toLowerCase().includes(query) || t.slug.toLowerCase().includes(query))
     );
   }
-  
+
   // Filter by category
   if (options.category) {
     filtered = filtered.filter(p => p.category?.slug === options.category);
   }
-  
+
   const total = filtered.length;
   const page = options.page || 1;
   const perPage = options.perPage || 20;
   const totalPages = Math.ceil(total / perPage);
-  
+
   // Paginate
   const start = (page - 1) * perPage;
   const paged = filtered.slice(start, start + perPage);
-  
+
   return { prompts: paged, total, page, perPage, totalPages };
 }
 

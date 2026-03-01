@@ -41,7 +41,7 @@ function removeFiles(baseDir: string): void {
 function runSetup(baseDir: string): Promise<void> {
   return new Promise((resolve, reject) => {
     const setupScript = join(baseDir, 'scripts', 'setup.js');
-    
+
     if (!existsSync(setupScript)) {
       console.log('\n⚠ Setup script not found, skipping interactive setup.');
       resolve();
@@ -49,7 +49,7 @@ function runSetup(baseDir: string): Promise<void> {
     }
 
     console.log('\n🚀 Starting interactive setup...\n');
-    
+
     const child = spawn('node', [setupScript], {
       cwd: baseDir,
       stdio: 'inherit',

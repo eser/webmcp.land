@@ -11,8 +11,8 @@ import { notFound } from "next/navigation";
 // Promi logo SVG component for light backgrounds
 function PromiLogo({ className }: { className?: string }) {
   return (
-    <svg 
-      viewBox="0 0 16 20" 
+    <svg
+      viewBox="0 0 16 20"
       className={className}
       style={{ imageRendering: "pixelated" }}
     >
@@ -46,8 +46,8 @@ function PromiLogo({ className }: { className?: string }) {
 // Promi logo SVG component for dark backgrounds
 function PromiLogoDark({ className }: { className?: string }) {
   return (
-    <svg 
-      viewBox="0 0 16 20" 
+    <svg
+      viewBox="0 0 16 20"
       className={className}
       style={{ imageRendering: "pixelated" }}
     >

@@ -183,18 +183,18 @@ function FlowGraph({ nodes, edges, currentResourceId, currentUserId, isAdmin, on
 
     const container = svgRef.current.parentElement;
     const width = container?.clientWidth || 600;
-    
+
     // Build adjacency for topological sort
     const inDegree: Record<string, number> = {};
     const outEdges: Record<string, string[]> = {};
     const nodeMap: Record<string, FlowGraphNode> = {};
-    
+
     nodes.forEach(n => {
       inDegree[n.id] = 0;
       outEdges[n.id] = [];
       nodeMap[n.id] = n;
     });
-    
+
     edges.forEach(e => {
       inDegree[e.target] = (inDegree[e.target] || 0) + 1;
       outEdges[e.source] = outEdges[e.source] || [];
@@ -204,13 +204,13 @@ function FlowGraph({ nodes, edges, currentResourceId, currentUserId, isAdmin, on
     // Topological sort to assign levels (y positions)
     const levels: Record<string, number> = {};
     const queue = nodes.filter(n => inDegree[n.id] === 0).map(n => n.id);
-    
+
     queue.forEach(id => { levels[id] = 0; });
-    
+
     while (queue.length > 0) {
       const current = queue.shift()!;
       const currentLevel = levels[current];
-      
+
       for (const next of outEdges[current] || []) {
         levels[next] = Math.max(levels[next] || 0, currentLevel + 1);
         inDegree[next]--;
@@ -229,7 +229,7 @@ function FlowGraph({ nodes, edges, currentResourceId, currentUserId, isAdmin, on
 
     // Find leaf nodes (no outgoing edges) to show output type
     const leafNodes = nodes.filter(n => (outEdges[n.id] || []).length === 0);
-    
+
     // Create virtual output nodes for leaf nodes
     interface OutputNode {
       id: string;
@@ -249,7 +249,7 @@ function FlowGraph({ nodes, edges, currentResourceId, currentUserId, isAdmin, on
       const hasIncoming = edges.some(e => e.target === n.id);
       return !hasIncoming && n.requiresMediaUpload && n.requiredMediaType && n.requiredMediaCount;
     });
-    
+
     // Create virtual input nodes for root nodes that require media
     interface InputNode {
       id: string;
@@ -262,7 +262,7 @@ function FlowGraph({ nodes, edges, currentResourceId, currentUserId, isAdmin, on
     rootNodes.forEach(root => {
       const count = root.requiredMediaCount || 1;
       const mediaType = root.requiredMediaType || "IMAGE";
-      
+
       if (count <= 3) {
         // Show individual nodes (up to 3)
         for (let i = 0; i < count; i++) {
@@ -296,22 +296,22 @@ function FlowGraph({ nodes, edges, currentResourceId, currentUserId, isAdmin, on
     const levelHeight = 140; // Increased to accommodate previews
     const inputOffset = hasInputNodes ? 80 : 0;
     const height = inputOffset + (maxLevel + 1) * levelHeight + (hasOutputNodes ? 80 : 0) + 80;
-    
+
     // Check if any node has a preview (mediaUrl for IMAGE/VIDEO types)
-    const hasPreview = (node: FlowGraphNode) => 
+    const hasPreview = (node: FlowGraphNode) =>
       node.mediaUrl && (node.type === "IMAGE" || node.type === "VIDEO");
 
     svg.attr("width", width).attr("height", height);
 
     // Calculate x positions for each node
     const positions: Record<string, { x: number; y: number }> = {};
-    
+
     Object.entries(levelGroups).forEach(([levelStr, ids]) => {
       const level = parseInt(levelStr);
       const count = ids.length;
       const totalWidth = count * nodeWidth + (count - 1) * 40;
       const startX = (width - totalWidth) / 2 + nodeWidth / 2;
-      
+
       ids.forEach((id, i) => {
         positions[id] = {
           x: startX + i * (nodeWidth + 40),
@@ -341,16 +341,16 @@ function FlowGraph({ nodes, edges, currentResourceId, currentUserId, isAdmin, on
       inputsByTarget[inp.targetId] = inputsByTarget[inp.targetId] || [];
       inputsByTarget[inp.targetId].push(inp);
     });
-    
+
     Object.entries(inputsByTarget).forEach(([targetId, inputs]) => {
       const targetPos = positions[targetId];
       if (!targetPos) return;
-      
+
       const count = inputs.length;
       const gap = 20;
       const totalWidth = count * inputNodeWidth + (count - 1) * gap;
       const startX = targetPos.x - totalWidth / 2 + inputNodeWidth / 2;
-      
+
       inputs.forEach((inp, i) => {
         inputPositions[inp.id] = {
           x: startX + i * (inputNodeWidth + gap),
@@ -387,13 +387,13 @@ function FlowGraph({ nodes, edges, currentResourceId, currentUserId, isAdmin, on
 
     // Draw edges
     const edgeGroup = svg.append("g").attr("class", "edges");
-    
+
     // Helper to get node height based on whether it has preview
     const getNodeHeight = (nodeId: string) => {
       const node = nodeMap[nodeId];
       return node && hasPreview(node) ? nodeWithPreviewHeight : nodeHeight;
     };
-    
+
     edges.forEach(edge => {
       const source = positions[edge.source];
       const target = positions[edge.target];
@@ -417,7 +417,7 @@ function FlowGraph({ nodes, edges, currentResourceId, currentUserId, isAdmin, on
         const labelX = (source.x + target.x) / 2;
         const labelY = midY;
         const labelWidth = edge.label.length * 5 + 16;
-        
+
         edgeGroup.append("rect")
           .attr("x", labelX - labelWidth / 2)
           .attr("y", labelY - 8)
@@ -448,7 +448,7 @@ function FlowGraph({ nodes, edges, currentResourceId, currentUserId, isAdmin, on
       const isCurrent = node.id === currentResourceId;
       const showPreview = hasPreview(node);
       const currentNodeHeight = showPreview ? nodeWithPreviewHeight : nodeHeight;
-      
+
       const g = nodeGroup.append("g")
         .attr("transform", `translate(${pos.x}, ${pos.y})`)
         .attr("cursor", "pointer")
@@ -519,7 +519,7 @@ function FlowGraph({ nodes, edges, currentResourceId, currentUserId, isAdmin, on
             .style("height", "100%")
             .style("object-fit", "cover")
             .style("border-radius", "10px");
-          
+
           // Ensure video is muted (some browsers need this set via property)
           const videoNode = videoEl.node() as HTMLVideoElement | null;
           if (videoNode) {
@@ -537,7 +537,7 @@ function FlowGraph({ nodes, edges, currentResourceId, currentUserId, isAdmin, on
             .attr("preserveAspectRatio", "xMidYMid slice")
             .attr("clip-path", `url(#${clipId})`);
         }
-        
+
         // Gradient overlay for text readability (bottom gradient)
         const gradientId = `grad-${node.id.replace(/[^a-zA-Z0-9]/g, '')}`;
         const gradient = defs.append("linearGradient")
@@ -555,7 +555,7 @@ function FlowGraph({ nodes, edges, currentResourceId, currentUserId, isAdmin, on
         gradient.append("stop")
           .attr("offset", "100%")
           .attr("stop-color", isDark ? "rgba(0,0,0,0.85)" : "rgba(0,0,0,0.7)");
-        
+
         g.append("rect")
           .attr("x", -nodeWidth / 2)
           .attr("y", -currentNodeHeight / 2)
@@ -575,7 +575,7 @@ function FlowGraph({ nodes, edges, currentResourceId, currentUserId, isAdmin, on
 
       // Title position depends on whether we have a preview
       const titleY = showPreview ? currentNodeHeight / 2 - 14 : 0;
-      
+
       g.append("text")
         .attr("text-anchor", "middle")
         .attr("y", titleY)
@@ -589,7 +589,7 @@ function FlowGraph({ nodes, edges, currentResourceId, currentUserId, isAdmin, on
       if (node.requiresMediaUpload && node.requiredMediaType) {
         const badgeX = nodeWidth / 2 - 8;
         const badgeY = -currentNodeHeight / 2 - 4;
-        
+
         // Badge background circle
         g.append("circle")
           .attr("cx", badgeX)
@@ -600,15 +600,15 @@ function FlowGraph({ nodes, edges, currentResourceId, currentUserId, isAdmin, on
           .attr("stroke-width", 2);
 
         // Icon path based on media type
-        const iconPath = node.requiredMediaType === "IMAGE" ? ICON_PATHS.image 
-          : node.requiredMediaType === "VIDEO" ? ICON_PATHS.video 
+        const iconPath = node.requiredMediaType === "IMAGE" ? ICON_PATHS.image
+          : node.requiredMediaType === "VIDEO" ? ICON_PATHS.video
           : ICON_PATHS.fileText;
         g.append("path")
           .attr("d", iconPath)
           .attr("transform", `translate(${badgeX - 5}, ${badgeY - 5}) scale(0.42)`)
           .attr("fill", "#fff");
       }
-      
+
       // Add output type badge in bottom-right corner
       if (!showPreview) {
         const typeBadgeX = nodeWidth / 2 - 14;
@@ -628,7 +628,7 @@ function FlowGraph({ nodes, edges, currentResourceId, currentUserId, isAdmin, on
           : node.type === "STRUCTURED" ? ICON_PATHS.structured
           : node.type === "SKILL" ? ICON_PATHS.skill
           : ICON_PATHS.text;
-        
+
         g.append("path")
           .attr("d", typeIcon)
           .attr("transform", `translate(${typeBadgeX - 5}, ${typeBadgeY - 5}) scale(0.42)`)
@@ -685,13 +685,13 @@ function FlowGraph({ nodes, edges, currentResourceId, currentUserId, isAdmin, on
         .attr("stroke-dasharray", "4,2");
 
       // Output icon path
-      const iconPath = outNode.type === "IMAGE" ? ICON_PATHS.image 
+      const iconPath = outNode.type === "IMAGE" ? ICON_PATHS.image
         : outNode.type === "VIDEO" ? ICON_PATHS.video
         : outNode.type === "AUDIO" ? ICON_PATHS.audio
         : outNode.type === "STRUCTURED" ? ICON_PATHS.structured
         : outNode.type === "SKILL" ? ICON_PATHS.skill
         : ICON_PATHS.text;
-      
+
       // Output label from translations
       const outputLabel = outNode.type === "IMAGE" ? translations.outputImage
         : outNode.type === "VIDEO" ? translations.outputVideo
@@ -705,7 +705,7 @@ function FlowGraph({ nodes, edges, currentResourceId, currentUserId, isAdmin, on
         .attr("d", iconPath)
         .attr("transform", `translate(${-outputNodeWidth / 2 + 14}, -6) scale(0.5)`)
         .attr("fill", typeColor.fg);
-      
+
       // Draw label
       g.append("text")
         .attr("x", 6)
@@ -756,10 +756,10 @@ function FlowGraph({ nodes, edges, currentResourceId, currentUserId, isAdmin, on
         .attr("stroke-dasharray", "4,2");
 
       // Input icon path
-      const iconPath = inNode.mediaType === "IMAGE" ? ICON_PATHS.image 
+      const iconPath = inNode.mediaType === "IMAGE" ? ICON_PATHS.image
         : inNode.mediaType === "VIDEO" ? ICON_PATHS.video
         : ICON_PATHS.fileText;
-      
+
       // Input label from translations
       let inputLabel: string;
       if (inNode.count === 1) {
@@ -777,7 +777,7 @@ function FlowGraph({ nodes, edges, currentResourceId, currentUserId, isAdmin, on
         .attr("d", iconPath)
         .attr("transform", `translate(${-inputNodeWidth / 2 + 14}, -6) scale(0.5)`)
         .attr("fill", inputColor.fg);
-      
+
       // Draw label
       g.append("text")
         .attr("x", 6)
@@ -801,7 +801,7 @@ function FlowGraph({ nodes, edges, currentResourceId, currentUserId, isAdmin, on
           const tooltipHeight = 280;
           const containerRect = containerRef.current?.getBoundingClientRect();
           const containerWidth = containerRef.current?.clientWidth || 600;
-          
+
           // Calculate left position - overlap slightly with node for easier hover transition
           let leftPos = nodePos.x + nodePos.width / 2 - 5;
           // Check if it overflows right edge of container
@@ -810,15 +810,15 @@ function FlowGraph({ nodes, edges, currentResourceId, currentUserId, isAdmin, on
           }
           // Ensure not negative
           if (leftPos < 0) leftPos = 10;
-          
+
           // Calculate top position - check against viewport
           let topPos = nodePos.y - tooltipHeight / 2;
-          
+
           if (containerRect) {
             const viewportHeight = window.innerHeight;
             const absoluteTop = containerRect.top + topPos;
             const margin = 60; // Keep tooltip well inside viewport
-            
+
             // If tooltip would go below viewport, push it up
             if (absoluteTop + tooltipHeight > viewportHeight - margin) {
               topPos = viewportHeight - containerRect.top - tooltipHeight - margin;
@@ -828,18 +828,18 @@ function FlowGraph({ nodes, edges, currentResourceId, currentUserId, isAdmin, on
               topPos = margin - containerRect.top;
             }
           }
-          
+
           // Also clamp to container bounds
           if (topPos < 10) topPos = 10;
           // Ensure left is valid
           if (leftPos < 10) leftPos = 10;
-          
+
           return (
-            <div 
+            <div
               ref={tooltipRef}
               className="absolute z-[100] w-80 p-3 rounded-lg border bg-card shadow-xl"
-              style={{ 
-                left: leftPos, 
+              style={{
+                left: leftPos,
                 top: topPos,
                 pointerEvents: 'auto',
               }}
@@ -849,8 +849,8 @@ function FlowGraph({ nodes, edges, currentResourceId, currentUserId, isAdmin, on
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   {hoveredNode.authorAvatar ? (
-                    <img 
-                      src={hoveredNode.authorAvatar} 
+                    <img
+                      src={hoveredNode.authorAvatar}
                       alt={hoveredNode.authorUsername}
                       className="w-5 h-5 rounded-full"
                     />
@@ -870,11 +870,11 @@ function FlowGraph({ nodes, edges, currentResourceId, currentUserId, isAdmin, on
                     {hoveredNode.requiredMediaType === "VIDEO" && <Video className="h-3 w-3" />}
                     {hoveredNode.requiredMediaType === "DOCUMENT" && <FileText className="h-3 w-3" />}
                     <span className="text-[10px] font-medium">
-                      {hoveredNode.requiredMediaCount === 1 
+                      {hoveredNode.requiredMediaCount === 1
                         ? (hoveredNode.requiredMediaType === "IMAGE" ? translations.inputImage
                           : hoveredNode.requiredMediaType === "VIDEO" ? translations.inputVideo
                           : translations.inputDocument)
-                        : (hoveredNode.requiredMediaType === "IMAGE" 
+                        : (hoveredNode.requiredMediaType === "IMAGE"
                           ? translations.inputImages.replace("{count}", String(hoveredNode.requiredMediaCount))
                           : hoveredNode.requiredMediaType === "VIDEO"
                           ? translations.inputVideos.replace("{count}", String(hoveredNode.requiredMediaCount))
@@ -943,13 +943,13 @@ export function ResourceConnections({
         fetch(`/api/resources/${resourceId}/connections`, { cache: "no-store" }),
         fetch(`/api/resources/${resourceId}/flow`, { cache: "no-store" }),
       ]);
-      
+
       if (connRes.ok) {
         const data = await connRes.json();
         setOutgoing(data.outgoing || []);
         setIncoming(data.incoming || []);
       }
-      
+
       if (flowRes.ok) {
         const flowData = await flowRes.json();
         setFlowNodes(flowData.nodes || []);
@@ -971,13 +971,13 @@ export function ResourceConnections({
     if (!confirm(`Remove "${node.title}" from this flow? This will delete all connections to/from this resource.`)) {
       return;
     }
-    
+
     try {
       // Find all edges connected to this node
       const edgesToDelete = flowEdges.filter(
         e => e.source === node.id || e.target === node.id
       );
-      
+
       // Delete each connection via API
       for (const edge of edgesToDelete) {
         // We need to find the connection ID - fetch connections for the source resource
@@ -993,7 +993,7 @@ export function ResourceConnections({
           }
         }
       }
-      
+
       toast.success("Removed from flow");
       fetchConnections();
     } catch (err) {
@@ -1046,11 +1046,11 @@ export function ResourceConnections({
       // Get container dimensions
       const container = svgRef.current?.parentElement;
       const width = container?.clientWidth || 600;
-      
+
       // Responsive sizing based on container width
       const isMobile = width < 500;
       const isTablet = width < 700;
-      
+
       const nodeWidth = isMobile ? width - 40 : isTablet ? Math.min(160, width * 0.35) : Math.min(200, width * 0.3);
       const baseNodeHeight = isMobile ? 36 : 40;
       const lineHeight = 14;
@@ -1058,7 +1058,7 @@ export function ResourceConnections({
       const horizontalGap = isMobile ? 20 : isTablet ? 40 : 60;
       const fontSize = isMobile ? "10px" : "11px";
       const labelFontSize = isMobile ? "8px" : "9px";
-      
+
       // Helper to wrap text and get line count
       const getWrappedLines = (text: string, maxWidth: number): string[] => {
         if (isMobile) return [text]; // No wrapping on mobile (full width)
@@ -1066,7 +1066,7 @@ export function ResourceConnections({
         const lines: string[] = [];
         let currentLine = "";
         const charWidth = 6; // Approximate char width for 11px font
-        
+
         words.forEach(word => {
           const testLine = currentLine ? `${currentLine} ${word}` : word;
           if (testLine.length * charWidth > maxWidth - 20) {
@@ -1079,24 +1079,24 @@ export function ResourceConnections({
         if (currentLine) lines.push(currentLine);
         return lines.length > 0 ? lines : [text];
       };
-      
+
       // Calculate node height based on text
       const getNodeHeight = (title: string): number => {
         const lines = getWrappedLines(title, nodeWidth);
         return Math.max(baseNodeHeight, lines.length * lineHeight + 20);
       };
-      
+
       // Use base height for layout calculations
       const nodeHeight = baseNodeHeight;
-      
+
       // Calculate layout dimensions
       const incomingCount = incoming.length;
       const outgoingCount = outgoing.length;
-      
+
       // On mobile, stack nodes vertically if more than 1
       const stackIncoming = isMobile && incomingCount > 1;
       const stackOutgoing = isMobile && outgoingCount > 1;
-      
+
       // Calculate total height (add extra space for badges on mobile)
       const badgeSpace = isMobile ? 24 : 0;
       const incomingRows = stackIncoming ? incomingCount : 1;
@@ -1104,10 +1104,10 @@ export function ResourceConnections({
       const topRowHeight = incomingCount > 0 ? (nodeHeight + badgeSpace + 20) * incomingRows : 0;
       const bottomRowHeight = outgoingCount > 0 ? (nodeHeight + badgeSpace + 20) * outgoingRows : 0;
       const height = topRowHeight + nodeHeight + bottomRowHeight + verticalGap * 2 + 60;
-      
+
       // Update SVG dimensions
       svg.attr("width", width).attr("height", height);
-      
+
       const centerX = width / 2;
       const centerY = topRowHeight + verticalGap + nodeHeight / 2 + 20;
 
@@ -1212,7 +1212,7 @@ export function ResourceConnections({
 
       // Check if dark mode
       const isDark = document.documentElement.classList.contains("dark");
-      
+
       // Theme colors (light/dark)
       const colors = {
         primary: isDark ? "#f4f4f5" : "#18181b",
@@ -1227,7 +1227,7 @@ export function ResourceConnections({
 
       // Create gradient definitions
       const defs = svg.append("defs");
-    
+
     // Arrow marker
     defs
       .append("marker")
@@ -1259,7 +1259,7 @@ export function ResourceConnections({
 
     // Draw links (curved paths - vertical)
     const linkGroup = svg.append("g").attr("class", "links");
-    
+
     linkGroup
       .selectAll("path")
       .data(links)
@@ -1279,7 +1279,7 @@ export function ResourceConnections({
     // Draw link labels with background (only on desktop)
     if (!isMobile) {
       const labelGroup = svg.append("g").attr("class", "labels");
-      
+
       const labelElements = labelGroup
         .selectAll("g")
         .data(links)
@@ -1359,7 +1359,7 @@ export function ResourceConnections({
       const lines = getWrappedLines(d.title, nodeWidth);
       const totalHeight = lines.length * lineHeight;
       const startY = -totalHeight / 2 + lineHeight / 2;
-      
+
       lines.forEach((line, i) => {
         g.append("text")
           .attr("text-anchor", "middle")
@@ -1377,7 +1377,7 @@ export function ResourceConnections({
       nodeElements
         .filter((d) => d.type !== "current")
         .each(function(d) {
-          const link = links.find(l => 
+          const link = links.find(l =>
             (d.type === "incoming" && l.source.id === d.id) ||
             (d.type === "outgoing" && l.target.id === d.id)
           );
@@ -1386,7 +1386,7 @@ export function ResourceConnections({
             const badgeWidth = badgeLabel.length * 5 + 12;
             const g = d3.select(this);
             const h = getNodeHeight(d.title);
-            
+
             // Badge background (above the node)
             g.append("rect")
               .attr("x", -badgeWidth / 2)
@@ -1397,7 +1397,7 @@ export function ResourceConnections({
               .attr("fill", colors.muted)
               .attr("stroke", colors.border)
               .attr("stroke-width", 1);
-            
+
             // Badge text (above the node)
             g.append("text")
               .attr("text-anchor", "middle")
@@ -1424,7 +1424,7 @@ export function ResourceConnections({
     // Add delete buttons for outgoing connections (owner only)
     if (canEdit) {
       const outgoingNodes = nodeElements.filter((d) => d.type === "outgoing");
-      
+
       outgoingNodes
         .append("circle")
         .attr("cx", nodeWidth / 2 - 8)
@@ -1506,7 +1506,7 @@ export function ResourceConnections({
   // Use controlled state if provided, otherwise use internal state
   const isCurrentlyExpanded = controlledExpanded !== undefined ? controlledExpanded : isExpanded;
   const showExpanded = hasConnections || isCurrentlyExpanded;
-  
+
   const handleExpand = () => {
     if (onExpandChange) {
       onExpandChange(true);
@@ -1538,7 +1538,7 @@ export function ResourceConnections({
     // For owners: show if expanded or has connections
     if (!canEdit && !hasConnections) return null;
     if (canEdit && !showExpanded) return null;
-    
+
     return (
       <div className="w-full mt-4 space-y-3">
         {/* Header row - above the container */}
@@ -1669,7 +1669,7 @@ export function ResourceConnections({
   // Default: render both (for backwards compatibility)
   // For non-owners: only show visualization if connections exist
   const showVisualization = hasConnections || (canEdit && showExpanded);
-  
+
   return (
     <>
       {canEdit && !showExpanded && (

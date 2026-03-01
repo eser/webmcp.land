@@ -109,7 +109,7 @@ for row in remote_prompts:
     act = row.get('act', '').strip()
     if not act:
         continue
-    
+
     if act not in local_prompts:
         new_prompts.append(row)
     else:
@@ -134,13 +134,13 @@ def parse_contributors(contributor_field):
     """Parse contributor field, returns (primary_author, co_authors_list)"""
     if not contributor_field:
         return 'anonymous', []
-    
+
     # Split by comma and clean up
     contributors = [c.strip() for c in contributor_field.split(',') if c.strip()]
-    
+
     if not contributors:
         return 'anonymous', []
-    
+
     primary = contributors[0]
     co_authors = contributors[1:] if len(contributors) > 1 else []
     return primary, co_authors
@@ -148,24 +148,24 @@ def parse_contributors(contributor_field):
 def build_commit_message(action, act, co_authors):
     """Build commit message with optional co-author trailers"""
     msg = f'{action} prompt: {act}'
-    
+
     if co_authors:
         msg += '\n\n'
         for co_author in co_authors:
             co_email = f"{co_author}@users.noreply.github.com"
             msg += f'Co-authored-by: {co_author} <{co_email}>\n'
-    
+
     return msg
 
 def format_contributor_links(contributor_field):
     """Format contributors as GitHub profile links"""
     if not contributor_field:
         return '@anonymous'
-    
+
     contributors = [c.strip() for c in contributor_field.split(',') if c.strip()]
     if not contributors:
         return '@anonymous'
-    
+
     return ', '.join([f'[@{c}](https://github.com/{c})' for c in contributors])
 
 def generate_prompt_block(row):
@@ -174,7 +174,7 @@ def generate_prompt_block(row):
     prompt = row.get('prompt', '')
     contributor = row.get('contributor', '')
     prompt_type = row.get('type', 'TEXT').upper()
-    
+
     # Determine code block language based on type
     if prompt_type == 'TEXT':
         lang = 'md'
@@ -184,9 +184,9 @@ def generate_prompt_block(row):
         lang = 'yaml'
     else:
         lang = 'md'
-    
+
     contributor_links = format_contributor_links(contributor)
-    
+
     block = f'<details>\n'
     block += f'<summary><strong>{act}</strong></summary>\n\n'
     block += f'## {act}\n\n'
@@ -218,18 +218,18 @@ def update_prompt_in_md(row, prompts_md_path):
     if not os.path.exists(prompts_md_path):
         append_prompt_to_md(row, prompts_md_path)
         return
-    
+
     with open(prompts_md_path, 'r', encoding='utf-8') as f:
         content = f.read()
-    
+
     # Find and replace the specific prompt block using regex
     import re
     # Pattern to match the entire <details> block for this prompt
     pattern = rf'<details>\n<summary><strong>{re.escape(act)}</strong></summary>.*?</details>\n\n'
     new_block = generate_prompt_block(row)
-    
+
     new_content, count = re.subn(pattern, new_block, content, flags=re.DOTALL)
-    
+
     if count > 0:
         with open(prompts_md_path, 'w', encoding='utf-8') as f:
             f.write(new_content)
@@ -241,14 +241,14 @@ def remove_prompt_from_md(act, prompts_md_path):
     """Remove a prompt's block from PROMPTS.md"""
     if not os.path.exists(prompts_md_path):
         return
-    
+
     with open(prompts_md_path, 'r', encoding='utf-8') as f:
         content = f.read()
-    
+
     import re
     pattern = rf'<details>\n<summary><strong>{re.escape(act)}</strong></summary>.*?</details>\n\n'
     new_content = re.sub(pattern, '', content, flags=re.DOTALL)
-    
+
     with open(prompts_md_path, 'w', encoding='utf-8') as f:
         f.write(new_content)
 
@@ -260,14 +260,14 @@ else:
     # Process updates one at a time (apply and commit each update separately)
     if updated_prompts:
         print("\nApplying updates to existing prompts...")
-        
+
         for i, (remote_row, local_row) in enumerate(updated_prompts, 1):
             act = remote_row.get('act', '').strip()
             contributor_field = remote_row.get('contributor', '').strip()
-            
+
             # Update this specific prompt in local_prompts
             local_prompts[act] = remote_row
-            
+
             # Rewrite the CSV with this update applied
             with open(csv_file, 'w', newline='') as f:
                 writer = csv.DictWriter(f, fieldnames=fieldnames)
@@ -277,138 +277,138 @@ else:
                     row_act = row.get('act', '').strip()
                     if row_act in local_prompts:
                         writer.writerow(local_prompts[row_act])
-            
+
             # Update only this prompt's block in PROMPTS.md
             update_prompt_in_md(remote_row, prompts_md_path)
-            
+
             primary_author, co_authors = parse_contributors(contributor_field)
             email = f"{primary_author}@users.noreply.github.com"
-            
+
             subprocess.run(['git', 'add', csv_file, prompts_md_path], check=True)
-            
+
             # Check if there are actual changes to commit
             diff_result = subprocess.run(['git', 'diff', '--cached', '--quiet'], capture_output=True)
             if diff_result.returncode == 0:
                 # No changes staged, skip this commit
                 print(f"[UPDATE {i}/{len(updated_prompts)}] {act} - no changes, skipping")
                 continue
-            
+
             env = os.environ.copy()
             env['GIT_AUTHOR_NAME'] = primary_author
             env['GIT_AUTHOR_EMAIL'] = email
             env['GIT_COMMITTER_NAME'] = primary_author
             env['GIT_COMMITTER_EMAIL'] = email
-            
+
             commit_msg = build_commit_message('Update', act, co_authors)
-            
+
             subprocess.run([
                 'git', 'commit',
                 '-m', commit_msg,
                 f'--author={primary_author} <{email}>'
             ], env=env, check=True)
-            
+
             co_authors_str = f" (+ {', '.join(co_authors)})" if co_authors else ""
             print(f"[UPDATE {i}/{len(updated_prompts)}] {primary_author}{co_authors_str}: {act}")
-    
+
     # Process new prompts
     if new_prompts:
         print("\nCreating commits for new prompts...")
-        
+
         for i, row in enumerate(new_prompts, 1):
             contributor_field = row.get('contributor', '').strip()
             act = row.get('act', 'Unknown')
-            
+
             primary_author, co_authors = parse_contributors(contributor_field)
             email = f"{primary_author}@users.noreply.github.com"
-            
+
             # Append this row to the CSV
             with open(csv_file, 'a', newline='') as f:
                 writer = csv.DictWriter(f, fieldnames=fieldnames)
                 writer.writerow(row)
-            
+
             # Track in local_prompts
             local_prompts[act] = row
-            
+
             # Append only this prompt's block to PROMPTS.md
             append_prompt_to_md(row, prompts_md_path)
-            
+
             # Stage and commit
             subprocess.run(['git', 'add', csv_file, prompts_md_path], check=True)
-            
+
             # Check if there are actual changes to commit
             diff_result = subprocess.run(['git', 'diff', '--cached', '--quiet'], capture_output=True)
             if diff_result.returncode == 0:
                 print(f"[NEW {i}/{len(new_prompts)}] {act} - no changes, skipping")
                 continue
-            
+
             env = os.environ.copy()
             env['GIT_AUTHOR_NAME'] = primary_author
             env['GIT_AUTHOR_EMAIL'] = email
             env['GIT_COMMITTER_NAME'] = primary_author
             env['GIT_COMMITTER_EMAIL'] = email
-            
+
             commit_msg = build_commit_message('Add', act, co_authors)
-            
+
             subprocess.run([
                 'git', 'commit',
                 '-m', commit_msg,
                 f'--author={primary_author} <{email}>'
             ], env=env, check=True)
-            
+
             co_authors_str = f" (+ {', '.join(co_authors)})" if co_authors else ""
             print(f"[NEW {i}/{len(new_prompts)}] {primary_author}{co_authors_str}: {act}")
-    
+
     # Process deleted prompts (remove from CSV, commit with original author)
     if deleted_prompts:
         print("\nRemoving unlisted/deleted prompts...")
-        
+
         for i, row in enumerate(deleted_prompts, 1):
             contributor_field = row.get('contributor', '').strip()
             act = row.get('act', 'Unknown')
-            
+
             primary_author, co_authors = parse_contributors(contributor_field)
             email = f"{primary_author}@users.noreply.github.com"
-            
+
             # Remove this prompt from local_prompts
             if act in local_prompts:
                 del local_prompts[act]
-            
+
             # Rewrite CSV without the deleted prompt
             with open(csv_file, 'w', newline='') as f:
                 writer = csv.DictWriter(f, fieldnames=fieldnames)
                 writer.writeheader()
                 for remaining_act, remaining_row in local_prompts.items():
                     writer.writerow(remaining_row)
-            
+
             # Remove only this prompt's block from PROMPTS.md
             remove_prompt_from_md(act, prompts_md_path)
-            
+
             # Stage and commit
             subprocess.run(['git', 'add', csv_file, prompts_md_path], check=True)
-            
+
             # Check if there are actual changes to commit
             diff_result = subprocess.run(['git', 'diff', '--cached', '--quiet'], capture_output=True)
             if diff_result.returncode == 0:
                 print(f"[REMOVE {i}/{len(deleted_prompts)}] {act} - no changes, skipping")
                 continue
-            
+
             env = os.environ.copy()
             env['GIT_AUTHOR_NAME'] = primary_author
             env['GIT_AUTHOR_EMAIL'] = email
             env['GIT_COMMITTER_NAME'] = primary_author
             env['GIT_COMMITTER_EMAIL'] = email
-            
+
             commit_msg = build_commit_message('Remove', act, co_authors)
-            
+
             subprocess.run([
                 'git', 'commit',
                 '-m', commit_msg,
                 f'--author={primary_author} <{email}>'
             ], env=env, check=True)
-            
+
             co_authors_str = f" (+ {', '.join(co_authors)})" if co_authors else ""
             print(f"[REMOVE {i}/{len(deleted_prompts)}] {primary_author}{co_authors_str}: {act}")
-    
+
     print(f"\nDone! Created {len(new_prompts)} new, {len(updated_prompts)} update, {len(deleted_prompts)} remove commits.")
 
 PYTHON_SCRIPT

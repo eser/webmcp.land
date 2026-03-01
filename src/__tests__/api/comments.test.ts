@@ -79,7 +79,7 @@ describe("GET /api/resources/[id]/comments", () => {
 
   it("should return comments for public resource", async () => {
     vi.mocked(getSession).mockResolvedValue(null as any);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ id: "123", isPrivate: false, authorId: "author1" }],
       [{
         id: "comment1",
@@ -111,7 +111,7 @@ describe("GET /api/resources/[id]/comments", () => {
 
   it("should hide flagged comments from non-admins (shadow-ban)", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user2", role: "USER" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ id: "123", isPrivate: false, authorId: "author1" }],
       [{
         id: "comment1",
@@ -142,7 +142,7 @@ describe("GET /api/resources/[id]/comments", () => {
 
   it("should show flagged comments to admins", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "admin1", role: "ADMIN" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ id: "123", isPrivate: false, authorId: "author1" }],
       [{
         id: "comment1",
@@ -174,7 +174,7 @@ describe("GET /api/resources/[id]/comments", () => {
 
   it("should show own flagged comments to author", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1", role: "USER" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ id: "123", isPrivate: false, authorId: "author1" }],
       [{
         id: "comment1",
@@ -271,7 +271,7 @@ describe("POST /api/resources/[id]/comments", () => {
 
   it("should create comment successfully", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ id: "123", isPrivate: false, authorId: "author1" }],
       [{ id: "user1", name: "Test User", username: "testuser", avatar: null, role: "USER" }],
     );
@@ -300,7 +300,7 @@ describe("POST /api/resources/[id]/comments", () => {
 
   it("should create notification for resource owner", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ id: "123", isPrivate: false, authorId: "author1" }],
       [{ id: "user1", name: "User", username: "user", avatar: null, role: "USER" }],
     );
@@ -327,7 +327,7 @@ describe("POST /api/resources/[id]/comments", () => {
 
   it("should return 400 for invalid parent comment", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ id: "123", isPrivate: false, authorId: "author1" }],
       [],  // parent comment not found
     );

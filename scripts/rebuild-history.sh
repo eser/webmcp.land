@@ -75,12 +75,12 @@ def parse_contributors(contributor_field):
     """Parse contributor field, returns (primary_author, co_authors_list)"""
     if not contributor_field:
         return 'anonymous', []
-    
+
     contributors = [c.strip() for c in contributor_field.split(',') if c.strip()]
-    
+
     if not contributors:
         return 'anonymous', []
-    
+
     primary = contributors[0]
     co_authors = contributors[1:] if len(contributors) > 1 else []
     return primary, co_authors
@@ -88,13 +88,13 @@ def parse_contributors(contributor_field):
 def build_commit_message(act, co_authors):
     """Build commit message with optional co-author trailers"""
     msg = f'Add prompt: {act}'
-    
+
     if co_authors:
         msg += '\n\n'
         for co_author in co_authors:
             co_email = f"{co_author}@users.noreply.github.com"
             msg += f'Co-authored-by: {co_author} <{co_email}>\n'
-    
+
     return msg
 
 # Remove prompts.csv from git (but keep the file)
@@ -121,32 +121,32 @@ print(f"\nCreating {len(prompts)} commits with contributor ownership...")
 for i, row in enumerate(prompts, 1):
     contributor_field = row.get('contributor', '').strip()
     act = row.get('act', 'Unknown')
-    
+
     primary_author, co_authors = parse_contributors(contributor_field)
     email = f"{primary_author}@users.noreply.github.com"
-    
+
     # Append this row to the CSV (only include known fieldnames)
     with open(csv_file, 'a', newline='') as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction='ignore')
         writer.writerow(row)
-    
+
     # Stage and commit
     subprocess.run(['git', 'add', csv_file], check=True)
-    
+
     env = os.environ.copy()
     env['GIT_AUTHOR_NAME'] = primary_author
     env['GIT_AUTHOR_EMAIL'] = email
     env['GIT_COMMITTER_NAME'] = primary_author
     env['GIT_COMMITTER_EMAIL'] = email
-    
+
     commit_msg = build_commit_message(act, co_authors)
-    
+
     subprocess.run([
         'git', 'commit',
         '-m', commit_msg,
         f'--author={primary_author} <{email}>'
     ], env=env, check=True)
-    
+
     co_authors_str = f" (+ {', '.join(co_authors)})" if co_authors else ""
     print(f"[{i}/{len(prompts)}] {primary_author}{co_authors_str}: {act}")
 

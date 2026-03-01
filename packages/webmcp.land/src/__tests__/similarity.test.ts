@@ -117,7 +117,7 @@ describe('similarity module', () => {
         { content: 'Goodbye', id: 3 },
         { content: 'Goodbye!', id: 4 },
       ];
-      
+
       const groups = findDuplicates(prompts);
       expect(groups).toHaveLength(2);
     });
@@ -128,7 +128,7 @@ describe('similarity module', () => {
         { content: 'World', id: 2 },
         { content: 'Foo', id: 3 },
       ];
-      
+
       const groups = findDuplicates(prompts);
       expect(groups).toHaveLength(0);
     });
@@ -138,7 +138,7 @@ describe('similarity module', () => {
         { content: 'Hello World', id: 1 },
         { content: 'Hello Earth', id: 2 },
       ];
-      
+
       // With high threshold, should not be duplicates
       expect(findDuplicates(prompts, 0.95)).toHaveLength(0);
       // With low threshold, should be duplicates
@@ -153,7 +153,7 @@ describe('similarity module', () => {
         { content: 'Hello World!', id: 2 },
         { content: 'Goodbye', id: 3 },
       ];
-      
+
       const deduped = deduplicate(prompts);
       expect(deduped).toHaveLength(2);
       expect(deduped[0].id).toBe(1);
@@ -166,7 +166,7 @@ describe('similarity module', () => {
         { content: 'World', id: 2 },
         { content: 'Foo', id: 3 },
       ];
-      
+
       const deduped = deduplicate(prompts);
       expect(deduped).toHaveLength(3);
     });

@@ -1,12 +1,12 @@
 "use client";
 
 import React from "react";
-import { 
-  Globe, 
-  Github, 
-  Linkedin, 
-  Instagram, 
-  Youtube, 
+import {
+  Globe,
+  Github,
+  Linkedin,
+  Instagram,
+  Youtube,
   Twitch,
   Heart,
   type LucideIcon
@@ -46,17 +46,17 @@ function BlueskyIcon({ className }: { className?: string }) {
   );
 }
 
-export type CustomLinkType = 
-  | "website" 
-  | "github" 
-  | "twitter" 
-  | "linkedin" 
-  | "instagram" 
-  | "youtube" 
-  | "twitch" 
-  | "discord" 
-  | "mastodon" 
-  | "bluesky" 
+export type CustomLinkType =
+  | "website"
+  | "github"
+  | "twitter"
+  | "linkedin"
+  | "instagram"
+  | "youtube"
+  | "twitch"
+  | "discord"
+  | "mastodon"
+  | "bluesky"
   | "sponsor";
 
 export interface CustomLink {
@@ -94,7 +94,7 @@ interface ProfileLinksProps {
 function parseBioText(text: string): React.ReactNode[] {
   const parts: React.ReactNode[] = [];
   let key = 0;
-  
+
   // Regex to match URLs and **bold** text
   const regex = /(https?:\/\/[^\s]+)|(\*\*[^*]+\*\*)/g;
   let lastIndex = 0;
@@ -139,7 +139,7 @@ function parseBioText(text: string): React.ReactNode[] {
 
 export function ProfileLinks({ bio, customLinks, className }: ProfileLinksProps) {
   const hasContent = bio || (customLinks && customLinks.length > 0);
-  
+
   if (!hasContent) return null;
 
   return (

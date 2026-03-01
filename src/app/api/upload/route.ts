@@ -16,13 +16,13 @@ async function compressToJpg(buffer: Buffer): Promise<Buffer> {
 
 export async function POST(request: NextRequest) {
   const session = await getSession();
-  
+
   if (!session?.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const enabledStorage = process.env.ENABLED_STORAGE || "url";
-  
+
   if (enabledStorage === "url") {
     return NextResponse.json(
       { error: "File upload is not enabled. Using URL storage mode." },
@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
   }
 
   const storagePlugin = getStoragePlugin(enabledStorage);
-  
+
   if (!storagePlugin) {
     return NextResponse.json(
       { error: `Storage plugin "${enabledStorage}" not found` },
@@ -82,7 +82,7 @@ export async function POST(request: NextRequest) {
     // Generate filename
     const timestamp = Date.now();
     const randomId = Math.random().toString(36).substring(2, 8);
-    
+
     let uploadBuffer: Buffer;
     let filename: string;
     let mimeType: string;

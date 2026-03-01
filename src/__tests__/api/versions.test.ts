@@ -245,7 +245,7 @@ describe("POST /api/resources/[id]/versions", () => {
 
   it("should create version with incrementing version number", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ authorId: "user1", content: "Original content" }],
       [{ version: 2 }],  // latest version
     );
@@ -278,7 +278,7 @@ describe("POST /api/resources/[id]/versions", () => {
 
   it("should use default changeNote when not provided", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ authorId: "user1", content: "Original content" }],
       [],  // no previous versions
     );
@@ -312,7 +312,7 @@ describe("POST /api/resources/[id]/versions", () => {
 
   it("should use custom changeNote when provided", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ authorId: "user1", content: "Original content" }],
       [],
     );
@@ -349,7 +349,7 @@ describe("POST /api/resources/[id]/versions", () => {
 
   it("should start at version 1 when no previous versions exist", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ authorId: "user1", content: "Original content" }],
       [],
     );
@@ -383,7 +383,7 @@ describe("POST /api/resources/[id]/versions", () => {
 
   it("should return created version with author info", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ authorId: "user1", content: "Original content" }],
       [],
     );

@@ -145,7 +145,7 @@
   .text-balance {
     text-wrap: balance;
   }
-  
+
   /* Gradient text animation */
   .animate-gradient-text {
     animation: gradient-flow 20s ease infinite;

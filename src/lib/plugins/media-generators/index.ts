@@ -1,8 +1,8 @@
 /**
  * Media Generators Plugin Registry
- * 
+ *
  * Manages AI-powered media generation plugins for images and videos.
- * 
+ *
  * To add a new plugin:
  * 1. Create your plugin file (e.g., ./my-provider.ts) implementing MediaGeneratorPlugin
  * 2. Import and add it to the `plugins` array below

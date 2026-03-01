@@ -1,12 +1,12 @@
 /**
  * Video Prompt Builder - Comprehensive video generation prompt builder
- * 
+ *
  * Based on OpenAI Sora, Runway, and other video generation best practices.
- * 
+ *
  * @example
  * ```ts
  * import { video } from 'webmcp.land/builder';
- * 
+ *
  * const prompt = video()
  *   .scene("A samurai walks through a bamboo forest")
  *   .camera({ movement: "tracking", angle: "low" })
@@ -50,12 +50,12 @@ export interface VideoCamera {
   // Framing
   shot?: ShotType;
   angle?: CameraAngle;
-  
+
   // Camera Body
   brand?: CameraBrand;
   model?: CameraModel;
   sensor?: SensorFormat;
-  
+
   // Lens
   lens?: LensType;
   lensModel?: LensModel;
@@ -63,28 +63,28 @@ export interface VideoCamera {
   focalLength?: string;
   anamorphic?: boolean;
   anamorphicRatio?: '1.33x' | '1.5x' | '1.8x' | '2x';
-  
+
   // Focus
   focus?: 'shallow' | 'deep' | 'rack-focus' | 'pull-focus' | 'split-diopter';
   aperture?: string;
   bokeh?: BokehStyle;
-  
+
   // Movement
   movement?: CameraMovement;
   movementSpeed?: 'slow' | 'medium' | 'fast';
   movementDirection?: 'left' | 'right' | 'forward' | 'backward' | 'up' | 'down' | 'arc-left' | 'arc-right';
-  
+
   // Rig & Stabilization
   rig?: CameraRig;
   gimbal?: GimbalModel;
   platform?: 'handheld' | 'steadicam' | 'tripod' | 'drone' | 'crane' | 'gimbal' | 'slider' | 'dolly' | 'technocrane' | 'russian-arm' | 'fpv-drone';
-  
+
   // Technical
   shutterAngle?: number;
   frameRate?: 24 | 25 | 30 | 48 | 60 | 120 | 240;
   slowMotion?: boolean;
   filter?: FilterType | FilterType[];
-  
+
   // Film Look
   filmStock?: FilmStock;
   filmGrain?: 'none' | 'subtle' | 'moderate' | 'heavy';
@@ -713,9 +713,9 @@ export class VideoPromptBuilder {
   toMarkdown(): string {
     const built = this.build();
     const sections: string[] = ['# Video Prompt\n'];
-    
+
     sections.push('## Prompt\n```\n' + built.prompt + '\n```\n');
-    
+
     if (built.structure.scene) {
       sections.push('## Scene\n' + objectToMarkdownList(built.structure.scene));
     }
@@ -740,7 +740,7 @@ export class VideoPromptBuilder {
     if (built.structure.technical) {
       sections.push('## Technical\n' + objectToMarkdownList(built.structure.technical));
     }
-    
+
     return sections.join('\n');
   }
 
@@ -761,10 +761,10 @@ export class VideoPromptBuilder {
 function objectToYaml(obj: object, indent = 0): string {
   const spaces = '  '.repeat(indent);
   const lines: string[] = [];
-  
+
   for (const [key, value] of Object.entries(obj)) {
     if (value === undefined || value === null) continue;
-    
+
     if (Array.isArray(value)) {
       if (value.length === 0) continue;
       lines.push(`${spaces}${key}:`);
@@ -783,17 +783,17 @@ function objectToYaml(obj: object, indent = 0): string {
       lines.push(`${spaces}${key}: ${value}`);
     }
   }
-  
+
   return lines.join('\n');
 }
 
 function objectToMarkdownList(obj: object, indent = 0): string {
   const spaces = '  '.repeat(indent);
   const lines: string[] = [];
-  
+
   for (const [key, value] of Object.entries(obj)) {
     if (value === undefined || value === null) continue;
-    
+
     if (Array.isArray(value)) {
       lines.push(`${spaces}- **${key}:** ${value.join(', ')}`);
     } else if (typeof value === 'object') {
@@ -803,7 +803,7 @@ function objectToMarkdownList(obj: object, indent = 0): string {
       lines.push(`${spaces}- **${key}:** ${value}`);
     }
   }
-  
+
   return lines.join('\n');
 }
 

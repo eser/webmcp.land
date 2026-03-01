@@ -25,16 +25,16 @@ const STORAGE_KEY = "app-banner-dismissed";
 
 function isAppleDevice(): boolean {
   if (typeof window === "undefined") return false;
-  
+
   const userAgent = navigator.userAgent.toLowerCase();
   const platform = (navigator as Navigator & { userAgentData?: { platform?: string } }).userAgentData?.platform?.toLowerCase() || navigator.platform?.toLowerCase() || "";
-  
+
   // Check for iOS devices
   const isIOS = /iphone|ipad|ipod/.test(userAgent);
-  
+
   // Check for macOS
   const isMac = platform.includes("mac") || /macintosh|macintel/.test(userAgent);
-  
+
   return isIOS || isMac;
 }
 
@@ -44,14 +44,14 @@ export function AppBanner() {
   const searchParams = useSearchParams();
   const [isVisible, setIsVisible] = useState(false);
   const [isApple, setIsApple] = useState(false);
-  
+
   const hideViaQuery = searchParams?.has("no-app-banner");
 
   useEffect(() => {
     const dismissed = localStorage.getItem(STORAGE_KEY);
     const isAppleUser = isAppleDevice();
     setIsApple(isAppleUser);
-    
+
     if (isAppleUser && !dismissed) {
       setIsVisible(true);
     }

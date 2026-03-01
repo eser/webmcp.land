@@ -24,14 +24,14 @@ export function HeroResourceInput() {
     t("heroResourceInput.examples.recipeGenerator"),
     t("heroResourceInput.examples.interviewCoach"),
   ], [t]);
-  
+
   const [displayText, setDisplayText] = useState("");
   const [inputValue, setInputValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [isAnimating, setIsAnimating] = useState(true);
   const [currentResourceIndex, setCurrentResourceIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
-  
+
   const animationRef = useRef<NodeJS.Timeout | null>(null);
 
   const clearAnimation = useCallback(() => {
@@ -149,7 +149,7 @@ export function HeroResourceInput() {
               </span>
             </button>
           )}
-          
+
           {/* Actual textarea */}
           <textarea
             ref={textareaRef}
@@ -183,7 +183,7 @@ export function HeroResourceInput() {
           </Button>
         </div>
       </div>
-      
+
       <p className="text-sm text-muted-foreground mt-3 text-center">
         {t("heroResourceInput.hint")}
       </p>

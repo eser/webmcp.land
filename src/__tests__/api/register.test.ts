@@ -156,7 +156,7 @@ describe("POST /api/auth/register", () => {
   describe("duplicate checks", () => {
     it("should return 400 when email already exists", async () => {
       // First select (email check) returns existing user, second (username) returns empty
-      mockSelectSequence(db, 
+      mockSelectSequence(db,
         [{ id: "1" }],
         [],
       );
@@ -177,7 +177,7 @@ describe("POST /api/auth/register", () => {
 
     it("should return 400 when username already exists", async () => {
       // First select (email check) returns empty, second (username check) returns existing user
-      mockSelectSequence(db, 
+      mockSelectSequence(db,
         [],
         [{ id: "1" }],
       );

@@ -40,11 +40,11 @@ export function VariableToolbar({ onInsert, getSelectedText }: VariableToolbarPr
 
   const handleInsert = () => {
     if (!name.trim()) return;
-    
+
     const variable = defaultValue.trim()
       ? `\${${name.trim()}:${defaultValue.trim()}}`
       : `\${${name.trim()}}`;
-    
+
     onInsert(variable);
     setName("");
     setDefaultValue("");

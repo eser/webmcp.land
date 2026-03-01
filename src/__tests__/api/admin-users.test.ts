@@ -48,7 +48,7 @@ describe("GET /api/admin/users", () => {
     // The route builds promptsCountSq subquery that calls db.select(),
     // then Promise.all has two more db.select() calls (main query + count query).
     // Total: 3 db.select() calls.
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [],  // promptsCountSq subquery builder
       [{
         id: "1",

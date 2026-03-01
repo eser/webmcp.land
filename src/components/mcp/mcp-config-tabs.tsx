@@ -46,7 +46,7 @@ function buildLocalEnv(apiKey?: string | null, queryParams?: string): Record<str
 function getConfig(client: Client, mode: Mode, mcpUrl: string, apiKey?: string | null, queryParams?: string): string {
   const packageName = NPM_PACKAGE;
   const localEnv = buildLocalEnv(apiKey, queryParams);
-  
+
   switch (client) {
     case "cursor":
       if (mode === "remote") {
@@ -79,7 +79,7 @@ function getConfig(client: Client, mode: Mode, mcpUrl: string, apiKey?: string |
         }
         return `claude mcp add --transport http webmcp.land ${mcpUrl}`;
       } else {
-        const envPrefix = localEnv 
+        const envPrefix = localEnv
           ? Object.entries(localEnv).map(([k, v]) => `${k}="${v}"`).join(" ") + " "
           : "";
         return `${envPrefix}claude mcp add webmcp.land -- npx -y ${packageName}`;
@@ -170,7 +170,7 @@ args = ["-y", "${packageName}"]`;
         }
         return `gemini mcp add webmcp.land --transport sse ${mcpUrl}`;
       } else {
-        const envPrefix = localEnv 
+        const envPrefix = localEnv
           ? Object.entries(localEnv).map(([k, v]) => `${k}="${v}"`).join(" ") + " "
           : "";
         return `${envPrefix}gemini mcp add webmcp.land -- npx -y ${packageName}`;
@@ -186,7 +186,7 @@ export function McpConfigTabs({ baseUrl, queryParams, className, mode, onModeCha
   const [internalMode, setInternalMode] = useState<Mode>("remote");
   const [copied, setCopied] = useState(false);
   const [showApiKey, setShowApiKey] = useState(false);
-  
+
   const selectedMode = mode ?? internalMode;
   const handleModeChange = (newMode: Mode) => {
     if (onModeChange) {
@@ -198,12 +198,12 @@ export function McpConfigTabs({ baseUrl, queryParams, className, mode, onModeCha
 
   const base = baseUrl || (typeof window !== "undefined" ? window.location.origin : "https://webmcp.land");
   const mcpUrl = queryParams ? `${base}/api/mcp?${queryParams}` : `${base}/api/mcp`;
-  
+
   // Full config with actual API key (for copying)
   const config = getConfig(selectedClient, selectedMode, mcpUrl, apiKey, queryParams);
-  
+
   // Display config: show full key if revealed, otherwise show placeholder (queryParams always visible)
-  const displayApiKey = apiKey 
+  const displayApiKey = apiKey
     ? (showApiKey ? apiKey : "<click to reveal>")
     : null;
   const displayConfig = getConfig(selectedClient, selectedMode, mcpUrl, displayApiKey, queryParams);
@@ -267,8 +267,8 @@ export function McpConfigTabs({ baseUrl, queryParams, className, mode, onModeCha
 
       {/* Config Display */}
       <div className="relative">
-        <div 
-          dir="ltr" 
+        <div
+          dir="ltr"
           className={cn(
             "bg-muted rounded-md p-2 font-mono text-[11px] overflow-x-auto text-left",
             showOfficialBranding && (selectedClient === "vscode" || selectedClient === "cursor") && "max-h-24 overflow-y-auto"
@@ -281,7 +281,7 @@ export function McpConfigTabs({ baseUrl, queryParams, className, mode, onModeCha
                   <span key={i}>
                     {part}
                     {i < arr.length - 1 && (
-                      <span 
+                      <span
                         onClick={() => setShowApiKey(true)}
                         className="text-primary underline cursor-pointer hover:text-primary/80"
                       >

@@ -2,16 +2,16 @@ import type { StoragePlugin, UploadResult, UploadOptions } from "../types";
 
 /**
  * S3 Storage Plugin
- * 
+ *
  * Supports AWS S3 and S3-compatible services (MinIO, DigitalOcean Spaces, etc.)
- * 
+ *
  * Required env vars:
  * - S3_BUCKET
  * - S3_REGION
  * - S3_ACCESS_KEY_ID
  * - S3_SECRET_ACCESS_KEY
  * - S3_ENDPOINT (optional, for S3-compatible services)
- * 
+ *
  * Note: Requires @aws-sdk/client-s3 to be installed:
  * npm install @aws-sdk/client-s3
  */
@@ -32,7 +32,7 @@ async function getS3Client() {
 export const s3StoragePlugin: StoragePlugin = {
   id: "s3",
   name: "Amazon S3",
-  
+
   isConfigured: () => {
     return !!(
       process.env.S3_BUCKET &&
@@ -41,7 +41,7 @@ export const s3StoragePlugin: StoragePlugin = {
       process.env.S3_SECRET_ACCESS_KEY
     );
   },
-  
+
   async upload(file: File | Buffer, options?: UploadOptions): Promise<UploadResult> {
     // Check configuration
     if (!this.isConfigured()) {
@@ -52,7 +52,7 @@ export const s3StoragePlugin: StoragePlugin = {
 
     // Dynamic import to avoid bundling issues when S3 is not used
     const { S3Client, PutObjectCommand } = await getS3Client();
-    
+
     const client = new S3Client({
       region: process.env.S3_REGION!,
       endpoint: process.env.S3_ENDPOINT,
@@ -73,7 +73,7 @@ export const s3StoragePlugin: StoragePlugin = {
     // Convert File to Buffer if needed
     let buffer: Buffer;
     let contentType: string | undefined;
-    
+
     if (file instanceof File) {
       const arrayBuffer = await file.arrayBuffer();
       buffer = Buffer.from(arrayBuffer);
@@ -104,14 +104,14 @@ export const s3StoragePlugin: StoragePlugin = {
       mimeType: contentType,
     };
   },
-  
+
   async delete(keyOrUrl: string): Promise<void> {
     if (!this.isConfigured()) {
       throw new Error("S3 storage is not configured.");
     }
 
     const { S3Client, DeleteObjectCommand } = await getS3Client();
-    
+
     const client = new S3Client({
       region: process.env.S3_REGION!,
       endpoint: process.env.S3_ENDPOINT,

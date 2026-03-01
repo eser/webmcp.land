@@ -32,13 +32,13 @@ export function normalizeContent(content: string): string {
 function jaccardSimilarity(str1: string, str2: string): number {
   const set1 = new Set(str1.split(" ").filter(Boolean));
   const set2 = new Set(str2.split(" ").filter(Boolean));
-  
+
   if (set1.size === 0 && set2.size === 0) return 1;
   if (set1.size === 0 || set2.size === 0) return 0;
-  
+
   const intersection = new Set([...set1].filter(x => set2.has(x)));
   const union = new Set([...set1, ...set2]);
-  
+
   return intersection.size / union.size;
 }
 
@@ -55,16 +55,16 @@ function ngramSimilarity(str1: string, str2: string, n: number = 3): number {
     }
     return ngrams;
   };
-  
+
   const ngrams1 = getNgrams(str1);
   const ngrams2 = getNgrams(str2);
-  
+
   if (ngrams1.size === 0 && ngrams2.size === 0) return 1;
   if (ngrams1.size === 0 || ngrams2.size === 0) return 0;
-  
+
   const intersection = new Set([...ngrams1].filter(x => ngrams2.has(x)));
   const union = new Set([...ngrams1, ...ngrams2]);
-  
+
   return intersection.size / union.size;
 }
 
@@ -75,17 +75,17 @@ function ngramSimilarity(str1: string, str2: string, n: number = 3): number {
 export function calculateSimilarity(content1: string, content2: string): number {
   const normalized1 = normalizeContent(content1);
   const normalized2 = normalizeContent(content2);
-  
+
   // Exact match after normalization
   if (normalized1 === normalized2) return 1;
-  
+
   // Empty content edge case
   if (!normalized1 || !normalized2) return 0;
-  
+
   // Combine Jaccard (word-level) and n-gram (character-level) similarities
   const jaccard = jaccardSimilarity(normalized1, normalized2);
   const ngram = ngramSimilarity(normalized1, normalized2);
-  
+
   // Weighted average: 60% Jaccard (word overlap), 40% n-gram (sequence similarity)
   return jaccard * 0.6 + ngram * 0.4;
 }
@@ -95,8 +95,8 @@ export function calculateSimilarity(content1: string, content2: string): number 
  * Default threshold is 0.85 (85% similar)
  */
 export function isSimilarContent(
-  content1: string, 
-  content2: string, 
+  content1: string,
+  content2: string,
   threshold: number = 0.85
 ): boolean {
   return calculateSimilarity(content1, content2) >= threshold;

@@ -52,7 +52,7 @@ describe("GET /api/user/notifications", () => {
     // First select: count pending change requests
     // Second select: unread comment notifications with actor info
     // Third select: prompt titles
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ value: 3 }],
       [{
         id: "notif1",
@@ -79,7 +79,7 @@ describe("GET /api/user/notifications", () => {
 
   it("should include actor info in notifications", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ value: 0 }],
       [{
         id: "notif1",
@@ -103,7 +103,7 @@ describe("GET /api/user/notifications", () => {
 
   it("should return empty notifications array when none exist", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ value: 0 }],
       [],
       [],

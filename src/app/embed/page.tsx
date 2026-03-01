@@ -14,20 +14,20 @@ interface TreeNode {
 
 function buildFileTree(paths: string[]): TreeNode[] {
   const root: TreeNode[] = [];
-  
+
   for (const path of paths) {
     const parts = path.split("/").filter(Boolean);
     let currentLevel = root;
     let currentPath = "";
-    
+
     for (let i = 0; i < parts.length; i++) {
       const part = parts[i];
       currentPath = currentPath ? `${currentPath}/${part}` : part;
       const isLastPart = i === parts.length - 1;
       const isFolder = path.endsWith("/") ? true : !isLastPart;
-      
+
       let existing = currentLevel.find(n => n.name === part);
-      
+
       if (!existing) {
         existing = {
           name: part,
@@ -37,13 +37,13 @@ function buildFileTree(paths: string[]): TreeNode[] {
         };
         currentLevel.push(existing);
       }
-      
+
       if (isFolder) {
         currentLevel = existing.children;
       }
     }
   }
-  
+
   // Sort: folders first, then alphabetically
   const sortNodes = (nodes: TreeNode[]): TreeNode[] => {
     return nodes
@@ -54,7 +54,7 @@ function buildFileTree(paths: string[]): TreeNode[] {
       })
       .map(n => ({ ...n, children: sortNodes(n.children) }));
   };
-  
+
   return sortNodes(root);
 }
 
@@ -118,7 +118,7 @@ function EmbedContent() {
       dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
     }
     setIsDark(dark);
-    
+
     // Set dark class on html element for portals (dropdowns, modals)
     if (dark) {
       document.documentElement.classList.add("dark");
@@ -166,7 +166,7 @@ function EmbedContent() {
   const renderContextPill = (context: string) => {
     let icon = null;
     let usesPrimary = false;
-    
+
     if (context.startsWith("@")) {
       usesPrimary = true;
     } else if (context.startsWith("http")) {
@@ -208,8 +208,8 @@ function EmbedContent() {
     };
 
     return (
-      <span 
-        key={context} 
+      <span
+        key={context}
         className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium"
         style={pillStyle}
       >
@@ -242,8 +242,8 @@ function EmbedContent() {
         <button
           onClick={() => !node.isFolder && toggleFileSelection(node.path)}
           className="w-full flex items-center gap-1.5 py-0.5 text-[10px] rounded transition-colors text-left"
-          style={{ 
-            paddingLeft: `${depth * 12 + 8}px`, 
+          style={{
+            paddingLeft: `${depth * 12 + 8}px`,
             paddingRight: "8px",
             backgroundColor: isSelected ? hexToRgba(primaryColor, 0.1) : "transparent",
             color: isSelected ? primaryColor : (isDark ? "#e5e5e5" : "#374151"),
@@ -270,7 +270,7 @@ function EmbedContent() {
   };
 
   return (
-    <div 
+    <div
       className={cn("h-screen flex", isDark ? "dark" : "")}
       style={{
         ["--primary" as string]: hexToRgb(primaryColor),
@@ -301,18 +301,18 @@ function EmbedContent() {
 
       {/* File Sidebar */}
       {fileTree.length > 0 && (
-        <div 
+        <div
           className="w-40 sm:w-44 border-r flex-shrink-0 overflow-y-auto"
           style={{
             backgroundColor: isDark ? "rgba(38,38,38,0.5)" : "#ffffff",
             borderColor: isDark ? "#404040" : "#e2e8f0",
           }}
         >
-          <div 
+          <div
             className="p-2 border-b"
             style={{ borderColor: isDark ? "#404040" : "#e2e8f0" }}
           >
-            <h3 
+            <h3
               className="text-[10px] font-semibold uppercase tracking-wider"
               style={{ color: isDark ? "#a3a3a3" : "#64748b" }}
             >
@@ -326,7 +326,7 @@ function EmbedContent() {
       )}
 
       {/* Main Content */}
-      <div 
+      <div
         className="flex-1 flex flex-col p-2 sm:p-4 h-full overflow-hidden relative"
         style={{ backgroundColor: isDark ? "#1a1a1a" : "#ffffff" }}
       >
@@ -336,17 +336,17 @@ function EmbedContent() {
             {allContextPills.filter(ctx => ctx.startsWith("##image")).map((ctx, index) => {
               const label = ctx.includes(":") ? ctx.split(":")[1] : `Image ${index + 1}`;
               return (
-                <div 
+                <div
                   key={`${ctx}-${index}`}
                   className="relative w-24 h-24 rounded-lg overflow-hidden flex-shrink-0"
                   style={{ border: `2px solid ${hexToRgba(primaryColor, 0.3)}` }}
                 >
-                  <img 
+                  <img
                     src={`https://picsum.photos/200?sig=${index}`}
                     alt={label}
                     className="w-full h-full object-cover"
                   />
-                  <div 
+                  <div
                     className="absolute bottom-0 left-0 right-0 px-1.5 py-0.5 text-[8px] font-medium text-center"
                     style={{
                       backgroundColor: hexToRgba(primaryColor, 0.9),
@@ -374,7 +374,7 @@ function EmbedContent() {
             {config.mcpTools.map((tool) => {
               const [server, toolName] = tool.includes(":") ? tool.split(":") : ["mcp", tool];
               return (
-                <span 
+                <span
                   key={tool}
                   className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium"
                   style={{
@@ -428,7 +428,7 @@ function EmbedContent() {
                     <span className="hidden sm:inline">Reject</span>
                   </button>
                 </div>
-                <button 
+                <button
                   onClick={() => setDiffCollapsed(!diffCollapsed)}
                   className="p-0.5 text-muted-foreground hover:text-foreground transition-colors"
                 >
@@ -441,7 +441,7 @@ function EmbedContent() {
             {!diffCollapsed && (
               <div className="space-y-1 mt-1.5">
                 {config.diffOldText && (
-                  <div 
+                  <div
                     className="p-2 rounded text-[10px] font-mono whitespace-pre-wrap max-h-20 overflow-y-auto"
                     style={{
                       backgroundColor: isDark ? "rgba(127, 29, 29, 0.15)" : "rgba(254, 226, 226, 0.6)",
@@ -453,7 +453,7 @@ function EmbedContent() {
                   </div>
                 )}
                 {config.diffNewText && (
-                  <div 
+                  <div
                     className="p-2 rounded text-[10px] font-mono whitespace-pre-wrap max-h-20 overflow-y-auto"
                     style={{
                       backgroundColor: isDark ? "rgba(20, 83, 45, 0.15)" : "rgba(220, 252, 231, 0.6)",
@@ -471,7 +471,7 @@ function EmbedContent() {
 
         {/* Prompt Container */}
         <div className="flex-1 min-h-0 overflow-hidden">
-          <div 
+          <div
             className="h-full rounded-lg p-3 sm:p-4 overflow-y-auto"
             style={{
               backgroundColor: isDark ? "rgba(38,38,38,0.5)" : "rgba(241,245,249,0.5)",
@@ -479,13 +479,13 @@ function EmbedContent() {
             }}
           >
             {config.prompt ? (
-              <p 
+              <p
                 className="text-sm whitespace-pre-wrap"
                 style={{ color: isDark ? "#fafafa" : "#0f172a" }}
                 dangerouslySetInnerHTML={{ __html: highlightMentions(config.prompt) }}
               />
             ) : (
-              <p 
+              <p
                 className="text-sm italic"
                 style={{ color: isDark ? "#a3a3a3" : "#64748b" }}
               >
@@ -498,7 +498,7 @@ function EmbedContent() {
         {/* Settings Pills + Run Button */}
         <div className="flex items-center justify-between mt-2 flex-shrink-0">
           <div className="flex flex-wrap gap-1.5 items-center">
-            <span 
+            <span
               className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium"
               style={{
                 backgroundColor: hexToRgba(primaryColor, 0.1),
@@ -508,7 +508,7 @@ function EmbedContent() {
             >
               {config.mode.charAt(0).toUpperCase() + config.mode.slice(1)}
             </span>
-            <span 
+            <span
               className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium"
               style={{
                 backgroundColor: hexToRgba(primaryColor, 0.1),
@@ -522,7 +522,7 @@ function EmbedContent() {
               <span style={{ color: isDark ? "#a3a3a3" : "#64748b" }} className="text-[10px]">•</span>
             )}
             {config.thinking && (
-              <span 
+              <span
                 className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium"
                 style={{
                   backgroundColor: isDark ? "#262626" : "#f8fafc",
@@ -534,7 +534,7 @@ function EmbedContent() {
               </span>
             )}
             {config.reasoning && (
-              <span 
+              <span
                 className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium"
                 style={{
                   backgroundColor: isDark ? "#262626" : "#f8fafc",
@@ -546,7 +546,7 @@ function EmbedContent() {
               </span>
             )}
             {config.planning && (
-              <span 
+              <span
                 className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium"
                 style={{
                   backgroundColor: isDark ? "#262626" : "#f8fafc",
@@ -558,7 +558,7 @@ function EmbedContent() {
               </span>
             )}
             {config.fast && (
-              <span 
+              <span
                 className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium"
                 style={{
                   backgroundColor: isDark ? "#262626" : "#f8fafc",
@@ -570,7 +570,7 @@ function EmbedContent() {
               </span>
             )}
             {config.max && (
-              <span 
+              <span
                 className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium"
                 style={{
                   backgroundColor: isDark ? "#262626" : "#f8fafc",
@@ -583,16 +583,16 @@ function EmbedContent() {
             )}
           </div>
           <div className="flex items-center gap-2">
-            <a 
-              href="https://webmcp.land" 
-              target="_blank" 
+            <a
+              href="https://webmcp.land"
+              target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 text-[10px] font-medium transition-opacity hover:opacity-80"
               style={{ color: isDark ? "#a3a3a3" : "#64748b" }}
             >
-              <img 
-                src={isDark ? "/logo-dark.svg" : "/logo.svg"} 
-                alt="webmcp.land" 
+              <img
+                src={isDark ? "/logo-dark.svg" : "/logo.svg"}
+                alt="webmcp.land"
                 className="w-3.5 h-3.5"
               />
               <span>webmcp.land</span>

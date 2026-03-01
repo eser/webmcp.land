@@ -87,8 +87,8 @@ export function TranslateButton({ content, onTranslate, isLoggedIn }: TranslateB
           onClick={handleTranslate}
           disabled={isTranslating || isTranslated}
           className={`inline-flex items-center justify-center rounded-sm p-0.5 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none ${
-            isTranslated 
-              ? "text-green-500 opacity-50" 
+            isTranslated
+              ? "text-green-500 opacity-50"
               : "text-primary/60 hover:text-primary hover:bg-primary/10"
           }`}
           title={isTranslated ? t("resources.alreadyTranslated") : t("resources.translateToLanguage")}

@@ -15,16 +15,16 @@ jobs:
           response=$(curl -s -w "\n%{http_code}" -X POST \
             "https://webmcp.land/api/cron/reset-credits" \
             -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}")
-          
+
           http_code=$(echo "$response" | tail -n1)
           body=$(echo "$response" | sed '$d')
-          
+
           echo "Response: $body"
           echo "HTTP Code: $http_code"
-          
+
           if [ "$http_code" != "200" ]; then
             echo "Failed to reset credits"
             exit 1
           fi
-          
+
           echo "Credits reset successfully"

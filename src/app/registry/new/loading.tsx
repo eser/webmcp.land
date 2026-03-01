@@ -56,7 +56,7 @@ export default function NewPromptLoading() {
           {/* ===== INPUT SECTION ===== */}
           <div className="space-y-4 py-6">
             <Skeleton className="h-5 w-20" />
-            
+
             {/* Input Type & Format selectors */}
             <div className="flex flex-col sm:flex-row sm:items-center gap-3">
               <Skeleton className="h-9 w-48" />
@@ -89,7 +89,7 @@ export default function NewPromptLoading() {
           {/* ===== OUTPUT SECTION ===== */}
           <div className="space-y-4 py-6 border-t">
             <Skeleton className="h-5 w-24" />
-            
+
             {/* Output Type buttons */}
             <div className="inline-flex rounded-md border divide-x">
               <Skeleton className="h-10 w-20 rounded-l-md rounded-r-none" />

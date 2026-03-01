@@ -73,7 +73,7 @@ describe("POST /api/resources/[id]/feature", () => {
 
   it("should toggle featured status from false to true", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "admin1" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ role: "ADMIN" }],
       [{ isFeatured: false }],
     );
@@ -94,7 +94,7 @@ describe("POST /api/resources/[id]/feature", () => {
 
   it("should toggle featured status from true to false", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "admin1" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ role: "ADMIN" }],
       [{ isFeatured: true }],
     );
@@ -115,7 +115,7 @@ describe("POST /api/resources/[id]/feature", () => {
 
   it("should set featuredAt when featuring a resource", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "admin1" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ role: "ADMIN" }],
       [{ isFeatured: false }],
     );
@@ -133,7 +133,7 @@ describe("POST /api/resources/[id]/feature", () => {
 
   it("should clear featuredAt when unfeaturing a resource", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "admin1" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ role: "ADMIN" }],
       [{ isFeatured: true }],
     );

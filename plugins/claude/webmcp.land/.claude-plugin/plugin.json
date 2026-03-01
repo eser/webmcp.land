@@ -9,7 +9,14 @@
   "homepage": "https://webmcp.land",
   "repository": "https://github.com/eser/webmcp.land",
   "license": "MIT",
-  "keywords": ["prompts", "ai", "skills", "chatgpt", "claude", "llm"],
+  "keywords": [
+    "prompts",
+    "ai",
+    "skills",
+    "chatgpt",
+    "claude",
+    "llm"
+  ],
   "commands": [
     "./commands/prompts.md",
     "./commands/skills.md"

@@ -143,7 +143,7 @@ describe("GET /api/resources/[id]", () => {
   it("should return resource for owner even if private", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "owner" } } as never);
     // Sequence: resource, author, tags, versions, vote count, user vote check
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{
         id: "123",
         isPrivate: true,
@@ -236,7 +236,7 @@ describe("PATCH /api/resources/[id]", () => {
       content: "Updated content",
     };
     // Sequence: find resource, update resource, get author, tags, etc.
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ authorId: "other-user", content: "original" }],
     );
     vi.mocked(db.update).mockReturnValue(createChainMock([updatedResource]) as any);
@@ -266,7 +266,7 @@ describe("PATCH /api/resources/[id]", () => {
       authorId: "user1",
       categoryId: null,
     };
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ authorId: "user1", content: "original" }],
     );
     vi.mocked(db.update).mockReturnValue(createChainMock([updatedResource]) as any);

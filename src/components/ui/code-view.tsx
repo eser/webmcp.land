@@ -24,7 +24,7 @@ export function CodeView({ content, language = "json", className, maxLines, font
   const [viewMode, setViewMode] = useState<ViewMode>("code");
   const expandAllRef = useRef<(() => void) | undefined>(undefined);
   const collapseAllRef = useRef<(() => void) | undefined>(undefined);
-  
+
   const isJson = language === "json";
   const showToggle = isJson && !maxLines; // Only show toggle for JSON when not truncated
 
@@ -74,7 +74,7 @@ export function CodeView({ content, language = "json", className, maxLines, font
               {t("common.treeView")}
             </Button>
           </div>
-          
+
           {/* Expand/Collapse buttons - right side (only in tree view) */}
           {viewMode === "tree" && (
             <div className="flex gap-2">
@@ -209,7 +209,7 @@ function highlightYAML(line: string) {
     parts.push(<span key={key++}>{keyValueMatch[1]}</span>);
     parts.push(<span key={key++} className="text-blue-600 dark:text-blue-400">{keyValueMatch[2]}</span>);
     parts.push(<span key={key++}>{keyValueMatch[3]}</span>);
-    
+
     const value = keyValueMatch[4];
     if (value) {
       parts.push(highlightYAMLValue(value, key));

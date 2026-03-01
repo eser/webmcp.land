@@ -21,7 +21,7 @@ describe("GET /api/leaderboard", () => {
   });
 
   it("should return leaderboard with default period (all)", async () => {
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [
         { promptId: "prompt1", voteCount: 10 },
         { promptId: "prompt2", voteCount: 5 },

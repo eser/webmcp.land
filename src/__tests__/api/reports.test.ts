@@ -103,7 +103,7 @@ describe("POST /api/reports", () => {
 
   it("should allow relist request on own prompt", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ id: "123", authorId: "user1" }],
       [],  // no existing report
     );
@@ -123,7 +123,7 @@ describe("POST /api/reports", () => {
 
   it("should return 400 if already reported", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ id: "123", authorId: "other-user" }],
       [{ id: "existing-report" }],
     );
@@ -142,7 +142,7 @@ describe("POST /api/reports", () => {
 
   it("should create report successfully", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ id: "123", authorId: "other-user" }],
       [],  // no existing report
     );
@@ -171,7 +171,7 @@ describe("POST /api/reports", () => {
     for (const reason of reasons) {
       vi.clearAllMocks();
       vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-      mockSelectSequence(db, 
+      mockSelectSequence(db,
         [{
           id: "123",
           authorId: reason === "RELIST_REQUEST" ? "user1" : "other-user",
@@ -193,7 +193,7 @@ describe("POST /api/reports", () => {
 
   it("should handle null details", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ id: "123", authorId: "other-user" }],
       [],
     );
@@ -211,7 +211,7 @@ describe("POST /api/reports", () => {
 
   it("should check for pending reports only", async () => {
     vi.mocked(getSession).mockResolvedValue({ user: { id: "user1" } } as never);
-    mockSelectSequence(db, 
+    mockSelectSequence(db,
       [{ id: "123", authorId: "other-user" }],
       [],
     );

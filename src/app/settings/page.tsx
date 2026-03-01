@@ -44,12 +44,12 @@ export default async function SettingsPage() {
       </div>
 
       <div className="space-y-6">
-        <ProfileForm 
+        <ProfileForm
           user={{
             ...user,
             customLinks: user.customLinks as CustomLink[] | null,
-          }} 
-          showVerifiedSection={!config.homepage?.useCloneBranding} 
+          }}
+          showVerifiedSection={!config.homepage?.useCloneBranding}
         />
 
         {config.features.mcp !== false && (
