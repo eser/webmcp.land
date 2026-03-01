@@ -57,6 +57,11 @@ COPY --from=builder /app/drizzle.config.ts ./drizzle.config.ts
 # Copy AI prompt YAML files (read at runtime via fs.readFileSync)
 COPY --from=builder /app/src/lib/ai/*.yml ./src/lib/ai/
 
+# Copy seed script and its dependencies (for first-run seeding)
+COPY --from=builder /app/drizzle/seed.ts ./drizzle/seed.ts
+COPY --from=builder /app/etc/prompts.json ./etc/prompts.json
+COPY --from=builder /app/src/lib/crypto.ts ./src/lib/crypto.ts
+
 # Copy entrypoint
 COPY docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
