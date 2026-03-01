@@ -1,10 +1,12 @@
 import { resolve } from "node:path";
+import tailwindcss from "@tailwindcss/vite";
 import vinext from "vinext";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
 import { defineConfig } from "vite";
 
 export default defineConfig({
   plugins: [
+    tailwindcss(),
     vinext({ appDir: resolve(import.meta.dirname, "src") }),
     sentryVitePlugin({
       org: "prompts-chat",
