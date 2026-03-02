@@ -1,5 +1,4 @@
 act,prompt,for_devs,type,contributor
-Text-to-Speech Generator,WebMCP service for converting text to natural-sounding speech in multiple languages and voices.,FALSE,WEBMCP,demo-riley
 Redis Cache Manager,"MCP service for interacting with Redis — get, set, delete keys, manage TTLs, and monitor cache stats.",TRUE,MCP,demo-avery
 PDF Document Parser,"WebMCP service for extracting text, tables, and metadata from PDF documents.",FALSE,WEBMCP,demo-pat
 DNS Lookup Service,"MCP service for performing DNS queries — A, AAAA, MX, CNAME, TXT, and NS record lookups.",TRUE,MCP,demo-quinn
