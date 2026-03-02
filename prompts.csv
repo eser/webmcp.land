@@ -1,5 +1,4 @@
 act,prompt,for_devs,type,contributor
-Figma Design Exporter,"WebMCP service for exporting Figma frames, components, and assets as images or SVGs.",FALSE,WEBMCP,demo-sam
 Sentry Error Tracker,"MCP service for querying, resolving, and analyzing errors and issues from Sentry projects.",TRUE,MCP,demo-alex
 Google Calendar Sync,"WebMCP service for reading, creating, and managing Google Calendar events and reminders.",FALSE,WEBMCP,demo-jordan
 NPM Package Inspector,"MCP service for searching, inspecting, and comparing npm packages — versions, dependencies, and downloads.",TRUE,MCP,demo-casey
