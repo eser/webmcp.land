@@ -1,3 +1,2 @@
 act,prompt,for_devs,type,contributor
-Linear Issue Sync,"WebMCP service for syncing, creating, and managing Linear issues and project boards.",FALSE,WEBMCP,demo-quinn
 API Rate Limiter,MCP service for implementing and managing API rate limiting with sliding window and token bucket algorithms.,TRUE,MCP,demo-sam
