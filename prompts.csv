@@ -1,5 +1,4 @@
 act,prompt,for_devs,type,contributor
-GitHub Actions Runner,"MCP service for triggering, listing, and inspecting GitHub Actions workflow runs.",TRUE,MCP,demo-avery
 MongoDB Query Tool,"MCP service for querying, inserting, updating, and aggregating documents in MongoDB collections.",TRUE,MCP,demo-pat
 Twilio SMS Gateway,"WebMCP service for sending SMS messages, managing phone numbers, and checking delivery status via Twilio.",FALSE,WEBMCP,demo-quinn
 Terraform State Viewer,"MCP service for inspecting Terraform state files, resource dependencies, and drift detection.",TRUE,MCP,demo-sam
