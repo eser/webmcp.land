@@ -1,5 +1,4 @@
 act,prompt,for_devs,type,contributor
-PostgreSQL Admin Tools,"MCP service for PostgreSQL administration — run queries, manage schemas, view stats, and optimize performance.",TRUE,MCP,demo-jordan
 Image Resizer & Optimizer,"WebMCP service for resizing, compressing, and converting images in various formats.",FALSE,WEBMCP,demo-casey
 AWS S3 File Manager,"MCP service for uploading, downloading, listing, and managing files in AWS S3 buckets.",TRUE,MCP,demo-taylor
 Jira Issue Tracker,"WebMCP service for creating, updating, and querying Jira issues and sprint boards.",FALSE,WEBMCP,demo-morgan
