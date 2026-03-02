@@ -1,5 +1,4 @@
 act,prompt,for_devs,type,contributor
-Discord Bot Controller,"MCP service for managing Discord bots — send messages, manage roles, moderate channels, and configure webhooks.",FALSE,MCP,demo-quinn
 Cron Job Scheduler,"WebMCP service for scheduling, managing, and monitoring cron jobs with retry logic and failure alerts.",TRUE,WEBMCP,demo-sam
 OAuth Token Manager,"MCP service for managing OAuth2 tokens — refresh, revoke, introspect, and generate tokens for multiple providers.",TRUE,MCP,demo-alex
 CSV Data Processor,"WebMCP service for parsing, transforming, filtering, and exporting CSV data with column mapping support.",FALSE,WEBMCP,demo-jordan
