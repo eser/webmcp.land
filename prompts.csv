@@ -1,5 +1,4 @@
 act,prompt,for_devs,type,contributor
-GraphQL Playground,"MCP service for introspecting GraphQL schemas, running queries, and testing mutations against any endpoint.",TRUE,MCP,demo-morgan
 Prometheus Metrics Exporter,"MCP service for querying Prometheus metrics, setting up alerts, and generating dashboards.",TRUE,MCP,demo-riley
 Webhook Relay,"WebMCP service for receiving, inspecting, replaying, and forwarding webhooks from any source.",TRUE,WEBMCP,demo-casey
 Currency Exchange Rates,WebMCP service providing real-time and historical currency exchange rates for 160+ currencies.,FALSE,WEBMCP,demo-avery
