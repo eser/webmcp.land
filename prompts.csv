@@ -1,5 +1,4 @@
 act,prompt,for_devs,type,contributor
-File System Browser,"MCP service for browsing, reading, and searching files in a sandboxed directory tree.",TRUE,MCP,demo-pat
 Weather Forecast API,"WebMCP service providing real-time weather data, forecasts, and severe weather alerts by location.",FALSE,WEBMCP,demo-quinn
 CI/CD Pipeline Runner,"MCP service for triggering, monitoring, and managing CI/CD pipeline runs across platforms.",TRUE,MCP,demo-alex
 PostgreSQL Admin Tools,"MCP service for PostgreSQL administration — run queries, manage schemas, view stats, and optimize performance.",TRUE,MCP,demo-jordan
