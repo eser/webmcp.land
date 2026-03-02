@@ -1,5 +1,4 @@
 act,prompt,for_devs,type,contributor
-PDF Document Parser,"WebMCP service for extracting text, tables, and metadata from PDF documents.",FALSE,WEBMCP,demo-pat
 DNS Lookup Service,"MCP service for performing DNS queries — A, AAAA, MX, CNAME, TXT, and NS record lookups.",TRUE,MCP,demo-quinn
 Figma Design Exporter,"WebMCP service for exporting Figma frames, components, and assets as images or SVGs.",FALSE,WEBMCP,demo-sam
 Sentry Error Tracker,"MCP service for querying, resolving, and analyzing errors and issues from Sentry projects.",TRUE,MCP,demo-alex
