@@ -1,5 +1,4 @@
 act,prompt,for_devs,type,contributor
-Embeddings Generator,"WebMCP service for generating text embeddings using multiple models, with similarity search and clustering.",TRUE,WEBMCP,demo-riley
 Secrets Vault,"MCP service for securely storing and retrieving secrets, API keys, and configuration values.",TRUE,MCP,demo-avery
 Sitemap Generator,WebMCP service for crawling websites and generating XML sitemaps with priority and frequency settings.,TRUE,WEBMCP,demo-pat
 Linear Issue Sync,"WebMCP service for syncing, creating, and managing Linear issues and project boards.",FALSE,WEBMCP,demo-quinn
