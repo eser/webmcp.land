@@ -1,5 +1,4 @@
 act,prompt,for_devs,type,contributor
-Slack Notifier,"MCP service for sending messages, managing channels, and reading threads in Slack workspaces.",FALSE,MCP,demo-sam
 Docker Container Manager,"MCP service for managing Docker containers — start, stop, inspect, and monitor running containers.",TRUE,MCP,demo-taylor
 Stripe Payment Gateway,"WebMCP service for processing payments, managing subscriptions, and handling invoices via Stripe.",TRUE,WEBMCP,demo-morgan
 Email Sender Service,"MCP service for composing and sending emails, managing templates, and tracking delivery status.",FALSE,MCP,demo-casey
