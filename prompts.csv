@@ -1,5 +1,4 @@
 act,prompt,for_devs,type,contributor
-Cloudflare DNS Manager,"MCP service for managing Cloudflare DNS zones and records — create, update, delete, and list DNS entries.",TRUE,MCP,demo-jordan
 Code Review Assistant,"WebMCP service that analyzes pull requests and provides code review feedback on style, bugs, and security.",TRUE,WEBMCP,demo-taylor
 GraphQL Playground,"MCP service for introspecting GraphQL schemas, running queries, and testing mutations against any endpoint.",TRUE,MCP,demo-morgan
 Prometheus Metrics Exporter,"MCP service for querying Prometheus metrics, setting up alerts, and generating dashboards.",TRUE,MCP,demo-riley
