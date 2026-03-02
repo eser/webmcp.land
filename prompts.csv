@@ -1,5 +1,4 @@
 act,prompt,for_devs,type,contributor
-SSL Certificate Checker,"MCP service for verifying SSL/TLS certificates — expiry dates, chain validity, and cipher suites.",TRUE,MCP,demo-riley
 Translation Service,WebMCP service for translating text between 50+ languages with automatic language detection.,FALSE,WEBMCP,demo-morgan
 GitHub Actions Runner,"MCP service for triggering, listing, and inspecting GitHub Actions workflow runs.",TRUE,MCP,demo-avery
 MongoDB Query Tool,"MCP service for querying, inserting, updating, and aggregating documents in MongoDB collections.",TRUE,MCP,demo-pat
