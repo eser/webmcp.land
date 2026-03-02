@@ -1,5 +1,4 @@
 act,prompt,for_devs,type,contributor
-Twilio SMS Gateway,"WebMCP service for sending SMS messages, managing phone numbers, and checking delivery status via Twilio.",FALSE,WEBMCP,demo-quinn
 Terraform State Viewer,"MCP service for inspecting Terraform state files, resource dependencies, and drift detection.",TRUE,MCP,demo-sam
 Markdown to HTML Converter,WebMCP service for converting Markdown documents to styled HTML with syntax highlighting and TOC generation.,TRUE,WEBMCP,demo-alex
 Cloudflare DNS Manager,"MCP service for managing Cloudflare DNS zones and records — create, update, delete, and list DNS entries.",TRUE,MCP,demo-jordan
