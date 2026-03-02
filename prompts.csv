@@ -1,5 +1,4 @@
 act,prompt,for_devs,type,contributor
-Webhook Relay,"WebMCP service for receiving, inspecting, replaying, and forwarding webhooks from any source.",TRUE,WEBMCP,demo-casey
 Currency Exchange Rates,WebMCP service providing real-time and historical currency exchange rates for 160+ currencies.,FALSE,WEBMCP,demo-avery
 Elasticsearch Query Builder,"MCP service for building and executing Elasticsearch queries, managing indices, and viewing cluster health.",TRUE,MCP,demo-pat
 Discord Bot Controller,"MCP service for managing Discord bots — send messages, manage roles, moderate channels, and configure webhooks.",FALSE,MCP,demo-quinn
