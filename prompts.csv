@@ -1,5 +1,4 @@
 act,prompt,for_devs,type,contributor
-Email Sender Service,"MCP service for composing and sending emails, managing templates, and tracking delivery status.",FALSE,MCP,demo-casey
 Kubernetes Cluster Monitor,"MCP service for monitoring Kubernetes clusters — pod status, resource usage, and alerts.",TRUE,MCP,demo-riley
 OpenAI Chat Proxy,"WebMCP proxy service for OpenAI chat completions with caching, rate limiting, and usage tracking.",TRUE,WEBMCP,demo-avery
 File System Browser,"MCP service for browsing, reading, and searching files in a sandboxed directory tree.",TRUE,MCP,demo-pat
