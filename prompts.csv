@@ -1,5 +1,4 @@
 act,prompt,for_devs,type,contributor
-Cron Job Scheduler,"WebMCP service for scheduling, managing, and monitoring cron jobs with retry logic and failure alerts.",TRUE,WEBMCP,demo-sam
 OAuth Token Manager,"MCP service for managing OAuth2 tokens — refresh, revoke, introspect, and generate tokens for multiple providers.",TRUE,MCP,demo-alex
 CSV Data Processor,"WebMCP service for parsing, transforming, filtering, and exporting CSV data with column mapping support.",FALSE,WEBMCP,demo-jordan
 Log Analyzer,"MCP service for parsing, searching, and analyzing application logs with pattern detection and alerting.",TRUE,MCP,demo-taylor
