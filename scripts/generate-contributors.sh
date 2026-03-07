@@ -1,38 +1,38 @@
 #!/bin/bash
 
-# Script to generate contributor commits from prompts.csv
-# Fetches latest prompts from webmcp.land/prompts.csv
-# Compares with existing prompts.csv and creates commits only for new prompts
+# Script to generate contributor commits from resources.csv
+# Fetches latest resources from webmcp.land/resources.csv
+# Compares with existing resources.csv and creates commits only for new resources
 
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
-CSV_FILE="$PROJECT_DIR/prompts.csv"
-REMOTE_CSV="$PROJECT_DIR/prompts.csv.remote"
-REMOTE_CSV_URL="https://webmcp.land/prompts.csv"
+CSV_FILE="$PROJECT_DIR/resources.csv"
+REMOTE_CSV="$PROJECT_DIR/resources.csv.remote"
+REMOTE_CSV_URL="https://webmcp.land/resources.csv"
 
-# Fetch latest prompts.csv from webmcp.land
-echo "Fetching latest prompts.csv from $REMOTE_CSV_URL..."
+# Fetch latest resources.csv from webmcp.land
+echo "Fetching latest resources.csv from $REMOTE_CSV_URL..."
 if ! curl -fsSL "$REMOTE_CSV_URL" -o "$REMOTE_CSV"; then
-    echo "Error: Failed to fetch prompts.csv from $REMOTE_CSV_URL"
+    echo "Error: Failed to fetch resources.csv from $REMOTE_CSV_URL"
     echo "Make sure webmcp.land is running and the endpoint is available."
     exit 1
 fi
-echo "Successfully fetched remote prompts.csv"
+echo "Successfully fetched remote resources.csv"
 
 # Initialize local CSV if it doesn't exist
 if [ ! -f "$CSV_FILE" ]; then
-    echo "Local prompts.csv not found, initializing with header..."
+    echo "Local resources.csv not found, initializing with header..."
     head -1 "$REMOTE_CSV" > "$CSV_FILE"
     git add "$CSV_FILE"
-    git commit -m "Initialize prompts.csv with header" --allow-empty 2>/dev/null || true
+    git commit -m "Initialize resources.csv with header" --allow-empty 2>/dev/null || true
 fi
 
 echo ""
-echo "Comparing local and remote prompts.csv..."
+echo "Comparing local and remote resources.csv..."
 
-# Process diffs and create commits for new prompts
+# Process diffs and create commits for new resources
 export PROJECT_DIR
 set +e  # Temporarily allow non-zero exit
 python3 << 'PYTHON_SCRIPT'
@@ -41,36 +41,35 @@ import subprocess
 import os
 import io
 import sys
+import re
 
-# Increase CSV field size limit to handle large prompt content
 csv.field_size_limit(sys.maxsize)
 
 project_dir = os.environ.get('PROJECT_DIR', '.')
-csv_file = os.path.join(project_dir, 'prompts.csv')
-remote_csv = os.path.join(project_dir, 'prompts.csv.remote')
+csv_file = os.path.join(project_dir, 'resources.csv')
+remote_csv = os.path.join(project_dir, 'resources.csv.remote')
 
-# Read existing local prompts (by act title as key)
-local_prompts = {}
+# Read existing local resources (by title as key)
+local_resources = {}
 fieldnames = None
 skipped_local = 0
 with open(csv_file, 'r', newline='', encoding='utf-8') as f:
-    # Normalize CRLF to LF
     content = f.read().replace('\r\n', '\n').replace('\r', '\n')
     reader = csv.DictReader(io.StringIO(content))
     fieldnames = reader.fieldnames
     for row in reader:
         try:
-            act = row.get('act', '').strip()
-            if act:
-                local_prompts[act] = row
+            title = row.get('title', '').strip()
+            if title:
+                local_resources[title] = row
         except csv.Error as e:
             skipped_local += 1
             print(f"Skipping local row due to CSV error: {e}")
 
-print(f"Found {len(local_prompts)} existing local prompts" + (f" (skipped {skipped_local})" if skipped_local else ""))
+print(f"Found {len(local_resources)} existing local resources" + (f" (skipped {skipped_local})" if skipped_local else ""))
 
-# Read remote prompts (normalize CRLF to LF)
-remote_prompts = []
+# Read remote resources (normalize CRLF to LF)
+remote_resources = []
 skipped_remote = 0
 with open(remote_csv, 'r', newline='', encoding='utf-8') as f:
     content = f.read().replace('\r\n', '\n').replace('\r', '\n')
@@ -79,337 +78,267 @@ with open(remote_csv, 'r', newline='', encoding='utf-8') as f:
     while True:
         try:
             row = next(reader)
-            remote_prompts.append(row)
+            remote_resources.append(row)
         except csv.Error as e:
             skipped_remote += 1
             print(f"Skipping remote row due to CSV error: {e}")
         except StopIteration:
             break
 
-print(f"Found {len(remote_prompts)} remote prompts" + (f" (skipped {skipped_remote})" if skipped_remote else ""))
+print(f"Found {len(remote_resources)} remote resources" + (f" (skipped {skipped_remote})" if skipped_remote else ""))
 
 # Use remote fieldnames if local is empty
 if not fieldnames:
     fieldnames = remote_fieldnames
 
-# Build set of remote prompt acts for quick lookup
-remote_acts = set()
-for row in remote_prompts:
-    act = row.get('act', '').strip()
-    if act:
-        remote_acts.add(act)
+# Build set of remote titles for quick lookup
+remote_titles = set()
+for row in remote_resources:
+    title = row.get('title', '').strip()
+    if title:
+        remote_titles.add(title)
 
-# Find new, updated, and deleted prompts
-new_prompts = []
-updated_prompts = []
-deleted_prompts = []
+# Find new, updated, and deleted resources
+new_resources = []
+updated_resources = []
+deleted_resources = []
 
-# Check for new and updated
-for row in remote_prompts:
-    act = row.get('act', '').strip()
-    if not act:
+for row in remote_resources:
+    title = row.get('title', '').strip()
+    if not title:
         continue
 
-    if act not in local_prompts:
-        new_prompts.append(row)
+    if title not in local_resources:
+        new_resources.append(row)
     else:
-        local_row = local_prompts[act]
-        # Check if content OR contributors changed
-        content_changed = row.get('prompt', '').strip() != local_row.get('prompt', '').strip()
-        contributors_changed = row.get('contributor', '').strip() != local_row.get('contributor', '').strip()
-        if content_changed or contributors_changed:
-            updated_prompts.append((row, local_row))
+        local_row = local_resources[title]
+        # Check if any field changed
+        changed = any(
+            row.get(f, '').strip() != local_row.get(f, '').strip()
+            for f in ['description', 'endpoint_url', 'server_type', 'status', 'category', 'author']
+        )
+        if changed:
+            updated_resources.append((row, local_row))
 
-# Check for deleted (in local but not in remote)
-for act, local_row in local_prompts.items():
-    if act not in remote_acts:
-        deleted_prompts.append(local_row)
+for title, local_row in local_resources.items():
+    if title not in remote_titles:
+        deleted_resources.append(local_row)
 
-print(f"Found {len(new_prompts)} new prompts to add")
-print(f"Found {len(updated_prompts)} updated prompts to modify")
-print(f"Found {len(deleted_prompts)} prompts to remove (unlisted/deleted)")
+print(f"Found {len(new_resources)} new resources to add")
+print(f"Found {len(updated_resources)} updated resources to modify")
+print(f"Found {len(deleted_resources)} resources to remove (unlisted/deleted)")
 
-# Helper function to parse contributors (supports "user1,user2,user3" format)
-def parse_contributors(contributor_field):
-    """Parse contributor field, returns (primary_author, co_authors_list)"""
-    if not contributor_field:
-        return 'anonymous', []
+# --- Helpers ---
 
-    # Split by comma and clean up
-    contributors = [c.strip() for c in contributor_field.split(',') if c.strip()]
+def get_author(row):
+    """Get author from row, returns username string"""
+    return row.get('author', '').strip() or 'anonymous'
 
-    if not contributors:
-        return 'anonymous', []
+def build_commit_message(action, title):
+    """Build commit message"""
+    return f'{action} resource: {title}'
 
-    primary = contributors[0]
-    co_authors = contributors[1:] if len(contributors) > 1 else []
-    return primary, co_authors
+def generate_resource_block(row):
+    """Generate a single resource's <details> block for RESOURCES.md"""
+    title = row.get('title', 'Untitled')
+    description = row.get('description', '')
+    endpoint_url = row.get('endpoint_url', '')
+    server_type = row.get('server_type', 'MCP')
+    category = row.get('category', '')
+    author = row.get('author', '')
+    url = row.get('url', '')
 
-def build_commit_message(action, act, co_authors):
-    """Build commit message with optional co-author trailers"""
-    msg = f'{action} prompt: {act}'
-
-    if co_authors:
-        msg += '\n\n'
-        for co_author in co_authors:
-            co_email = f"{co_author}@users.noreply.github.com"
-            msg += f'Co-authored-by: {co_author} <{co_email}>\n'
-
-    return msg
-
-def format_contributor_links(contributor_field):
-    """Format contributors as GitHub profile links"""
-    if not contributor_field:
-        return '@anonymous'
-
-    contributors = [c.strip() for c in contributor_field.split(',') if c.strip()]
-    if not contributors:
-        return '@anonymous'
-
-    return ', '.join([f'[@{c}](https://github.com/{c})' for c in contributors])
-
-def generate_prompt_block(row):
-    """Generate a single prompt's <details> block"""
-    act = row.get('act', 'Untitled')
-    prompt = row.get('prompt', '')
-    contributor = row.get('contributor', '')
-    prompt_type = row.get('type', 'TEXT').upper()
-
-    # Determine code block language based on type
-    if prompt_type == 'TEXT':
-        lang = 'md'
-    elif prompt_type == 'JSON':
-        lang = 'json'
-    elif prompt_type == 'YAML':
-        lang = 'yaml'
-    else:
-        lang = 'md'
-
-    contributor_links = format_contributor_links(contributor)
+    author_link = f'[@{author}](https://github.com/{author})' if author else '@anonymous'
 
     block = f'<details>\n'
-    block += f'<summary><strong>{act}</strong></summary>\n\n'
-    block += f'## {act}\n\n'
-    block += f'Contributed by {contributor_links}\n\n'
-    block += f'```{lang}\n'
-    block += f'{prompt}\n'
-    block += f'```\n\n'
-    block += f'</details>\n\n'
+    block += f'<summary><strong>{title}</strong> ({server_type})</summary>\n\n'
+    block += f'## {title}\n\n'
+    block += f'{description}\n\n' if description else ''
+    block += f'- **Type:** {server_type}\n'
+    block += f'- **Endpoint:** `{endpoint_url}`\n'
+    if category:
+        block += f'- **Category:** {category}\n'
+    block += f'- **Author:** {author_link}\n'
+    if url:
+        block += f'- **Details:** [{url}]({url})\n'
+    block += f'\n</details>\n\n'
     return block
 
-def init_prompts_md(prompts_md_path):
-    """Initialize PROMPTS.md with header if it doesn't exist"""
-    if not os.path.exists(prompts_md_path):
-        with open(prompts_md_path, 'w', encoding='utf-8') as f:
+def init_resources_md(resources_md_path):
+    """Initialize RESOURCES.md with header if it doesn't exist"""
+    if not os.path.exists(resources_md_path):
+        with open(resources_md_path, 'w', encoding='utf-8') as f:
             f.write('# webmcp.land\n\n')
-            f.write('> A curated list of prompts for ChatGPT and other AI models.\n\n')
+            f.write('> A curated registry of MCP/WebMCP resources, tools, and prompts.\n\n')
+            f.write('For full details including tools, methods, and use cases, visit the resource page on [webmcp.land](https://webmcp.land).\n\n')
             f.write('---\n\n')
 
-def append_prompt_to_md(row, prompts_md_path):
-    """Append a new prompt block to PROMPTS.md"""
-    init_prompts_md(prompts_md_path)
-    block = generate_prompt_block(row)
-    with open(prompts_md_path, 'a', encoding='utf-8') as f:
+def append_resource_to_md(row, resources_md_path):
+    """Append a new resource block to RESOURCES.md"""
+    init_resources_md(resources_md_path)
+    block = generate_resource_block(row)
+    with open(resources_md_path, 'a', encoding='utf-8') as f:
         f.write(block)
 
-def update_prompt_in_md(row, prompts_md_path):
-    """Update an existing prompt's block in PROMPTS.md"""
-    act = row.get('act', '')
-    if not os.path.exists(prompts_md_path):
-        append_prompt_to_md(row, prompts_md_path)
+def update_resource_in_md(row, resources_md_path):
+    """Update an existing resource's block in RESOURCES.md"""
+    title = row.get('title', '')
+    if not os.path.exists(resources_md_path):
+        append_resource_to_md(row, resources_md_path)
         return
 
-    with open(prompts_md_path, 'r', encoding='utf-8') as f:
+    with open(resources_md_path, 'r', encoding='utf-8') as f:
         content = f.read()
 
-    # Find and replace the specific prompt block using regex
-    import re
-    # Pattern to match the entire <details> block for this prompt
-    pattern = rf'<details>\n<summary><strong>{re.escape(act)}</strong></summary>.*?</details>\n\n'
-    new_block = generate_prompt_block(row)
-
+    pattern = rf'<details>\n<summary><strong>{re.escape(title)}</strong>.*?</details>\n\n'
+    new_block = generate_resource_block(row)
     new_content, count = re.subn(pattern, new_block, content, flags=re.DOTALL)
 
     if count > 0:
-        with open(prompts_md_path, 'w', encoding='utf-8') as f:
+        with open(resources_md_path, 'w', encoding='utf-8') as f:
             f.write(new_content)
     else:
-        # Prompt not found, append it
-        append_prompt_to_md(row, prompts_md_path)
+        append_resource_to_md(row, resources_md_path)
 
-def remove_prompt_from_md(act, prompts_md_path):
-    """Remove a prompt's block from PROMPTS.md"""
-    if not os.path.exists(prompts_md_path):
+def remove_resource_from_md(title, resources_md_path):
+    """Remove a resource's block from RESOURCES.md"""
+    if not os.path.exists(resources_md_path):
         return
 
-    with open(prompts_md_path, 'r', encoding='utf-8') as f:
+    with open(resources_md_path, 'r', encoding='utf-8') as f:
         content = f.read()
 
-    import re
-    pattern = rf'<details>\n<summary><strong>{re.escape(act)}</strong></summary>.*?</details>\n\n'
+    pattern = rf'<details>\n<summary><strong>{re.escape(title)}</strong>.*?</details>\n\n'
     new_content = re.sub(pattern, '', content, flags=re.DOTALL)
 
-    with open(prompts_md_path, 'w', encoding='utf-8') as f:
+    with open(resources_md_path, 'w', encoding='utf-8') as f:
         f.write(new_content)
 
-prompts_md_path = os.path.join(project_dir, 'PROMPTS.md')
+# --- Main processing ---
 
-if not new_prompts and not updated_prompts and not deleted_prompts:
+resources_md_path = os.path.join(project_dir, 'RESOURCES.md')
+
+if not new_resources and not updated_resources and not deleted_resources:
     print("\nNo CSV changes detected. Already up to date!")
 else:
-    # Process updates one at a time (apply and commit each update separately)
-    if updated_prompts:
-        print("\nApplying updates to existing prompts...")
+    if updated_resources:
+        print("\nApplying updates to existing resources...")
 
-        for i, (remote_row, local_row) in enumerate(updated_prompts, 1):
-            act = remote_row.get('act', '').strip()
-            contributor_field = remote_row.get('contributor', '').strip()
+        for i, (remote_row, local_row) in enumerate(updated_resources, 1):
+            title = remote_row.get('title', '').strip()
+            author = get_author(remote_row)
 
-            # Update this specific prompt in local_prompts
-            local_prompts[act] = remote_row
+            local_resources[title] = remote_row
 
-            # Rewrite the CSV with this update applied
             with open(csv_file, 'w', newline='') as f:
                 writer = csv.DictWriter(f, fieldnames=fieldnames)
                 writer.writeheader()
-                # Write in order of remote (to maintain order)
-                for row in remote_prompts:
-                    row_act = row.get('act', '').strip()
-                    if row_act in local_prompts:
-                        writer.writerow(local_prompts[row_act])
+                for row in remote_resources:
+                    row_title = row.get('title', '').strip()
+                    if row_title in local_resources:
+                        writer.writerow(local_resources[row_title])
 
-            # Update only this prompt's block in PROMPTS.md
-            update_prompt_in_md(remote_row, prompts_md_path)
+            update_resource_in_md(remote_row, resources_md_path)
 
-            primary_author, co_authors = parse_contributors(contributor_field)
-            email = f"{primary_author}@users.noreply.github.com"
+            email = f"{author}@users.noreply.github.com"
+            subprocess.run(['git', 'add', csv_file, resources_md_path], check=True)
 
-            subprocess.run(['git', 'add', csv_file, prompts_md_path], check=True)
-
-            # Check if there are actual changes to commit
             diff_result = subprocess.run(['git', 'diff', '--cached', '--quiet'], capture_output=True)
             if diff_result.returncode == 0:
-                # No changes staged, skip this commit
-                print(f"[UPDATE {i}/{len(updated_prompts)}] {act} - no changes, skipping")
+                print(f"[UPDATE {i}/{len(updated_resources)}] {title} - no changes, skipping")
                 continue
 
             env = os.environ.copy()
-            env['GIT_AUTHOR_NAME'] = primary_author
+            env['GIT_AUTHOR_NAME'] = author
             env['GIT_AUTHOR_EMAIL'] = email
-            env['GIT_COMMITTER_NAME'] = primary_author
+            env['GIT_COMMITTER_NAME'] = author
             env['GIT_COMMITTER_EMAIL'] = email
-
-            commit_msg = build_commit_message('Update', act, co_authors)
 
             subprocess.run([
                 'git', 'commit',
-                '-m', commit_msg,
-                f'--author={primary_author} <{email}>'
+                '-m', build_commit_message('Update', title),
+                f'--author={author} <{email}>'
             ], env=env, check=True)
 
-            co_authors_str = f" (+ {', '.join(co_authors)})" if co_authors else ""
-            print(f"[UPDATE {i}/{len(updated_prompts)}] {primary_author}{co_authors_str}: {act}")
+            print(f"[UPDATE {i}/{len(updated_resources)}] {author}: {title}")
 
-    # Process new prompts
-    if new_prompts:
-        print("\nCreating commits for new prompts...")
+    if new_resources:
+        print("\nCreating commits for new resources...")
 
-        for i, row in enumerate(new_prompts, 1):
-            contributor_field = row.get('contributor', '').strip()
-            act = row.get('act', 'Unknown')
+        for i, row in enumerate(new_resources, 1):
+            title = row.get('title', 'Unknown')
+            author = get_author(row)
+            email = f"{author}@users.noreply.github.com"
 
-            primary_author, co_authors = parse_contributors(contributor_field)
-            email = f"{primary_author}@users.noreply.github.com"
-
-            # Append this row to the CSV
             with open(csv_file, 'a', newline='') as f:
                 writer = csv.DictWriter(f, fieldnames=fieldnames)
                 writer.writerow(row)
 
-            # Track in local_prompts
-            local_prompts[act] = row
+            local_resources[title] = row
+            append_resource_to_md(row, resources_md_path)
 
-            # Append only this prompt's block to PROMPTS.md
-            append_prompt_to_md(row, prompts_md_path)
+            subprocess.run(['git', 'add', csv_file, resources_md_path], check=True)
 
-            # Stage and commit
-            subprocess.run(['git', 'add', csv_file, prompts_md_path], check=True)
-
-            # Check if there are actual changes to commit
             diff_result = subprocess.run(['git', 'diff', '--cached', '--quiet'], capture_output=True)
             if diff_result.returncode == 0:
-                print(f"[NEW {i}/{len(new_prompts)}] {act} - no changes, skipping")
+                print(f"[NEW {i}/{len(new_resources)}] {title} - no changes, skipping")
                 continue
 
             env = os.environ.copy()
-            env['GIT_AUTHOR_NAME'] = primary_author
+            env['GIT_AUTHOR_NAME'] = author
             env['GIT_AUTHOR_EMAIL'] = email
-            env['GIT_COMMITTER_NAME'] = primary_author
+            env['GIT_COMMITTER_NAME'] = author
             env['GIT_COMMITTER_EMAIL'] = email
-
-            commit_msg = build_commit_message('Add', act, co_authors)
 
             subprocess.run([
                 'git', 'commit',
-                '-m', commit_msg,
-                f'--author={primary_author} <{email}>'
+                '-m', build_commit_message('Add', title),
+                f'--author={author} <{email}>'
             ], env=env, check=True)
 
-            co_authors_str = f" (+ {', '.join(co_authors)})" if co_authors else ""
-            print(f"[NEW {i}/{len(new_prompts)}] {primary_author}{co_authors_str}: {act}")
+            print(f"[NEW {i}/{len(new_resources)}] {author}: {title}")
 
-    # Process deleted prompts (remove from CSV, commit with original author)
-    if deleted_prompts:
-        print("\nRemoving unlisted/deleted prompts...")
+    if deleted_resources:
+        print("\nRemoving unlisted/deleted resources...")
 
-        for i, row in enumerate(deleted_prompts, 1):
-            contributor_field = row.get('contributor', '').strip()
-            act = row.get('act', 'Unknown')
+        for i, row in enumerate(deleted_resources, 1):
+            title = row.get('title', 'Unknown')
+            author = get_author(row)
+            email = f"{author}@users.noreply.github.com"
 
-            primary_author, co_authors = parse_contributors(contributor_field)
-            email = f"{primary_author}@users.noreply.github.com"
+            if title in local_resources:
+                del local_resources[title]
 
-            # Remove this prompt from local_prompts
-            if act in local_prompts:
-                del local_prompts[act]
-
-            # Rewrite CSV without the deleted prompt
             with open(csv_file, 'w', newline='') as f:
                 writer = csv.DictWriter(f, fieldnames=fieldnames)
                 writer.writeheader()
-                for remaining_act, remaining_row in local_prompts.items():
+                for remaining_title, remaining_row in local_resources.items():
                     writer.writerow(remaining_row)
 
-            # Remove only this prompt's block from PROMPTS.md
-            remove_prompt_from_md(act, prompts_md_path)
+            remove_resource_from_md(title, resources_md_path)
 
-            # Stage and commit
-            subprocess.run(['git', 'add', csv_file, prompts_md_path], check=True)
+            subprocess.run(['git', 'add', csv_file, resources_md_path], check=True)
 
-            # Check if there are actual changes to commit
             diff_result = subprocess.run(['git', 'diff', '--cached', '--quiet'], capture_output=True)
             if diff_result.returncode == 0:
-                print(f"[REMOVE {i}/{len(deleted_prompts)}] {act} - no changes, skipping")
+                print(f"[REMOVE {i}/{len(deleted_resources)}] {title} - no changes, skipping")
                 continue
 
             env = os.environ.copy()
-            env['GIT_AUTHOR_NAME'] = primary_author
+            env['GIT_AUTHOR_NAME'] = author
             env['GIT_AUTHOR_EMAIL'] = email
-            env['GIT_COMMITTER_NAME'] = primary_author
+            env['GIT_COMMITTER_NAME'] = author
             env['GIT_COMMITTER_EMAIL'] = email
-
-            commit_msg = build_commit_message('Remove', act, co_authors)
 
             subprocess.run([
                 'git', 'commit',
-                '-m', commit_msg,
-                f'--author={primary_author} <{email}>'
+                '-m', build_commit_message('Remove', title),
+                f'--author={author} <{email}>'
             ], env=env, check=True)
 
-            co_authors_str = f" (+ {', '.join(co_authors)})" if co_authors else ""
-            print(f"[REMOVE {i}/{len(deleted_prompts)}] {primary_author}{co_authors_str}: {act}")
+            print(f"[REMOVE {i}/{len(deleted_resources)}] {author}: {title}")
 
-    print(f"\nDone! Created {len(new_prompts)} new, {len(updated_prompts)} update, {len(deleted_prompts)} remove commits.")
+    print(f"\nDone! Created {len(new_resources)} new, {len(updated_resources)} update, {len(deleted_resources)} remove commits.")
 
 PYTHON_SCRIPT
 PYTHON_EXIT=$?
@@ -425,6 +354,6 @@ if [ $PYTHON_EXIT -ne 0 ]; then
 fi
 
 echo ""
-echo "Review with: git log --oneline prompts.csv PROMPTS.md"
+echo "Review with: git log --oneline resources.csv RESOURCES.md"
 echo ""
 echo "To push: git push origin main"

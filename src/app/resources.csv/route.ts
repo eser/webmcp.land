@@ -25,6 +25,7 @@ export async function GET() {
       ),
       columns: {
         title: true,
+        slug: true,
         description: true,
         endpointUrl: true,
         serverType: true,
@@ -46,16 +47,18 @@ export async function GET() {
       orderBy: asc(resources.createdAt),
     });
 
-    const headers = ["title", "endpoint_url", "server_type", "status", "category", "author"];
+    const headers = ["title", "description", "endpoint_url", "server_type", "status", "category", "author", "url"];
     const rows = resourcesList.map((resource) => {
       const title = escapeCSVField(resource.title);
+      const description = escapeCSVField(resource.description || "");
       const endpointUrl = escapeCSVField(resource.endpointUrl);
       const serverType = resource.serverType;
       const status = resource.status;
       const category = escapeCSVField(resource.category?.slug || "");
       const author = escapeCSVField(resource.author.githubUsername || resource.author.username);
+      const url = resource.slug ? `https://webmcp.land/registry/${resource.slug}` : "";
 
-      return [title, endpointUrl, serverType, status, category, author].join(",");
+      return [title, description, endpointUrl, serverType, status, category, author, url].join(",");
     });
 
     const csvContent = [headers.join(","), ...rows].join("\n");

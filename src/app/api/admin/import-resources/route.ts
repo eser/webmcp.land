@@ -7,11 +7,14 @@ import fs from "fs/promises";
 import path from "path";
 
 interface CsvRow {
-  act: string;
+  title: string;
+  description: string;
   endpointUrl: string;
   serverType: string;
-  contributor: string;
+  status: string;
   category: string;
+  author: string;
+  url: string;
 }
 
 // Unescape literal escape sequences like \n, \t, etc.
@@ -61,11 +64,14 @@ function parseCSV(content: string): CsvRow[] {
       } else if (values.some(v => v.trim())) {
         // Only add non-empty rows
         rows.push({
-          act: values[0]?.trim() || "",
-          endpointUrl: unescapeString(values[1] || "").trim(),
-          serverType: values[2]?.trim() || "MCP",
-          contributor: values[3]?.trim() || "",
-          category: values[4]?.trim() || "",
+          title: values[0]?.trim() || "",
+          description: unescapeString(values[1] || "").trim(),
+          endpointUrl: unescapeString(values[2] || "").trim(),
+          serverType: values[3]?.trim() || "MCP",
+          status: values[4]?.trim() || "PENDING",
+          category: values[5]?.trim() || "",
+          author: values[6]?.trim() || "",
+          url: values[7]?.trim() || "",
         });
       }
       values.length = 0; // Clear array
@@ -79,11 +85,14 @@ function parseCSV(content: string): CsvRow[] {
     values.push(current);
     if (!isFirstRow && values.some(v => v.trim())) {
       rows.push({
-        act: values[0]?.trim() || "",
-        endpointUrl: unescapeString(values[1] || "").trim(),
-        serverType: values[2]?.trim() || "MCP",
-        contributor: values[3]?.trim() || "",
-        category: values[4]?.trim() || "",
+        title: values[0]?.trim() || "",
+        description: unescapeString(values[1] || "").trim(),
+        endpointUrl: unescapeString(values[2] || "").trim(),
+        serverType: values[3]?.trim() || "MCP",
+        status: values[4]?.trim() || "PENDING",
+        category: values[5]?.trim() || "",
+        author: values[6]?.trim() || "",
+        url: values[7]?.trim() || "",
       });
     }
   }
@@ -190,7 +199,7 @@ export async function POST(request: NextRequest) {
         const [existing] = await db
           .select({ id: resources.id })
           .from(resources)
-          .where(eq(resources.title, row.act))
+          .where(eq(resources.title, row.title))
           .limit(1);
 
         if (existing) {
@@ -199,7 +208,7 @@ export async function POST(request: NextRequest) {
         }
 
         // Get or create contributor user
-        const authorId = await getOrCreateContributor(row.contributor);
+        const authorId = await getOrCreateContributor(row.author);
 
         // Determine server type
         const serverType = mapCsvServerType(row.serverType);
@@ -219,7 +228,8 @@ export async function POST(request: NextRequest) {
         const [resource] = await db
           .insert(resources)
           .values({
-            title: row.act,
+            title: row.title,
+            description: row.description || null,
             endpointUrl: row.endpointUrl,
             serverType,
             isPrivate: false,
@@ -242,7 +252,7 @@ export async function POST(request: NextRequest) {
         imported++;
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : "Unknown error";
-        errors.push(`Failed to import "${row.act}": ${errorMessage}`);
+        errors.push(`Failed to import "${row.title}": ${errorMessage}`);
       }
     }
 
@@ -275,7 +285,7 @@ export async function DELETE(request: NextRequest) {
     const csvContent = await fs.readFile(csvPath, "utf-8");
     const rows = parseCSV(csvContent);
 
-    const titles = rows.map(row => row.act);
+    const titles = rows.map(row => row.title);
 
     // Delete all resources that match the CSV titles
     const result = await db

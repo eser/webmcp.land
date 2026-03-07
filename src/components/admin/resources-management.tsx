@@ -298,7 +298,7 @@ export function ResourcesManagement({ aiSearchEnabled, resourcesWithoutEmbedding
   };
 
   const handleExport = () => {
-    // Direct link to public prompts.csv endpoint
+    // Direct link to public resources.csv endpoint
     window.open("/resources.csv", "_blank");
     toast.success(t("admin.resources.exportSuccess"));
   };

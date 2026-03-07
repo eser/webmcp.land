@@ -1,8 +1,9 @@
 ---
 name: "Spam & Self-Promotion Check"
 description: >
-  Detects spam, self-promotion, and direct prompts.csv edits in issues and PRs.
+  Detects spam, self-promotion, and direct resources.csv edits in issues and PRs.
   Automatically labels detected items as wontfix and closes them with an explanatory comment.
+  Resources and prompts must be submitted through the webmcp.land website, not via direct CSV edits.
 on:
   issues:
     types: [opened, edited]
@@ -51,9 +52,9 @@ Use the GitHub MCP tools to fetch the full content of the triggering issue or pu
 
 Analyze the triggering issue or PR against the following three categories. If **any** category matches, take the corresponding action.
 
-### 1. Direct `prompts.csv` Edits (PRs Only)
+### 1. Direct `resources.csv` Edits (PRs Only)
 
-If the PR modifies the file `prompts.csv`, it should be closed. Prompts must be submitted through the [webmcp.land](https://webmcp.land) website, not via direct CSV edits.
+If the PR modifies the file `resources.csv`, it should be closed. Prompts must be submitted through the [webmcp.land](https://webmcp.land) website, not via direct CSV edits.
 
 **Exceptions — do NOT close if:**
 - The PR author is the repository owner (`f`)
@@ -90,18 +91,19 @@ Flag the item as self-promotion if the title or body matches **two or more** of 
 
 If this rule matches, use the **spam** response template below.
 
-### 4. Prompt Submission via Issue (Issues Only)
+### 4. Resource/Prompt Submission via Issue (Issues Only)
 
-Flag the issue if it appears to be a prompt submission that should have gone through the website. Match if the title or body contains patterns like:
+Flag the issue if it appears to be a resource or prompt submission that should have gone through the website. Match if the title or body contains patterns like:
 
 - "add a prompt", "new prompt", "submit a prompt", "create a prompt"
+- "add a resource", "new resource", "submit a resource", "register a resource"
 - "here is a prompt", "I wrote a prompt", "I created a prompt", "I made a prompt"
-- "please add this prompt", "please add my prompt"
+- "please add this prompt", "please add my prompt", "please add my resource"
 - The body begins with "Act as" or "I want you to act as" (common prompt format)
 
-**Be conservative** — only flag if the intent to submit a prompt (rather than discuss prompts in general) is clear.
+**Be conservative** — only flag if the intent to submit a resource or prompt (rather than discuss them in general) is clear.
 
-If this rule matches, use the **prompt submission** response template below.
+If this rule matches, use the **resource submission** response template below.
 
 ## Actions
 
@@ -113,18 +115,18 @@ When a detection rule matches:
 
 ### Response Templates
 
-#### CSV Edit (PRs modifying `prompts.csv`)
+#### CSV Edit (PRs modifying `resources.csv`)
 
 ```
 👋 Thanks for your interest in contributing!
 
-⚠️ This PR has been automatically closed because it modifies `prompts.csv` directly.
+⚠️ This PR has been automatically closed because it modifies `resources.csv` directly.
 
-To add a new prompt, please use the **[webmcp.land](https://webmcp.land)** website:
+To add a new resource or prompt, please use the **[webmcp.land](https://webmcp.land)** website:
 
 1. **Login with GitHub** at [webmcp.land](https://webmcp.land)
-2. **Create your prompt** using the prompt editor
-3. **Submit** — your prompt will be reviewed and a GitHub Action will automatically create a commit on your behalf
+2. **Create your resource** using the editor
+3. **Submit** — your resource will be reviewed and a GitHub Action will automatically create a commit on your behalf
 
 This ensures proper attribution, formatting, and keeps the repository in sync.
 
@@ -141,18 +143,18 @@ If you believe this is a mistake, please reach out to the maintainers.
 _This is an automated action._
 ```
 
-#### Prompt Submission via Issue
+#### Resource/Prompt Submission via Issue
 
 ```
-👋 Thanks for your interest in contributing a prompt!
+👋 Thanks for your interest in contributing!
 
-⚠️ This issue has been automatically closed because prompt submissions should be made through the website.
+⚠️ This issue has been automatically closed because resource and prompt submissions should be made through the website.
 
-To submit a new prompt, please visit **[webmcp.land/prompts/new](https://webmcp.land/prompts/new)**:
+To submit a new resource or prompt, please visit **[webmcp.land/registry/new](https://webmcp.land/registry/new)**:
 
 1. **Login with GitHub** at [webmcp.land](https://webmcp.land)
-2. **Create your prompt** using the prompt editor
-3. **Submit** — your prompt will be reviewed and added automatically
+2. **Create your resource** using the editor
+3. **Submit** — your resource will be reviewed and added automatically
 
 This ensures proper attribution, formatting, and keeps the repository in sync.
 
@@ -162,6 +164,6 @@ _This is an automated action._
 ## Important Guidelines
 
 - **Be conservative.** Only take action when you have high confidence in the detection. When in doubt, do nothing — a human maintainer can review later.
-- **Never close legitimate contributions.** Bug reports, feature requests, documentation improvements, and code contributions that do not touch `prompts.csv` should never be closed.
+- **Never close legitimate contributions.** Bug reports, feature requests, documentation improvements, and code contributions that do not touch `resources.csv` should never be closed.
 - **Skip bots and the repo owner.** Never flag items from `github-actions[bot]`, `dependabot[bot]`, or the repository owner `f`.
 - **One action per run.** This workflow processes a single triggering item per run. Analyze only the item that triggered the workflow.

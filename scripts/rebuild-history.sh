@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# ONE-TIME SCRIPT: Rebuild prompts.csv git history with contributor ownership
+# ONE-TIME SCRIPT: Rebuild resources.csv git history with contributor ownership
 # This script will:
-# 1. Remove prompts.csv from git history
-# 2. Recreate it with individual commits for each prompt, attributed to their contributors
+# 1. Remove resources.csv from git history
+# 2. Recreate it with individual commits for each resource, attributed to their authors
 #
 # WARNING: This rewrites git history! Only run this once, then delete this script.
 
@@ -11,12 +11,12 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
-CSV_FILE="$PROJECT_DIR/prompts.csv"
-BACKUP_FILE="$PROJECT_DIR/prompts.csv.backup"
+CSV_FILE="$PROJECT_DIR/resources.csv"
+BACKUP_FILE="$PROJECT_DIR/resources.csv.backup"
 
-echo "=== Rebuild prompts.csv History ==="
+echo "=== Rebuild resources.csv History ==="
 echo ""
-echo "WARNING: This will rewrite git history for prompts.csv!"
+echo "WARNING: This will rewrite git history for resources.csv!"
 echo "Make sure you have a backup and coordinate with your team."
 echo ""
 read -p "Continue? (yes/no): " CONFIRM
@@ -25,9 +25,9 @@ if [ "$CONFIRM" != "yes" ]; then
     exit 1
 fi
 
-# Backup current prompts.csv
+# Backup current resources.csv
 cp "$CSV_FILE" "$BACKUP_FILE"
-echo "Backed up prompts.csv to prompts.csv.backup"
+echo "Backed up resources.csv to resources.csv.backup"
 
 # Store current branch
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
@@ -43,15 +43,14 @@ import os
 import io
 import sys
 
-# Increase CSV field size limit to handle large prompt content
 csv.field_size_limit(sys.maxsize)
 
 project_dir = os.environ.get('PROJECT_DIR', '.')
-csv_file = os.path.join(project_dir, 'prompts.csv')
-backup_file = os.path.join(project_dir, 'prompts.csv.backup')
+csv_file = os.path.join(project_dir, 'resources.csv')
+backup_file = os.path.join(project_dir, 'resources.csv.backup')
 
-# Read all prompts from backup (normalize CRLF to LF)
-prompts = []
+# Read all resources from backup (normalize CRLF to LF)
+all_resources = []
 fieldnames = None
 skipped = 0
 with open(backup_file, 'r', newline='', encoding='utf-8') as f:
@@ -61,48 +60,25 @@ with open(backup_file, 'r', newline='', encoding='utf-8') as f:
     while True:
         try:
             row = next(reader)
-            prompts.append(row)
+            all_resources.append(row)
         except csv.Error as e:
             skipped += 1
             print(f"Skipping row due to CSV error: {e}")
         except StopIteration:
             break
 
-print(f"Found {len(prompts)} prompts to process" + (f" (skipped {skipped})" if skipped else ""))
+print(f"Found {len(all_resources)} resources to process" + (f" (skipped {skipped})" if skipped else ""))
 
-# Helper function to parse contributors
-def parse_contributors(contributor_field):
-    """Parse contributor field, returns (primary_author, co_authors_list)"""
-    if not contributor_field:
-        return 'anonymous', []
+def get_author(row):
+    """Get author from row"""
+    return row.get('author', '').strip() or 'anonymous'
 
-    contributors = [c.strip() for c in contributor_field.split(',') if c.strip()]
-
-    if not contributors:
-        return 'anonymous', []
-
-    primary = contributors[0]
-    co_authors = contributors[1:] if len(contributors) > 1 else []
-    return primary, co_authors
-
-def build_commit_message(act, co_authors):
-    """Build commit message with optional co-author trailers"""
-    msg = f'Add prompt: {act}'
-
-    if co_authors:
-        msg += '\n\n'
-        for co_author in co_authors:
-            co_email = f"{co_author}@users.noreply.github.com"
-            msg += f'Co-authored-by: {co_author} <{co_email}>\n'
-
-    return msg
-
-# Remove prompts.csv from git (but keep the file)
-print("\nRemoving prompts.csv from git tracking...")
+# Remove resources.csv from git (but keep the file)
+print("\nRemoving resources.csv from git tracking...")
 subprocess.run(['git', 'rm', '--cached', csv_file], check=False)
 
 # Create empty CSV with header
-print("Creating empty prompts.csv with header...")
+print("Creating empty resources.csv with header...")
 with open(csv_file, 'w', newline='') as f:
     writer = csv.DictWriter(f, fieldnames=fieldnames)
     writer.writeheader()
@@ -111,19 +87,17 @@ with open(csv_file, 'w', newline='') as f:
 subprocess.run(['git', 'add', csv_file], check=True)
 subprocess.run([
     'git', 'commit',
-    '-m', 'Initialize prompts.csv',
+    '-m', 'Initialize resources.csv',
     '--author=f <f@users.noreply.github.com>'
 ], check=True)
 
-print(f"\nCreating {len(prompts)} commits with contributor ownership...")
+print(f"\nCreating {len(all_resources)} commits with author ownership...")
 
-# Add each prompt with proper attribution
-for i, row in enumerate(prompts, 1):
-    contributor_field = row.get('contributor', '').strip()
-    act = row.get('act', 'Unknown')
-
-    primary_author, co_authors = parse_contributors(contributor_field)
-    email = f"{primary_author}@users.noreply.github.com"
+# Add each resource with proper attribution
+for i, row in enumerate(all_resources, 1):
+    title = row.get('title', 'Unknown')
+    author = get_author(row)
+    email = f"{author}@users.noreply.github.com"
 
     # Append this row to the CSV (only include known fieldnames)
     with open(csv_file, 'a', newline='') as f:
@@ -134,23 +108,20 @@ for i, row in enumerate(prompts, 1):
     subprocess.run(['git', 'add', csv_file], check=True)
 
     env = os.environ.copy()
-    env['GIT_AUTHOR_NAME'] = primary_author
+    env['GIT_AUTHOR_NAME'] = author
     env['GIT_AUTHOR_EMAIL'] = email
-    env['GIT_COMMITTER_NAME'] = primary_author
+    env['GIT_COMMITTER_NAME'] = author
     env['GIT_COMMITTER_EMAIL'] = email
-
-    commit_msg = build_commit_message(act, co_authors)
 
     subprocess.run([
         'git', 'commit',
-        '-m', commit_msg,
-        f'--author={primary_author} <{email}>'
+        '-m', f'Add resource: {title}',
+        f'--author={author} <{email}>'
     ], env=env, check=True)
 
-    co_authors_str = f" (+ {', '.join(co_authors)})" if co_authors else ""
-    print(f"[{i}/{len(prompts)}] {primary_author}{co_authors_str}: {act}")
+    print(f"[{i}/{len(all_resources)}] {author}: {title}")
 
-print(f"\nDone! Created {len(prompts)} commits with proper contributor attribution.")
+print(f"\nDone! Created {len(all_resources)} commits with proper author attribution.")
 print("\nTo push (force required since history changed):")
 print("  git push origin main --force")
 
@@ -162,7 +133,7 @@ rm -f "$BACKUP_FILE"
 echo ""
 echo "=== History Rebuilt ==="
 echo ""
-echo "Review with: git log --oneline prompts.csv | head -20"
+echo "Review with: git log --oneline resources.csv | head -20"
 echo ""
 echo "To push (FORCE REQUIRED):"
 echo "  git push origin main --force"

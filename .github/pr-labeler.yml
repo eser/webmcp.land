@@ -17,13 +17,16 @@ frontend:
       - any-glob-to-any-file:
           - "src/components/**"
           - "src/app/(auth)/**"
-          - "src/app/prompts/**"
+          - "src/app/registry/**"
           - "src/app/admin/**"
 
 database:
   - changed-files:
       - any-glob-to-any-file:
           - "drizzle/**"
+          - "src/lib/schema.ts"
+          - "src/lib/db.ts"
+          - "drizzle.config.ts"
 
 infrastructure:
   - changed-files:
