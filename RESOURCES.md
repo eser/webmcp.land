@@ -263,3 +263,18 @@ MCP service for interacting with Redis — get, set, delete keys, manage TTLs, a
 
 </details>
 
+<details>
+<summary><strong>PDF Document Parser</strong> (WEBMCP)</summary>
+
+## PDF Document Parser
+
+WebMCP service for extracting text, tables, and metadata from PDF documents.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** productivity
+- **Author:** [@demo-pat](https://github.com/demo-pat)
+- **Details:** [https://webmcp.land/registry/pdf-document-parser](https://webmcp.land/registry/pdf-document-parser)
+
+</details>
+
