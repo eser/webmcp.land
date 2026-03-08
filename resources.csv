@@ -24,3 +24,4 @@ Google Calendar Sync,"WebMCP service for reading, creating, and managing Google 
 NPM Package Inspector,"MCP service for searching, inspecting, and comparing npm packages — versions, dependencies, and downloads.",,WEBMCP,PENDING,developer-tools,demo-casey,https://webmcp.land/registry/npm-package-inspector
 Notion Page Manager,"WebMCP service for creating, reading, updating, and searching pages in Notion workspaces.",,WEBMCP,PENDING,productivity,demo-taylor,https://webmcp.land/registry/notion-page-manager
 SSL Certificate Checker,"MCP service for verifying SSL/TLS certificates — expiry dates, chain validity, and cipher suites.",,WEBMCP,PENDING,security,demo-riley,https://webmcp.land/registry/ssl-certificate-checker
+Translation Service,WebMCP service for translating text between 50+ languages with automatic language detection.,,WEBMCP,PENDING,ai-ml,demo-morgan,https://webmcp.land/registry/translation-service

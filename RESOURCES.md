@@ -383,3 +383,18 @@ MCP service for verifying SSL/TLS certificates — expiry dates, chain validity,
 
 </details>
 
+<details>
+<summary><strong>Translation Service</strong> (WEBMCP)</summary>
+
+## Translation Service
+
+WebMCP service for translating text between 50+ languages with automatic language detection.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** ai-ml
+- **Author:** [@demo-morgan](https://github.com/demo-morgan)
+- **Details:** [https://webmcp.land/registry/translation-service](https://webmcp.land/registry/translation-service)
+
+</details>
+
