@@ -68,3 +68,18 @@ MCP service for managing Docker containers — start, stop, inspect, and monitor
 
 </details>
 
+<details>
+<summary><strong>Stripe Payment Gateway</strong> (WEBMCP)</summary>
+
+## Stripe Payment Gateway
+
+WebMCP service for processing payments, managing subscriptions, and handling invoices via Stripe.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** finance
+- **Author:** [@demo-morgan](https://github.com/demo-morgan)
+- **Details:** [https://webmcp.land/registry/stripe-payment-gateway](https://webmcp.land/registry/stripe-payment-gateway)
+
+</details>
+
