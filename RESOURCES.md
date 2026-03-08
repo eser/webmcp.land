@@ -443,3 +443,18 @@ WebMCP service for sending SMS messages, managing phone numbers, and checking de
 
 </details>
 
+<details>
+<summary><strong>Terraform State Viewer</strong> (WEBMCP)</summary>
+
+## Terraform State Viewer
+
+MCP service for inspecting Terraform state files, resource dependencies, and drift detection.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** cloud-services
+- **Author:** [@demo-sam](https://github.com/demo-sam)
+- **Details:** [https://webmcp.land/registry/terraform-state-viewer](https://webmcp.land/registry/terraform-state-viewer)
+
+</details>
+

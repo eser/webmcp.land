@@ -28,3 +28,4 @@ Translation Service,WebMCP service for translating text between 50+ languages wi
 GitHub Actions Runner,"MCP service for triggering, listing, and inspecting GitHub Actions workflow runs.",,WEBMCP,PENDING,devops,demo-avery,https://webmcp.land/registry/github-actions-runner
 MongoDB Query Tool,"MCP service for querying, inserting, updating, and aggregating documents in MongoDB collections.",,WEBMCP,PENDING,data-analytics,demo-pat,https://webmcp.land/registry/mongodb-query-tool
 Twilio SMS Gateway,"WebMCP service for sending SMS messages, managing phone numbers, and checking delivery status via Twilio.",,WEBMCP,PENDING,communication,demo-quinn,https://webmcp.land/registry/twilio-sms-gateway
+Terraform State Viewer,"MCP service for inspecting Terraform state files, resource dependencies, and drift detection.",,WEBMCP,PENDING,cloud-services,demo-sam,https://webmcp.land/registry/terraform-state-viewer
