@@ -7,3 +7,4 @@ Stripe Payment Gateway,"WebMCP service for processing payments, managing subscri
 Email Sender Service,"MCP service for composing and sending emails, managing templates, and tracking delivery status.",,WEBMCP,PENDING,communication,demo-casey,https://webmcp.land/registry/email-sender-service
 Kubernetes Cluster Monitor,"MCP service for monitoring Kubernetes clusters — pod status, resource usage, and alerts.",,WEBMCP,PENDING,devops,demo-riley,https://webmcp.land/registry/kubernetes-cluster-monitor
 OpenAI Chat Proxy,"WebMCP proxy service for OpenAI chat completions with caching, rate limiting, and usage tracking.",,WEBMCP,PENDING,ai-ml,demo-avery,https://webmcp.land/registry/openai-chat-proxy
+File System Browser,"MCP service for browsing, reading, and searching files in a sandboxed directory tree.",,WEBMCP,PENDING,developer-tools,demo-pat,https://webmcp.land/registry/file-system-browser

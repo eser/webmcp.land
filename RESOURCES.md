@@ -128,3 +128,18 @@ WebMCP proxy service for OpenAI chat completions with caching, rate limiting, an
 
 </details>
 
+<details>
+<summary><strong>File System Browser</strong> (WEBMCP)</summary>
+
+## File System Browser
+
+MCP service for browsing, reading, and searching files in a sandboxed directory tree.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** developer-tools
+- **Author:** [@demo-pat](https://github.com/demo-pat)
+- **Details:** [https://webmcp.land/registry/file-system-browser](https://webmcp.land/registry/file-system-browser)
+
+</details>
+
