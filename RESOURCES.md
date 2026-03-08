@@ -173,3 +173,18 @@ MCP service for triggering, monitoring, and managing CI/CD pipeline runs across 
 
 </details>
 
+<details>
+<summary><strong>PostgreSQL Admin Tools</strong> (WEBMCP)</summary>
+
+## PostgreSQL Admin Tools
+
+MCP service for PostgreSQL administration — run queries, manage schemas, view stats, and optimize performance.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** data-analytics
+- **Author:** [@demo-jordan](https://github.com/demo-jordan)
+- **Details:** [https://webmcp.land/registry/postgresql-admin-tools](https://webmcp.land/registry/postgresql-admin-tools)
+
+</details>
+
