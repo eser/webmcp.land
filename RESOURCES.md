@@ -653,3 +653,18 @@ MCP service for parsing, searching, and analyzing application logs with pattern 
 
 </details>
 
+<details>
+<summary><strong>Vercel Deployment Manager</strong> (WEBMCP)</summary>
+
+## Vercel Deployment Manager
+
+WebMCP service for deploying, previewing, and managing Vercel projects and serverless functions.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** cloud-services
+- **Author:** [@demo-morgan](https://github.com/demo-morgan)
+- **Details:** [https://webmcp.land/registry/vercel-deployment-manager](https://webmcp.land/registry/vercel-deployment-manager)
+
+</details>
+
