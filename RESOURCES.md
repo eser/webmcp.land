@@ -743,3 +743,18 @@ WebMCP service for syncing, creating, and managing Linear issues and project boa
 
 </details>
 
+<details>
+<summary><strong>API Rate Limiter</strong> (WEBMCP)</summary>
+
+## API Rate Limiter
+
+MCP service for implementing and managing API rate limiting with sliding window and token bucket algorithms.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** developer-tools
+- **Author:** [@demo-sam](https://github.com/demo-sam)
+- **Details:** [https://webmcp.land/registry/api-rate-limiter](https://webmcp.land/registry/api-rate-limiter)
+
+</details>
+

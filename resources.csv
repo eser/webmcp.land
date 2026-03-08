@@ -48,3 +48,4 @@ Embeddings Generator,"WebMCP service for generating text embeddings using multip
 Secrets Vault,"MCP service for securely storing and retrieving secrets, API keys, and configuration values.",,WEBMCP,PENDING,security,demo-avery,https://webmcp.land/registry/secrets-vault
 Sitemap Generator,WebMCP service for crawling websites and generating XML sitemaps with priority and frequency settings.,,WEBMCP,PENDING,developer-tools,demo-pat,https://webmcp.land/registry/sitemap-generator
 Linear Issue Sync,"WebMCP service for syncing, creating, and managing Linear issues and project boards.",,WEBMCP,PENDING,productivity,demo-quinn,https://webmcp.land/registry/linear-issue-sync
+API Rate Limiter,MCP service for implementing and managing API rate limiting with sliding window and token bucket algorithms.,,WEBMCP,PENDING,developer-tools,demo-sam,https://webmcp.land/registry/api-rate-limiter
