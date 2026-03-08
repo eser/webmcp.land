@@ -458,3 +458,18 @@ MCP service for inspecting Terraform state files, resource dependencies, and dri
 
 </details>
 
+<details>
+<summary><strong>Markdown to HTML Converter</strong> (WEBMCP)</summary>
+
+## Markdown to HTML Converter
+
+WebMCP service for converting Markdown documents to styled HTML with syntax highlighting and TOC generation.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** developer-tools
+- **Author:** [@demo-alex](https://github.com/demo-alex)
+- **Details:** [https://webmcp.land/registry/markdown-to-html-converter](https://webmcp.land/registry/markdown-to-html-converter)
+
+</details>
+
