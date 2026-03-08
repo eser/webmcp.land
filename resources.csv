@@ -2,3 +2,4 @@ title,description,endpoint_url,server_type,status,category,author,url
 GitHub Repository Manager,"MCP service for managing GitHub repositories — create, list, search, and configure repos programmatically.",,WEBMCP,PENDING,developer-tools,demo-alex,https://webmcp.land/registry/github-repository-manager
 SQL Query Builder,WebMCP service that generates and executes SQL queries from natural language descriptions.,,WEBMCP,PENDING,data-analytics,demo-jordan,https://webmcp.land/registry/sql-query-builder
 Slack Notifier,"MCP service for sending messages, managing channels, and reading threads in Slack workspaces.",,WEBMCP,PENDING,communication,demo-sam,https://webmcp.land/registry/slack-notifier
+Docker Container Manager,"MCP service for managing Docker containers — start, stop, inspect, and monitor running containers.",,WEBMCP,PENDING,devops,demo-taylor,https://webmcp.land/registry/docker-container-manager

@@ -53,3 +53,18 @@ MCP service for sending messages, managing channels, and reading threads in Slac
 
 </details>
 
+<details>
+<summary><strong>Docker Container Manager</strong> (WEBMCP)</summary>
+
+## Docker Container Manager
+
+MCP service for managing Docker containers — start, stop, inspect, and monitor running containers.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** devops
+- **Author:** [@demo-taylor](https://github.com/demo-taylor)
+- **Details:** [https://webmcp.land/registry/docker-container-manager](https://webmcp.land/registry/docker-container-manager)
+
+</details>
+
