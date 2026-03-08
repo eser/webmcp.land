@@ -1,1 +1,2 @@
 title,description,endpoint_url,server_type,status,category,author,url
+GitHub Repository Manager,"MCP service for managing GitHub repositories — create, list, search, and configure repos programmatically.",,WEBMCP,PENDING,developer-tools,demo-alex,https://webmcp.land/registry/github-repository-manager
