@@ -12,3 +12,4 @@ Weather Forecast API,"WebMCP service providing real-time weather data, forecasts
 CI/CD Pipeline Runner,"MCP service for triggering, monitoring, and managing CI/CD pipeline runs across platforms.",,WEBMCP,PENDING,devops,demo-alex,https://webmcp.land/registry/cicd-pipeline-runner
 PostgreSQL Admin Tools,"MCP service for PostgreSQL administration — run queries, manage schemas, view stats, and optimize performance.",,WEBMCP,PENDING,data-analytics,demo-jordan,https://webmcp.land/registry/postgresql-admin-tools
 Image Resizer & Optimizer,"WebMCP service for resizing, compressing, and converting images in various formats.",,WEBMCP,PENDING,media-entertainment,demo-casey,https://webmcp.land/registry/image-resizer-optimizer
+AWS S3 File Manager,"MCP service for uploading, downloading, listing, and managing files in AWS S3 buckets.",,WEBMCP,PENDING,cloud-services,demo-taylor,https://webmcp.land/registry/aws-s3-file-manager

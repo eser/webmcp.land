@@ -203,3 +203,18 @@ WebMCP service for resizing, compressing, and converting images in various forma
 
 </details>
 
+<details>
+<summary><strong>AWS S3 File Manager</strong> (WEBMCP)</summary>
+
+## AWS S3 File Manager
+
+MCP service for uploading, downloading, listing, and managing files in AWS S3 buckets.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** cloud-services
+- **Author:** [@demo-taylor](https://github.com/demo-taylor)
+- **Details:** [https://webmcp.land/registry/aws-s3-file-manager](https://webmcp.land/registry/aws-s3-file-manager)
+
+</details>
+
