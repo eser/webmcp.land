@@ -158,3 +158,18 @@ WebMCP service providing real-time weather data, forecasts, and severe weather a
 
 </details>
 
+<details>
+<summary><strong>CI/CD Pipeline Runner</strong> (WEBMCP)</summary>
+
+## CI/CD Pipeline Runner
+
+MCP service for triggering, monitoring, and managing CI/CD pipeline runs across platforms.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** devops
+- **Author:** [@demo-alex](https://github.com/demo-alex)
+- **Details:** [https://webmcp.land/registry/cicd-pipeline-runner](https://webmcp.land/registry/cicd-pipeline-runner)
+
+</details>
+
