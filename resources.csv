@@ -8,3 +8,4 @@ Email Sender Service,"MCP service for composing and sending emails, managing tem
 Kubernetes Cluster Monitor,"MCP service for monitoring Kubernetes clusters — pod status, resource usage, and alerts.",,WEBMCP,PENDING,devops,demo-riley,https://webmcp.land/registry/kubernetes-cluster-monitor
 OpenAI Chat Proxy,"WebMCP proxy service for OpenAI chat completions with caching, rate limiting, and usage tracking.",,WEBMCP,PENDING,ai-ml,demo-avery,https://webmcp.land/registry/openai-chat-proxy
 File System Browser,"MCP service for browsing, reading, and searching files in a sandboxed directory tree.",,WEBMCP,PENDING,developer-tools,demo-pat,https://webmcp.land/registry/file-system-browser
+Weather Forecast API,"WebMCP service providing real-time weather data, forecasts, and severe weather alerts by location.",,WEBMCP,PENDING,information,demo-quinn,https://webmcp.land/registry/weather-forecast-api

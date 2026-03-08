@@ -143,3 +143,18 @@ MCP service for browsing, reading, and searching files in a sandboxed directory 
 
 </details>
 
+<details>
+<summary><strong>Weather Forecast API</strong> (WEBMCP)</summary>
+
+## Weather Forecast API
+
+WebMCP service providing real-time weather data, forecasts, and severe weather alerts by location.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** information
+- **Author:** [@demo-quinn](https://github.com/demo-quinn)
+- **Details:** [https://webmcp.land/registry/weather-forecast-api](https://webmcp.land/registry/weather-forecast-api)
+
+</details>
+
