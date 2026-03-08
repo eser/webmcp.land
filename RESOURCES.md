@@ -668,3 +668,18 @@ WebMCP service for deploying, previewing, and managing Vercel projects and serve
 
 </details>
 
+<details>
+<summary><strong>JSON Schema Validator</strong> (WEBMCP)</summary>
+
+## JSON Schema Validator
+
+MCP service for validating JSON documents against schemas, generating schemas from samples, and converting formats.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** developer-tools
+- **Author:** [@demo-casey](https://github.com/demo-casey)
+- **Details:** [https://webmcp.land/registry/json-schema-validator](https://webmcp.land/registry/json-schema-validator)
+
+</details>
+

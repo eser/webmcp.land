@@ -43,3 +43,4 @@ OAuth Token Manager,"MCP service for managing OAuth2 tokens — refresh, revoke,
 CSV Data Processor,"WebMCP service for parsing, transforming, filtering, and exporting CSV data with column mapping support.",,WEBMCP,PENDING,data-analytics,demo-jordan,https://webmcp.land/registry/csv-data-processor
 Log Analyzer,"MCP service for parsing, searching, and analyzing application logs with pattern detection and alerting.",,WEBMCP,PENDING,devops,demo-taylor,https://webmcp.land/registry/log-analyzer
 Vercel Deployment Manager,"WebMCP service for deploying, previewing, and managing Vercel projects and serverless functions.",,WEBMCP,PENDING,cloud-services,demo-morgan,https://webmcp.land/registry/vercel-deployment-manager
+JSON Schema Validator,"MCP service for validating JSON documents against schemas, generating schemas from samples, and converting formats.",,WEBMCP,PENDING,developer-tools,demo-casey,https://webmcp.land/registry/json-schema-validator
