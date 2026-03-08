@@ -293,3 +293,18 @@ MCP service for performing DNS queries — A, AAAA, MX, CNAME, TXT, and NS recor
 
 </details>
 
+<details>
+<summary><strong>Figma Design Exporter</strong> (WEBMCP)</summary>
+
+## Figma Design Exporter
+
+WebMCP service for exporting Figma frames, components, and assets as images or SVGs.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** design
+- **Author:** [@demo-sam](https://github.com/demo-sam)
+- **Details:** [https://webmcp.land/registry/figma-design-exporter](https://webmcp.land/registry/figma-design-exporter)
+
+</details>
+
