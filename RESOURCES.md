@@ -23,3 +23,18 @@ MCP service for managing GitHub repositories — create, list, search, and confi
 
 </details>
 
+<details>
+<summary><strong>SQL Query Builder</strong> (WEBMCP)</summary>
+
+## SQL Query Builder
+
+WebMCP service that generates and executes SQL queries from natural language descriptions.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** data-analytics
+- **Author:** [@demo-jordan](https://github.com/demo-jordan)
+- **Details:** [https://webmcp.land/registry/sql-query-builder](https://webmcp.land/registry/sql-query-builder)
+
+</details>
+

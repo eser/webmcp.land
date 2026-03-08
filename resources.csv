@@ -1,2 +1,3 @@
 title,description,endpoint_url,server_type,status,category,author,url
 GitHub Repository Manager,"MCP service for managing GitHub repositories — create, list, search, and configure repos programmatically.",,WEBMCP,PENDING,developer-tools,demo-alex,https://webmcp.land/registry/github-repository-manager
+SQL Query Builder,WebMCP service that generates and executes SQL queries from natural language descriptions.,,WEBMCP,PENDING,data-analytics,demo-jordan,https://webmcp.land/registry/sql-query-builder
