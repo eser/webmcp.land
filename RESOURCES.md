@@ -113,3 +113,18 @@ MCP service for monitoring Kubernetes clusters — pod status, resource usage, a
 
 </details>
 
+<details>
+<summary><strong>OpenAI Chat Proxy</strong> (WEBMCP)</summary>
+
+## OpenAI Chat Proxy
+
+WebMCP proxy service for OpenAI chat completions with caching, rate limiting, and usage tracking.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** ai-ml
+- **Author:** [@demo-avery](https://github.com/demo-avery)
+- **Details:** [https://webmcp.land/registry/openai-chat-proxy](https://webmcp.land/registry/openai-chat-proxy)
+
+</details>
+

@@ -6,3 +6,4 @@ Docker Container Manager,"MCP service for managing Docker containers — start, 
 Stripe Payment Gateway,"WebMCP service for processing payments, managing subscriptions, and handling invoices via Stripe.",,WEBMCP,PENDING,finance,demo-morgan,https://webmcp.land/registry/stripe-payment-gateway
 Email Sender Service,"MCP service for composing and sending emails, managing templates, and tracking delivery status.",,WEBMCP,PENDING,communication,demo-casey,https://webmcp.land/registry/email-sender-service
 Kubernetes Cluster Monitor,"MCP service for monitoring Kubernetes clusters — pod status, resource usage, and alerts.",,WEBMCP,PENDING,devops,demo-riley,https://webmcp.land/registry/kubernetes-cluster-monitor
+OpenAI Chat Proxy,"WebMCP proxy service for OpenAI chat completions with caching, rate limiting, and usage tracking.",,WEBMCP,PENDING,ai-ml,demo-avery,https://webmcp.land/registry/openai-chat-proxy
