@@ -41,3 +41,4 @@ Discord Bot Controller,"MCP service for managing Discord bots — send messages,
 Cron Job Scheduler,"WebMCP service for scheduling, managing, and monitoring cron jobs with retry logic and failure alerts.",,WEBMCP,PENDING,devops,demo-sam,https://webmcp.land/registry/cron-job-scheduler
 OAuth Token Manager,"MCP service for managing OAuth2 tokens — refresh, revoke, introspect, and generate tokens for multiple providers.",,WEBMCP,PENDING,security,demo-alex,https://webmcp.land/registry/oauth-token-manager
 CSV Data Processor,"WebMCP service for parsing, transforming, filtering, and exporting CSV data with column mapping support.",,WEBMCP,PENDING,data-analytics,demo-jordan,https://webmcp.land/registry/csv-data-processor
+Log Analyzer,"MCP service for parsing, searching, and analyzing application logs with pattern detection and alerting.",,WEBMCP,PENDING,devops,demo-taylor,https://webmcp.land/registry/log-analyzer

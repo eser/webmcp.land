@@ -638,3 +638,18 @@ WebMCP service for parsing, transforming, filtering, and exporting CSV data with
 
 </details>
 
+<details>
+<summary><strong>Log Analyzer</strong> (WEBMCP)</summary>
+
+## Log Analyzer
+
+MCP service for parsing, searching, and analyzing application logs with pattern detection and alerting.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** devops
+- **Author:** [@demo-taylor](https://github.com/demo-taylor)
+- **Details:** [https://webmcp.land/registry/log-analyzer](https://webmcp.land/registry/log-analyzer)
+
+</details>
+
