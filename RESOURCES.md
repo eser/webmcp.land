@@ -728,3 +728,18 @@ WebMCP service for crawling websites and generating XML sitemaps with priority a
 
 </details>
 
+<details>
+<summary><strong>Linear Issue Sync</strong> (WEBMCP)</summary>
+
+## Linear Issue Sync
+
+WebMCP service for syncing, creating, and managing Linear issues and project boards.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** productivity
+- **Author:** [@demo-quinn](https://github.com/demo-quinn)
+- **Details:** [https://webmcp.land/registry/linear-issue-sync](https://webmcp.land/registry/linear-issue-sync)
+
+</details>
+
