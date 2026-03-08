@@ -368,3 +368,18 @@ WebMCP service for creating, reading, updating, and searching pages in Notion wo
 
 </details>
 
+<details>
+<summary><strong>SSL Certificate Checker</strong> (WEBMCP)</summary>
+
+## SSL Certificate Checker
+
+MCP service for verifying SSL/TLS certificates — expiry dates, chain validity, and cipher suites.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** security
+- **Author:** [@demo-riley](https://github.com/demo-riley)
+- **Details:** [https://webmcp.land/registry/ssl-certificate-checker](https://webmcp.land/registry/ssl-certificate-checker)
+
+</details>
+
