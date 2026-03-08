@@ -563,3 +563,18 @@ WebMCP service providing real-time and historical currency exchange rates for 16
 
 </details>
 
+<details>
+<summary><strong>Elasticsearch Query Builder</strong> (WEBMCP)</summary>
+
+## Elasticsearch Query Builder
+
+MCP service for building and executing Elasticsearch queries, managing indices, and viewing cluster health.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** data-analytics
+- **Author:** [@demo-pat](https://github.com/demo-pat)
+- **Details:** [https://webmcp.land/registry/elasticsearch-query-builder](https://webmcp.land/registry/elasticsearch-query-builder)
+
+</details>
+
