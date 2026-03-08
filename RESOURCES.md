@@ -488,3 +488,18 @@ MCP service for managing Cloudflare DNS zones and records — create, update, de
 
 </details>
 
+<details>
+<summary><strong>Code Review Assistant</strong> (WEBMCP)</summary>
+
+## Code Review Assistant
+
+WebMCP service that analyzes pull requests and provides code review feedback on style, bugs, and security.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** developer-tools
+- **Author:** [@demo-taylor](https://github.com/demo-taylor)
+- **Details:** [https://webmcp.land/registry/code-review-assistant](https://webmcp.land/registry/code-review-assistant)
+
+</details>
+
