@@ -218,3 +218,18 @@ MCP service for uploading, downloading, listing, and managing files in AWS S3 bu
 
 </details>
 
+<details>
+<summary><strong>Jira Issue Tracker</strong> (WEBMCP)</summary>
+
+## Jira Issue Tracker
+
+WebMCP service for creating, updating, and querying Jira issues and sprint boards.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** productivity
+- **Author:** [@demo-morgan](https://github.com/demo-morgan)
+- **Details:** [https://webmcp.land/registry/jira-issue-tracker](https://webmcp.land/registry/jira-issue-tracker)
+
+</details>
+
