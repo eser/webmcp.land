@@ -548,3 +548,18 @@ WebMCP service for receiving, inspecting, replaying, and forwarding webhooks fro
 
 </details>
 
+<details>
+<summary><strong>Currency Exchange Rates</strong> (WEBMCP)</summary>
+
+## Currency Exchange Rates
+
+WebMCP service providing real-time and historical currency exchange rates for 160+ currencies.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** finance
+- **Author:** [@demo-avery](https://github.com/demo-avery)
+- **Details:** [https://webmcp.land/registry/currency-exchange-rates](https://webmcp.land/registry/currency-exchange-rates)
+
+</details>
+

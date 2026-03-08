@@ -35,3 +35,4 @@ Code Review Assistant,"WebMCP service that analyzes pull requests and provides c
 GraphQL Playground,"MCP service for introspecting GraphQL schemas, running queries, and testing mutations against any endpoint.",,WEBMCP,PENDING,developer-tools,demo-morgan,https://webmcp.land/registry/graphql-playground
 Prometheus Metrics Exporter,"MCP service for querying Prometheus metrics, setting up alerts, and generating dashboards.",,WEBMCP,PENDING,devops,demo-riley,https://webmcp.land/registry/prometheus-metrics-exporter
 Webhook Relay,"WebMCP service for receiving, inspecting, replaying, and forwarding webhooks from any source.",,WEBMCP,PENDING,developer-tools,demo-casey,https://webmcp.land/registry/webhook-relay
+Currency Exchange Rates,WebMCP service providing real-time and historical currency exchange rates for 160+ currencies.,,WEBMCP,PENDING,finance,demo-avery,https://webmcp.land/registry/currency-exchange-rates
