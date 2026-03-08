@@ -353,3 +353,18 @@ MCP service for searching, inspecting, and comparing npm packages — versions, 
 
 </details>
 
+<details>
+<summary><strong>Notion Page Manager</strong> (WEBMCP)</summary>
+
+## Notion Page Manager
+
+WebMCP service for creating, reading, updating, and searching pages in Notion workspaces.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** productivity
+- **Author:** [@demo-taylor](https://github.com/demo-taylor)
+- **Details:** [https://webmcp.land/registry/notion-page-manager](https://webmcp.land/registry/notion-page-manager)
+
+</details>
+
