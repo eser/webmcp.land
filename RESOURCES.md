@@ -248,3 +248,18 @@ WebMCP service for converting text to natural-sounding speech in multiple langua
 
 </details>
 
+<details>
+<summary><strong>Redis Cache Manager</strong> (WEBMCP)</summary>
+
+## Redis Cache Manager
+
+MCP service for interacting with Redis — get, set, delete keys, manage TTLs, and monitor cache stats.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** developer-tools
+- **Author:** [@demo-avery](https://github.com/demo-avery)
+- **Details:** [https://webmcp.land/registry/redis-cache-manager](https://webmcp.land/registry/redis-cache-manager)
+
+</details>
+
