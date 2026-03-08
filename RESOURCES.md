@@ -233,3 +233,18 @@ WebMCP service for creating, updating, and querying Jira issues and sprint board
 
 </details>
 
+<details>
+<summary><strong>Text-to-Speech Generator</strong> (WEBMCP)</summary>
+
+## Text-to-Speech Generator
+
+WebMCP service for converting text to natural-sounding speech in multiple languages and voices.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** ai-ml
+- **Author:** [@demo-riley](https://github.com/demo-riley)
+- **Details:** [https://webmcp.land/registry/text-to-speech-generator](https://webmcp.land/registry/text-to-speech-generator)
+
+</details>
+

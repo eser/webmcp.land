@@ -14,3 +14,4 @@ PostgreSQL Admin Tools,"MCP service for PostgreSQL administration — run querie
 Image Resizer & Optimizer,"WebMCP service for resizing, compressing, and converting images in various formats.",,WEBMCP,PENDING,media-entertainment,demo-casey,https://webmcp.land/registry/image-resizer-optimizer
 AWS S3 File Manager,"MCP service for uploading, downloading, listing, and managing files in AWS S3 buckets.",,WEBMCP,PENDING,cloud-services,demo-taylor,https://webmcp.land/registry/aws-s3-file-manager
 Jira Issue Tracker,"WebMCP service for creating, updating, and querying Jira issues and sprint boards.",,WEBMCP,PENDING,productivity,demo-morgan,https://webmcp.land/registry/jira-issue-tracker
+Text-to-Speech Generator,WebMCP service for converting text to natural-sounding speech in multiple languages and voices.,,WEBMCP,PENDING,ai-ml,demo-riley,https://webmcp.land/registry/text-to-speech-generator
