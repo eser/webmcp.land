@@ -713,3 +713,18 @@ MCP service for securely storing and retrieving secrets, API keys, and configura
 
 </details>
 
+<details>
+<summary><strong>Sitemap Generator</strong> (WEBMCP)</summary>
+
+## Sitemap Generator
+
+WebMCP service for crawling websites and generating XML sitemaps with priority and frequency settings.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** developer-tools
+- **Author:** [@demo-pat](https://github.com/demo-pat)
+- **Details:** [https://webmcp.land/registry/sitemap-generator](https://webmcp.land/registry/sitemap-generator)
+
+</details>
+
