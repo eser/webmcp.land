@@ -623,3 +623,18 @@ MCP service for managing OAuth2 tokens — refresh, revoke, introspect, and gene
 
 </details>
 
+<details>
+<summary><strong>CSV Data Processor</strong> (WEBMCP)</summary>
+
+## CSV Data Processor
+
+WebMCP service for parsing, transforming, filtering, and exporting CSV data with column mapping support.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** data-analytics
+- **Author:** [@demo-jordan](https://github.com/demo-jordan)
+- **Details:** [https://webmcp.land/registry/csv-data-processor](https://webmcp.land/registry/csv-data-processor)
+
+</details>
+
