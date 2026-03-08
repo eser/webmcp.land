@@ -26,3 +26,4 @@ Notion Page Manager,"WebMCP service for creating, reading, updating, and searchi
 SSL Certificate Checker,"MCP service for verifying SSL/TLS certificates — expiry dates, chain validity, and cipher suites.",,WEBMCP,PENDING,security,demo-riley,https://webmcp.land/registry/ssl-certificate-checker
 Translation Service,WebMCP service for translating text between 50+ languages with automatic language detection.,,WEBMCP,PENDING,ai-ml,demo-morgan,https://webmcp.land/registry/translation-service
 GitHub Actions Runner,"MCP service for triggering, listing, and inspecting GitHub Actions workflow runs.",,WEBMCP,PENDING,devops,demo-avery,https://webmcp.land/registry/github-actions-runner
+MongoDB Query Tool,"MCP service for querying, inserting, updating, and aggregating documents in MongoDB collections.",,WEBMCP,PENDING,data-analytics,demo-pat,https://webmcp.land/registry/mongodb-query-tool

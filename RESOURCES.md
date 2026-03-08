@@ -413,3 +413,18 @@ MCP service for triggering, listing, and inspecting GitHub Actions workflow runs
 
 </details>
 
+<details>
+<summary><strong>MongoDB Query Tool</strong> (WEBMCP)</summary>
+
+## MongoDB Query Tool
+
+MCP service for querying, inserting, updating, and aggregating documents in MongoDB collections.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** data-analytics
+- **Author:** [@demo-pat](https://github.com/demo-pat)
+- **Details:** [https://webmcp.land/registry/mongodb-query-tool](https://webmcp.land/registry/mongodb-query-tool)
+
+</details>
+
