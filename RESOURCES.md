@@ -593,3 +593,18 @@ MCP service for managing Discord bots — send messages, manage roles, moderate 
 
 </details>
 
+<details>
+<summary><strong>Cron Job Scheduler</strong> (WEBMCP)</summary>
+
+## Cron Job Scheduler
+
+WebMCP service for scheduling, managing, and monitoring cron jobs with retry logic and failure alerts.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** devops
+- **Author:** [@demo-sam](https://github.com/demo-sam)
+- **Details:** [https://webmcp.land/registry/cron-job-scheduler](https://webmcp.land/registry/cron-job-scheduler)
+
+</details>
+
