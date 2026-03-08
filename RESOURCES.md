@@ -698,3 +698,18 @@ WebMCP service for generating text embeddings using multiple models, with simila
 
 </details>
 
+<details>
+<summary><strong>Secrets Vault</strong> (WEBMCP)</summary>
+
+## Secrets Vault
+
+MCP service for securely storing and retrieving secrets, API keys, and configuration values.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** security
+- **Author:** [@demo-avery](https://github.com/demo-avery)
+- **Details:** [https://webmcp.land/registry/secrets-vault](https://webmcp.land/registry/secrets-vault)
+
+</details>
+

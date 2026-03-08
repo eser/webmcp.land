@@ -45,3 +45,4 @@ Log Analyzer,"MCP service for parsing, searching, and analyzing application logs
 Vercel Deployment Manager,"WebMCP service for deploying, previewing, and managing Vercel projects and serverless functions.",,WEBMCP,PENDING,cloud-services,demo-morgan,https://webmcp.land/registry/vercel-deployment-manager
 JSON Schema Validator,"MCP service for validating JSON documents against schemas, generating schemas from samples, and converting formats.",,WEBMCP,PENDING,developer-tools,demo-casey,https://webmcp.land/registry/json-schema-validator
 Embeddings Generator,"WebMCP service for generating text embeddings using multiple models, with similarity search and clustering.",,WEBMCP,PENDING,ai-ml,demo-riley,https://webmcp.land/registry/embeddings-generator
+Secrets Vault,"MCP service for securely storing and retrieving secrets, API keys, and configuration values.",,WEBMCP,PENDING,security,demo-avery,https://webmcp.land/registry/secrets-vault
