@@ -4,3 +4,4 @@ SQL Query Builder,WebMCP service that generates and executes SQL queries from na
 Slack Notifier,"MCP service for sending messages, managing channels, and reading threads in Slack workspaces.",,WEBMCP,PENDING,communication,demo-sam,https://webmcp.land/registry/slack-notifier
 Docker Container Manager,"MCP service for managing Docker containers — start, stop, inspect, and monitor running containers.",,WEBMCP,PENDING,devops,demo-taylor,https://webmcp.land/registry/docker-container-manager
 Stripe Payment Gateway,"WebMCP service for processing payments, managing subscriptions, and handling invoices via Stripe.",,WEBMCP,PENDING,finance,demo-morgan,https://webmcp.land/registry/stripe-payment-gateway
+Email Sender Service,"MCP service for composing and sending emails, managing templates, and tracking delivery status.",,WEBMCP,PENDING,communication,demo-casey,https://webmcp.land/registry/email-sender-service

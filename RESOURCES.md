@@ -83,3 +83,18 @@ WebMCP service for processing payments, managing subscriptions, and handling inv
 
 </details>
 
+<details>
+<summary><strong>Email Sender Service</strong> (WEBMCP)</summary>
+
+## Email Sender Service
+
+MCP service for composing and sending emails, managing templates, and tracking delivery status.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** communication
+- **Author:** [@demo-casey](https://github.com/demo-casey)
+- **Details:** [https://webmcp.land/registry/email-sender-service](https://webmcp.land/registry/email-sender-service)
+
+</details>
+
