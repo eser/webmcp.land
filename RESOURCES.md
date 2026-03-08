@@ -473,3 +473,18 @@ WebMCP service for converting Markdown documents to styled HTML with syntax high
 
 </details>
 
+<details>
+<summary><strong>Cloudflare DNS Manager</strong> (WEBMCP)</summary>
+
+## Cloudflare DNS Manager
+
+MCP service for managing Cloudflare DNS zones and records — create, update, delete, and list DNS entries.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** cloud-services
+- **Author:** [@demo-jordan](https://github.com/demo-jordan)
+- **Details:** [https://webmcp.land/registry/cloudflare-dns-manager](https://webmcp.land/registry/cloudflare-dns-manager)
+
+</details>
+

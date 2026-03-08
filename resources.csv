@@ -30,3 +30,4 @@ MongoDB Query Tool,"MCP service for querying, inserting, updating, and aggregati
 Twilio SMS Gateway,"WebMCP service for sending SMS messages, managing phone numbers, and checking delivery status via Twilio.",,WEBMCP,PENDING,communication,demo-quinn,https://webmcp.land/registry/twilio-sms-gateway
 Terraform State Viewer,"MCP service for inspecting Terraform state files, resource dependencies, and drift detection.",,WEBMCP,PENDING,cloud-services,demo-sam,https://webmcp.land/registry/terraform-state-viewer
 Markdown to HTML Converter,WebMCP service for converting Markdown documents to styled HTML with syntax highlighting and TOC generation.,,WEBMCP,PENDING,developer-tools,demo-alex,https://webmcp.land/registry/markdown-to-html-converter
+Cloudflare DNS Manager,"MCP service for managing Cloudflare DNS zones and records — create, update, delete, and list DNS entries.",,WEBMCP,PENDING,cloud-services,demo-jordan,https://webmcp.land/registry/cloudflare-dns-manager
