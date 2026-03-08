@@ -278,3 +278,18 @@ WebMCP service for extracting text, tables, and metadata from PDF documents.
 
 </details>
 
+<details>
+<summary><strong>DNS Lookup Service</strong> (WEBMCP)</summary>
+
+## DNS Lookup Service
+
+MCP service for performing DNS queries — A, AAAA, MX, CNAME, TXT, and NS record lookups.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** devops
+- **Author:** [@demo-quinn](https://github.com/demo-quinn)
+- **Details:** [https://webmcp.land/registry/dns-lookup-service](https://webmcp.land/registry/dns-lookup-service)
+
+</details>
+

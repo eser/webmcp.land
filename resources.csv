@@ -17,3 +17,4 @@ Jira Issue Tracker,"WebMCP service for creating, updating, and querying Jira iss
 Text-to-Speech Generator,WebMCP service for converting text to natural-sounding speech in multiple languages and voices.,,WEBMCP,PENDING,ai-ml,demo-riley,https://webmcp.land/registry/text-to-speech-generator
 Redis Cache Manager,"MCP service for interacting with Redis — get, set, delete keys, manage TTLs, and monitor cache stats.",,WEBMCP,PENDING,developer-tools,demo-avery,https://webmcp.land/registry/redis-cache-manager
 PDF Document Parser,"WebMCP service for extracting text, tables, and metadata from PDF documents.",,WEBMCP,PENDING,productivity,demo-pat,https://webmcp.land/registry/pdf-document-parser
+DNS Lookup Service,"MCP service for performing DNS queries — A, AAAA, MX, CNAME, TXT, and NS record lookups.",,WEBMCP,PENDING,devops,demo-quinn,https://webmcp.land/registry/dns-lookup-service
