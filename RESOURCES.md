@@ -323,3 +323,18 @@ MCP service for querying, resolving, and analyzing errors and issues from Sentry
 
 </details>
 
+<details>
+<summary><strong>Google Calendar Sync</strong> (WEBMCP)</summary>
+
+## Google Calendar Sync
+
+WebMCP service for reading, creating, and managing Google Calendar events and reminders.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** productivity
+- **Author:** [@demo-jordan](https://github.com/demo-jordan)
+- **Details:** [https://webmcp.land/registry/google-calendar-sync](https://webmcp.land/registry/google-calendar-sync)
+
+</details>
+
