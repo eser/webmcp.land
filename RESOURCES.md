@@ -308,3 +308,18 @@ WebMCP service for exporting Figma frames, components, and assets as images or S
 
 </details>
 
+<details>
+<summary><strong>Sentry Error Tracker</strong> (WEBMCP)</summary>
+
+## Sentry Error Tracker
+
+MCP service for querying, resolving, and analyzing errors and issues from Sentry projects.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** developer-tools
+- **Author:** [@demo-alex](https://github.com/demo-alex)
+- **Details:** [https://webmcp.land/registry/sentry-error-tracker](https://webmcp.land/registry/sentry-error-tracker)
+
+</details>
+
