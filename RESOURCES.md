@@ -398,3 +398,18 @@ WebMCP service for translating text between 50+ languages with automatic languag
 
 </details>
 
+<details>
+<summary><strong>GitHub Actions Runner</strong> (WEBMCP)</summary>
+
+## GitHub Actions Runner
+
+MCP service for triggering, listing, and inspecting GitHub Actions workflow runs.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** devops
+- **Author:** [@demo-avery](https://github.com/demo-avery)
+- **Details:** [https://webmcp.land/registry/github-actions-runner](https://webmcp.land/registry/github-actions-runner)
+
+</details>
+
