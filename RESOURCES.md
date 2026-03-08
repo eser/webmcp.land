@@ -578,3 +578,18 @@ MCP service for building and executing Elasticsearch queries, managing indices, 
 
 </details>
 
+<details>
+<summary><strong>Discord Bot Controller</strong> (WEBMCP)</summary>
+
+## Discord Bot Controller
+
+MCP service for managing Discord bots — send messages, manage roles, moderate channels, and configure webhooks.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** communication
+- **Author:** [@demo-quinn](https://github.com/demo-quinn)
+- **Details:** [https://webmcp.land/registry/discord-bot-controller](https://webmcp.land/registry/discord-bot-controller)
+
+</details>
+
