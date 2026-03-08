@@ -683,3 +683,18 @@ MCP service for validating JSON documents against schemas, generating schemas fr
 
 </details>
 
+<details>
+<summary><strong>Embeddings Generator</strong> (WEBMCP)</summary>
+
+## Embeddings Generator
+
+WebMCP service for generating text embeddings using multiple models, with similarity search and clustering.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** ai-ml
+- **Author:** [@demo-riley](https://github.com/demo-riley)
+- **Details:** [https://webmcp.land/registry/embeddings-generator](https://webmcp.land/registry/embeddings-generator)
+
+</details>
+
