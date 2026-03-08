@@ -338,3 +338,18 @@ WebMCP service for reading, creating, and managing Google Calendar events and re
 
 </details>
 
+<details>
+<summary><strong>NPM Package Inspector</strong> (WEBMCP)</summary>
+
+## NPM Package Inspector
+
+MCP service for searching, inspecting, and comparing npm packages — versions, dependencies, and downloads.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** developer-tools
+- **Author:** [@demo-casey](https://github.com/demo-casey)
+- **Details:** [https://webmcp.land/registry/npm-package-inspector](https://webmcp.land/registry/npm-package-inspector)
+
+</details>
+

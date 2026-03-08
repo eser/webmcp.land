@@ -21,3 +21,4 @@ DNS Lookup Service,"MCP service for performing DNS queries — A, AAAA, MX, CNAM
 Figma Design Exporter,"WebMCP service for exporting Figma frames, components, and assets as images or SVGs.",,WEBMCP,PENDING,design,demo-sam,https://webmcp.land/registry/figma-design-exporter
 Sentry Error Tracker,"MCP service for querying, resolving, and analyzing errors and issues from Sentry projects.",,WEBMCP,PENDING,developer-tools,demo-alex,https://webmcp.land/registry/sentry-error-tracker
 Google Calendar Sync,"WebMCP service for reading, creating, and managing Google Calendar events and reminders.",,WEBMCP,PENDING,productivity,demo-jordan,https://webmcp.land/registry/google-calendar-sync
+NPM Package Inspector,"MCP service for searching, inspecting, and comparing npm packages — versions, dependencies, and downloads.",,WEBMCP,PENDING,developer-tools,demo-casey,https://webmcp.land/registry/npm-package-inspector
