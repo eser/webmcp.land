@@ -39,3 +39,4 @@ Currency Exchange Rates,WebMCP service providing real-time and historical curren
 Elasticsearch Query Builder,"MCP service for building and executing Elasticsearch queries, managing indices, and viewing cluster health.",,WEBMCP,PENDING,data-analytics,demo-pat,https://webmcp.land/registry/elasticsearch-query-builder
 Discord Bot Controller,"MCP service for managing Discord bots — send messages, manage roles, moderate channels, and configure webhooks.",,WEBMCP,PENDING,communication,demo-quinn,https://webmcp.land/registry/discord-bot-controller
 Cron Job Scheduler,"WebMCP service for scheduling, managing, and monitoring cron jobs with retry logic and failure alerts.",,WEBMCP,PENDING,devops,demo-sam,https://webmcp.land/registry/cron-job-scheduler
+OAuth Token Manager,"MCP service for managing OAuth2 tokens — refresh, revoke, introspect, and generate tokens for multiple providers.",,WEBMCP,PENDING,security,demo-alex,https://webmcp.land/registry/oauth-token-manager

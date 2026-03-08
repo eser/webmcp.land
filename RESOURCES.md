@@ -608,3 +608,18 @@ WebMCP service for scheduling, managing, and monitoring cron jobs with retry log
 
 </details>
 
+<details>
+<summary><strong>OAuth Token Manager</strong> (WEBMCP)</summary>
+
+## OAuth Token Manager
+
+MCP service for managing OAuth2 tokens — refresh, revoke, introspect, and generate tokens for multiple providers.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** security
+- **Author:** [@demo-alex](https://github.com/demo-alex)
+- **Details:** [https://webmcp.land/registry/oauth-token-manager](https://webmcp.land/registry/oauth-token-manager)
+
+</details>
+
