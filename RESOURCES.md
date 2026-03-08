@@ -98,3 +98,18 @@ MCP service for composing and sending emails, managing templates, and tracking d
 
 </details>
 
+<details>
+<summary><strong>Kubernetes Cluster Monitor</strong> (WEBMCP)</summary>
+
+## Kubernetes Cluster Monitor
+
+MCP service for monitoring Kubernetes clusters — pod status, resource usage, and alerts.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** devops
+- **Author:** [@demo-riley](https://github.com/demo-riley)
+- **Details:** [https://webmcp.land/registry/kubernetes-cluster-monitor](https://webmcp.land/registry/kubernetes-cluster-monitor)
+
+</details>
+
