@@ -428,3 +428,18 @@ MCP service for querying, inserting, updating, and aggregating documents in Mong
 
 </details>
 
+<details>
+<summary><strong>Twilio SMS Gateway</strong> (WEBMCP)</summary>
+
+## Twilio SMS Gateway
+
+WebMCP service for sending SMS messages, managing phone numbers, and checking delivery status via Twilio.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** communication
+- **Author:** [@demo-quinn](https://github.com/demo-quinn)
+- **Details:** [https://webmcp.land/registry/twilio-sms-gateway](https://webmcp.land/registry/twilio-sms-gateway)
+
+</details>
+

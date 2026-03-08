@@ -27,3 +27,4 @@ SSL Certificate Checker,"MCP service for verifying SSL/TLS certificates — expi
 Translation Service,WebMCP service for translating text between 50+ languages with automatic language detection.,,WEBMCP,PENDING,ai-ml,demo-morgan,https://webmcp.land/registry/translation-service
 GitHub Actions Runner,"MCP service for triggering, listing, and inspecting GitHub Actions workflow runs.",,WEBMCP,PENDING,devops,demo-avery,https://webmcp.land/registry/github-actions-runner
 MongoDB Query Tool,"MCP service for querying, inserting, updating, and aggregating documents in MongoDB collections.",,WEBMCP,PENDING,data-analytics,demo-pat,https://webmcp.land/registry/mongodb-query-tool
+Twilio SMS Gateway,"WebMCP service for sending SMS messages, managing phone numbers, and checking delivery status via Twilio.",,WEBMCP,PENDING,communication,demo-quinn,https://webmcp.land/registry/twilio-sms-gateway
