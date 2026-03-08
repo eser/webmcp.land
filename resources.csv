@@ -33,3 +33,4 @@ Markdown to HTML Converter,WebMCP service for converting Markdown documents to s
 Cloudflare DNS Manager,"MCP service for managing Cloudflare DNS zones and records — create, update, delete, and list DNS entries.",,WEBMCP,PENDING,cloud-services,demo-jordan,https://webmcp.land/registry/cloudflare-dns-manager
 Code Review Assistant,"WebMCP service that analyzes pull requests and provides code review feedback on style, bugs, and security.",,WEBMCP,PENDING,developer-tools,demo-taylor,https://webmcp.land/registry/code-review-assistant
 GraphQL Playground,"MCP service for introspecting GraphQL schemas, running queries, and testing mutations against any endpoint.",,WEBMCP,PENDING,developer-tools,demo-morgan,https://webmcp.land/registry/graphql-playground
+Prometheus Metrics Exporter,"MCP service for querying Prometheus metrics, setting up alerts, and generating dashboards.",,WEBMCP,PENDING,devops,demo-riley,https://webmcp.land/registry/prometheus-metrics-exporter

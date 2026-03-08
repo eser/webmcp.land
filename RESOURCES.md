@@ -518,3 +518,18 @@ MCP service for introspecting GraphQL schemas, running queries, and testing muta
 
 </details>
 
+<details>
+<summary><strong>Prometheus Metrics Exporter</strong> (WEBMCP)</summary>
+
+## Prometheus Metrics Exporter
+
+MCP service for querying Prometheus metrics, setting up alerts, and generating dashboards.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** devops
+- **Author:** [@demo-riley](https://github.com/demo-riley)
+- **Details:** [https://webmcp.land/registry/prometheus-metrics-exporter](https://webmcp.land/registry/prometheus-metrics-exporter)
+
+</details>
+
