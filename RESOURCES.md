@@ -533,3 +533,18 @@ MCP service for querying Prometheus metrics, setting up alerts, and generating d
 
 </details>
 
+<details>
+<summary><strong>Webhook Relay</strong> (WEBMCP)</summary>
+
+## Webhook Relay
+
+WebMCP service for receiving, inspecting, replaying, and forwarding webhooks from any source.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** developer-tools
+- **Author:** [@demo-casey](https://github.com/demo-casey)
+- **Details:** [https://webmcp.land/registry/webhook-relay](https://webmcp.land/registry/webhook-relay)
+
+</details>
+
