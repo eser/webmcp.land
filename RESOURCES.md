@@ -38,3 +38,18 @@ WebMCP service that generates and executes SQL queries from natural language des
 
 </details>
 
+<details>
+<summary><strong>Slack Notifier</strong> (WEBMCP)</summary>
+
+## Slack Notifier
+
+MCP service for sending messages, managing channels, and reading threads in Slack workspaces.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** communication
+- **Author:** [@demo-sam](https://github.com/demo-sam)
+- **Details:** [https://webmcp.land/registry/slack-notifier](https://webmcp.land/registry/slack-notifier)
+
+</details>
+
