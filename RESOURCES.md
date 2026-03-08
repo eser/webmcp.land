@@ -503,3 +503,18 @@ WebMCP service that analyzes pull requests and provides code review feedback on 
 
 </details>
 
+<details>
+<summary><strong>GraphQL Playground</strong> (WEBMCP)</summary>
+
+## GraphQL Playground
+
+MCP service for introspecting GraphQL schemas, running queries, and testing mutations against any endpoint.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** developer-tools
+- **Author:** [@demo-morgan](https://github.com/demo-morgan)
+- **Details:** [https://webmcp.land/registry/graphql-playground](https://webmcp.land/registry/graphql-playground)
+
+</details>
+
