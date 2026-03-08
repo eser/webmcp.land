@@ -188,3 +188,18 @@ MCP service for PostgreSQL administration — run queries, manage schemas, view 
 
 </details>
 
+<details>
+<summary><strong>Image Resizer & Optimizer</strong> (WEBMCP)</summary>
+
+## Image Resizer & Optimizer
+
+WebMCP service for resizing, compressing, and converting images in various formats.
+
+- **Type:** WEBMCP
+- **Endpoint:** ``
+- **Category:** media-entertainment
+- **Author:** [@demo-casey](https://github.com/demo-casey)
+- **Details:** [https://webmcp.land/registry/image-resizer-optimizer](https://webmcp.land/registry/image-resizer-optimizer)
+
+</details>
+

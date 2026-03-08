@@ -11,3 +11,4 @@ File System Browser,"MCP service for browsing, reading, and searching files in a
 Weather Forecast API,"WebMCP service providing real-time weather data, forecasts, and severe weather alerts by location.",,WEBMCP,PENDING,information,demo-quinn,https://webmcp.land/registry/weather-forecast-api
 CI/CD Pipeline Runner,"MCP service for triggering, monitoring, and managing CI/CD pipeline runs across platforms.",,WEBMCP,PENDING,devops,demo-alex,https://webmcp.land/registry/cicd-pipeline-runner
 PostgreSQL Admin Tools,"MCP service for PostgreSQL administration — run queries, manage schemas, view stats, and optimize performance.",,WEBMCP,PENDING,data-analytics,demo-jordan,https://webmcp.land/registry/postgresql-admin-tools
+Image Resizer & Optimizer,"WebMCP service for resizing, compressing, and converting images in various formats.",,WEBMCP,PENDING,media-entertainment,demo-casey,https://webmcp.land/registry/image-resizer-optimizer
