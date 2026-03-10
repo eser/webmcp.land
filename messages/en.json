@@ -1531,6 +1531,10 @@
     "docsSelfHostingTitle": "Self-Hosting Guide",
     "docsSelfHostingDesc": "Deploy your own webmcp.land instance with customizable branding, themes, and authentication.",
     "docsWhatsWebmcpTitle": "What's WebMCP?",
-    "docsWhatsWebmcpDesc": "Learn about MCP and WebMCP — the standards powering AI agent connectivity and how webmcp.land fits in."
+    "docsWhatsWebmcpDesc": "Learn about MCP and WebMCP — the standards powering AI agent connectivity and how webmcp.land fits in.",
+    "docsSdkTitle": "React SDK",
+    "docsSdkDesc": "Drop-in AI chatbox component for React. Multi-provider support, tool execution, theming, and headless mode.",
+    "docsSdkShowcaseTitle": "SDK Showcase",
+    "docsSdkShowcaseDesc": "Interactive demos showing different usage patterns — from zero-config to fully custom implementations."
   }
 }

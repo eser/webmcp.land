@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Book, Code, Server, ArrowRight } from "lucide-react";
+import { Book, Code, Server, ArrowRight, Puzzle, Play } from "lucide-react";
 import { getTranslations } from "@/i18n/request";
 
 export async function generateMetadata() {
@@ -28,6 +28,18 @@ const docPages = [
     icon: Book,
     titleKey: "docsWhatsWebmcpTitle" as const,
     descKey: "docsWhatsWebmcpDesc" as const,
+  },
+  {
+    href: "/docs/sdk",
+    icon: Puzzle,
+    titleKey: "docsSdkTitle" as const,
+    descKey: "docsSdkDesc" as const,
+  },
+  {
+    href: "/docs/sdk/showcase",
+    icon: Play,
+    titleKey: "docsSdkShowcaseTitle" as const,
+    descKey: "docsSdkShowcaseDesc" as const,
   },
 ];
 
